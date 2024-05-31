@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BusinessObject;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,6 +26,42 @@ namespace DataAccess
                     return instance;
                 }
             }
+        }
+
+        public Prescription getClinicByID(int id)
+        {
+            var context = new BookingDentistDbContext();
+            var prescription = context.Prescriptions.FirstOrDefault(c => c.PrescriptionId == id);
+            return prescription;
+        }
+
+        public List<Prescription> getAllPrescriptions()
+        {
+            var context = new BookingDentistDbContext();
+            var prescriptionList = context.Prescriptions.ToList();
+            return prescriptionList;
+        }
+
+        public void deletePrescription(Prescription prescription)
+        {
+            var context = new BookingDentistDbContext();
+            prescription.Status = false;
+            context.Entry<Prescription>(prescription).State = EntityState.Modified;
+            context.SaveChanges();
+        }
+
+        public void createPrescription(Prescription prescription)
+        {
+            var context = new BookingDentistDbContext();
+            context.Prescriptions.Add(prescription);
+            context.SaveChanges();
+        }
+
+        public void updateClinic(Prescription prescription)
+        {
+            var context = new BookingDentistDbContext();
+            context.Entry<Prescription>(prescription).State = EntityState.Modified;
+            context.SaveChanges();
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BusinessObject;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,6 +26,42 @@ namespace DataAccess
                     return instance;
                 }
             }
+        }
+
+        public Clinic getClinicByID(int id)
+        {
+            var context = new BookingDentistDbContext();
+            var clinic = context.Clinics.FirstOrDefault(c => c.ClinicId == id);
+            return clinic;
+        }
+
+        public List<Clinic> getAllClinics()
+        {
+            var context = new BookingDentistDbContext();
+            var clinicList = context.Clinics.ToList();
+            return clinicList;
+        }
+
+        public void deleteClinic(Clinic clinic)
+        {
+            var context = new BookingDentistDbContext();
+            clinic.Status = false;
+            context.Entry<Clinic>(clinic).State = EntityState.Modified;
+            context.SaveChanges();
+        }
+
+        public void createClinic(Clinic clinic)
+        {
+            var context = new BookingDentistDbContext();
+            context.Clinics.Add(clinic);
+            context.SaveChanges();
+        }
+
+        public void updateClinic(Clinic clinic)
+        {
+            var context = new BookingDentistDbContext();
+            context.Entry<Clinic>(clinic).State = EntityState.Modified;
+            context.SaveChanges();
         }
     }
 }

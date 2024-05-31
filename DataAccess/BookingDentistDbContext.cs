@@ -27,7 +27,7 @@ public partial class BookingDentistDbContext : DbContext
 
     public virtual DbSet<DentistSlot> DentistSlots { get; set; }
 
-    public virtual DbSet<MedicalRecordDAO> MedicalRecords { get; set; }
+    public virtual DbSet<MedicalRecord> MedicalRecords { get; set; }
 
     public virtual DbSet<Medicine> Medicines { get; set; }
 
