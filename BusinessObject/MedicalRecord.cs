@@ -7,7 +7,9 @@ public partial class MedicalRecord
 {
     public int MediaRecordId { get; set; }
 
-    public DateOnly Date { get; set; }
+    public DateTime TimeStart { get; set; }
+
+    public TimeOnly Duration { get; set; }
 
     public string? Diagnosis { get; set; }
 

@@ -9,6 +9,8 @@ public partial class User
 
     public string UserName { get; set; } = null!;
 
+    public string Name { get; set; } = null!;
+
     public string Password { get; set; } = null!;
 
     public DateOnly? Dob { get; set; }
@@ -19,11 +21,15 @@ public partial class User
 
     public string? Email { get; set; }
 
+    public DateTime? CreatedDate { get; set; }
+
     public bool? Status { get; set; }
 
     public int? ClinicId { get; set; }
 
     public int? RoleId { get; set; }
+
+    public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 
     public virtual ICollection<CheckupSchedule> CheckupScheduleCustomers { get; set; } = new List<CheckupSchedule>();
 
@@ -31,13 +37,11 @@ public partial class User
 
     public virtual Clinic? Clinic { get; set; }
 
-    public virtual ICollection<CustomerDentistSlot> CustomerDentistSlots { get; set; } = new List<CustomerDentistSlot>();
+    public virtual ICollection<DentistService> DentistServices { get; set; } = new List<DentistService>();
 
     public virtual ICollection<DentistSlot> DentistSlots { get; set; } = new List<DentistSlot>();
 
     public virtual ICollection<MedicalRecord> MedicalRecords { get; set; } = new List<MedicalRecord>();
 
     public virtual Role? Role { get; set; }
-
-    public virtual ICollection<Service> Services { get; set; } = new List<Service>();
 }

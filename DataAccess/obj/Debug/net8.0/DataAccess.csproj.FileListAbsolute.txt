@@ -1,0 +1,16 @@
+C:\Users\Admin\DentistBooking\DentistBooking\DataAccess\bin\Debug\net8.0\DataAccess.deps.json
+C:\Users\Admin\DentistBooking\DentistBooking\DataAccess\bin\Debug\net8.0\DataAccess.dll
+C:\Users\Admin\DentistBooking\DentistBooking\DataAccess\bin\Debug\net8.0\DataAccess.pdb
+C:\Users\Admin\DentistBooking\DentistBooking\DataAccess\bin\Debug\net8.0\BusinessObject.dll
+C:\Users\Admin\DentistBooking\DentistBooking\DataAccess\bin\Debug\net8.0\BusinessObject.pdb
+C:\Users\Admin\DentistBooking\DentistBooking\DataAccess\obj\Debug\net8.0\DataAccess.csproj.AssemblyReference.cache
+C:\Users\Admin\DentistBooking\DentistBooking\DataAccess\obj\Debug\net8.0\DataAccess.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Admin\DentistBooking\DentistBooking\DataAccess\obj\Debug\net8.0\DataAccess.AssemblyInfoInputs.cache
+C:\Users\Admin\DentistBooking\DentistBooking\DataAccess\obj\Debug\net8.0\DataAccess.AssemblyInfo.cs
+C:\Users\Admin\DentistBooking\DentistBooking\DataAccess\obj\Debug\net8.0\DataAccess.csproj.CoreCompileInputs.cache
+C:\Users\Admin\DentistBooking\DentistBooking\DataAccess\obj\Debug\net8.0\DataAccess.sourcelink.json
+C:\Users\Admin\DentistBooking\DentistBooking\DataAccess\obj\Debug\net8.0\DataAccess.csproj.Up2Date
+C:\Users\Admin\DentistBooking\DentistBooking\DataAccess\obj\Debug\net8.0\DataAccess.dll
+C:\Users\Admin\DentistBooking\DentistBooking\DataAccess\obj\Debug\net8.0\refint\DataAccess.dll
+C:\Users\Admin\DentistBooking\DentistBooking\DataAccess\obj\Debug\net8.0\DataAccess.pdb
+C:\Users\Admin\DentistBooking\DentistBooking\DataAccess\obj\Debug\net8.0\ref\DataAccess.dll
