@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\BusinessObject\\BusinessObject.csproj": {}
+    "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\BusinessObject\\BusinessObject.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\BusinessObject\\BusinessObject.csproj": {
+    "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\BusinessObject\\BusinessObject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\BusinessObject\\BusinessObject.csproj",
+        "projectUniqueName": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\BusinessObject\\BusinessObject.csproj",
         "projectName": "BusinessObject",
-        "projectPath": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\BusinessObject\\BusinessObject.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\BusinessObject\\obj\\",
+        "projectPath": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\BusinessObject\\BusinessObject.csproj",
+        "packagesPath": "C:\\Users\\huylo\\.nuget\\packages\\",
+        "outputPath": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\BusinessObject\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\huylo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {

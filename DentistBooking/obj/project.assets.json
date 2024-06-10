@@ -3189,19 +3189,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Admin\\.nuget\\packages\\": {}
+    "C:\\Users\\huylo\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\DentistBooking\\DentistBooking.csproj",
+      "projectUniqueName": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\DentistBooking\\DentistBooking.csproj",
       "projectName": "DentistBooking",
-      "projectPath": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\DentistBooking\\DentistBooking.csproj",
-      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\DentistBooking\\obj\\",
+      "projectPath": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\DentistBooking\\DentistBooking.csproj",
+      "packagesPath": "C:\\Users\\huylo\\.nuget\\packages\\",
+      "outputPath": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\DentistBooking\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\huylo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -3209,17 +3214,18 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\BusinessObject\\BusinessObject.csproj": {
-              "projectPath": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\BusinessObject\\BusinessObject.csproj"
+            "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\BusinessObject\\BusinessObject.csproj": {
+              "projectPath": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\BusinessObject\\BusinessObject.csproj"
             },
-            "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\Service\\Service.csproj": {
-              "projectPath": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\Service\\Service.csproj"
+            "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\Service\\Service.csproj": {
+              "projectPath": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\Service\\Service.csproj"
             }
           }
         }
