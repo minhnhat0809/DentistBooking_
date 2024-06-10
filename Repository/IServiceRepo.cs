@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BusinessObject;
 
 namespace Repository
 {
     public interface IServiceRepo
     {
+        public Service GetServiceByID(int id);
+        public List<Service> GetAllServices();
+        public void DeleteService(Service service);
+        public void CreateService(Service service);
+        public void UpdateService(Service service);
     }
 }
