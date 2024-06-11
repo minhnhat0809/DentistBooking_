@@ -4414,11 +4414,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\BusinessObject\\BusinessObject.csproj",
+      "projectUniqueName": "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\BusinessObject\\BusinessObject.csproj",
       "projectName": "BusinessObject",
-      "projectPath": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\BusinessObject\\BusinessObject.csproj",
+      "projectPath": "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\BusinessObject\\BusinessObject.csproj",
       "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\BusinessObject\\obj\\",
+      "outputPath": "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\BusinessObject\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -4441,11 +4441,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
       }
     },
     "frameworks": {

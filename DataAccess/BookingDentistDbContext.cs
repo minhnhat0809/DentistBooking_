@@ -171,7 +171,7 @@ public partial class BookingDentistDbContext : DbContext
                 .HasConstraintName("FK__dentist_s__denti__5EBF139D");
         });
 
-        modelBuilder.Entity<MedicalRecordDAO>(entity =>
+        modelBuilder.Entity<MedicalRecord>(entity =>
         {
             entity.HasKey(e => e.MediaRecordId).HasName("PK__medical___E8DC072EC8E03993");
 

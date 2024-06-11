@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\Service\\Service.csproj": {}
+    "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\Service\\Service.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\BusinessObject\\BusinessObject.csproj": {
+    "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\BusinessObject\\BusinessObject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\BusinessObject\\BusinessObject.csproj",
+        "projectUniqueName": "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\BusinessObject\\BusinessObject.csproj",
         "projectName": "BusinessObject",
-        "projectPath": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\BusinessObject\\BusinessObject.csproj",
+        "projectPath": "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\BusinessObject\\BusinessObject.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\BusinessObject\\obj\\",
+        "outputPath": "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\BusinessObject\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -34,11 +34,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -86,14 +81,14 @@
         }
       }
     },
-    "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\DataAccess\\DataAccess.csproj": {
+    "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\DataAccess\\DataAccess.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\DataAccess\\DataAccess.csproj",
+        "projectUniqueName": "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\DataAccess\\DataAccess.csproj",
         "projectName": "DataAccess",
-        "projectPath": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\DataAccess\\DataAccess.csproj",
+        "projectPath": "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\DataAccess\\DataAccess.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\DataAccess\\obj\\",
+        "outputPath": "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\DataAccess\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -110,8 +105,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\BusinessObject\\BusinessObject.csproj": {
-                "projectPath": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\BusinessObject\\BusinessObject.csproj"
+              "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\BusinessObject\\BusinessObject.csproj": {
+                "projectPath": "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\BusinessObject\\BusinessObject.csproj"
               }
             }
           }
@@ -120,11 +115,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -156,14 +146,14 @@
         }
       }
     },
-    "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\Repository\\Repository.csproj": {
+    "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\Repository\\Repository.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\Repository\\Repository.csproj",
+        "projectUniqueName": "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\Repository\\Repository.csproj",
         "projectName": "Repository",
-        "projectPath": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\Repository\\Repository.csproj",
+        "projectPath": "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\Repository\\Repository.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\Repository\\obj\\",
+        "outputPath": "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\Repository\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -180,11 +170,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\BusinessObject\\BusinessObject.csproj": {
-                "projectPath": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\BusinessObject\\BusinessObject.csproj"
+              "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\BusinessObject\\BusinessObject.csproj": {
+                "projectPath": "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\BusinessObject\\BusinessObject.csproj"
               },
-              "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\DataAccess\\DataAccess.csproj": {
-                "projectPath": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\DataAccess\\DataAccess.csproj"
+              "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\DataAccess\\DataAccess.csproj": {
+                "projectPath": "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\DataAccess\\DataAccess.csproj"
               }
             }
           }
@@ -193,11 +183,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -223,14 +208,14 @@
         }
       }
     },
-    "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\Service\\Service.csproj": {
+    "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\Service\\Service.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\Service\\Service.csproj",
+        "projectUniqueName": "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\Service\\Service.csproj",
         "projectName": "Service",
-        "projectPath": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\Service\\Service.csproj",
+        "projectPath": "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\Service\\Service.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\Service\\obj\\",
+        "outputPath": "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\Service\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -247,11 +232,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\BusinessObject\\BusinessObject.csproj": {
-                "projectPath": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\BusinessObject\\BusinessObject.csproj"
+              "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\BusinessObject\\BusinessObject.csproj": {
+                "projectPath": "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\BusinessObject\\BusinessObject.csproj"
               },
-              "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\Repository\\Repository.csproj": {
-                "projectPath": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\Repository\\Repository.csproj"
+              "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\Repository\\Repository.csproj": {
+                "projectPath": "D:\\FPT\\Semes 7\\PRN221_VanVTT10\\team-project\\DentistBooking\\Repository\\Repository.csproj"
               }
             }
           }
@@ -260,11 +245,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
