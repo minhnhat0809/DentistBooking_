@@ -1,3 +1,4 @@
+
 using Repository.Impl;
 using Repository;
 using Service.Impl;
@@ -6,7 +7,12 @@ using Service;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
+{
+    options.Conventions.AddPageRoute("/ForgetPassword", "/forget-password");
+    options.Conventions.AddPageRoute("/Index", "/login");
+}); ;
+
 
 //Services
 builder.Services.AddScoped<IUserService, UserService>();
