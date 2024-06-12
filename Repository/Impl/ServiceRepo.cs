@@ -3,7 +3,7 @@ using DataAccess;
 
 namespace Repository.Impl
 {
-    internal class ServiceRepo : IServiceRepo
+    public class ServiceRepo : IServiceRepo
     {
         public void CreateService(Service service)
         => ServiceDAO.Instance.createService(service);

@@ -34,7 +34,7 @@ builder.Services.AddScoped<ICheckupScheduleRepo, CheckupScheduleRepo>();
 builder.Services.AddScoped<IDentistSlotRepo, DentistSlotRepo>();
 builder.Services.AddScoped<IMedicalRecordRepo, MedicalRecordRepo>();
 builder.Services.AddScoped<IPrescriptionrepo, PrescriptionRepo>();
-builder.Services.AddScoped<IServiceRepo, IServiceRepo>();
+builder.Services.AddScoped<IServiceRepo, ServiceRepo>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddScoped<IDentistServiceRepo, DentistServiceRepo>();
 builder.Services.AddScoped<IServiceAppointmentRepo, ServiceAppointmentRepo>();
