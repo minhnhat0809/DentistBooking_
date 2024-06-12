@@ -3,20 +3,28 @@
   "WorkspaceRootPath": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{006DFA0D-9E8E-4670-A99B-B78020B13B62}|DataAccess\\DataAccess.csproj|d:\\fu\\semester7\\prn221\\dentistbooking_\\dataaccess\\userdao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{006DFA0D-9E8E-4670-A99B-B78020B13B62}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\userdao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3F601383-8D16-49A7-ABD6-55341648A173}|Service\\Service.csproj|d:\\fu\\semester7\\prn221\\dentistbooking_\\service\\impl\\clinicservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3F601383-8D16-49A7-ABD6-55341648A173}|Service\\Service.csproj|solutionrelative:service\\impl\\clinicservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|d:\\fu\\semester7\\prn221\\dentistbooking_\\dentistbooking\\pages\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|solutionrelative:dentistbooking\\pages\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3F601383-8D16-49A7-ABD6-55341648A173}|Service\\Service.csproj|d:\\fu\\semester7\\prn221\\dentistbooking_\\service\\impl\\service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3F601383-8D16-49A7-ABD6-55341648A173}|Service\\Service.csproj|solutionrelative:service\\impl\\service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3F601383-8D16-49A7-ABD6-55341648A173}|Service\\Service.csproj|d:\\fu\\semester7\\prn221\\dentistbooking_\\service\\iservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3F601383-8D16-49A7-ABD6-55341648A173}|Service\\Service.csproj|solutionrelative:service\\iservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3F601383-8D16-49A7-ABD6-55341648A173}|Service\\Service.csproj|d:\\fu\\semester7\\prn221\\dentistbooking_\\service\\impl\\clinicservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3F601383-8D16-49A7-ABD6-55341648A173}|Service\\Service.csproj|solutionrelative:service\\impl\\clinicservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3F601383-8D16-49A7-ABD6-55341648A173}|Service\\Service.csproj|d:\\fu\\semester7\\prn221\\dentistbooking_\\service\\identistslotservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3F601383-8D16-49A7-ABD6-55341648A173}|Service\\Service.csproj|solutionrelative:service\\identistslotservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{3F601383-8D16-49A7-ABD6-55341648A173}|Service\\Service.csproj|d:\\fu\\semester7\\prn221\\dentistbooking_\\service\\impl\\service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3F601383-8D16-49A7-ABD6-55341648A173}|Service\\Service.csproj|solutionrelative:service\\impl\\service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{006DFA0D-9E8E-4670-A99B-B78020B13B62}|DataAccess\\DataAccess.csproj|d:\\fu\\semester7\\prn221\\dentistbooking_\\dataaccess\\userdao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{006DFA0D-9E8E-4670-A99B-B78020B13B62}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\userdao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5521587E-8D87-4606-84EC-E8195D17714F}|Repository\\Repository.csproj|d:\\fu\\semester7\\prn221\\dentistbooking_\\repository\\iservicerepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -90,24 +98,37 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 11,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ClinicService.cs",
-              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\Service\\Impl\\ClinicService.cs",
-              "RelativeDocumentMoniker": "Service\\Impl\\ClinicService.cs",
-              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\Service\\Impl\\ClinicService.cs",
-              "RelativeToolTip": "Service\\Impl\\ClinicService.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAvAAAA",
+              "DocumentIndex": 1,
+              "Title": "Index.cshtml.cs",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\DentistBooking\\Pages\\Index.cshtml.cs",
+              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Index.cshtml.cs",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\DentistBooking\\Pages\\Index.cshtml.cs",
+              "RelativeToolTip": "DentistBooking\\Pages\\Index.cshtml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABQAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-10T15:52:29.825Z",
+              "WhenOpened": "2024-06-11T12:53:10.551Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
+              "Title": "IDentistSlotService.cs",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\Service\\IDentistSlotService.cs",
+              "RelativeDocumentMoniker": "Service\\IDentistSlotService.cs",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\Service\\IDentistSlotService.cs",
+              "RelativeToolTip": "Service\\IDentistSlotService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-11T12:52:27.02Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "Service.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\Service\\Impl\\Service.cs",
               "RelativeDocumentMoniker": "Service\\Impl\\Service.cs",
@@ -120,20 +141,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ServiceRepo.cs",
-              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\Repository\\Impl\\ServiceRepo.cs",
-              "RelativeDocumentMoniker": "Repository\\Impl\\ServiceRepo.cs",
-              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\Repository\\Impl\\ServiceRepo.cs",
-              "RelativeToolTip": "Repository\\Impl\\ServiceRepo.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABQAAAA1AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-10T15:35:13.866Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "IServiceRepo.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\Repository\\IServiceRepo.cs",
               "RelativeDocumentMoniker": "Repository\\IServiceRepo.cs",
@@ -141,12 +149,11 @@
               "RelativeToolTip": "Repository\\IServiceRepo.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-10T15:33:43.471Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-10T15:33:43.471Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "Service.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\BusinessObject\\Service.cs",
               "RelativeDocumentMoniker": "BusinessObject\\Service.cs",
@@ -154,12 +161,11 @@
               "RelativeToolTip": "BusinessObject\\Service.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-10T15:33:00.151Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-10T15:33:00.151Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 11,
               "Title": "IUserService.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\Service\\IUserService.cs",
               "RelativeDocumentMoniker": "Service\\IUserService.cs",
@@ -167,12 +173,11 @@
               "RelativeToolTip": "Service\\IUserService.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-10T15:23:21.548Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-10T15:23:21.548Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "UserService.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\Service\\Impl\\UserService.cs",
               "RelativeDocumentMoniker": "Service\\Impl\\UserService.cs",
@@ -180,25 +185,24 @@
               "RelativeToolTip": "Service\\Impl\\UserService.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABkAAAAmAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-10T15:23:07.353Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-10T15:23:07.353Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 5,
               "Title": "UserDAO.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\DataAccess\\UserDAO.cs",
               "RelativeDocumentMoniker": "DataAccess\\UserDAO.cs",
               "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\DataAccess\\UserDAO.cs",
               "RelativeToolTip": "DataAccess\\UserDAO.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAAFAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABcAAAAgAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-10T15:12:33.584Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 13,
               "Title": "UserRepo.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\Repository\\Impl\\UserRepo.cs",
               "RelativeDocumentMoniker": "Repository\\Impl\\UserRepo.cs",
@@ -206,12 +210,11 @@
               "RelativeToolTip": "Repository\\Impl\\UserRepo.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABQAAAAtAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-10T15:17:27.673Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-10T15:17:27.673Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 12,
               "Title": "IUserRepo.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\Repository\\IUserRepo.cs",
               "RelativeDocumentMoniker": "Repository\\IUserRepo.cs",
@@ -219,12 +222,11 @@
               "RelativeToolTip": "Repository\\IUserRepo.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-10T15:13:55.433Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-10T15:13:55.433Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 14,
               "Title": "IMedicineRepo.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\Repository\\IMedicineRepo.cs",
               "RelativeDocumentMoniker": "Repository\\IMedicineRepo.cs",
@@ -232,25 +234,36 @@
               "RelativeToolTip": "Repository\\IMedicineRepo.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-10T15:13:38.781Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-10T15:13:38.781Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "ServiceDAO.cs",
-              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\DataAccess\\ServiceDAO.cs",
-              "RelativeDocumentMoniker": "DataAccess\\ServiceDAO.cs",
-              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\DataAccess\\ServiceDAO.cs",
-              "RelativeToolTip": "DataAccess\\ServiceDAO.cs",
-              "ViewState": "AQIAABcAAAAAAAAAAAAAAB4AAAAIAAAA",
+              "DocumentIndex": 0,
+              "Title": "ClinicService.cs",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\Service\\Impl\\ClinicService.cs",
+              "RelativeDocumentMoniker": "Service\\Impl\\ClinicService.cs",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\Service\\Impl\\ClinicService.cs",
+              "RelativeToolTip": "Service\\Impl\\ClinicService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAvAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-10T15:11:51.798Z",
+              "WhenOpened": "2024-06-10T15:52:29.825Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 7,
+              "Title": "ServiceRepo.cs",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\Repository\\Impl\\ServiceRepo.cs",
+              "RelativeDocumentMoniker": "Repository\\Impl\\ServiceRepo.cs",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\Repository\\Impl\\ServiceRepo.cs",
+              "RelativeToolTip": "Repository\\Impl\\ServiceRepo.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABQAAAA1AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T15:35:13.866Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "IService.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\Service\\IService.cs",
               "RelativeDocumentMoniker": "Service\\IService.cs",
@@ -263,7 +276,19 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 8,
+              "Title": "ServiceDAO.cs",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\DataAccess\\ServiceDAO.cs",
+              "RelativeDocumentMoniker": "DataAccess\\ServiceDAO.cs",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\DataAccess\\ServiceDAO.cs",
+              "RelativeToolTip": "DataAccess\\ServiceDAO.cs",
+              "ViewState": "AQIAABcAAAAAAAAAAAAAAB4AAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-10T15:11:51.798Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
               "Title": "IDentistSlotRepo.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\Repository\\IDentistSlotRepo.cs",
               "RelativeDocumentMoniker": "Repository\\IDentistSlotRepo.cs",
@@ -271,12 +296,11 @@
               "RelativeToolTip": "Repository\\IDentistSlotRepo.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-10T15:13:36.873Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-10T15:13:36.873Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 16,
               "Title": "IDentistServiceRepo.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\Repository\\IDentistServiceRepo.cs",
               "RelativeDocumentMoniker": "Repository\\IDentistServiceRepo.cs",
@@ -284,12 +308,11 @@
               "RelativeToolTip": "Repository\\IDentistServiceRepo.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-10T15:10:29.747Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-10T15:10:29.747Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 17,
               "Title": "DentistSlotDAO.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\DataAccess\\DentistSlotDAO.cs",
               "RelativeDocumentMoniker": "DataAccess\\DentistSlotDAO.cs",
@@ -297,12 +320,11 @@
               "RelativeToolTip": "DataAccess\\DentistSlotDAO.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-06T04:33:48.31Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-06T04:33:48.31Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 18,
               "Title": "PrescriptionDAO.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\DataAccess\\PrescriptionDAO.cs",
               "RelativeDocumentMoniker": "DataAccess\\PrescriptionDAO.cs",
@@ -314,7 +336,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 19,
               "Title": "ClinicDAO.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\DataAccess\\ClinicDAO.cs",
               "RelativeDocumentMoniker": "DataAccess\\ClinicDAO.cs",
@@ -326,7 +348,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 20,
               "Title": "IMedicalRecordRepo.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\Repository\\IMedicalRecordRepo.cs",
               "RelativeDocumentMoniker": "Repository\\IMedicalRecordRepo.cs",
@@ -338,7 +360,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 21,
               "Title": "IClinicRepo.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\Repository\\IClinicRepo.cs",
               "RelativeDocumentMoniker": "Repository\\IClinicRepo.cs",

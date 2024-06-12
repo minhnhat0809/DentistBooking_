@@ -1,7 +1,37 @@
+using Repository.Impl;
+using Repository;
+using Service.Impl;
+using Service;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+//Services
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<ICheckupScheduleService, CheckupScheduleService>();
+builder.Services.AddScoped<IDentistSlotService, DentistSlotService>();
+builder.Services.AddScoped<IMedicalRecordService, MedicalRecordService>();
+builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
+builder.Services.AddScoped<IService, Service.Impl.Service>();
+builder.Services.AddScoped<IClinicService, ClinicService>();
+builder.Services.AddScoped<IMedicineService, MedicineService>();
+
+
+
+//Reposiroties
+builder.Services.AddScoped<IAppointmentRepo, AppointmentRepo>();
+builder.Services.AddScoped<IClinicRepo, ClinicRepo>();
+builder.Services.AddScoped<ICheckupScheduleRepo, CheckupScheduleRepo>();
+builder.Services.AddScoped<IDentistSlotRepo, DentistSlotRepo>();
+builder.Services.AddScoped<IMedicalRecordRepo, MedicalRecordRepo>();
+builder.Services.AddScoped<IPrescriptionrepo, PrescriptionRepo>();
+builder.Services.AddScoped<IServiceRepo, IServiceRepo>();
+builder.Services.AddScoped<IUserRepo, UserRepo>();
+builder.Services.AddScoped<IDentistServiceRepo, DentistServiceRepo>();
+builder.Services.AddScoped<IServiceAppointmentRepo, ServiceAppointmentRepo>();
 
 var app = builder.Build();
 

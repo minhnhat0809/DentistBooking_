@@ -4409,24 +4409,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\huylo\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\Admin\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\BusinessObject\\BusinessObject.csproj",
+      "projectUniqueName": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\BusinessObject\\BusinessObject.csproj",
       "projectName": "BusinessObject",
-      "projectPath": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\BusinessObject\\BusinessObject.csproj",
-      "packagesPath": "C:\\Users\\huylo\\.nuget\\packages\\",
-      "outputPath": "D:\\FU\\Semester7\\PRN221\\DentistBooking_\\BusinessObject\\obj\\",
+      "projectPath": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\BusinessObject\\BusinessObject.csproj",
+      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Admin\\DentistBooking\\DentistBooking\\BusinessObject\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\huylo\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -4434,7 +4429,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Repository.Impl
 {
-    internal class ServiceAppointmentRepo : IServiceAppointmentRepo
+    public class ServiceAppointmentRepo : IServiceAppointmentRepo
     {
     }
 }
