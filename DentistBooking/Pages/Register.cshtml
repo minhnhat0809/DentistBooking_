@@ -1,0 +1,109 @@
+﻿@page
+@model DentistBooking.Pages.RegisterModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+    <link href="DentistBooking.styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<body>
+    <div class="wrapper">
+        <div class="img-wrapper">
+            <img class="main-img" src="/assets/img/13053.jpg" />
+            <h4>Dentist Booking System</h4>
+            <p>PRN221 - Group Project</p>
+        </div>
+        <div class="content-wrapper">
+            <div class="register-form" id="register-form">
+                <form method="post" asp-page-handler="register" class="needs-validation" novalidate>
+                    <h2>Register</h2>
+                    <div class="input-field">
+                        <input type="text" name="name" required>
+                        <label>Enter your name</label>
+                        <div style="position: absolute; font-size: 10px">
+                            <span asp-validation-for="Name" class="text-danger text-start"></span>
+                        </div>
+                    </div>
+                    <div class="input-field">
+                        <input type="email" name="RegisterEmail" required>
+                        <label>Enter your email</label>
+                        <div style="position: absolute; font-size: 10px">
+                            <span asp-validation-for="RegisterEmail" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-row gap-3">
+                        <div class="input-field">
+                            <input type="date" name="dob">
+                            <label>Date of birth</label>
+                            <div style="position: absolute; font-size: 10px">
+                                <span asp-validation-for="Dob" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div style="display: flex;flex-direction: column; align-items: flex-start; row-gap: 5px; position: relative">
+                            <label class="radio-label">Gender</label>
+                            <div class="radio-group" style="display: flex; flex-direction: row; column-gap: 5px">
+                                <label>
+                                    <input type="radio" name="gender" value="male" required>
+                                    Male
+                                </label>
+                                <label>
+                                    <input type="radio" name="gender" value="female" required>
+                                    Female
+                                </label>
+                                <label>
+                                    <input type="radio" name="gender" value="other" required>
+                                    Other
+                                </label>
+                            </div>
+                            <div style="position: absolute; font-size: 10px; top: 20px">
+                                <span asp-validation-for="Gender" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" name="phoneNumber" required>
+                        <label>Enter your phone number</label>
+                        <div style="position: absolute; font-size: 10px">
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-field">
+                        <input type="password" name="RegisterPassword" required>
+                        <label>Enter your password</label>
+                        <div style="position: absolute; font-size: 10px">
+                            <span asp-validation-for="RegisterPassword" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="input-field">
+                        <input type="password" name="RegisterConfirm" required>
+                        <label>Confirm your password</label>
+                    </div>
+                    <div class="forget">
+                        <label for="remember">
+                            <input type="checkbox" id="remember">
+                            <p>Remember me</p>
+                        </label>
+                        <a asp-page="ForgetPassword" id="forget-button">Forgot password?</a>
+                    </div>
+                    <button type="submit">Register</button>
+                    <div class="login">
+                        <p>Already have an account? <a asp-page="Index" class="login-button" id="login-button">Log In</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

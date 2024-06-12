@@ -1,8 +1,18 @@
+using Repository;
+using Repository.Impl;
+using Service;
+using Service.Impl;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
-
+builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
+{
+    options.Conventions.AddPageRoute("/ForgetPassword", "/forget-password");
+    options.Conventions.AddPageRoute("/Index", "/login");
+}); ;
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepo, UserRepo>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
