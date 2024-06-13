@@ -1,3 +1,4 @@
+
 using Repository.Impl;
 using Repository;
 using Service.Impl;
@@ -6,7 +7,12 @@ using Service;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
+{
+    options.Conventions.AddPageRoute("/ForgetPassword", "/forget-password");
+    options.Conventions.AddPageRoute("/Index", "/login");
+}); ;
+
 
 //Services
 builder.Services.AddScoped<IUserService, UserService>();
@@ -28,7 +34,7 @@ builder.Services.AddScoped<ICheckupScheduleRepo, CheckupScheduleRepo>();
 builder.Services.AddScoped<IDentistSlotRepo, DentistSlotRepo>();
 builder.Services.AddScoped<IMedicalRecordRepo, MedicalRecordRepo>();
 builder.Services.AddScoped<IPrescriptionrepo, PrescriptionRepo>();
-builder.Services.AddScoped<IServiceRepo, IServiceRepo>();
+builder.Services.AddScoped<IServiceRepo, ServiceRepo>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddScoped<IDentistServiceRepo, DentistServiceRepo>();
 builder.Services.AddScoped<IServiceAppointmentRepo, ServiceAppointmentRepo>();

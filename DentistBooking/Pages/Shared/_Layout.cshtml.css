@@ -46,3 +46,53 @@ button.accept-policy {
   white-space: nowrap;
   line-height: 60px;
 }
+
+.cus-container {
+    width: 100%;
+    padding-right: var(--bs-gutter-x, 0.75rem);
+    padding-left: var(--bs-gutter-x, 0.75rem);
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* Extra small devices (phones, less than 576px) */
+@media (max-width: 575.98px) {
+    .cus-container {
+        max-width: 100%;
+    }
+}
+
+/* Small devices (tablets, 576px and up) */
+@media (min-width: 576px) {
+    .cus-container {
+        max-width: 720px;
+    }
+}
+
+/* Medium devices (desktops, 768px and up) */
+@media (min-width: 768px) {
+    .cus-container {
+        max-width: 960px;
+    }
+}
+
+/* Large devices (large desktops, 992px and up) */
+@media (min-width: 992px) {
+    .cus-container {
+        max-width: 1140px;
+    }
+}
+
+/* Extra large devices (extra large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .cus-container {
+        max-width: 1320px;
+    }
+}
+
+/* Extra extra large devices (XXL desktops, 1400px and up) */
+@media (min-width: 1400px) {
+    .cus-container {
+        max-width: 1480px;
+    }
+}
