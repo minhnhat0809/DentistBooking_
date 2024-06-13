@@ -28,6 +28,12 @@ namespace DataAccess
             }
         }
 
+        public List<CheckupSchedule> getAllCheckupSchedule()
+        {
+            var context = new BookingDentistDbContext();
+            var scheduleList = context.CheckupSchedules.ToList();
+            return scheduleList;
+        }
         public CheckupSchedule getCheckupScheduleByID(int id)
         {
             var context = new BookingDentistDbContext();

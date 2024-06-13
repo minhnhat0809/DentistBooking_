@@ -40,58 +40,58 @@
         </div>
 
     </header>
-    <div class="main-container">
-        <div class="navcontainer">
-            <nav class="nav">
-                <div class="nav-upper-options">
-                    <div class="nav-option option1">
+<div class="main-container">
+    <div class="navcontainer">
+        <nav class="nav">
+            <div class="nav-upper-options">
+                <div class="nav-option option1">
                         
                     <i class="fa-solid fa-user"></i>
-                        <a asp-page="/Users/View"> Users</a>
-                    </div>
-
-                    <div class="option2 nav-option">
-                        <i class="fa-solid fa-list"></i>
-                        <a> Services</a>
-                    </div>
-
-                    <div class="nav-option option3">
-                        <i class="fa-solid fa-house-chimney-medical"></i>
-                        <a> Clinic</a>
-                    </div>
-
-                    <div class="nav-option option4">
-                        <i class="fa-solid fa-users"></i>
-                        <a> Customers</a>
-                    </div>
-
-                    <div class="nav-option option5">
-                        <i class="fa-solid fa-calendar-days"></i>
-                        <a> Appointment</a>
-                    </div>
-
-                    <div class="nav-option option6">
-                        <i class="fa-solid fa-gear"></i>
-                        <a> Settings</a>
-                    </div>
-
-                    <div class="nav-option logout">
-                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                        <a>Logout</a>
-                    </div>
-
+                    <a asp-page="/Users/View"> Users</a>
                 </div>
-            </nav>
-        </div>
 
-        <div class="vw-100 bg-opacity-10 bg-dark">
-            <div class="cus-container">
-                <main role="main" class="pb-3">
-                    @RenderBody()
-                </main>
+                <div class="option2 nav-option">
+                    <i class="fa-solid fa-list"></i>
+                    <a> Services</a>
+                </div>
+
+                <div class="nav-option option3">
+                    <i class="fa-solid fa-house-chimney-medical"></i>
+                    <a> Clinic</a>
+                </div>
+
+                <div class="nav-option option4">
+                    <i class="fa-solid fa-users"></i>
+                    <a> Customers</a>
+                </div>
+
+                <div class="nav-option option5">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <a> Appointment</a>
+                </div>
+
+                <div class="nav-option option6">
+                    <i class="fa-solid fa-gear"></i>
+                    <a> Settings</a>
+                </div>
+
+                <div class="nav-option logout">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <a>Logout</a>
+                </div>
+
             </div>
+        </nav>
+    </div>
+
+    <div class="vw-100 bg-opacity-10 bg-dark">
+        <div class="cus-container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
         </div>
-    </div
+    </div>
+</div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
