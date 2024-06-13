@@ -5,42 +5,93 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - DentistBooking</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/fontawesome-free-6.5.2-web/css/all.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/responsive.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/DentistBooking.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">DentistBooking</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - DentistBooking - <a asp-area="" asp-page="/Privacy">Privacy</a>
+        <div class="logosec">
+            <div class="logo">Dentist Booking</div>
+            <i class="fa-solid fa-bars icn menuicn align-content-center"
+                id="menuicn" 
+                alt="menu-icon"></i>
         </div>
-    </footer>
+
+        <div class="searchbar">
+            <input type="text"
+                   placeholder="Search">
+            <div class="searchbtn">
+                <i class="fa-solid fa-magnifying-glass" style="color: white"></i>
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="circle"></div>
+            <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/8.png"
+                 class="icn"
+                 alt="">
+            <div class="dp">
+                <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210180014/profile-removebg-preview.png"
+                     class="dpicn"
+                     alt="dp">
+            </div>
+        </div>
+
+    </header>
+    <div class="main-container">
+        <div class="navcontainer">
+            <nav class="nav">
+                <div class="nav-upper-options">
+                    <div class="nav-option option1">
+                        
+                    <i class="fa-solid fa-user"></i>
+                        <a asp-page="/Users/View"> Users</a>
+                    </div>
+
+                    <div class="option2 nav-option">
+                        <i class="fa-solid fa-list"></i>
+                        <a> Services</a>
+                    </div>
+
+                    <div class="nav-option option3">
+                        <i class="fa-solid fa-house-chimney-medical"></i>
+                        <a> Clinic</a>
+                    </div>
+
+                    <div class="nav-option option4">
+                        <i class="fa-solid fa-users"></i>
+                        <a> Customers</a>
+                    </div>
+
+                    <div class="nav-option option5">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <a> Appointment</a>
+                    </div>
+
+                    <div class="nav-option option6">
+                        <i class="fa-solid fa-gear"></i>
+                        <a> Settings</a>
+                    </div>
+
+                    <div class="nav-option logout">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        <a>Logout</a>
+                    </div>
+
+                </div>
+            </nav>
+        </div>
+
+        <div class="vw-100 bg-opacity-10 bg-dark">
+            <div class="cus-container">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
+    </div
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

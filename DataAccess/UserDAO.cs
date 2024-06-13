@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BusinessObject;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,7 +28,43 @@ namespace DataAccess
             }
         }
 
+        public User getUserByID(int id)
+        {
+            var context = new BookingDentistDbContext();
+            var user = context.Users.FirstOrDefault(c => c.UserId == id);
+            return user;
+        }
 
-        
+        public List<User> getAllUsers()
+        {
+            var context = new BookingDentistDbContext();
+            var userList = context.Users.ToList();
+            return userList;
+        }
+
+        public void deleteUser(User user)
+        {
+            var context = new BookingDentistDbContext();
+            user.Status = false;
+            context.Entry<User>(user).State = EntityState.Modified;
+            context.SaveChanges();
+        }
+
+        public void createUser(User user)
+        {
+            var context = new BookingDentistDbContext();
+            context.Users.Add(user);
+            context.SaveChanges();
+        }
+
+        public void updateUser(User user)
+        {
+            var context = new BookingDentistDbContext();
+            context.Entry<User>(user).State = EntityState.Modified;
+            context.SaveChanges();
+        }
+
+
+
     }
 }

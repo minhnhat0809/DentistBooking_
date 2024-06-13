@@ -7,7 +7,9 @@ public partial class Appointment
 {
     public int AppointmentId { get; set; }
 
-    public DateOnly Date { get; set; }
+    public DateTime TimeStart { get; set; }
+
+    public TimeOnly Duration { get; set; }
 
     public string? Diagnosis { get; set; }
 
@@ -15,7 +17,11 @@ public partial class Appointment
 
     public int? DentistSlotId { get; set; }
 
+    public int? CustomerId { get; set; }
+
     public int? MedicalRecordId { get; set; }
+
+    public virtual User? Customer { get; set; }
 
     public virtual DentistSlot? DentistSlot { get; set; }
 

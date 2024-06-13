@@ -13,9 +13,7 @@ public partial class Service
 
     public bool? Status { get; set; }
 
-    public int? ClinicOwnerId { get; set; }
-
-    public virtual User? ClinicOwner { get; set; }
+    public virtual ICollection<DentistService> DentistServices { get; set; } = new List<DentistService>();
 
     public virtual ICollection<ServiceAppointment> ServiceAppointments { get; set; } = new List<ServiceAppointment>();
 }

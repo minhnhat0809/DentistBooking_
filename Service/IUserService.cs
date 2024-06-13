@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BusinessObject;
 
 namespace Service
 {
     public interface IUserService
     {
+        public List<User> GetAllUsers();
+        public User GetById(int id);
+        public void CreateUser(User user);
+        public void UpdateUser(User user);
+        public void DeleteUser(User id);
+
     }
 }

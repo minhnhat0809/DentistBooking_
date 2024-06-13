@@ -11,6 +11,8 @@ public partial class ServiceAppointment
 
     public int? AppointmentId { get; set; }
 
+    public bool? Status { get; set; }
+
     public virtual Appointment? Appointment { get; set; }
 
     public virtual Service? Service { get; set; }
