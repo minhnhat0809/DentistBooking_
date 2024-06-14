@@ -1,5 +1,6 @@
 ﻿using BusinessObject;
 using Repository;
+using Service.Lib;
 
 namespace Service.Impl
 {
@@ -10,8 +11,24 @@ namespace Service.Impl
         {
             _userRepo = repo;
         }
+        private bool IsValidUser(User user)
+        {
+            return user != null &&
+                   (Validation.ValidateUserName(user.UserName) &&
+                    Validation.ValidateName(user.Name) &&
+                    Validation.ValidatePassword(user.Password) &&                  
+                    Validation.ValidatePhoneNumber(user.PhoneNumber) &&
+                    Validation.ValidateEmail(user.Email));
+        }
         public void CreateUser(User user)
-        => _userRepo.CreateUser(user);
+        {    
+            if (!IsValidUser(user))
+            {
+                throw new ArgumentException("Invalid user data. Please check all fields.");
+            }
+
+            _userRepo.CreateUser(user);
+        }
 
         public void DeleteUser(User id)
         => _userRepo.DeleteUser(id);
@@ -23,6 +40,13 @@ namespace Service.Impl
         => _userRepo.GetById(id);
 
         public void UpdateUser(User user)
-        => _userRepo.UpdateUser(user);
+        {
+            if (!IsValidUser(user))
+            {
+                throw new ArgumentException("Invalid user data. Please check all fields.");
+            }
+             _userRepo.UpdateUser(user);
+        }
+          
     }
 }
