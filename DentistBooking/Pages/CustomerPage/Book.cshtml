@@ -1,0 +1,137 @@
+﻿@page
+@model DentistBooking.Pages.CustomerPage.BookModel
+@{
+    ViewData["Title"] = "Book Appointment";
+    Layout = null;
+}
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .container {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 5%;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        color: #343a40;
+    }
+
+    h2 {
+        font-size: 2rem;
+        color: #343a40;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .table {
+        margin-top: 2rem;
+    }
+
+        .table th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+</style>
+
+<div class="container">
+    <h1 class="mb-4 text-center">Book Appointment</h1>
+
+    <form method="post" asp-page-handler="View" class="mb-5">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label asp-for="selectedDate" for="datepicker">Select Date:</label>
+                <input asp-for="selectedDate" type="date" id="datepicker" name="selectedDate" class="form-control" autocomplete="off">
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="selectedDentist" for="selectedDentist">Select Dentist:</label>
+                <select id="selectedDentistId" name="selectedDentistId" class="form-control">
+                    @foreach (var dentist in Model.selectedDentist)
+                    {
+                        <option value="@dentist.UserId">@dentist.Name</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">View schedule</button>
+    </form>
+
+    @if (Model.DentistSlots != null && Model.DentistSlots.Any())
+    {
+        <h2 class="mb-4 text-center">Dentist Schedule for @Model.selectedDate.ToShortDateString()</h2>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Dentist Slot</th>
+                    <th>Appointment</th>
+                    <th>Book</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var slot in Model.DentistSlots)
+                {
+                    <tr>
+                        <td>@slot.TimeStart.ToString("hh:mm tt") - @slot.TimeEnd.ToString("hh:mm tt")</td>
+                        <td>
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Start Time</th>
+                                        <th>End Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var appointment in slot.Appointments.OrderBy(ap => ap.TimeStart))
+                                    {
+                                        <tr>
+                                            <td>@appointment.TimeStart.ToString("hh:mm tt")</td>
+                                            <td>@appointment.TimeStart.Add(appointment.Duration.ToTimeSpan()).ToString("hh:mm tt")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </td>
+                        <td>
+                            <form method="post" asp-page-handler="Book" asp-route-slotId="@slot.DentistSlotId">
+                                <input asp-for="SlotId" type="hidden" name="slotId" value="@slot.DentistSlotId" />
+                                <div class="form-group">
+                                    <label asp-for="startTime">Start Time:</label>
+                                    <input asp-for="startTime" type="time" id="startTime" name="startTime" class="form-control" required>
+                                </div>
+                                <button type="submit" class="btn btn-success btn-block">Book Slot</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

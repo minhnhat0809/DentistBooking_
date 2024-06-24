@@ -10,5 +10,11 @@ namespace Repository
         public void UpdateUser(User user);
         public void DeleteUser(User id);
 
+        Task<User?> GetUserByUserName(string email);
+
+        Task<List<User>> GetAllDentists();
+
+        Task<List<User>> GetAllDentistsByService(int serviceId);
+
     }
 }

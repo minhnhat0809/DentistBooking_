@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Repository
 {
-    public class IMedicineRepo
+    public interface IMedicineRepo
     {
     }
 }
