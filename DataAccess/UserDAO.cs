@@ -64,6 +64,30 @@ namespace DataAccess
             context.SaveChanges();
         }
 
+        public async Task<User?> GetUserByUserName(string email)
+        {
+            var context = new BookingDentistDbContext();
+            User? user = await context.Users.Include(u => u.Role).FirstOrDefaultAsync(c => c.Email == email);
+            return user;
+        }
+
+        public async Task<List<User>> GetAllDentists()
+        {
+            var context = new BookingDentistDbContext();
+            var userList = await context.Users.Where(u => u.Role.RoleName.Equals("Dentist")).ToListAsync();
+            return userList;
+        }
+
+        public async Task<List<User>> GetAllDentistsByService(int serviceId)
+        {
+            var context = new BookingDentistDbContext();
+            var dentistService = context.DentistServices.Include(ds => ds.Dentist).Where(ds => ds.ServiceId == serviceId).ToList();
+            dentistService.Where(ds => ds.Status == true).ToList();
+
+            var dentistList = dentistService.Select(ds => ds.Dentist).ToList();
+            return dentistList;
+        }
+
 
 
     }
