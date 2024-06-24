@@ -31,15 +31,24 @@ namespace DataAccess
         public Appointment getAppointmnentByID(int id)
         {
             var context = new BookingDentistDbContext();
-            var category = context.Appointments.FirstOrDefault(c => c.AppointmentId == id);
-            return category;
+            var appointment = context.Appointments.FirstOrDefault(c => c.AppointmentId == id);
+            return appointment;
         }
 
-        public List<Appointment> getAllAppointments()
+        public async Task<List<Appointment>> getAllAppointments()
         {
             var context = new BookingDentistDbContext();
-            var categoryList = context.Appointments.ToList();
-            return categoryList;
+            var appointments = await context.Appointments.OrderBy(ap => ap.TimeStart).ToListAsync();
+            return appointments;
+        }
+
+        
+        public async Task<List<Appointment>> getAllAppointmentsOfCustomer(int customerId)
+        {
+            var context = new BookingDentistDbContext();
+            var appointments = await context.Appointments.Include(ap => ap.DentistSlot)
+                .ThenInclude(ds => ds.Dentist).Where(ap => ap.CustomerId == customerId).OrderBy(ap => ap.TimeStart).ToListAsync();
+            return appointments;
         }
 
         public void deleteAppointment(Appointment appointment)
@@ -50,11 +59,11 @@ namespace DataAccess
             context.SaveChanges();
         }
 
-        public void createAppointment(Appointment appointment)
+        public async Task createAppointment(Appointment appointment)
         {
             var context = new BookingDentistDbContext();
-            context.Appointments.Add(appointment);
-            context.SaveChanges();
+            await context.Appointments.AddAsync(appointment);
+            await context.SaveChangesAsync();
         }
 
         public void updateAppointment(Appointment appointment)

@@ -1,0 +1,49 @@
+﻿@page
+@model DentistBooking.Pages.Dentist_slots.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>DentistSlot</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="DentistSlot.TimeStart" class="control-label"></label>
+                <input asp-for="DentistSlot.TimeStart" class="form-control" />
+                <span asp-validation-for="DentistSlot.TimeStart" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DentistSlot.TimeEnd" class="control-label"></label>
+                <input asp-for="DentistSlot.TimeEnd" class="form-control" />
+                <span asp-validation-for="DentistSlot.TimeEnd" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DentistSlot.Status" class="control-label"></label>
+                <input asp-for="DentistSlot.Status" class="form-control" />
+                <span asp-validation-for="DentistSlot.Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DentistSlot.DentistId" class="control-label"></label>
+                <select asp-for="DentistSlot.DentistId" class ="form-control" asp-items="ViewBag.DentistId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

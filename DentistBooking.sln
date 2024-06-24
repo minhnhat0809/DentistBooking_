@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentistBooking", "DentistBooking\DentistBooking.csproj", "{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DentistBooking", "DentistBooking\DentistBooking.csproj", "{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.csproj", "{3F601383-8D16-49A7-ABD6-55341648A173}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "Service\Service.csproj", "{3F601383-8D16-49A7-ABD6-55341648A173}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{5521587E-8D87-4606-84EC-E8195D17714F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Repository.csproj", "{5521587E-8D87-4606-84EC-E8195D17714F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{006DFA0D-9E8E-4670-A99B-B78020B13B62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{006DFA0D-9E8E-4670-A99B-B78020B13B62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessObject", "BusinessObject\BusinessObject.csproj", "{48FD0A1A-E8A0-4B92-A504-6F803E6B39FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessObject", "BusinessObject\BusinessObject.csproj", "{48FD0A1A-E8A0-4B92-A504-6F803E6B39FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
