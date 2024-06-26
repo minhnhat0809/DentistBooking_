@@ -26,10 +26,18 @@ namespace DentistBooking.Pages
             {
                 // Replace this with your actual login logic
 
-                if (Email == "admin@domain.com" && Password == "password")
+                if (result.IsSuccess)
                 {
-                    // On successful login, redirect to a different page, e.g., Dashboard
-                    return RedirectToPage("/Users/View");
+                    HttpContext.Session.SetString("Email", Email);
+                    HttpContext.Session.SetString("Role", result.Result.ToString());
+                    if (result.Result.Equals("Customer"))
+                    {
+                        return RedirectToPage("/CustomerPage/InitialPage");
+                    }else if (result.Result.Equals("Admin"))
+                    {
+                        return RedirectToPage("/Users/View");
+                    }
+                   
                 }
                 else
                 {

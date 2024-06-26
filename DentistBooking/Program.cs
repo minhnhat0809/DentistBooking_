@@ -3,6 +3,7 @@ using Repository.Impl;
 using Repository;
 using Service.Impl;
 using Service;
+using DentistBooking.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,9 @@ builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
 {
     options.Conventions.AddPageRoute("/ForgetPassword", "/forget-password");
     options.Conventions.AddPageRoute("/Index", "/login");
-}); ;
+});
+
+builder.Services.AddSignalR();
 
 
 //Services
@@ -57,5 +60,9 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+
+app.MapHub<ChatHub>("/chatHub");
+
+app.UseSession();
 
 app.Run();

@@ -8,3 +8,15 @@ let nav = document.querySelector(".navcontainer");
 menuicn.addEventListener("click", () => {
     nav.classList.toggle("navclose");
 })
+
+document.addEventListener("DOMContentLoaded", function () {
+    var path = window.location.pathname;
+    var navOptions = document.querySelectorAll(".nav-option");
+
+    navOptions.forEach(function (option) {
+        var link = option.getAttribute("href");
+        if (path === link) {
+            option.classList.add("active");
+        }
+    });
+});

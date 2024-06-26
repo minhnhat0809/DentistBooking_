@@ -1,0 +1,46 @@
+﻿@page
+@model DentistBooking.Pages.CustomerPage.ViewAppointmentsModel
+@{
+    ViewData["Title"] = "View Appointments";
+    Layout = "_CustomerLayout";
+}
+
+<div class="mt-5">
+    <h1 class="mb-4">View Appointments</h1>
+
+    @if (Model.Appointments != null && Model.Appointments.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Appointment Date</th>
+                        <th scope="col">Time</th>
+                        <th scope="col">Dentist</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var appointment in Model.Appointments)
+                    {
+                        <tr>
+                            <td>@appointment.TimeStart.ToString("MM/dd/yyyy")</td>
+                            <td>@appointment.TimeStart.ToString("hh\\:mm tt")</td>
+                            <td>@appointment.DentistSlot.Dentist.Name</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            No appointments found.
+        </div>
+    }
+
+    <a asp-page="./Book"></a>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
