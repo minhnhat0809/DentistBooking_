@@ -1,0 +1,38 @@
+﻿@page "{id:int}"
+@model DentistBooking.Pages.CustomerPage.AppointmentDetailModel
+@{
+    ViewData["Title"] = "Appointment Detail";
+    Layout = null;
+}
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<div class="container mt-5">
+    <h1 class="mb-4">Appointment Detail</h1>
+
+    @if (Model.Appointment != null)
+    {
+        <div class="card">
+            <div class="card-header">
+                Appointment on @Model.Appointment.TimeStart.ToString("MM/dd/yyyy")
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Time: @Model.Appointment.TimeStart.ToString("hh\\:mm tt")</h5>
+                <p class="card-text"><strong>Duration:</strong> @Model.Appointment.Duration.ToString("hh\\:mm")</p>
+                <p class="card-text"><strong>Diagnosis:</strong> @Model.Appointment.Diagnosis</p>
+                <p class="card-text"><strong>Status:</strong> @(Model.Appointment.Status == true ? "Completed" : "Pending")</p>
+                <p class="card-text"><strong>Dentist:</strong> @Model.Appointment.DentistSlot?.Dentist?.Name</p>
+                <a href="/CustomerPage/ViewAppointments" class="btn btn-primary">Back to Appointments</a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">
+            Appointment not found.
+        </div>
+    }
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
