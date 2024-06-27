@@ -8,5 +8,6 @@
         public void DeleteService(BusinessObject.Service service);
         public void CreateService(BusinessObject.Service service);
         public void UpdateService(BusinessObject.Service service);
+        public List<BusinessObject.Service> GetAllServiceByDentist(int dentistId);
     }
 }

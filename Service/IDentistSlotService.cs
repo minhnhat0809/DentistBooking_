@@ -11,7 +11,7 @@ namespace Service
     {
         Task<List<DentistSlot>> GetAllDentistSlots();
 
-        Task<List<DentistSlot>> GetAllDentistSlotsByDentist(int id);
+        Task<List<DentistSlot>> GetAllDentistSlotsByDentistAndDate(int id, DateOnly selectedDate);
 
         Task<DentistSlot> GetDentistSlot(int dentistSlotId);
     }

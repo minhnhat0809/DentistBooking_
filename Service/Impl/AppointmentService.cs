@@ -12,14 +12,18 @@ namespace Service.Impl
     {
         private readonly IAppointmentRepo appointmentRepo;
         private readonly IDentistSlotService dentistSlotService;
+        private readonly IService service;
+        private readonly IUserService userService;
 
-        public AppointmentService(IAppointmentRepo appointmentRepo, IDentistSlotService dentistSlotService)
+        public AppointmentService(IAppointmentRepo appointmentRepo, IDentistSlotService dentistSlotService, IService service, IUserService userService)
         {
             this.appointmentRepo = appointmentRepo;
             this.dentistSlotService = dentistSlotService;
+            this.service = service;
+            this.userService = userService;
         }
 
-        public async Task<Dictionary<string, List<string>>> CreateAppointment(DateTime TimeStart, int dentistSlotId, int customerId)
+        public async Task<Dictionary<string, List<string>>> CreateAppointment(DateTime TimeStart, int dentistSlotId, int customerId, int serviceId)
         {
             Dictionary<string, List<string>> errors = new Dictionary<string, List<string>>();
 
@@ -32,9 +36,18 @@ namespace Service.Impl
                 errors[field].Add(message);
             }
 
+            BusinessObject.Service sErvice = service.GetServiceByID(serviceId);
+            if (sErvice == null)
+            {
+                AddError("Service", "Service is not existed");
+                return errors;
+            }
+
+
             if (dentistSlotId <= 0)
             {
                 AddError("","Internal Error At Getting Dentist Slot!");
+                return errors;
             }
 
             DentistSlot dentistSlot = await dentistSlotService.GetDentistSlot(dentistSlotId);
@@ -81,11 +94,51 @@ namespace Service.Impl
             appointment.DentistSlotId = dentistSlotId;
             appointment.CustomerId = customerId;
             appointment.Status = true;
+            appointment.ServiceId = serviceId;
 
             await appointmentRepo.CreateAppointment(appointment);
             AddError("Success", "Create Successfully!");
+            return errors;
+        }
 
+        public Dictionary<string, string> DeleteAppointment(int appointmentId)
+        {
+            Dictionary<string, string> errors = new Dictionary<string, string>();
 
+            void AddError(string field, string message)
+            {
+                if (!errors.ContainsKey(field))
+                {
+                    errors[field] = "";
+                }
+                errors[field] = message;
+            }
+
+            Appointment appointment = appointmentRepo.GetAppointment(appointmentId);
+
+            if (appointment == null)
+            {
+                AddError("NotFound","Appointment is not found.");
+                return errors;
+            }
+
+            if (appointment.TimeStart.Date == DateTime.Now.Date)
+            {
+                AddError("Date", "Appointment is going to happen!");
+                return errors;
+            }else if (appointment.TimeStart.Date < DateTime.UtcNow.Date)
+            {
+                AddError("Date", "Appointment is expired!");
+                return errors;
+            }
+
+            if (errors.Count > 0)
+            {
+                return errors;
+            }
+
+            appointmentRepo.DeleteAppointment(appointment);
+            AddError("Success","Delete successfully!");
             return errors;
         }
 
@@ -104,7 +157,126 @@ namespace Service.Impl
 
             appointmentList = await appointmentRepo.GetAllAppointmentsOfCustomer(customerId);
 
-            return appointmentList;
+            return appointmentList.Where(a => a.Status == true).ToList();
+        }
+
+        public Appointment GetAppointmentByID(int appointmentId)
+        {
+            Appointment appointment = appointmentRepo.GetAppointment(appointmentId);
+            return appointment;
+        }
+
+        public List<BusinessObject.Service> GetServiceOfDentistByDentistSlotID(int dentistSlotId, int serviceId)
+        {
+            DentistSlot dentistSlot = dentistSlotService.GetDentistSlot(dentistSlotId).Result;
+
+            BusinessObject.Service sErvice = service.GetServiceByID(serviceId);
+
+            List<BusinessObject.Service> services = service.GetAllServiceByDentist((int)dentistSlot.DentistId);
+
+            if (sErvice != null && services.Any(s => s.ServiceId == sErvice.ServiceId))
+            {
+                var s = services.FirstOrDefault(s => s.ServiceId == sErvice.ServiceId);
+                services.Remove(s);  
+                services.Insert(0, sErvice); 
+            }
+
+            return services;
+        }
+
+        public Dictionary<string, string> UpdateAppointment(int appointmentId, DateTime TimeStart, int serviceId)
+        {
+            Dictionary<string, string> errors = new Dictionary<string, string>();
+
+            void AddError(string field, string message)
+            {
+                if (!errors.ContainsKey(field))
+                {
+                    errors[field] = "";
+                }
+                errors[field] = message;
+            }
+
+            Appointment appointment = appointmentRepo.GetAppointment(appointmentId);
+
+            if (appointment == null)
+            {
+                AddError("NotFound", "Appointment is not found.");
+                return errors;
+            }
+
+            BusinessObject.Service sErvice = service.GetServiceByID(serviceId);
+            if (sErvice == null)
+            {
+                AddError("Service", "Service is not existed");
+                return errors;
+            }
+
+            List<User> dentists = userService.GetAllDentistsByService(serviceId).Result;
+
+            int dentistslotId = 0;
+
+            foreach(var dentist in dentists)
+            {
+                List<DentistSlot> dentistSlots = dentistSlotService
+                .GetAllDentistSlotsByDentistAndDate(dentist.UserId, DateOnly.FromDateTime(TimeStart.Date)).Result;
+                
+                foreach(var dentistSlot in dentistSlots)
+                {
+                    dentistslotId = dentistSlot.DentistSlotId;
+                    List<Appointment> appointments = dentistSlot.Appointments.ToList();
+                    if (dentistSlot.TimeStart <= TimeStart && TimeStart < dentistSlot.TimeEnd)
+                    {
+                        foreach (var ap in appointments)
+                        {
+                            TimeSpan apStartTime = ap.TimeStart.TimeOfDay;
+                            TimeSpan apEndTime = ap.Duration.ToTimeSpan();
+
+                            if (IsOverlap(TimeStart.TimeOfDay, apStartTime, apEndTime))
+                            {
+                                AddError("TimeStart",
+                                    $"There is an appointment overlapping at {ap.TimeStart.ToString()} - {ap.TimeStart.Add(ap.Duration.ToTimeSpan()).ToString()}");
+                                break;
+                            }
+
+                            if (IsOverlap(TimeStart.TimeOfDay.Add(new TimeSpan(0, 30, 0)), apStartTime, apEndTime))
+                            {
+                                AddError("TimeStart",
+                                    $"There is an appointment overlapping at " +
+                                    $"{ap.TimeStart.ToString()} - {ap.TimeStart.Add(ap.Duration.ToTimeSpan()).ToString()}. Your appoinment needs 30'");
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        AddError("Time","Out of range!");
+                        return errors;
+                    }
+                }
+            }
+
+            //User dentist = dentists.FirstOrDefault();
+
+            if (errors.Count > 0)
+            {
+                return errors;
+            }
+
+
+
+
+
+
+            appointment.ServiceId = serviceId;
+            appointment.TimeStart = TimeStart;
+            appointment.DentistSlotId = dentistslotId;
+            appointment.Duration = TimeOnly.FromDateTime(TimeStart).AddMinutes(30);
+            appointmentRepo.UpdateAppointment(appointment);
+
+
+            AddError("Success", "Update successfully!");
+            return errors;
         }
 
         private bool IsOverlap(TimeSpan targetStart, TimeSpan apStart, TimeSpan apEnd)

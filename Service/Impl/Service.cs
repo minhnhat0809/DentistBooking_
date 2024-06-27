@@ -16,6 +16,11 @@ namespace Service.Impl
         public void DeleteService(BusinessObject.Service service)
         =>_servicerRepo.DeleteService(service);
 
+        public List<BusinessObject.Service> GetAllServiceByDentist(int dentistId)
+        {
+            return _servicerRepo.GetAllServicesOfDentist(dentistId);
+        }
+
         public List<BusinessObject.Service> GetAllServices()
         => _servicerRepo.GetAllServices();
 
