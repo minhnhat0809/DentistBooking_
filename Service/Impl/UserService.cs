@@ -72,8 +72,8 @@ namespace Service.Impl
                     if (user.Password.Equals(password))
                     {
                         responseDTO.IsSuccess = true;
-                        responseDTO.Message = "Create successfully !!!";
-                        responseDTO.Result = user.Role.RoleName;
+                        responseDTO.Message = user.UserId.ToString();
+                        responseDTO.Result = user.Role.RoleName;                        
                         return responseDTO;
                     }
                     else

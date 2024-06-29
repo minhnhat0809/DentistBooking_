@@ -31,7 +31,7 @@ namespace DataAccess
         public Appointment getAppointmnentByID(int id)
         {
             var context = new BookingDentistDbContext();
-            var appointment = context.Appointments.FirstOrDefault(c => c.AppointmentId == id);
+            var appointment = context.Appointments.Include(a => a.DentistSlot.Dentist).Include(a => a.Customer).FirstOrDefault(c => c.AppointmentId == id);
             return appointment;
         }
 
@@ -54,7 +54,7 @@ namespace DataAccess
         public void deleteAppointment(Appointment appointment)
         {
             var context = new BookingDentistDbContext();
-            appointment.Status = false;
+            appointment.Status = "Deleted";
             context.Entry<Appointment>(appointment).State = EntityState.Modified;
             context.SaveChanges();
         }

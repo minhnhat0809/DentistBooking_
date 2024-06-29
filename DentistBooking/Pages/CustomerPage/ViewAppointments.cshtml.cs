@@ -19,7 +19,14 @@ namespace DentistBooking.Pages.CustomerPage
 
         public async Task OnGet()
         {
-            Appointments = await appointmentService.GetALlAppointmentsOfCustomer(2);
+            var customerId = Int32.Parse(HttpContext.Session.GetString("ID"));
+            Appointments = await appointmentService.GetALlAppointmentsOfCustomer(customerId);
+        }
+
+        public IActionResult OnPostDelete(int appointmentId)
+        {
+
+            return Page();
         }
     }
 }

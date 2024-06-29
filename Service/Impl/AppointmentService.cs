@@ -12,29 +12,34 @@ namespace Service.Impl
     {
         private readonly IAppointmentRepo appointmentRepo;
         private readonly IDentistSlotService dentistSlotService;
+        private readonly IService service;
+        private readonly IUserRepo userRepo;
 
-        public AppointmentService(IAppointmentRepo appointmentRepo, IDentistSlotService dentistSlotService)
+        public AppointmentService(IAppointmentRepo appointmentRepo, IDentistSlotService dentistSlotService, IService service, IUserRepo userRepo)
         {
             this.appointmentRepo = appointmentRepo;
             this.dentistSlotService = dentistSlotService;
+            this.service = service;
+            this.userRepo = userRepo;
         }
 
-        public async Task<Dictionary<string, List<string>>> CreateAppointment(DateTime TimeStart, int dentistSlotId, int customerId)
+        public async Task<Dictionary<string, string>> CreateAppointment(DateTime TimeStart, int customerId, DateOnly selectedDate, int serviceId)
         {
-            Dictionary<string, List<string>> errors = new Dictionary<string, List<string>>();
+            Dictionary<string, string> errors = new Dictionary<string, string>();
 
             void AddError(string field, string message)
             {
                 if (!errors.ContainsKey(field))
                 {
-                    errors[field] = new List<string>();
+                    errors[field] = "";
                 }
-                errors[field].Add(message);
+                errors[field] = message;
             }
 
-            if (dentistSlotId <= 0)
+            /*if (dentistSlotId <= 0)
             {
                 AddError("","Internal Error At Getting Dentist Slot!");
+                return errors;
             }
 
             DentistSlot dentistSlot = await dentistSlotService.GetDentistSlot(dentistSlotId);
@@ -51,12 +56,12 @@ namespace Service.Impl
                 foreach (var ap in appointments)
                 {
                     TimeSpan apStartTime = ap.TimeStart.TimeOfDay;
-                    TimeSpan apEndTime = ap.Duration.ToTimeSpan();
+                    TimeSpan apEndTime = ap.TimeEnd.TimeOfDay;
 
                     if (IsOverlap(TimeStart.TimeOfDay, apStartTime, apEndTime))
                     {
                         AddError("TimeStart",
-                            $"There is an appointment overlapping at {ap.TimeStart.ToString()} - {ap.TimeStart.Add(ap.Duration.ToTimeSpan()).ToString()}");
+                            $"There is an appointment overlapping at {ap.TimeStart} - {ap.TimeStart.Add(ap.TimeEnd.TimeOfDay)}");
                         break; 
                     }
 
@@ -64,28 +69,38 @@ namespace Service.Impl
                     {
                         AddError("TimeStart",
                             $"There is an appointment overlapping at " +
-                            $"{ap.TimeStart.ToString()} - {ap.TimeStart.Add(ap.Duration.ToTimeSpan()).ToString()}. Your appoinment needs 30'");
+                            $"{ap.TimeStart.ToString()} - {ap.TimeStart.Add(ap.TimeEnd.TimeOfDay).ToString()}. Your appoinment needs 30'");
                         break;
                     }
                 }
-            }
+            }*/
 
-            if (errors.Count > 0)
+            BusinessObject.Service sErvice = service.GetServiceByID(serviceId);
+            if (sErvice == null)
             {
+                AddError("Service","Service is not existed!");
                 return errors;
             }
 
+            if (!CheckTimeStart(TimeStart))
+            {
+                AddError("TimeStart","Time must be in range [8:00-11:30] & [13:00-19:00]");
+                return errors;
+            }
+
+            DateTime combinedDateTime = new DateTime(selectedDate.Year, selectedDate.Month, 
+                selectedDate.Day, TimeStart.Hour, TimeStart.Minute, TimeStart.Second);
+
+
             Appointment appointment = new Appointment();
-            appointment.TimeStart = TimeStart;
-            appointment.Duration = TimeOnly.FromTimeSpan(TimeStart.TimeOfDay.Add(new TimeSpan(0, 30, 0)));
-            appointment.DentistSlotId = dentistSlotId;
+            appointment.TimeStart = combinedDateTime;
+            appointment.TimeEnd = TimeStart.AddMinutes(30);
             appointment.CustomerId = customerId;
-            appointment.Status = true;
+            appointment.Status = "Processing";
+            appointment.ServiceId = serviceId;
 
             await appointmentRepo.CreateAppointment(appointment);
             AddError("Success", "Create Successfully!");
-
-
             return errors;
         }
 
@@ -107,10 +122,112 @@ namespace Service.Impl
             return appointmentList;
         }
 
+        public Appointment GetAppointmentByID(int id)
+        {
+            Appointment appointment = appointmentRepo.GetAppointmentById(id);
+            return appointment;
+        }
+
+        public Dictionary<string, string> UpdateAppointment(int serviceId, int appointmentId, DateTime TimeStart, int customerId)
+        {
+            Dictionary<string, string> errors = new Dictionary<string, string>();
+
+            void AddError(string field, string message)
+            {
+                errors[field] = message;
+            }
+
+            if (serviceId <= 0)
+            {
+                AddError("Service", "Service Id is empty!");
+                return errors;
+            }
+
+            BusinessObject.Service sErvice = service.GetServiceByID(serviceId);
+            if (sErvice == null)
+            {
+                AddError("Service","Service is not existed!");
+                return errors;
+            }
+
+            if (customerId <= 0)
+            {
+                AddError("Customer", "Cusotmer Id is empty!");
+                return errors;
+            }
+
+            User cusomter = userRepo.GetById(customerId);
+            if (cusomter == null)
+            {
+                AddError("Customer","Customer is not existed!");
+                return errors;
+            }
+
+            if (!CheckTimeStart(TimeStart))
+            {
+                AddError("TimeStart","Time must be in range [8:00-12:00] & [13:00-19:30]");
+                return errors;
+            }
+
+            Appointment appointment = appointmentRepo.GetAppointmentById(appointmentId);
+            if (appointment == null)
+            {
+                AddError("Appointment","Appointment is not existed!");
+                return errors;
+            }
+
+            switch (appointment.Status)
+            {
+                case "Deleted":
+                    AddError("Status","Cannot update! This appointment is deleted!");
+                    return errors;
+                case "Happening":
+                    AddError("Status", "Cannot update! This appointment is happening!");
+                    return errors;
+                case "Expired":
+                    AddError("Status", "Cannot update! This appointment is expired!");
+                    return errors;
+                case "Done":
+                    AddError("Status", "Cannot update! This appointment is done!");
+                    return errors;
+                default:
+                    break;
+            }
+
+            appointment.ServiceId = serviceId;
+            appointment.TimeStart = TimeStart;
+            appointment.TimeEnd = TimeStart.AddMinutes(30);
+            appointment.Status = "Processing";
+            
+            appointmentRepo.UpdateAppointment(appointment);
+            AddError("Success", "Update successfully!");
+            return errors;
+        }
+
         private bool IsOverlap(TimeSpan targetStart, TimeSpan apStart, TimeSpan apEnd)
         {
            
             return (targetStart >= apStart && targetStart < apEnd);
         }
+        private bool CheckTimeStart(DateTime TimeStart)
+        {
+          
+            TimeSpan morningStart = new TimeSpan(8, 0, 0); 
+            TimeSpan morningEnd = new TimeSpan(11, 30, 0); 
+            TimeSpan afternoonStart = new TimeSpan(13, 0, 0); 
+            TimeSpan afternoonEnd = new TimeSpan(19, 0, 0); 
+
+           
+            TimeSpan timeOfDay = TimeStart.TimeOfDay;
+
+            
+            bool isInMorning = timeOfDay >= morningStart && timeOfDay <= morningEnd;
+            bool isInAfternoon = timeOfDay >= afternoonStart && timeOfDay <= afternoonEnd;
+           
+            return isInMorning || isInAfternoon;
+        }
+
+
+
     }
 }

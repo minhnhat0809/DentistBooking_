@@ -16,6 +16,13 @@ namespace Service.Impl
         public void DeleteService(BusinessObject.Service service)
         =>_servicerRepo.DeleteService(service);
 
+        public List<BusinessObject.Service> GetAllServiceByDentist(int dentistId)
+        {
+            
+
+            throw new NotImplementedException();
+        }
+
         public List<BusinessObject.Service> GetAllServices()
         => _servicerRepo.GetAllServices();
 

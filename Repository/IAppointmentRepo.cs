@@ -14,5 +14,9 @@ namespace Repository
         Task CreateAppointment(Appointment appointment);
 
         Task<List<Appointment>> GetAllAppointmentsOfCustomer(int customerId);
+
+        Appointment GetAppointmentById(int id);
+
+        void UpdateAppointment(Appointment appointment);   
     }
 }

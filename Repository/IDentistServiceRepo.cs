@@ -9,5 +9,6 @@ namespace Repository
 {
     public interface IDentistServiceRepo
     {
+        List<BusinessObject.Service> GetAllServiceByDentist(int dentistId);
     }
 }

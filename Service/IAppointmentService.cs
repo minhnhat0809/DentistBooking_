@@ -11,8 +11,12 @@ namespace Service
     {
         Task<List<Appointment>> GetAllAppointments();
 
-        Task<Dictionary<string, List<string>>> CreateAppointment(DateTime TimeStart, int dentistSlotId, int customerId);
+        Task<Dictionary<string, string>> CreateAppointment(DateTime TimeStart, int customerId, DateOnly selectedDate, int serviceId);
 
         Task<List<Appointment>> GetALlAppointmentsOfCustomer(int customerId);
+
+        Appointment GetAppointmentByID(int id);
+
+        Dictionary<string, string> UpdateAppointment(int serviceId, int appointmentId, DateTime TimeStart, int customerId);
     }
 }

@@ -9,15 +9,17 @@ public partial class Appointment
 
     public DateTime TimeStart { get; set; }
 
-    public TimeOnly Duration { get; set; }
+    public DateTime TimeEnd { get; set; }
 
     public string? Diagnosis { get; set; }
 
-    public bool? Status { get; set; }
+    public string? Status { get; set; }
 
     public int? DentistSlotId { get; set; }
 
     public int? CustomerId { get; set; }
+
+    public int? ServiceId { get; set; }
 
     public int? MedicalRecordId { get; set; }
 
@@ -29,5 +31,5 @@ public partial class Appointment
 
     public virtual ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
 
-    public virtual ICollection<ServiceAppointment> ServiceAppointments { get; set; } = new List<ServiceAppointment>();
+    public virtual Service? Service { get; set; }
 }

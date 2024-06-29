@@ -2,7 +2,7 @@
 @model DentistBooking.Pages.CustomerPage.ViewAppointmentsModel
 @{
     ViewData["Title"] = "View Appointments";
-    Layout = null;
+    Layout = "/Pages/Shared/_CustomerLayout.cshtml";
 }
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -19,6 +19,7 @@
                         <th scope="col">Appointment Date</th>
                         <th scope="col">Time</th>
                         <th scope="col">Dentist</th>
+                        <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -28,6 +29,12 @@
                             <td>@appointment.TimeStart.ToString("MM/dd/yyyy")</td>
                             <td>@appointment.TimeStart.ToString("hh\\:mm tt")</td>
                             <td>@appointment.DentistSlot.Dentist.Name</td>
+                            <td>
+                                <a asp-page="./AppointmentDetail" asp-route-id="@appointment.AppointmentId" class="btn btn-primary btn-sm">View Details</a>
+                                <form method="post" asp-page-handler="Delete" asp-route-id="@appointment.AppointmentId" class="d-inline">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
                         </tr>
                     }
                 </tbody>

@@ -12,7 +12,7 @@ namespace Repository.Impl
     {
         public async Task<List<DentistSlot>> GetAllDentistSlots() => await DentistSlotDAO.Instance.getAllDentistSlots();
 
-        public async Task<List<DentistSlot>> GetAllDentistSlotsByDentist(int id) => await DentistSlotDAO.Instance.getAllDentistSlotsByDentist(id);
+        public async Task<List<DentistSlot>> GetAllDentistSlotsByDentistAndDate(int id, DateOnly selectedDate) => await DentistSlotDAO.Instance.getAllDentistSlotsByDentist(id, selectedDate);
 
         public async Task<DentistSlot> GetDentistSlotByID(int dentistSlotId) => await DentistSlotDAO.Instance.getDentistSlotByID(dentistSlotId);
     }

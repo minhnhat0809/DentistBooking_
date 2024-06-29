@@ -23,9 +23,9 @@ namespace Service.Impl
             return dentistServiceList;
         }
 
-        public async Task<List<DentistSlot>> GetAllDentistSlotsByDentist(int id)
+        public async Task<List<DentistSlot>> GetAllDentistSlotsByDentistAndDate(int id, DateOnly selectedDate)
         {
-            List<DentistSlot> dentistSlots = await dentistSlotRepo.GetAllDentistSlotsByDentist(id);
+            List<DentistSlot> dentistSlots = await dentistSlotRepo.GetAllDentistSlotsByDentistAndDate(id, selectedDate);
             return dentistSlots;
         }
 

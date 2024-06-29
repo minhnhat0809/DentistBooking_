@@ -11,6 +11,7 @@ namespace Repository.Impl
         public void DeleteService(Service service)
         => ServiceDAO.Instance.deleteService(service);
 
+
         public List<Service> GetAllServices()
         => ServiceDAO.Instance.getAllServices();
 

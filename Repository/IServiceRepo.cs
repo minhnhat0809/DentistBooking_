@@ -9,5 +9,6 @@ namespace Repository
         public void DeleteService(Service service);
         public void CreateService(Service service);
         public void UpdateService(Service service);
+
     }
 }

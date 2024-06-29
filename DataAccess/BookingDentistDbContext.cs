@@ -38,8 +38,6 @@ public partial class BookingDentistDbContext : DbContext
 
     public virtual DbSet<Service> Services { get; set; }
 
-    public virtual DbSet<ServiceAppointment> ServiceAppointments { get; set; }
-
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -50,7 +48,7 @@ public partial class BookingDentistDbContext : DbContext
     {
         modelBuilder.Entity<Appointment>(entity =>
         {
-            entity.HasKey(e => e.AppointmentId).HasName("PK__appointm__A50828FC7807574C");
+            entity.HasKey(e => e.AppointmentId).HasName("PK__appointm__A50828FC92EA3C93");
 
             entity.ToTable("appointment");
 
@@ -60,16 +58,21 @@ public partial class BookingDentistDbContext : DbContext
             entity.Property(e => e.Diagnosis)
                 .HasMaxLength(255)
                 .HasColumnName("diagnosis");
-            entity.Property(e => e.Duration).HasColumnName("duration");
             entity.Property(e => e.MedicalRecordId).HasColumnName("medical_record_id");
-            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.ServiceId).HasColumnName("service_id");
+            entity.Property(e => e.Status)
+                .HasMaxLength(10)
+                .HasColumnName("status");
+            entity.Property(e => e.TimeEnd)
+                .HasColumnType("datetime")
+                .HasColumnName("time_end");
             entity.Property(e => e.TimeStart)
                 .HasColumnType("datetime")
                 .HasColumnName("time_start");
 
             entity.HasOne(d => d.Customer).WithMany(p => p.Appointments)
                 .HasForeignKey(d => d.CustomerId)
-                .HasConstraintName("FK__appointme__custo__5070F446");
+                .HasConstraintName("FK__appointme__custo__5165187F");
 
             entity.HasOne(d => d.DentistSlot).WithMany(p => p.Appointments)
                 .HasForeignKey(d => d.DentistSlotId)
@@ -78,11 +81,15 @@ public partial class BookingDentistDbContext : DbContext
             entity.HasOne(d => d.MedicalRecord).WithMany(p => p.Appointments)
                 .HasForeignKey(d => d.MedicalRecordId)
                 .HasConstraintName("FK__appointme__medic__4F7CD00D");
+
+            entity.HasOne(d => d.Service).WithMany(p => p.Appointments)
+                .HasForeignKey(d => d.ServiceId)
+                .HasConstraintName("FK__appointme__servi__5070F446");
         });
 
         modelBuilder.Entity<CheckupSchedule>(entity =>
         {
-            entity.HasKey(e => e.ScheduleId).HasName("PK__checkup___C46A8A6FEA916EDE");
+            entity.HasKey(e => e.ScheduleId).HasName("PK__checkup___C46A8A6F9B6290B2");
 
             entity.ToTable("checkup_schedule");
 
@@ -111,7 +118,7 @@ public partial class BookingDentistDbContext : DbContext
 
         modelBuilder.Entity<Clinic>(entity =>
         {
-            entity.HasKey(e => e.ClinicId).HasName("PK__clinic__A0C8D19BD7408E5F");
+            entity.HasKey(e => e.ClinicId).HasName("PK__clinic__A0C8D19BBE0AE97C");
 
             entity.ToTable("clinic");
 
@@ -133,7 +140,7 @@ public partial class BookingDentistDbContext : DbContext
 
         modelBuilder.Entity<DentistService>(entity =>
         {
-            entity.HasKey(e => e.DentistServiceId).HasName("PK__dentist___79BA93FD575B91C1");
+            entity.HasKey(e => e.DentistServiceId).HasName("PK__dentist___79BA93FD9DF4C9B2");
 
             entity.ToTable("dentist_service");
 
@@ -153,7 +160,7 @@ public partial class BookingDentistDbContext : DbContext
 
         modelBuilder.Entity<DentistSlot>(entity =>
         {
-            entity.HasKey(e => e.DentistSlotId).HasName("PK__dentist___F7C6C8C3FF231507");
+            entity.HasKey(e => e.DentistSlotId).HasName("PK__dentist___F7C6C8C33A2A88E7");
 
             entity.ToTable("dentist_slot");
 
@@ -174,7 +181,7 @@ public partial class BookingDentistDbContext : DbContext
 
         modelBuilder.Entity<MedicalRecord>(entity =>
         {
-            entity.HasKey(e => e.MediaRecordId).HasName("PK__medical___E8DC072E7817D1F0");
+            entity.HasKey(e => e.MediaRecordId).HasName("PK__medical___E8DC072E2BE6E869");
 
             entity.ToTable("medical_record");
 
@@ -196,7 +203,7 @@ public partial class BookingDentistDbContext : DbContext
 
         modelBuilder.Entity<Medicine>(entity =>
         {
-            entity.HasKey(e => e.MedicineId).HasName("PK__medicine__E7148EBB6075DFC9");
+            entity.HasKey(e => e.MedicineId).HasName("PK__medicine__E7148EBB4B00EEBC");
 
             entity.ToTable("medicine");
 
@@ -216,7 +223,7 @@ public partial class BookingDentistDbContext : DbContext
 
         modelBuilder.Entity<Prescription>(entity =>
         {
-            entity.HasKey(e => e.PrescriptionId).HasName("PK__prescrip__3EE444F80BA4AE84");
+            entity.HasKey(e => e.PrescriptionId).HasName("PK__prescrip__3EE444F8345AC814");
 
             entity.ToTable("prescription");
 
@@ -233,12 +240,12 @@ public partial class BookingDentistDbContext : DbContext
 
             entity.HasOne(d => d.Appointment).WithMany(p => p.Prescriptions)
                 .HasForeignKey(d => d.AppointmentId)
-                .HasConstraintName("FK__prescript__appoi__571DF1D5");
+                .HasConstraintName("FK__prescript__appoi__5441852A");
         });
 
         modelBuilder.Entity<PrescriptionMedicine>(entity =>
         {
-            entity.HasKey(e => e.PrescriptionMedicineId).HasName("PK__prescrip__6C802F92CE63C9BC");
+            entity.HasKey(e => e.PrescriptionMedicineId).HasName("PK__prescrip__6C802F92F6C095E7");
 
             entity.ToTable("prescription_medicine");
 
@@ -253,16 +260,16 @@ public partial class BookingDentistDbContext : DbContext
 
             entity.HasOne(d => d.Medicine).WithMany(p => p.PrescriptionMedicines)
                 .HasForeignKey(d => d.MedicineId)
-                .HasConstraintName("FK__prescript__medic__5CD6CB2B");
+                .HasConstraintName("FK__prescript__medic__59FA5E80");
 
             entity.HasOne(d => d.Prescription).WithMany(p => p.PrescriptionMedicines)
                 .HasForeignKey(d => d.PrescriptionId)
-                .HasConstraintName("FK__prescript__presc__5BE2A6F2");
+                .HasConstraintName("FK__prescript__presc__59063A47");
         });
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.RoleId).HasName("PK__role__760965CCC3544C74");
+            entity.HasKey(e => e.RoleId).HasName("PK__role__760965CCC4CE8C32");
 
             entity.ToTable("role");
 
@@ -274,7 +281,7 @@ public partial class BookingDentistDbContext : DbContext
 
         modelBuilder.Entity<Service>(entity =>
         {
-            entity.HasKey(e => e.ServiceId).HasName("PK__service__3E0DB8AFC01B6960");
+            entity.HasKey(e => e.ServiceId).HasName("PK__service__3E0DB8AF2EFB7359");
 
             entity.ToTable("service");
 
@@ -288,29 +295,9 @@ public partial class BookingDentistDbContext : DbContext
             entity.Property(e => e.Status).HasColumnName("status");
         });
 
-        modelBuilder.Entity<ServiceAppointment>(entity =>
-        {
-            entity.HasKey(e => e.ServiceAppointmentId).HasName("PK__service___5A8BD6158DA9082D");
-
-            entity.ToTable("service_appointment");
-
-            entity.Property(e => e.ServiceAppointmentId).HasColumnName("service_appointment_id");
-            entity.Property(e => e.AppointmentId).HasColumnName("appointment_id");
-            entity.Property(e => e.ServiceId).HasColumnName("service_id");
-            entity.Property(e => e.Status).HasColumnName("status");
-
-            entity.HasOne(d => d.Appointment).WithMany(p => p.ServiceAppointments)
-                .HasForeignKey(d => d.AppointmentId)
-                .HasConstraintName("FK__service_a__appoi__5441852A");
-
-            entity.HasOne(d => d.Service).WithMany(p => p.ServiceAppointments)
-                .HasForeignKey(d => d.ServiceId)
-                .HasConstraintName("FK__service_a__servi__534D60F1");
-        });
-
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__user__B9BE370F074A16C0");
+            entity.HasKey(e => e.UserId).HasName("PK__user__B9BE370F05D85914");
 
             entity.ToTable("user");
 

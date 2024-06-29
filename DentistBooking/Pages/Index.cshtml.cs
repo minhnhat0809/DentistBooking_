@@ -37,9 +37,10 @@ namespace DentistBooking.Pages
                 {
                     HttpContext.Session.SetString("Email", Email);
                     HttpContext.Session.SetString("Role", result.Result.ToString());
+                    HttpContext.Session.SetString("ID", result.Message);
                     if (result.Result.Equals("Customer"))
                     {
-                        return RedirectToPage("/CustomerPage/InitialPage");
+                        return RedirectToPage("/CustomerPage/ViewServices");
                     }else if (result.Result.Equals("Admin"))
                     {
                         return RedirectToPage("/Users/Index");

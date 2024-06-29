@@ -2,7 +2,8 @@
 @model DentistBooking.Pages.CustomerPage.BookModel
 @{
     ViewData["Title"] = "Book Appointment";
-    Layout = null;
+    Layout = "/Pages/Shared/_CustomerLayout.cshtml";
+    var resultMessage = TempData["Book"] as string;
 }
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -65,73 +66,48 @@
 <div class="container">
     <h1 class="mb-4 text-center">Book Appointment</h1>
 
-    <form method="post" asp-page-handler="View" class="mb-5">
+    <form method="post" asp-page-handler="Book" class="mb-5">
         <div class="form-row">
+            <input type="hidden" asp-for="@Model.serviceId"/>
             <div class="form-group col-md-6">
                 <label asp-for="selectedDate" for="datepicker">Select Date:</label>
                 <input asp-for="selectedDate" type="date" id="datepicker" name="selectedDate" class="form-control" autocomplete="off">
             </div>
-            <div class="form-group col-md-6">
-                <label asp-for="selectedDentist" for="selectedDentist">Select Dentist:</label>
-                <select id="selectedDentistId" name="selectedDentistId" class="form-control">
-                    @foreach (var dentist in Model.selectedDentist)
-                    {
-                        <option value="@dentist.UserId">@dentist.Name</option>
-                    }
-                </select>
-            </div>
+                <div class="form-group">
+                    <label asp-for="startTime">Start Time:</label>
+                    <input asp-for="startTime" type="time" id="startTime" name="startTime" class="form-control" required>
+                </div>
+            <button type="submit" class="btn btn-success btn-block">Book</button>
         </div>
-        <button type="submit" class="btn btn-primary btn-block">View schedule</button>
-    </form>
+    </form> 
+    <br />
+    <div class="text-xl-center">
+        <a href="./InitialPage" class="btn btn-primary btn-sm">Back</a>
+    </div>
 
-    @if (Model.DentistSlots != null && Model.DentistSlots.Any())
-    {
-        <h2 class="mb-4 text-center">Dentist Schedule for @Model.selectedDate.ToShortDateString()</h2>
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>Dentist Slot</th>
-                    <th>Appointment</th>
-                    <th>Book</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var slot in Model.DentistSlots)
-                {
-                    <tr>
-                        <td>@slot.TimeStart.ToString("hh:mm tt") - @slot.TimeEnd.ToString("hh:mm tt")</td>
-                        <td>
-                            <table class="table table-sm">
-                                <thead>
-                                    <tr>
-                                        <th>Start Time</th>
-                                        <th>End Time</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var appointment in slot.Appointments.OrderBy(ap => ap.TimeStart))
-                                    {
-                                        <tr>
-                                            <td>@appointment.TimeStart.ToString("hh:mm tt")</td>
-                                            <td>@appointment.TimeStart.Add(appointment.Duration.ToTimeSpan()).ToString("hh:mm tt")</td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </td>
-                        <td>
-                            <form method="post" asp-page-handler="Book" asp-route-slotId="@slot.DentistSlotId">
-                                <input asp-for="SlotId" type="hidden" name="slotId" value="@slot.DentistSlotId" />
-                                <div class="form-group">
-                                    <label asp-for="startTime">Start Time:</label>
-                                    <input asp-for="startTime" type="time" id="startTime" name="startTime" class="form-control" required>
-                                </div>
-                                <button type="submit" class="btn btn-success btn-block">Book Slot</button>
-                            </form>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-</div>
+    <br />
+    <div id="customAlertPlaceholder"></div>
+
+<script>
+    $(document).ready(function () {
+        var today = new Date().toISOString().split('T')[0];
+        $('#datepicker').val(today);
+    });
+
+        $(document).ready(function () {
+            var resultMessage = '@resultMessage';
+            if (resultMessage.trim() !== '') {
+                var alertPlaceholder = $('#customAlertPlaceholder');
+                var alertHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'
+                    + resultMessage
+                    + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
+                    + '<span aria-hidden="true">&times;</span>'
+                    + '</button></div>';
+                alertPlaceholder.html(alertHtml);
+
+                setTimeout(function () {
+                    alertPlaceholder.children('.alert').alert('close');
+                }, 3000);
+            }
+        });
+</script>

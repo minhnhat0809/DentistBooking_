@@ -13,7 +13,7 @@ public partial class Service
 
     public bool? Status { get; set; }
 
-    public virtual ICollection<DentistService> DentistServices { get; set; } = new List<DentistService>();
+    public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 
-    public virtual ICollection<ServiceAppointment> ServiceAppointments { get; set; } = new List<ServiceAppointment>();
+    public virtual ICollection<DentistService> DentistServices { get; set; } = new List<DentistService>();
 }
