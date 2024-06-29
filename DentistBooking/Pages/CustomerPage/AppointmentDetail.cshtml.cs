@@ -33,7 +33,7 @@ namespace DentistBooking.Pages.CustomerPage
             if (!result.ContainsKey("Success"))
             {
                 foreach(var item in result)
-                {
+        {
                     TempData["AppointmentDetail"] = item.Value;
                 }
                 Services = dentistService.GetAllServiceByDentist((int)Appointment.DentistSlot.DentistId, (int)Appointment.ServiceId);
