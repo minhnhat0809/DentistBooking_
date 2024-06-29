@@ -50,7 +50,7 @@ namespace DentistBooking.Pages.CustomerPage
                 }
                 return Page();
             }
-            TempData["Book"] = "Category created successfully!";
+            TempData["Book"] = "Appointment created successfully!";
             return Page();
         }
     }

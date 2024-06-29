@@ -101,40 +101,6 @@ namespace Service.Impl
 
             await appointmentRepo.CreateAppointment(appointment);
             AddError("Success", "Create Successfully!");
-            void AddError(string field, string message)
-            {
-                if (!errors.ContainsKey(field))
-                {
-                    errors[field] = "";
-                }
-                errors[field] = message;
-            }
-
-            Appointment appointment = appointmentRepo.GetAppointment(appointmentId);
-
-            if (appointment == null)
-            {
-                AddError("NotFound","Appointment is not found.");
-                return errors;
-            }
-
-            if (appointment.TimeStart.Date == DateTime.Now.Date)
-            {
-                AddError("Date", "Appointment is going to happen!");
-                return errors;
-            }else if (appointment.TimeStart.Date < DateTime.UtcNow.Date)
-            {
-                AddError("Date", "Appointment is expired!");
-                return errors;
-            }
-
-            if (errors.Count > 0)
-            {
-                return errors;
-            }
-
-            appointmentRepo.DeleteAppointment(appointment);
-            AddError("Success","Delete successfully!");
             return errors;
         }
 
@@ -152,13 +118,12 @@ namespace Service.Impl
             List<Appointment> appointmentList = new List<Appointment>();
 
             appointmentList = await appointmentRepo.GetAllAppointmentsOfCustomer(customerId);
-
-            return appointmentList.Where(a => a.Status == true).ToList();
+            return appointmentList;
         }
 
         public Appointment GetAppointmentByID(int appointmentId)
         {
-            Appointment appointment = appointmentRepo.GetAppointment(appointmentId);
+            Appointment appointment = appointmentRepo.GetAppointmentById(appointmentId);
             return appointment;
         }
 
@@ -179,108 +144,6 @@ namespace Service.Impl
 
             return services;
         }
-
-        public Dictionary<string, string> UpdateAppointment(int appointmentId, DateTime TimeStart, int serviceId)
-        {
-            Dictionary<string, string> errors = new Dictionary<string, string>();
-
-            void AddError(string field, string message)
-            {
-                if (!errors.ContainsKey(field))
-                {
-                    errors[field] = "";
-                }
-                errors[field] = message;
-            }
-
-            Appointment appointment = appointmentRepo.GetAppointment(appointmentId);
-
-            if (appointment == null)
-            {
-                AddError("NotFound", "Appointment is not found.");
-                return errors;
-            }
-
-            BusinessObject.Service sErvice = service.GetServiceByID(serviceId);
-            if (sErvice == null)
-            {
-                AddError("Service", "Service is not existed");
-                return errors;
-            }
-
-            List<User> dentists = userService.GetAllDentistsByService(serviceId).Result;
-
-            int dentistslotId = 0;
-
-            foreach(var dentist in dentists)
-            {
-                List<DentistSlot> dentistSlots = dentistSlotService
-                .GetAllDentistSlotsByDentistAndDate(dentist.UserId, DateOnly.FromDateTime(TimeStart.Date)).Result;
-                
-                foreach(var dentistSlot in dentistSlots)
-                {
-                    dentistslotId = dentistSlot.DentistSlotId;
-                    List<Appointment> appointments = dentistSlot.Appointments.ToList();
-                    if (dentistSlot.TimeStart <= TimeStart && TimeStart < dentistSlot.TimeEnd)
-                    {
-                        foreach (var ap in appointments)
-                        {
-                            TimeSpan apStartTime = ap.TimeStart.TimeOfDay;
-                            TimeSpan apEndTime = ap.Duration.ToTimeSpan();
-
-                            if (IsOverlap(TimeStart.TimeOfDay, apStartTime, apEndTime))
-                            {
-                                AddError("TimeStart",
-                                    $"There is an appointment overlapping at {ap.TimeStart.ToString()} - {ap.TimeStart.Add(ap.Duration.ToTimeSpan()).ToString()}");
-                                break;
-                            }
-
-                            if (IsOverlap(TimeStart.TimeOfDay.Add(new TimeSpan(0, 30, 0)), apStartTime, apEndTime))
-                            {
-                                AddError("TimeStart",
-                                    $"There is an appointment overlapping at " +
-                                    $"{ap.TimeStart.ToString()} - {ap.TimeStart.Add(ap.Duration.ToTimeSpan()).ToString()}. Your appoinment needs 30'");
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        AddError("Time","Out of range!");
-                        return errors;
-                    }
-                }
-            }
-
-            //User dentist = dentists.FirstOrDefault();
-
-            if (errors.Count > 0)
-            {
-                return errors;
-            }
-
-
-
-
-
-
-            appointment.ServiceId = serviceId;
-            appointment.TimeStart = TimeStart;
-            appointment.DentistSlotId = dentistslotId;
-            appointment.Duration = TimeOnly.FromDateTime(TimeStart).AddMinutes(30);
-            appointmentRepo.UpdateAppointment(appointment);
-
-
-            AddError("Success", "Update successfully!");
-            return errors;
-        }
-
-        public Appointment GetAppointmentByID(int id)
-        {
-            Appointment appointment = appointmentRepo.GetAppointmentById(id);
-            return appointment;
-        }
-
         public Dictionary<string, string> UpdateAppointment(int serviceId, int appointmentId, DateTime TimeStart, int customerId)
         {
             Dictionary<string, string> errors = new Dictionary<string, string>();
@@ -318,7 +181,7 @@ namespace Service.Impl
 
             if (!CheckTimeStart(TimeStart))
             {
-                AddError("TimeStart","Time must be in range [8:00-12:00] & [13:00-19:30]");
+                AddError("TimeStart","Time must be in range [8:00-11:30] & [13:00-19:00]");
                 return errors;
             }
 

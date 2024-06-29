@@ -36,11 +36,13 @@ namespace DentistBooking.Pages.CustomerPage
         {
                     TempData["AppointmentDetail"] = item.Value;
                 }
+                Appointment = appointmentService.GetAppointmentByID(Appointment.AppointmentId);
                 Services = dentistService.GetAllServiceByDentist((int)Appointment.DentistSlot.DentistId, (int)Appointment.ServiceId);
                 return Page();
             }
 
             TempData["AppointmentDetail"] = "Appointment updated successfully!";
+            Appointment = appointmentService.GetAppointmentByID(Appointment.AppointmentId);
             Services = dentistService.GetAllServiceByDentist((int)Appointment.DentistSlot.DentistId, (int)Appointment.ServiceId);
             return Page();
         }
