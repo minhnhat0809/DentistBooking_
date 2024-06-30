@@ -28,17 +28,25 @@ namespace DataAccess
             }
         }
 
-        public DentistSlot getDentistSlotByID(int id)
+        public async Task<DentistSlot> getDentistSlotByID(int id)
         {
             var context = new BookingDentistDbContext();
-            var dentistSlot = context.DentistSlots.FirstOrDefault(c => c.DentistSlotId == id);
+            var dentistSlot = await context.DentistSlots.Include(ds => ds.Appointments).FirstOrDefaultAsync(c => c.DentistSlotId == id);
             return dentistSlot;
         }
 
-        public List<DentistSlot> getAllClinics()
+        public async Task<List<DentistSlot>> getAllDentistSlots()
         {
             var context = new BookingDentistDbContext();
-            var dentistSlotList = context.DentistSlots.ToList();
+            var dentistSlotList = await context.DentistSlots.ToListAsync();
+            return dentistSlotList;
+        }       
+        public async Task<List<DentistSlot>> getAllDentistSlotsByDentist(int id, DateOnly selectedDate)
+        {
+            var context = new BookingDentistDbContext();
+            var dentistSlotList = await context.DentistSlots.Include(ds => ds.Appointments)
+                .Where(ds => ds.DentistId == id && EF.Functions.DateDiffDay(ds.TimeStart, selectedDate.ToDateTime(default)) == 0)
+                .OrderBy(ds => ds.TimeStart).ToListAsync();
             return dentistSlotList;
         }
 

@@ -1,0 +1,92 @@
+﻿﻿
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/fontawesome-free-6.5.2-web/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/responsive.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/DentistBooking.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <div class="logosec">
+            <div class="logo">Dentist Booking</div>
+            <i class="fa-solid fa-bars icn menuicn align-content-center"
+               id="menuicn"
+               alt="menu-icon"></i>
+        </div>
+
+        <div class="searchbar">
+            <input type="text"
+                   placeholder="Search">
+            <div class="searchbtn">
+                <i class="fa-solid fa-magnifying-glass" style="color: white"></i>
+            </div>
+        </div>
+
+        <div class="message">
+            <div class="circle"></div>
+            <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/8.png"
+                 class="icn"
+                 alt="">
+            <div class="dp">
+                <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210180014/profile-removebg-preview.png"
+                     class="dpicn"
+                     alt="dp">
+            </div>
+        </div>
+
+    </header>
+    <div class="main-container">
+        <div class="navcontainer">
+            <nav class="nav">
+                <div class="nav-upper-options">
+                    <a href="/CustomerPage/ViewAppointments" class="nav-option option2">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        My Appointment
+                    </a>
+                    <a href="/CustomerPage/ViewClinic" class="nav-option option3">
+                        <i class="fa-solid fa-house-chimney-medical"></i>
+                        Clinic
+                    </a>
+                    <a href="/CustomerPage/ViewServices" class="nav-option option3">
+                        <i class="fa-solid fa-stethoscope"></i>
+                        Service
+                    </a>
+                    <a href="#" class="nav-option option3">
+                        <i class="fa-solid fa-chalkboard-user"></i>
+                        Medicine Precription
+                    </a>
+                    <a href="#" class="nav-option option6">
+                        <i class="fa-solid fa-gear"></i>
+                        Settings
+                    </a>
+
+                    <a href="#" class="nav-option logout">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        Logout
+                    </a>
+                </div>
+            </nav>
+        </div>
+
+        <div class="vw-100 bg-opacity-10 bg-dark">
+            <div class="cus-container">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

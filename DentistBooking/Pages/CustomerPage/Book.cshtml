@@ -1,0 +1,113 @@
+﻿@page
+@model DentistBooking.Pages.CustomerPage.BookModel
+@{
+    ViewData["Title"] = "Book Appointment";
+    Layout = "/Pages/Shared/_CustomerLayout.cshtml";
+    var resultMessage = TempData["Book"] as string;
+}
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .container {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 5%;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        color: #343a40;
+    }
+
+    h2 {
+        font-size: 2rem;
+        color: #343a40;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .table {
+        margin-top: 2rem;
+    }
+
+        .table th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+</style>
+
+<div class="container">
+    <h1 class="mb-4 text-center">Book Appointment</h1>
+
+    <form method="post" asp-page-handler="Book" class="mb-5">
+        <div class="form-row">
+            <input type="hidden" asp-for="@Model.serviceId"/>
+            <div class="form-group col-md-6">
+                <label asp-for="selectedDate" for="datepicker">Select Date:</label>
+                <input asp-for="selectedDate" type="date" id="datepicker" name="selectedDate" class="form-control" autocomplete="off">
+            </div>
+                <div class="form-group">
+                    <label asp-for="startTime">Start Time:</label>
+                    <input asp-for="startTime" type="time" id="startTime" name="startTime" class="form-control" required>
+                </div>
+            <button type="submit" class="btn btn-success btn-block">Book</button>
+        </div>
+    </form> 
+    <br />
+    <div class="text-xl-center">
+        <a href="./ViewServices" class="btn btn-primary btn-sm">Back</a>
+    </div>
+
+    <br />
+    <div id="customAlertPlaceholder"></div>
+
+<script>
+    $(document).ready(function () {
+        var today = new Date().toISOString().split('T')[0];
+        $('#datepicker').val(today);
+    });
+
+        $(document).ready(function () {
+            var resultMessage = '@resultMessage';
+            if (resultMessage.trim() !== '') {
+                var alertPlaceholder = $('#customAlertPlaceholder');
+                var alertHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'
+                    + resultMessage
+                    + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
+                    + '<span aria-hidden="true">&times;</span>'
+                    + '</button></div>';
+                alertPlaceholder.html(alertHtml);
+
+                setTimeout(function () {
+                    alertPlaceholder.children('.alert').alert('close');
+                }, 3000);
+            }
+        });
+</script>

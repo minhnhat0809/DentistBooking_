@@ -1,0 +1,18 @@
+﻿@page
+@model DentistBooking.Pages.CustomerPage.ViewClinicModel
+@{
+    ViewData["Title"] = "Clinic Detail";
+    Layout = "/Pages/Shared/_CustomerLayout.cshtml";
+}
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<div class="container mt-4">
+    <h1>@Model.Clinic.ClinicName</h1>
+    <br />
+    <p><strong>Address:</strong> @Model.Clinic.Address</p>
+    <br />
+    <p><strong>Phone:</strong> @Model.Clinic.Phone</p>
+    <br />
+    <p><strong>Email:</strong> @Model.Clinic.Email</p>
+</div>

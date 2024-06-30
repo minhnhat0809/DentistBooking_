@@ -1,4 +1,5 @@
 ﻿using BusinessObject;
+using BusinessObject.DTO;
 
 namespace Service
 {
@@ -9,6 +10,12 @@ namespace Service
         public void CreateUser(User user);
         public void UpdateUser(User user);
         public void DeleteUser(User id);
+
+        Task<ResponseDTO> Login(string userName, string password);
+        Task<List<User>?> GetAllDentists();
+
+        Task<List<User>?> GetAllDentistsByService(int serviceId);
+
 
     }
 }

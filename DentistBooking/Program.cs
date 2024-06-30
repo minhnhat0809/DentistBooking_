@@ -13,6 +13,13 @@ builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
     options.Conventions.AddPageRoute("/Index", "/login");
 }); ;
 
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(60);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 
 //Services
 builder.Services.AddScoped<IUserService, UserService>();
@@ -24,6 +31,8 @@ builder.Services.AddScoped<IPrescriptionService, PrescriptionService>();
 builder.Services.AddScoped<IService, Service.Impl.Service>();
 builder.Services.AddScoped<IClinicService, ClinicService>();
 builder.Services.AddScoped<IMedicineService, MedicineService>();
+builder.Services.AddScoped<IDentistService, DentistService>();
+
 
 
 
@@ -37,7 +46,7 @@ builder.Services.AddScoped<IPrescriptionrepo, PrescriptionRepo>();
 builder.Services.AddScoped<IServiceRepo, ServiceRepo>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddScoped<IDentistServiceRepo, DentistServiceRepo>();
-builder.Services.AddScoped<IServiceAppointmentRepo, ServiceAppointmentRepo>();
+builder.Services.AddScoped<IMedicineRepo, MedicineRepo>();
 
 var app = builder.Build();
 
@@ -57,5 +66,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+
+app.UseSession();
 
 app.Run();

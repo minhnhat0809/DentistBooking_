@@ -1,0 +1,43 @@
+﻿@page
+@model DentistBooking.Pages.CustomerPage.InitialPageModel
+
+@{
+    ViewData["Title"] = "Services";
+    Layout = "/Pages/Shared/_CustomerLayout.cshtml";
+}
+
+<h1>Services</h1>
+<br></br>
+<a asp-page="./ViewAppointments">View Appointments</a>
+<br></br>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Service[0].ServiceName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Service[0].Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Service[0].Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Service) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                <a asp-page="./Book" asp-route-id="@item.ServiceId">Book</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

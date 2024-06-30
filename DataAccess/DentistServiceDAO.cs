@@ -64,5 +64,12 @@ namespace DataAccess
             context.SaveChanges();
         }
 
+        public List<BusinessObject.Service> getAllServiceByDentist(int dentistId)
+        {
+            var context = new BookingDentistDbContext();
+            List<BusinessObject.Service> services = context.DentistServices.Where(ds => ds.DentistId == dentistId).Select(ds => ds.Service).ToList();
+            return services;
+        }
+
     }
 }
