@@ -45,7 +45,11 @@ namespace DentistBooking.Pages
                     {
                         return RedirectToPage("/Users/Index");
                     }
-                   
+                    else if (result.Result.Equals("Staff"))
+                    {
+                        return RedirectToPage("/Staff/MedicineManagement/Index");
+                    }
+
                 }
                 else
                 {                   
