@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BusinessObject;
 
 namespace Service
 {
     public interface IPrescriptionService
     {
+        public List<Prescription> GetPrescriptions();
+        public Prescription GetById(int id);
+        public void CreatePrescription(Prescription prescription);
+        public void UpdatePrescription(Prescription prescription);
+        public void DeletePrescription(int id);
     }
 }

@@ -3,16 +3,100 @@
   "WorkspaceRootPath": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dentistbooking\\pages\\dentis\\prescriptionmanagement\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|solutionrelative:dentistbooking\\pages\\dentis\\prescriptionmanagement\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dentistbooking\\pages\\dentis\\prescriptionmanagement\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|solutionrelative:dentistbooking\\pages\\dentis\\prescriptionmanagement\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dentistbooking\\pages\\dentis\\prescriptionmanagement\\delete.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|solutionrelative:dentistbooking\\pages\\dentis\\prescriptionmanagement\\delete.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dentistbooking\\pages\\dentis\\prescriptionmanagement\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|solutionrelative:dentistbooking\\pages\\dentis\\prescriptionmanagement\\delete.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dentistbooking\\pages\\dentis\\prescriptionmanagement\\details.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|solutionrelative:dentistbooking\\pages\\dentis\\prescriptionmanagement\\details.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dentistbooking\\pages\\dentis\\prescriptionmanagement\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|solutionrelative:dentistbooking\\pages\\dentis\\prescriptionmanagement\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dentistbooking\\pages\\dentis\\prescriptionmanagement\\edit.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|solutionrelative:dentistbooking\\pages\\dentis\\prescriptionmanagement\\edit.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dentistbooking\\pages\\dentis\\prescriptionmanagement\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|solutionrelative:dentistbooking\\pages\\dentis\\prescriptionmanagement\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dentistbooking\\pages\\dentis\\prescriptionmanagement\\create.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|solutionrelative:dentistbooking\\pages\\dentis\\prescriptionmanagement\\create.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dentistbooking\\pages\\dentis\\prescriptionmanagement\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|solutionrelative:dentistbooking\\pages\\dentis\\prescriptionmanagement\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dentistbooking\\pages\\staff\\medicinemanagement\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|solutionrelative:dentistbooking\\pages\\staff\\medicinemanagement\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dentistbooking\\pages\\users\\view.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|solutionrelative:dentistbooking\\pages\\users\\view.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dentistbooking\\pages\\shared\\_dentistlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|solutionrelative:dentistbooking\\pages\\shared\\_dentistlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dentistbooking\\pages\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|solutionrelative:dentistbooking\\pages\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dentistbooking\\pages\\shared\\_customerlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|solutionrelative:dentistbooking\\pages\\shared\\_customerlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3F601383-8D16-49A7-ABD6-55341648A173}|Service\\Service.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\service\\impl\\prescriptionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3F601383-8D16-49A7-ABD6-55341648A173}|Service\\Service.csproj|solutionrelative:service\\impl\\prescriptionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3F601383-8D16-49A7-ABD6-55341648A173}|Service\\Service.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\service\\imedicineservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3F601383-8D16-49A7-ABD6-55341648A173}|Service\\Service.csproj|solutionrelative:service\\imedicineservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3F601383-8D16-49A7-ABD6-55341648A173}|Service\\Service.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\service\\iprescriptionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3F601383-8D16-49A7-ABD6-55341648A173}|Service\\Service.csproj|solutionrelative:service\\iprescriptionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5521587E-8D87-4606-84EC-E8195D17714F}|Repository\\Repository.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\repository\\impl\\prescriptionrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5521587E-8D87-4606-84EC-E8195D17714F}|Repository\\Repository.csproj|solutionrelative:repository\\impl\\prescriptionrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5521587E-8D87-4606-84EC-E8195D17714F}|Repository\\Repository.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\repository\\imedicinerepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5521587E-8D87-4606-84EC-E8195D17714F}|Repository\\Repository.csproj|solutionrelative:repository\\imedicinerepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5521587E-8D87-4606-84EC-E8195D17714F}|Repository\\Repository.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\repository\\iprescriptionrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5521587E-8D87-4606-84EC-E8195D17714F}|Repository\\Repository.csproj|solutionrelative:repository\\iprescriptionrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{006DFA0D-9E8E-4670-A99B-B78020B13B62}|DataAccess\\DataAccess.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dataaccess\\prescriptiondao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{006DFA0D-9E8E-4670-A99B-B78020B13B62}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\prescriptiondao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dentistbooking\\pages\\staff\\medicinemanagement\\delete.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|solutionrelative:dentistbooking\\pages\\staff\\medicinemanagement\\delete.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{006DFA0D-9E8E-4670-A99B-B78020B13B62}|DataAccess\\DataAccess.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dataaccess\\medicinedao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{006DFA0D-9E8E-4670-A99B-B78020B13B62}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\medicinedao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5521587E-8D87-4606-84EC-E8195D17714F}|Repository\\Repository.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\repository\\impl\\medicinerepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5521587E-8D87-4606-84EC-E8195D17714F}|Repository\\Repository.csproj|solutionrelative:repository\\impl\\medicinerepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dentistbooking\\pages\\staff\\medicinemanagement\\details.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -31,10 +115,6 @@
       "RelativeMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|solutionrelative:dentistbooking\\pages\\staff\\medicinemanagement\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dentistbooking\\pages\\staff\\medicinemanagement\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|solutionrelative:dentistbooking\\pages\\staff\\medicinemanagement\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dentistbooking\\wwwroot\\css\\staff.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
       "RelativeMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|solutionrelative:dentistbooking\\wwwroot\\css\\staff.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     },
@@ -43,24 +123,12 @@
       "RelativeMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|solutionrelative:dentistbooking\\pages\\staff\\medicinemanagement\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dentistbooking\\pages\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|solutionrelative:dentistbooking\\pages\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dentistbooking\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|solutionrelative:dentistbooking\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5521587E-8D87-4606-84EC-E8195D17714F}|Repository\\Repository.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\repository\\imedicinerepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5521587E-8D87-4606-84EC-E8195D17714F}|Repository\\Repository.csproj|solutionrelative:repository\\imedicinerepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dentistbooking\\pages\\users\\view.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|solutionrelative:dentistbooking\\pages\\users\\view.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dentistbooking\\pages\\users\\view.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|solutionrelative:dentistbooking\\pages\\users\\view.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dentistbooking\\pages\\index.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -81,14 +149,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{3F601383-8D16-49A7-ABD6-55341648A173}|Service\\Service.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\service\\impl\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{3F601383-8D16-49A7-ABD6-55341648A173}|Service\\Service.csproj|solutionrelative:service\\impl\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dentistbooking\\pages\\shared\\_customerlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{F3E1CFC8-CE4F-4474-B669-F29DB7F52E20}|DentistBooking\\DentistBooking.csproj|solutionrelative:dentistbooking\\pages\\shared\\_customerlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{3F601383-8D16-49A7-ABD6-55341648A173}|Service\\Service.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\service\\impl\\medicineservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3F601383-8D16-49A7-ABD6-55341648A173}|Service\\Service.csproj|solutionrelative:service\\impl\\medicineservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3F601383-8D16-49A7-ABD6-55341648A173}|Service\\Service.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\service\\lib\\validation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -183,10 +243,6 @@
       "RelativeMoniker": "D:0:0:{006DFA0D-9E8E-4670-A99B-B78020B13B62}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\dentistslotdao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{006DFA0D-9E8E-4670-A99B-B78020B13B62}|DataAccess\\DataAccess.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dataaccess\\prescriptiondao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{006DFA0D-9E8E-4670-A99B-B78020B13B62}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\prescriptiondao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{006DFA0D-9E8E-4670-A99B-B78020B13B62}|DataAccess\\DataAccess.csproj|d:\\fu\\semester7\\prn221\\dentisbooking\\dataaccess\\clinicdao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{006DFA0D-9E8E-4670-A99B-B78020B13B62}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\clinicdao.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -205,246 +261,207 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "DockedWidth": 243,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Index.cshtml",
-              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Index.cshtml",
-              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Index.cshtml",
-              "RelativeToolTip": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Index.cshtml",
-              "ViewState": "AQIAAA8AAAAAAAAAAAAAAA0AAAAsAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-06-30T11:02:02.85Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Delete.cshtml.cs",
-              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Delete.cshtml.cs",
-              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Delete.cshtml.cs",
-              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Delete.cshtml.cs",
-              "RelativeToolTip": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Delete.cshtml.cs",
-              "ViewState": "AQIAABQAAAAAAAAAAAAAACAAAAAIAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-30T11:02:02.76Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
               "Title": "Index.cshtml.cs",
-              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Index.cshtml.cs",
-              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Index.cshtml.cs",
-              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Index.cshtml.cs",
-              "RelativeToolTip": "DentistBooking\\Pages\\Index.cshtml.cs",
-              "ViewState": "AQIAAB0AAAAAAAAAAAAAwDEAAABIAAAA",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Index.cshtml.cs",
+              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Index.cshtml.cs",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Index.cshtml.cs",
+              "RelativeToolTip": "DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Index.cshtml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-11T12:53:10.551Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "View.cshtml",
-              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Users\\View.cshtml",
-              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Users\\View.cshtml",
-              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Users\\View.cshtml",
-              "RelativeToolTip": "DentistBooking\\Pages\\Users\\View.cshtml",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABQAAAAIAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-06-30T11:17:57.545Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Edit.cshtml.cs",
-              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Edit.cshtml.cs",
-              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Edit.cshtml.cs",
-              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Edit.cshtml.cs",
-              "RelativeToolTip": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Edit.cshtml.cs",
-              "ViewState": "AQIAAAgAAAAAAAAAAAAQwBsAAAALAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-30T11:02:02.418Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Create.cshtml",
-              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Create.cshtml",
-              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Create.cshtml",
-              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Create.cshtml",
-              "RelativeToolTip": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Create.cshtml",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAAADMAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-06-30T11:02:02.085Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Create.cshtml.cs",
-              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Create.cshtml.cs",
-              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Create.cshtml.cs",
-              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Create.cshtml.cs",
-              "RelativeToolTip": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Create.cshtml.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAHAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-30T11:02:02.246Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Details.cshtml.cs",
-              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Details.cshtml.cs",
-              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Details.cshtml.cs",
-              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Details.cshtml.cs",
-              "RelativeToolTip": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Details.cshtml.cs",
-              "ViewState": "AQIAAAgAAAAAAAAAAAAiwBkAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-30T11:02:02.588Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "Program.cs",
-              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Program.cs",
-              "RelativeDocumentMoniker": "DentistBooking\\Program.cs",
-              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Program.cs",
-              "RelativeToolTip": "DentistBooking\\Program.cs",
-              "ViewState": "AQIAAAsAAAAAAAAAAAAAACEAAAA+AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-30T11:12:52.804Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "MedicineRepo.cs",
-              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Repository\\Impl\\MedicineRepo.cs",
-              "RelativeDocumentMoniker": "Repository\\Impl\\MedicineRepo.cs",
-              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Repository\\Impl\\MedicineRepo.cs",
-              "RelativeToolTip": "Repository\\Impl\\MedicineRepo.cs",
-              "ViewState": "AQIAAA4AAAAAAAAAAAAiwBsAAAAMAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-30T11:30:29.672Z",
+              "WhenOpened": "2024-07-01T03:20:27.77Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "MedicineDAO.cs",
-              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DataAccess\\MedicineDAO.cs",
-              "RelativeDocumentMoniker": "DataAccess\\MedicineDAO.cs",
-              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DataAccess\\MedicineDAO.cs",
-              "RelativeToolTip": "DataAccess\\MedicineDAO.cs",
-              "ViewState": "AQIAACAAAAAAAAAAAAAAAC4AAAAMAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-30T14:19:52.255Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "Index.cshtml.cs",
-              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Index.cshtml.cs",
-              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Index.cshtml.cs",
-              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Index.cshtml.cs",
-              "RelativeToolTip": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Index.cshtml.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAAIAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-30T11:02:02.935Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 23,
-              "Title": "Medicine.cs",
-              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\BusinessObject\\Medicine.cs",
-              "RelativeDocumentMoniker": "BusinessObject\\Medicine.cs",
-              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\BusinessObject\\Medicine.cs",
-              "RelativeToolTip": "BusinessObject\\Medicine.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-30T11:07:47.072Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 21,
-              "Title": "MedicineService.cs",
-              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Service\\Impl\\MedicineService.cs",
-              "RelativeDocumentMoniker": "Service\\Impl\\MedicineService.cs",
-              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Service\\Impl\\MedicineService.cs",
-              "RelativeToolTip": "Service\\Impl\\MedicineService.cs",
-              "ViewState": "AQIAAAsAAAAAAAAAAAAQwAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-30T11:10:40.122Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "_ValidationScriptsPartial.cshtml",
-              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Shared\\_ValidationScriptsPartial.cshtml",
-              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Shared\\_ValidationScriptsPartial.cshtml",
-              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Shared\\_ValidationScriptsPartial.cshtml",
-              "RelativeToolTip": "DentistBooking\\Pages\\Shared\\_ValidationScriptsPartial.cshtml",
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Index.cshtml",
+              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Index.cshtml",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Index.cshtml",
+              "RelativeToolTip": "DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Index.cshtml",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-06-30T11:21:08.68Z",
+              "WhenOpened": "2024-07-01T03:20:27.658Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "_Layout.cshtml",
-              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Shared\\_Layout.cshtml",
-              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Shared\\_Layout.cshtml",
-              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Shared\\_Layout.cshtml",
-              "RelativeToolTip": "DentistBooking\\Pages\\Shared\\_Layout.cshtml",
+              "DocumentIndex": 2,
+              "Title": "Delete.cshtml.cs",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Delete.cshtml.cs",
+              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Delete.cshtml.cs",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Delete.cshtml.cs",
+              "RelativeToolTip": "DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Delete.cshtml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-01T03:20:27.541Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Delete.cshtml",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Delete.cshtml",
+              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Delete.cshtml",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Delete.cshtml",
+              "RelativeToolTip": "DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Delete.cshtml",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-06-30T12:40:10Z",
+              "WhenOpened": "2024-07-01T03:20:27.441Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Details.cshtml.cs",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Details.cshtml.cs",
+              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Details.cshtml.cs",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Details.cshtml.cs",
+              "RelativeToolTip": "DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Details.cshtml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-01T03:20:27.321Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Details.cshtml",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Details.cshtml",
+              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Details.cshtml",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Details.cshtml",
+              "RelativeToolTip": "DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Details.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-07-01T03:20:27.224Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Edit.cshtml.cs",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Edit.cshtml.cs",
+              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Edit.cshtml.cs",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Edit.cshtml.cs",
+              "RelativeToolTip": "DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Edit.cshtml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-01T03:20:27.092Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Edit.cshtml",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Edit.cshtml",
+              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Edit.cshtml",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Edit.cshtml",
+              "RelativeToolTip": "DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Edit.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-07-01T03:20:26.968Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 8,
-              "Title": "Staff.css",
-              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\wwwroot\\css\\Staff.css",
-              "RelativeDocumentMoniker": "DentistBooking\\wwwroot\\css\\Staff.css",
-              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\wwwroot\\css\\Staff.css",
-              "RelativeToolTip": "DentistBooking\\wwwroot\\css\\Staff.css",
-              "ViewState": "AQIAABMAAAAAAAAAAAAgwCgAAAAUAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2024-06-30T12:44:33.179Z",
+              "Title": "Create.cshtml.cs",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Create.cshtml.cs",
+              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Create.cshtml.cs",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Create.cshtml.cs",
+              "RelativeToolTip": "DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Create.cshtml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-01T03:20:26.841Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "View.cshtml.cs",
-              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Users\\View.cshtml.cs",
-              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Users\\View.cshtml.cs",
-              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Users\\View.cshtml.cs",
-              "RelativeToolTip": "DentistBooking\\Pages\\Users\\View.cshtml.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAAAzAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-12T07:44:16.696Z",
+              "DocumentIndex": 9,
+              "Title": "Create.cshtml",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Create.cshtml",
+              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Create.cshtml",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Create.cshtml",
+              "RelativeToolTip": "DentistBooking\\Pages\\Dentis\\PrescriptionManagement\\Create.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-07-01T03:20:26.72Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 12,
+              "Title": "_DentistLayout.cshtml",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Shared\\_DentistLayout.cshtml",
+              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Shared\\_DentistLayout.cshtml",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Shared\\_DentistLayout.cshtml",
+              "RelativeToolTip": "DentistBooking\\Pages\\Shared\\_DentistLayout.cshtml",
+              "ViewState": "AQIAACoAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-07-01T03:16:31.788Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "IMedicineService.cs",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Service\\IMedicineService.cs",
+              "RelativeDocumentMoniker": "Service\\IMedicineService.cs",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Service\\IMedicineService.cs",
+              "RelativeToolTip": "Service\\IMedicineService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAqwAoAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-30T11:32:30.221Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "IPrescriptionService.cs",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Service\\IPrescriptionService.cs",
+              "RelativeDocumentMoniker": "Service\\IPrescriptionService.cs",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Service\\IPrescriptionService.cs",
+              "RelativeToolTip": "Service\\IPrescriptionService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-01T02:52:01.85Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "PrescriptionRepo.cs",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Repository\\Impl\\PrescriptionRepo.cs",
+              "RelativeDocumentMoniker": "Repository\\Impl\\PrescriptionRepo.cs",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Repository\\Impl\\PrescriptionRepo.cs",
+              "RelativeToolTip": "Repository\\Impl\\PrescriptionRepo.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAuAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-01T02:51:04.532Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "PrescriptionService.cs",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Service\\Impl\\PrescriptionService.cs",
+              "RelativeDocumentMoniker": "Service\\Impl\\PrescriptionService.cs",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Service\\Impl\\PrescriptionService.cs",
+              "RelativeToolTip": "Service\\Impl\\PrescriptionService.cs",
+              "ViewState": "AQIAADUAAAAAAAAAAAAwwHcAAABuAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-01T02:51:10.517Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
               "Title": "IMedicineRepo.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Repository\\IMedicineRepo.cs",
               "RelativeDocumentMoniker": "Repository\\IMedicineRepo.cs",
@@ -457,7 +474,254 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 14,
+              "Title": "_CustomerLayout.cshtml",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Shared\\_CustomerLayout.cshtml",
+              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Shared\\_CustomerLayout.cshtml",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Shared\\_CustomerLayout.cshtml",
+              "RelativeToolTip": "DentistBooking\\Pages\\Shared\\_CustomerLayout.cshtml",
+              "ViewState": "AQIAAC0AAAAAAAAAAAAAAE8AAAAfAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-06-30T11:19:14.201Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Shared\\_Layout.cshtml",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "DentistBooking\\Pages\\Shared\\_Layout.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAFkAAAAbAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-06-30T12:40:10Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "View.cshtml",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Users\\View.cshtml",
+              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Users\\View.cshtml",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Users\\View.cshtml",
+              "RelativeToolTip": "DentistBooking\\Pages\\Users\\View.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABQAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-06-30T11:17:57.545Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Index.cshtml",
+              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Index.cshtml",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Index.cshtml",
+              "RelativeToolTip": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Index.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAsAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-06-30T11:02:02.85Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "IPrescriptionRepo.cs",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Repository\\IPrescriptionRepo.cs",
+              "RelativeDocumentMoniker": "Repository\\IPrescriptionRepo.cs",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Repository\\IPrescriptionRepo.cs",
+              "RelativeToolTip": "Repository\\IPrescriptionRepo.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAvAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-01T02:58:40.573Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "PrescriptionDAO.cs",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DataAccess\\PrescriptionDAO.cs",
+              "RelativeDocumentMoniker": "DataAccess\\PrescriptionDAO.cs",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DataAccess\\PrescriptionDAO.cs",
+              "RelativeToolTip": "DataAccess\\PrescriptionDAO.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACYAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-06T04:33:45.238Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "Delete.cshtml.cs",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Delete.cshtml.cs",
+              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Delete.cshtml.cs",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Delete.cshtml.cs",
+              "RelativeToolTip": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Delete.cshtml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAAAWAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-30T11:02:02.76Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "Create.cshtml",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Create.cshtml",
+              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Create.cshtml",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Create.cshtml",
+              "RelativeToolTip": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Create.cshtml",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAAADMAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-06-30T11:02:02.085Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "Create.cshtml.cs",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Create.cshtml.cs",
+              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Create.cshtml.cs",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Create.cshtml.cs",
+              "RelativeToolTip": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Create.cshtml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAHAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-30T11:02:02.246Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "Edit.cshtml.cs",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Edit.cshtml.cs",
+              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Edit.cshtml.cs",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Edit.cshtml.cs",
+              "RelativeToolTip": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Edit.cshtml.cs",
+              "ViewState": "AQIAAAgAAAAAAAAAAAAQwBsAAAALAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-30T11:02:02.418Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "Index.cshtml.cs",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Index.cshtml.cs",
+              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Index.cshtml.cs",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Index.cshtml.cs",
+              "RelativeToolTip": "DentistBooking\\Pages\\Index.cshtml.cs",
+              "ViewState": "AQIAAB0AAAAAAAAAAAAAwDEAAABIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-11T12:53:10.551Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "Details.cshtml.cs",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Details.cshtml.cs",
+              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Details.cshtml.cs",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Details.cshtml.cs",
+              "RelativeToolTip": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Details.cshtml.cs",
+              "ViewState": "AQIAAAgAAAAAAAAAAAAiwBkAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-30T11:02:02.588Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Program.cs",
+              "RelativeDocumentMoniker": "DentistBooking\\Program.cs",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Program.cs",
+              "RelativeToolTip": "DentistBooking\\Program.cs",
+              "ViewState": "AQIAAAsAAAAAAAAAAAAAACEAAAA+AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-30T11:12:52.804Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "MedicineDAO.cs",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DataAccess\\MedicineDAO.cs",
+              "RelativeDocumentMoniker": "DataAccess\\MedicineDAO.cs",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DataAccess\\MedicineDAO.cs",
+              "RelativeToolTip": "DataAccess\\MedicineDAO.cs",
+              "ViewState": "AQIAACAAAAAAAAAAAAAAAC4AAAAMAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-30T14:19:52.255Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "Index.cshtml.cs",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Index.cshtml.cs",
+              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Index.cshtml.cs",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Index.cshtml.cs",
+              "RelativeToolTip": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Index.cshtml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-30T11:02:02.935Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "Medicine.cs",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\BusinessObject\\Medicine.cs",
+              "RelativeDocumentMoniker": "BusinessObject\\Medicine.cs",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\BusinessObject\\Medicine.cs",
+              "RelativeToolTip": "BusinessObject\\Medicine.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-30T11:07:47.072Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "_ValidationScriptsPartial.cshtml",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Shared\\_ValidationScriptsPartial.cshtml",
+              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Shared\\_ValidationScriptsPartial.cshtml",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Shared\\_ValidationScriptsPartial.cshtml",
+              "RelativeToolTip": "DentistBooking\\Pages\\Shared\\_ValidationScriptsPartial.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-06-30T11:21:08.68Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "Staff.css",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\wwwroot\\css\\Staff.css",
+              "RelativeDocumentMoniker": "DentistBooking\\wwwroot\\css\\Staff.css",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\wwwroot\\css\\Staff.css",
+              "RelativeToolTip": "DentistBooking\\wwwroot\\css\\Staff.css",
+              "ViewState": "AQIAABMAAAAAAAAAAAAgwCgAAAAUAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2024-06-30T12:44:33.179Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "View.cshtml.cs",
+              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Users\\View.cshtml.cs",
+              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Users\\View.cshtml.cs",
+              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Users\\View.cshtml.cs",
+              "RelativeToolTip": "DentistBooking\\Pages\\Users\\View.cshtml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAAAzAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-12T07:44:16.696Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
               "Title": "Register.cshtml",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Register.cshtml",
               "RelativeDocumentMoniker": "DentistBooking\\Pages\\Register.cshtml",
@@ -470,7 +734,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 33,
               "Title": "Register.cshtml.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Register.cshtml.cs",
               "RelativeDocumentMoniker": "DentistBooking\\Pages\\Register.cshtml.cs",
@@ -483,20 +747,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "_CustomerLayout.cshtml",
-              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Shared\\_CustomerLayout.cshtml",
-              "RelativeDocumentMoniker": "DentistBooking\\Pages\\Shared\\_CustomerLayout.cshtml",
-              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Shared\\_CustomerLayout.cshtml",
-              "RelativeToolTip": "DentistBooking\\Pages\\Shared\\_CustomerLayout.cshtml",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-06-30T11:19:14.201Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 39,
               "Title": "Delete.cshtml",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Delete.cshtml",
               "RelativeDocumentMoniker": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Delete.cshtml",
@@ -509,7 +760,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 36,
               "Title": "UserService.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Service\\Impl\\UserService.cs",
               "RelativeDocumentMoniker": "Service\\Impl\\UserService.cs",
@@ -522,7 +773,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 40,
               "Title": "Details.cshtml",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Details.cshtml",
               "RelativeDocumentMoniker": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Details.cshtml",
@@ -535,7 +786,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 37,
               "Title": "Validation.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Service\\Lib\\Validation.cs",
               "RelativeDocumentMoniker": "Service\\Lib\\Validation.cs",
@@ -548,7 +799,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 41,
               "Title": "Edit.cshtml",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Staff\\MedicineManagement\\Edit.cshtml",
               "RelativeDocumentMoniker": "DentistBooking\\Pages\\Staff\\MedicineManagement\\Edit.cshtml",
@@ -561,7 +812,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 42,
               "Title": "BookingDentistDbContext.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DataAccess\\BookingDentistDbContext.cs",
               "RelativeDocumentMoniker": "DataAccess\\BookingDentistDbContext.cs",
@@ -574,7 +825,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 44,
               "Title": "Index.cshtml",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\Pages\\Index.cshtml",
               "RelativeDocumentMoniker": "DentistBooking\\Pages\\Index.cshtml",
@@ -586,7 +837,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 36,
+              "DocumentIndex": 51,
               "Title": "IDentistSlotService.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Service\\IDentistSlotService.cs",
               "RelativeDocumentMoniker": "Service\\IDentistSlotService.cs",
@@ -598,7 +849,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 43,
               "Title": "Service.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Service\\Impl\\Service.cs",
               "RelativeDocumentMoniker": "Service\\Impl\\Service.cs",
@@ -610,7 +861,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 37,
+              "DocumentIndex": 52,
               "Title": "IServiceRepo.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Repository\\IServiceRepo.cs",
               "RelativeDocumentMoniker": "Repository\\IServiceRepo.cs",
@@ -622,7 +873,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 39,
+              "DocumentIndex": 54,
               "Title": "Service.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\BusinessObject\\Service.cs",
               "RelativeDocumentMoniker": "BusinessObject\\Service.cs",
@@ -634,7 +885,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 47,
               "Title": "IUserService.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Service\\IUserService.cs",
               "RelativeDocumentMoniker": "Service\\IUserService.cs",
@@ -646,7 +897,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 46,
               "Title": "UserDAO.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DataAccess\\UserDAO.cs",
               "RelativeDocumentMoniker": "DataAccess\\UserDAO.cs",
@@ -659,7 +910,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 41,
+              "DocumentIndex": 56,
               "Title": "UserRepo.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Repository\\Impl\\UserRepo.cs",
               "RelativeDocumentMoniker": "Repository\\Impl\\UserRepo.cs",
@@ -671,7 +922,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 45,
               "Title": "appsettings.json",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DentistBooking\\appsettings.json",
               "RelativeDocumentMoniker": "DentistBooking\\appsettings.json",
@@ -683,7 +934,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 40,
+              "DocumentIndex": 55,
               "Title": "IUserRepo.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Repository\\IUserRepo.cs",
               "RelativeDocumentMoniker": "Repository\\IUserRepo.cs",
@@ -695,7 +946,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
+              "DocumentIndex": 48,
               "Title": "ServiceRepo.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Repository\\Impl\\ServiceRepo.cs",
               "RelativeDocumentMoniker": "Repository\\Impl\\ServiceRepo.cs",
@@ -707,7 +958,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 49,
               "Title": "ClinicService.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Service\\Impl\\ClinicService.cs",
               "RelativeDocumentMoniker": "Service\\Impl\\ClinicService.cs",
@@ -719,7 +970,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 50,
               "Title": "IService.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Service\\IService.cs",
               "RelativeDocumentMoniker": "Service\\IService.cs",
@@ -731,7 +982,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 38,
+              "DocumentIndex": 53,
               "Title": "ServiceDAO.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DataAccess\\ServiceDAO.cs",
               "RelativeDocumentMoniker": "DataAccess\\ServiceDAO.cs",
@@ -743,7 +994,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 42,
+              "DocumentIndex": 57,
               "Title": "IDentistSlotRepo.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Repository\\IDentistSlotRepo.cs",
               "RelativeDocumentMoniker": "Repository\\IDentistSlotRepo.cs",
@@ -755,7 +1006,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 43,
+              "DocumentIndex": 58,
               "Title": "IDentistServiceRepo.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Repository\\IDentistServiceRepo.cs",
               "RelativeDocumentMoniker": "Repository\\IDentistServiceRepo.cs",
@@ -767,7 +1018,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 44,
+              "DocumentIndex": 59,
               "Title": "DentistSlotDAO.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DataAccess\\DentistSlotDAO.cs",
               "RelativeDocumentMoniker": "DataAccess\\DentistSlotDAO.cs",
@@ -779,19 +1030,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 45,
-              "Title": "PrescriptionDAO.cs",
-              "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DataAccess\\PrescriptionDAO.cs",
-              "RelativeDocumentMoniker": "DataAccess\\PrescriptionDAO.cs",
-              "ToolTip": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DataAccess\\PrescriptionDAO.cs",
-              "RelativeToolTip": "DataAccess\\PrescriptionDAO.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-06T04:33:45.238Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 46,
+              "DocumentIndex": 60,
               "Title": "ClinicDAO.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\DataAccess\\ClinicDAO.cs",
               "RelativeDocumentMoniker": "DataAccess\\ClinicDAO.cs",
@@ -803,7 +1042,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 47,
+              "DocumentIndex": 61,
               "Title": "IMedicalRecordRepo.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Repository\\IMedicalRecordRepo.cs",
               "RelativeDocumentMoniker": "Repository\\IMedicalRecordRepo.cs",
@@ -815,7 +1054,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 48,
+              "DocumentIndex": 62,
               "Title": "IClinicRepo.cs",
               "DocumentMoniker": "D:\\FU\\Semester7\\PRN221\\DentisBooking\\Repository\\IClinicRepo.cs",
               "RelativeDocumentMoniker": "Repository\\IClinicRepo.cs",
