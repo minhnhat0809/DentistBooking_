@@ -1,16 +1,17 @@
 ﻿using BusinessObject;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Service;
 
 namespace DentistBooking.Pages.Staff.MedicineManagement
 {
     public class CreateModel : PageModel
     {
-        private readonly DataAccess.BookingDentistDbContext _context;
+        private readonly IMedicineService _medicineService;
 
-        public CreateModel(DataAccess.BookingDentistDbContext context)
+        public CreateModel(IMedicineService medicineService)
         {
-            _context = context;
+            _medicineService = medicineService;
         }
 
         public IActionResult OnGet()
@@ -29,8 +30,7 @@ namespace DentistBooking.Pages.Staff.MedicineManagement
                 return Page();
             }
 
-            _context.Medicines.Add(Medicine);
-            await _context.SaveChangesAsync();
+            _medicineService.CreateMedicine(Medicine);
 
             return RedirectToPage("./Index");
         }
