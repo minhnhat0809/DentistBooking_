@@ -2,55 +2,41 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Service;
 
 namespace DentistBooking.Pages.Staff.MedicineManagement
 {
     public class DeleteModel : PageModel
     {
-        private readonly DataAccess.BookingDentistDbContext _context;
+        private readonly IMedicineService _medicineService;
 
-        public DeleteModel(DataAccess.BookingDentistDbContext context)
+        public DeleteModel(IMedicineService medicineService)
         {
-            _context = context;
+            _medicineService = medicineService;
         }
 
         [BindProperty]
         public Medicine Medicine { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var medicine = await _context.Medicines.FirstOrDefaultAsync(m => m.MedicineId == id);
-
-            if (medicine == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                Medicine = medicine;
-            }
+            Medicine = _medicineService.GetById(id);
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public async Task<IActionResult> OnPostAsync(int id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var medicine = await _context.Medicines.FindAsync(id);
-            if (medicine != null)
-            {
-                Medicine = medicine;
-                _context.Medicines.Remove(Medicine);
-                await _context.SaveChangesAsync();
-            }
+            _medicineService.DeleteMedicine(id);
 
             return RedirectToPage("./Index");
         }

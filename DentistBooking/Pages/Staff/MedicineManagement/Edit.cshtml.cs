@@ -1,35 +1,31 @@
 ﻿using BusinessObject;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
+using Service;
 
 namespace DentistBooking.Pages.Staff.MedicineManagement
 {
     public class EditModel : PageModel
     {
-        private readonly DataAccess.BookingDentistDbContext _context;
+        private readonly IMedicineService _medicineService;
 
-        public EditModel(DataAccess.BookingDentistDbContext context)
+        public EditModel(IMedicineService medicineService)
         {
-            _context = context;
+            _medicineService = medicineService;
         }
 
         [BindProperty]
         public Medicine Medicine { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var medicine =  await _context.Medicines.FirstOrDefaultAsync(m => m.MedicineId == id);
-            if (medicine == null)
-            {
-                return NotFound();
-            }
-            Medicine = medicine;
+          
+            Medicine = _medicineService.GetById(id);
             return Page();
         }
 
@@ -42,30 +38,10 @@ namespace DentistBooking.Pages.Staff.MedicineManagement
                 return Page();
             }
 
-            _context.Attach(Medicine).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MedicineExists(Medicine.MedicineId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _medicineService.UpdateMedicine(Medicine);
 
             return RedirectToPage("./Index");
         }
 
-        private bool MedicineExists(int id)
-        {
-            return _context.Medicines.Any(e => e.MedicineId == id);
-        }
     }
 }
