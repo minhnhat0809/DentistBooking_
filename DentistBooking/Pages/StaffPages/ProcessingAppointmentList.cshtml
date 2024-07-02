@@ -1,14 +1,15 @@
 ﻿@page
-@model DentistBooking.Pages.CustomerPage.ViewAppointmentsModel
+@model DentistBooking.Pages.StaffPages.ProcessingAppointmentListModel
 @{
     ViewData["Title"] = "Appointments";
-    Layout = "/Pages/Shared/_CustomerLayout.cshtml";
+    //Layout = "/Pages/Shared/_Layout.cshtml";
+    Layout = null;
 }
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
 <div class="container mt-5">
-    <h1 class="mb-4">View Appointments</h1>
+    <h1 class="mb-4">Processing Appointments</h1>
 
     @if (Model.Appointments != null && Model.Appointments.Any())
     {
@@ -17,8 +18,9 @@
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">Appointment Date</th>
-                        <th scope="col">Time</th>
+                        <th scope="col">Time Start</th>
                         <th scope="col">Dentist</th>
+                        <th scope="col">Status</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
@@ -28,14 +30,14 @@
                         <tr>
                             <td>@appointment.TimeStart.ToString("MM/dd/yyyy")</td>
                             <td>@appointment.TimeStart.ToString("hh\\:mm tt")</td>
-                            @if(appointment.DentistSlot == null){
+                            @if(@appointment.DentistSlot == null){
                                 <td></td>
-                            }else
-                            {
+                            }else{
                                 <td>@appointment.DentistSlot.Dentist.Name</td>
                             }                           
+                            <td>@appointment.Status</td>
                             <td>
-                                <a asp-page="./AppointmentDetail" asp-route-id="@appointment.AppointmentId" class="btn btn-primary btn-sm">View Details</a>
+                                <a asp-page="./ProcessingAppointment" asp-route-id="@appointment.AppointmentId" class="btn btn-primary btn-sm">Assign</a>
                                 <form method="post" asp-page-handler="Delete" asp-route-id="@appointment.AppointmentId" class="d-inline">
                                     <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                 </form>
@@ -56,3 +58,4 @@
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+

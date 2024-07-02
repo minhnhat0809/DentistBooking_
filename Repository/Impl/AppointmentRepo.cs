@@ -16,6 +16,8 @@ namespace Repository.Impl
 
         public async Task<List<Appointment>> GetAllAppointmentsOfCustomer(int customerId) => await AppointmentDAO.Instance.getAllAppointmentsOfCustomer(customerId);
 
+        public List<Appointment> GetAllProcessingAppointment() => AppointmentDAO.Instance.getAllProcessingAppointment();
+
         public Appointment GetAppointmentById(int id) => AppointmentDAO.Instance.getAppointmnentByID(id);
 
         public void UpdateAppointment(Appointment appointment) => AppointmentDAO.Instance.updateAppointment(appointment);

@@ -9,10 +9,12 @@ namespace DentistBooking.Pages.CustomerPage
     {
         private readonly IAppointmentService appointmentService;
         private readonly IDentistService dentistService;
-        public AppointmentDetailModel(IAppointmentService appointmentService, IDentistService dentistService)
+        private readonly IService service;
+        public AppointmentDetailModel(IAppointmentService appointmentService, IDentistService dentistService, IService service)
         {
             this.appointmentService = appointmentService;   
             this.dentistService = dentistService;
+            this.service = service;
         }
 
         [BindProperty]
@@ -22,7 +24,14 @@ namespace DentistBooking.Pages.CustomerPage
         public void OnGet(int id)
         {
             Appointment = appointmentService.GetAppointmentByID(id);
-            Services = dentistService.GetAllServiceByDentist((int)Appointment.DentistSlot.DentistId, (int)Appointment.ServiceId);
+            if (Appointment.DentistSlot != null)
+            {
+                Services = dentistService.GetAllServiceByDentist((int)Appointment.DentistSlot.DentistId, (int)Appointment.ServiceId);
+            }
+            else
+            {
+                Services = service.GetAllServicesForCustomer((int)Appointment.ServiceId);
+            }
         }
 
         public IActionResult OnPostUpdate()
@@ -37,13 +46,27 @@ namespace DentistBooking.Pages.CustomerPage
                     TempData["AppointmentDetail"] = item.Value;
                 }
                 Appointment = appointmentService.GetAppointmentByID(Appointment.AppointmentId);
-                Services = dentistService.GetAllServiceByDentist((int)Appointment.DentistSlot.DentistId, (int)Appointment.ServiceId);
+                if (Appointment.DentistSlot != null)
+                {
+                    Services = dentistService.GetAllServiceByDentist((int)Appointment.DentistSlot.DentistId, (int)Appointment.ServiceId);
+                }
+                else
+                {
+                    Services = service.GetAllServicesForCustomer((int)Appointment.ServiceId);
+                }
                 return Page();
             }
 
             TempData["AppointmentDetail"] = "Appointment updated successfully!";
             Appointment = appointmentService.GetAppointmentByID(Appointment.AppointmentId);
-            Services = dentistService.GetAllServiceByDentist((int)Appointment.DentistSlot.DentistId, (int)Appointment.ServiceId);
+            if (Appointment.DentistSlot != null)
+            {
+                Services = dentistService.GetAllServiceByDentist((int)Appointment.DentistSlot.DentistId, (int)Appointment.ServiceId);
+            }
+            else
+            {
+                Services = service.GetAllServicesForCustomer((int)Appointment.ServiceId);
+            }
             return Page();
         }
     }

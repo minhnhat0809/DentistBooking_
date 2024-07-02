@@ -16,15 +16,21 @@ namespace Service.Impl
         public void DeleteService(BusinessObject.Service service)
         =>_servicerRepo.DeleteService(service);
 
-        public List<BusinessObject.Service> GetAllServiceByDentist(int dentistId)
-        {
-            
-
-            throw new NotImplementedException();
-        }
-
         public List<BusinessObject.Service> GetAllServices()
         => _servicerRepo.GetAllServices();
+
+        public List<BusinessObject.Service> GetAllServicesForCustomer(int serviceId)
+        {
+            List<BusinessObject.Service> services = _servicerRepo.GetAllServices();
+
+            BusinessObject.Service service = services.FirstOrDefault(s => s.ServiceId == serviceId);
+            if (service != null)
+            {
+                services.Remove(service);
+                services.Insert(0, service);
+            }
+            return services;
+        }
 
         public BusinessObject.Service GetServiceByID(int id)
         => _servicerRepo.GetServiceByID(id);

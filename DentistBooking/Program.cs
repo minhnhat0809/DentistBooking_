@@ -11,7 +11,7 @@ builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
 {
     options.Conventions.AddPageRoute("/ForgetPassword", "/forget-password");
     options.Conventions.AddPageRoute("/Index", "/login");
-}); ;
+});
 
 builder.Services.AddSession(options =>
 {
@@ -19,7 +19,6 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
-
 
 //Services
 builder.Services.AddScoped<IUserService, UserService>();
