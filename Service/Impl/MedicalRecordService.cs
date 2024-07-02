@@ -28,7 +28,7 @@ namespace Service.Impl
             }
         }
 
-        public MedicalRecord GetById(int id)
+        public MedicalRecord GetById(int? id)
         {
             if (id <= 0)
             {

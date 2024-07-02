@@ -10,7 +10,7 @@ namespace Repository
     public interface IMedicalRecordRepo
     {
         public List<MedicalRecord> GetAllMedicalRecords();
-        public MedicalRecord GetById(int id);
+        public MedicalRecord GetById(int? id);
         public void CreateMedicalRecord(MedicalRecord medical);
         public void UpdateMedicalRecord(MedicalRecord medical);
         public void DeleteMedicalRecord(int id);

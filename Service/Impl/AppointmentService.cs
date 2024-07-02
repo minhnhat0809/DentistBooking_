@@ -230,7 +230,7 @@ namespace Service.Impl
             return appointmentRepo.GetAllProcessingAppointment();
         }
 
-        public Dictionary<string, string> UpdateAppointmentForStaff(int serviceId, int appointmentId, DateTime TimeStart, DateTime TimeEnd, int dentistSlotId)
+        public Dictionary<string, string> UpdateAppointmentForStaff(int serviceId, int appointmentId, DateTime TimeStart, DateTime TimeEnd, int? dentistSlotId)
         {
             throw new NotImplementedException();
         }

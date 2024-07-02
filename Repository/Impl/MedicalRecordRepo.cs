@@ -13,7 +13,7 @@ namespace Repository.Impl
         public List<MedicalRecord> GetAllMedicalRecords()
             => MedicalRecordDAO.Instance.getAllMedicalRecords();
 
-        public MedicalRecord GetById(int id)
+        public MedicalRecord GetById(int? id)
             => MedicalRecordDAO.Instance.getMedicalRecordByID(id);
 
         public void CreateMedicalRecord(MedicalRecord medical)

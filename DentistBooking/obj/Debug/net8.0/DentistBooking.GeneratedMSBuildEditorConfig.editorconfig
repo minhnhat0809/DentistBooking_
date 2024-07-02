@@ -26,12 +26,120 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = D:\FPT\Semes 7\PRN221_VanVTT10\team-project\DentistBooking\DentistBooking
 build_property._RazorSourceGeneratorDebug = 
 
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/CustomerPage/AppointmentDetail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ3VzdG9tZXJQYWdlXEFwcG9pbnRtZW50RGV0YWlsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/CustomerPage/Book.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ3VzdG9tZXJQYWdlXEJvb2suY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/CustomerPage/ViewAppointments.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ3VzdG9tZXJQYWdlXFZpZXdBcHBvaW50bWVudHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/CustomerPage/ViewClinic.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ3VzdG9tZXJQYWdlXFZpZXdDbGluaWMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/CustomerPage/ViewServices.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ3VzdG9tZXJQYWdlXFZpZXdTZXJ2aWNlcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/StaffPages/Appointments/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhZmZQYWdlc1xBcHBvaW50bWVudHNcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/StaffPages/Appointments/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhZmZQYWdlc1xBcHBvaW50bWVudHNcRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/StaffPages/Appointments/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhZmZQYWdlc1xBcHBvaW50bWVudHNcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/StaffPages/Appointments/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhZmZQYWdlc1xBcHBvaW50bWVudHNcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/StaffPages/Appointments/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhZmZQYWdlc1xBcHBvaW50bWVudHNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/StaffPages/Check-upSchedules/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhZmZQYWdlc1xDaGVjay11cFNjaGVkdWxlc1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/StaffPages/Check-upSchedules/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhZmZQYWdlc1xDaGVjay11cFNjaGVkdWxlc1xEZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/StaffPages/Check-upSchedules/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhZmZQYWdlc1xDaGVjay11cFNjaGVkdWxlc1xEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/StaffPages/Check-upSchedules/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhZmZQYWdlc1xDaGVjay11cFNjaGVkdWxlc1xFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/StaffPages/Check-upSchedules/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhZmZQYWdlc1xDaGVjay11cFNjaGVkdWxlc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/StaffPages/MedicalRecords/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhZmZQYWdlc1xNZWRpY2FsUmVjb3Jkc1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/StaffPages/MedicalRecords/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhZmZQYWdlc1xNZWRpY2FsUmVjb3Jkc1xEZWxldGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/StaffPages/MedicalRecords/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhZmZQYWdlc1xNZWRpY2FsUmVjb3Jkc1xEZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/StaffPages/MedicalRecords/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhZmZQYWdlc1xNZWRpY2FsUmVjb3Jkc1xFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/StaffPages/MedicalRecords/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhZmZQYWdlc1xNZWRpY2FsUmVjb3Jkc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/StaffPages/Medicines/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhZmZQYWdlc1xNZWRpY2luZXNcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/StaffPages/Medicines/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhZmZQYWdlc1xNZWRpY2luZXNcRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/StaffPages/Medicines/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhZmZQYWdlc1xNZWRpY2luZXNcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/StaffPages/Medicines/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhZmZQYWdlc1xNZWRpY2luZXNcRWRpdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/StaffPages/Medicines/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhZmZQYWdlc1xNZWRpY2luZXNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/StaffPages/ProcessingAppointment.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhZmZQYWdlc1xQcm9jZXNzaW5nQXBwb2ludG1lbnQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/StaffPages/ProcessingAppointmentList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3RhZmZQYWdlc1xQcm9jZXNzaW5nQXBwb2ludG1lbnRMaXN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/Users/Create.cshtml]
@@ -73,6 +181,14 @@ build_metadata.AdditionalFiles.CssScope = b-atsvz0jznk
 [D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVnaXN0ZXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-qxguiyu05r
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/Shared/_CustomerLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9DdXN0b21lckxheW91dC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = b-h3i1wep6at
+
+[D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/Shared/_DentistLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9EZW50aXN0TGF5b3V0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = b-68lgl9meao
 
 [D:/FPT/Semes 7/PRN221_VanVTT10/team-project/DentistBooking/DentistBooking/Pages/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXQuY3NodG1s

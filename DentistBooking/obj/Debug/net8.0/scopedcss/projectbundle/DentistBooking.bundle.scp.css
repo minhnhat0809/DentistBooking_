@@ -1,3 +1,830 @@
+/* _content/DentistBooking/Pages/ForgetPassword.cshtml.rz.scp.css */
+*[b-8278y74ozr] {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.wrapper[b-8278y74ozr] {
+    display: flex;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+    padding: 0 10px;
+}
+
+.img-wrapper[b-8278y74ozr] {
+    height: 100vh;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    text-align: center;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    z-index: -100;
+    border-radius: 20px;
+}
+
+    .img-wrapper > p[b-8278y74ozr] {
+        font-size: 0.875rem;
+    }
+
+.main-img[b-8278y74ozr] {
+    background-size: cover;
+    width: 300px;
+    height: 300px;
+    z-index: -1;
+}
+
+.content-wrapper[b-8278y74ozr] {
+    width: 60%;
+    height: 100vh;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    background-color: rgba(160,193,244,0.7);
+    position: relative; /* Added to ensure stacking context */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.forget-form[b-8278y74ozr],
+.register-form[b-8278y74ozr],
+.login-form[b-8278y74ozr] {
+    width: 400px;
+    padding: 40px 20px 40px 20px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(8px);
+    background: rgba(255,255,255,0.3); /* Ensure the content has a slight background */
+    border-radius: 20px;
+    z-index: 1; /* Ensure the content is above the pseudo-element */
+}
+
+h2[b-8278y74ozr] {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #000;
+}
+
+.input-field[b-8278y74ozr] {
+    position: relative;
+    border-bottom: 2px solid #ccc;
+    margin: 15px 0;
+}
+
+    .input-field label[b-8278y74ozr] {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        color: #000;
+        font-size: 16px;
+        pointer-events: none;
+        transition: 0.15s ease;
+    }
+
+    .input-field input[b-8278y74ozr] {
+        width: 100%;
+        height: 40px;
+        background: transparent;
+        border: none;
+        outline: none;
+        font-size: 16px;
+        color: #000;
+    }
+
+        .input-field input:focus ~ label[b-8278y74ozr],
+        .input-field input:valid ~ label[b-8278y74ozr],
+        .input-field select:focus ~ label[b-8278y74ozr],
+        .input-field select:valid ~ label[b-8278y74ozr] {
+            font-size: 0.8rem;
+            top: 10px;
+            transform: translateY(-120%);
+        }
+
+.text-danger[b-8278y74ozr] {
+    text-align: left;
+    font-size: 8px;
+}
+
+.forget[b-8278y74ozr] {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 25px 0 35px 0;
+    color: #000;
+}
+
+#remember[b-8278y74ozr] {
+    accent-color: #000;
+}
+
+.forget label[b-8278y74ozr] {
+    display: flex;
+    align-items: center;
+}
+
+    .forget label p[b-8278y74ozr] {
+        margin-left: 8px;
+    }
+
+.wrapper a[b-8278y74ozr] {
+    color: #333;
+    text-decoration: none;
+}
+
+    .wrapper a:hover[b-8278y74ozr] {
+        text-decoration: underline;
+    }
+
+button[b-8278y74ozr] {
+    background: #000;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 16px;
+    border: 2px solid transparent;
+    transition: 0.3s ease;
+}
+
+    button:hover[b-8278y74ozr] {
+        color: #000;
+        border-color: #000;
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+.register[b-8278y74ozr] {
+    text-align: center;
+    margin-top: 30px;
+    color: #000;
+}
+
+@media (max-width: 575.98px) {
+    .img-wrapper[b-8278y74ozr] {
+        display: none;
+    }
+
+    .wrapper[b-8278y74ozr] {
+        justify-content: center;
+        min-height: 80dvh;
+    }
+
+    .content-wrapper[b-8278y74ozr] {
+        height: 100%;
+    }
+}
+
+/* Small devices (tablets, 576px and up) */
+@media (min-width: 576px) {
+    .img-wrapper[b-8278y74ozr] {
+        display: none;
+    }
+
+    .wrapper[b-8278y74ozr] {
+        justify-content: center;
+        min-height: 80dvh;
+    }
+
+    .content-wrapper[b-8278y74ozr] {
+        height: 100%;
+    }
+}
+
+/* Medium devices (desktops, 768px and up) */
+@media (min-width: 768px) {
+    
+}
+
+/* Large devices (large desktops, 992px and up) */
+@media (min-width: 992px) {
+
+}
+
+/* Extra large devices (extra large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .img-wrapper[b-8278y74ozr] {
+        display: flex;
+    }
+
+    .content-wrapper[b-8278y74ozr] {
+        height: 100vh;
+    }
+}
+    /* Extra extra large devices (XXL desktops, 1400px and up) */
+    @media (min-width: 1400px) {
+        
+    }
+/* _content/DentistBooking/Pages/Index.cshtml.rz.scp.css */
+*[b-atsvz0jznk] {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.wrapper[b-atsvz0jznk] {
+    display: flex;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+    padding: 0 10px;
+}
+
+.img-wrapper[b-atsvz0jznk] {
+    height:100vh;
+    width:40%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    text-align: center;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    z-index:-100;
+    border-radius: 20px;
+}
+
+.img-wrapper > p[b-atsvz0jznk]{
+    font-size: 0.875rem;
+}
+
+.main-img[b-atsvz0jznk]{
+    background-size: cover;
+    width:300px;
+    height:300px;
+    z-index:-1;
+}
+
+.content-wrapper[b-atsvz0jznk] {
+    width: 60%;
+    height: 100vh;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    background-color: rgba(160,193,244,0.7);
+    position: relative; /* Added to ensure stacking context */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.forget-form[b-atsvz0jznk],
+.register-form[b-atsvz0jznk],
+.login-form[b-atsvz0jznk] {
+    width: 400px;
+    padding: 40px 20px 40px 20px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(8px);
+    background: rgba(255,255,255,0.3); /* Ensure the content has a slight background */
+    border-radius:20px;
+    z-index: 1; /* Ensure the content is above the pseudo-element */
+}
+
+h2[b-atsvz0jznk] {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #000;
+}
+
+.input-field[b-atsvz0jznk] {
+    position: relative;
+    border-bottom: 2px solid #ccc;
+    margin: 15px 0;
+}
+
+    .input-field label[b-atsvz0jznk] {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        color: #000;
+        font-size: 16px;
+        pointer-events: none;
+        transition: 0.15s ease;
+    }
+
+    .input-field input[b-atsvz0jznk] {
+        width: 100%;
+        height: 40px;
+        background: transparent;
+        border: none;
+        outline: none;
+        font-size: 16px;
+        color: #000;
+    }
+
+        .input-field input:focus ~ label[b-atsvz0jznk],
+        .input-field input:valid ~ label[b-atsvz0jznk],
+        .input-field select:focus ~ label[b-atsvz0jznk],
+        .input-field select:valid ~ label[b-atsvz0jznk] {
+            font-size: 0.8rem;
+            top: 10px;
+            transform: translateY(-120%);
+        }
+        .text-danger[b-atsvz0jznk]{
+            text-align: left;
+            font-size: 8px;
+        }
+.forget[b-atsvz0jznk] {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 25px 0 35px 0;
+    color: #000;
+}
+
+#remember[b-atsvz0jznk] {
+    accent-color: #000;
+}
+
+.forget label[b-atsvz0jznk] {
+    display: flex;
+    align-items: center;
+}
+
+    .forget label p[b-atsvz0jznk] {
+        margin-left: 8px;
+    }
+
+.wrapper a[b-atsvz0jznk] {
+    color: #333;
+    text-decoration: none;
+}
+
+    .wrapper a:hover[b-atsvz0jznk] {
+        text-decoration: underline;
+    }
+
+button[b-atsvz0jznk] {
+    background: #000;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 16px;
+    border: 2px solid transparent;
+    transition: 0.3s ease;
+}
+
+    button:hover[b-atsvz0jznk] {
+        color: #000;
+        border-color: #000;
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+.register[b-atsvz0jznk] {
+    text-align: center;
+    margin-top: 30px;
+    color: #000;
+}
+
+
+/* Small devices (tablets, 576px and up) */
+@media (min-width: 576px) {
+    .img-wrapper[b-atsvz0jznk] {
+        display: none;
+    }
+
+    .wrapper[b-atsvz0jznk] {
+        justify-content: center;
+        min-height: 80dvh;
+    }
+
+    .content-wrapper[b-atsvz0jznk] {
+        height: 100%;
+    }
+}
+
+/* Medium devices (desktops, 768px and up) */
+@media (min-width: 768px) {
+}
+
+/* Large devices (large desktops, 992px and up) */
+@media (min-width: 992px) {
+}
+
+/* Extra large devices (extra large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .img-wrapper[b-atsvz0jznk] {
+        display: flex;
+    }
+
+    .content-wrapper[b-atsvz0jznk] {
+        height: 100vh;
+    }
+}
+/* Extra extra large devices (XXL desktops, 1400px and up) */
+@media (min-width: 1400px) {
+}
+/* _content/DentistBooking/Pages/Register.cshtml.rz.scp.css */
+*[b-qxguiyu05r] {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.wrapper[b-qxguiyu05r] {
+    display: flex;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+    padding: 0 10px;
+}
+
+.img-wrapper[b-qxguiyu05r] {
+    height: 100vh;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    text-align: center;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    z-index: -100;
+    border-radius: 20px;
+}
+
+    .img-wrapper > p[b-qxguiyu05r] {
+        font-size: 0.875rem;
+    }
+
+.main-img[b-qxguiyu05r] {
+    background-size: cover;
+    width: 300px;
+    height: 300px;
+    z-index: -1;
+}
+
+.content-wrapper[b-qxguiyu05r] {
+    width: 60%;
+    height: 100vh;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    background-color: rgba(160,193,244,0.7);
+    position: relative; /* Added to ensure stacking context */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.forget-form[b-qxguiyu05r],
+.register-form[b-qxguiyu05r],
+.login-form[b-qxguiyu05r] {
+    width: 400px;
+    padding: 40px 20px 40px 20px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(8px);
+    background: rgba(255,255,255,0.3); /* Ensure the content has a slight background */
+    border-radius: 20px;
+    z-index: 1; /* Ensure the content is above the pseudo-element */
+}
+
+h2[b-qxguiyu05r] {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #000;
+}
+
+.input-field[b-qxguiyu05r] {
+    position: relative;
+    border-bottom: 2px solid #ccc;
+    margin: 15px 0;
+}
+
+    .input-field label[b-qxguiyu05r] {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        color: #000;
+        font-size: 16px;
+        pointer-events: none;
+        transition: 0.15s ease;
+    }
+
+    .input-field input[b-qxguiyu05r] {
+        width: 100%;
+        height: 40px;
+        background: transparent;
+        border: none;
+        outline: none;
+        font-size: 16px;
+        color: #000;
+    }
+
+        .input-field input:focus ~ label[b-qxguiyu05r],
+        .input-field input:valid ~ label[b-qxguiyu05r],
+        .input-field select:focus ~ label[b-qxguiyu05r],
+        .input-field select:valid ~ label[b-qxguiyu05r] {
+            font-size: 0.8rem;
+            top: 10px;
+            transform: translateY(-120%);
+        }
+
+.forget[b-qxguiyu05r] {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 25px 0 35px 0;
+    color: #000;
+}
+
+#remember[b-qxguiyu05r] {
+    accent-color: #000;
+}
+
+.forget label[b-qxguiyu05r] {
+    display: flex;
+    align-items: center;
+}
+
+    .forget label p[b-qxguiyu05r] {
+        margin-left: 8px;
+    }
+
+.wrapper a[b-qxguiyu05r] {
+    color: #333;
+    text-decoration: none;
+}
+
+    .wrapper a:hover[b-qxguiyu05r] {
+        text-decoration: underline;
+    }
+
+button[b-qxguiyu05r] {
+    background: #000;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 16px;
+    border: 2px solid transparent;
+    transition: 0.3s ease;
+}
+
+    button:hover[b-qxguiyu05r] {
+        color: #000;
+        border-color: #000;
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+.register[b-qxguiyu05r] {
+    text-align: center;
+    margin-top: 30px;
+    color: #000;
+}
+
+
+/* Small devices (tablets, 576px and up) */
+@media (min-width: 576px) {
+        .img-wrapper[b-qxguiyu05r] {
+        display: none;
+    }
+
+    .wrapper[b-qxguiyu05r] {
+        justify-content: center;
+        min-height: 80dvh;
+    }
+
+    .content-wrapper[b-qxguiyu05r] {
+        height: 100%;
+    }
+}
+
+/* Medium devices (desktops, 768px and up) */
+@media (min-width: 768px) {
+}
+
+/* Large devices (large desktops, 992px and up) */
+@media (min-width: 992px) {
+}
+
+/* Extra large devices (extra large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .img-wrapper[b-qxguiyu05r] {
+        display: flex;
+    }
+
+    .content-wrapper[b-qxguiyu05r] {
+        height: 100vh;
+    }
+}
+/* Extra extra large devices (XXL desktops, 1400px and up) */
+@media (min-width: 1400px) {
+}
+/* _content/DentistBooking/Pages/Shared/_CustomerLayout.cshtml.rz.scp.css */
+ /* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+a.navbar-brand[b-h3i1wep6at] {
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+}
+
+.btn-primary[b-h3i1wep6at] {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active[b-h3i1wep6at], .nav-pills .show > .nav-link[b-h3i1wep6at] {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.border-top[b-h3i1wep6at] {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom[b-h3i1wep6at] {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow[b-h3i1wep6at] {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy[b-h3i1wep6at] {
+    font-size: 1rem;
+    line-height: inherit;
+}
+
+.footer[b-h3i1wep6at] {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+}
+
+.cus-container[b-h3i1wep6at] {
+    width: 100%;
+    padding-right: var(--bs-gutter-x, 0.75rem);
+    padding-left: var(--bs-gutter-x, 0.75rem);
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* Extra small devices (phones, less than 576px) */
+@media (max-width: 575.98px) {
+    .cus-container[b-h3i1wep6at] {
+        max-width: 100%;
+    }
+}
+
+/* Small devices (tablets, 576px and up) */
+@media (min-width: 576px) {
+    .cus-container[b-h3i1wep6at] {
+        max-width: 720px;
+    }
+}
+
+/* Medium devices (desktops, 768px and up) */
+@media (min-width: 768px) {
+    .cus-container[b-h3i1wep6at] {
+        max-width: 960px;
+    }
+}
+
+/* Large devices (large desktops, 992px and up) */
+@media (min-width: 992px) {
+    .cus-container[b-h3i1wep6at] {
+        max-width: 1140px;
+    }
+}
+
+/* Extra large devices (extra large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .cus-container[b-h3i1wep6at] {
+        max-width: 1320px;
+    }
+}
+
+/* Extra extra large devices (XXL desktops, 1400px and up) */
+@media (min-width: 1400px) {
+    .cus-container[b-h3i1wep6at] {
+        max-width: 1480px;
+    }
+}
+/* _content/DentistBooking/Pages/Shared/_DentistLayout.cshtml.rz.scp.css */
+ /* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+a.navbar-brand[b-68lgl9meao] {
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+}
+
+.btn-primary[b-68lgl9meao] {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active[b-68lgl9meao], .nav-pills .show > .nav-link[b-68lgl9meao] {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.border-top[b-68lgl9meao] {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom[b-68lgl9meao] {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow[b-68lgl9meao] {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy[b-68lgl9meao] {
+    font-size: 1rem;
+    line-height: inherit;
+}
+
+.footer[b-68lgl9meao] {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+}
+
+.cus-container[b-68lgl9meao] {
+    width: 100%;
+    padding-right: var(--bs-gutter-x, 0.75rem);
+    padding-left: var(--bs-gutter-x, 0.75rem);
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* Extra small devices (phones, less than 576px) */
+@media (max-width: 575.98px) {
+    .cus-container[b-68lgl9meao] {
+        max-width: 100%;
+    }
+}
+
+/* Small devices (tablets, 576px and up) */
+@media (min-width: 576px) {
+    .cus-container[b-68lgl9meao] {
+        max-width: 720px;
+    }
+}
+
+/* Medium devices (desktops, 768px and up) */
+@media (min-width: 768px) {
+    .cus-container[b-68lgl9meao] {
+        max-width: 960px;
+    }
+}
+
+/* Large devices (large desktops, 992px and up) */
+@media (min-width: 992px) {
+    .cus-container[b-68lgl9meao] {
+        max-width: 1140px;
+    }
+}
+
+/* Extra large devices (extra large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .cus-container[b-68lgl9meao] {
+        max-width: 1320px;
+    }
+}
+
+/* Extra extra large devices (XXL desktops, 1400px and up) */
+@media (min-width: 1400px) {
+    .cus-container[b-68lgl9meao] {
+        max-width: 1480px;
+    }
+}
 /* _content/DentistBooking/Pages/Shared/_Layout.cshtml.rz.scp.css */
 /* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
@@ -46,4 +873,54 @@ button.accept-policy[b-xerl77qobf] {
   width: 100%;
   white-space: nowrap;
   line-height: 60px;
+}
+
+.cus-container[b-xerl77qobf] {
+    width: 100%;
+    padding-right: var(--bs-gutter-x, 0.75rem);
+    padding-left: var(--bs-gutter-x, 0.75rem);
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* Extra small devices (phones, less than 576px) */
+@media (max-width: 575.98px) {
+    .cus-container[b-xerl77qobf] {
+        max-width: 100%;
+    }
+}
+
+/* Small devices (tablets, 576px and up) */
+@media (min-width: 576px) {
+    .cus-container[b-xerl77qobf] {
+        max-width: 720px;
+    }
+}
+
+/* Medium devices (desktops, 768px and up) */
+@media (min-width: 768px) {
+    .cus-container[b-xerl77qobf] {
+        max-width: 960px;
+    }
+}
+
+/* Large devices (large desktops, 992px and up) */
+@media (min-width: 992px) {
+    .cus-container[b-xerl77qobf] {
+        max-width: 1140px;
+    }
+}
+
+/* Extra large devices (extra large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .cus-container[b-xerl77qobf] {
+        max-width: 1320px;
+    }
+}
+
+/* Extra extra large devices (XXL desktops, 1400px and up) */
+@media (min-width: 1400px) {
+    .cus-container[b-xerl77qobf] {
+        max-width: 1480px;
+    }
 }

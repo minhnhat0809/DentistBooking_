@@ -28,7 +28,7 @@ namespace DataAccess
             }
         }
 
-        public MedicalRecord getMedicalRecordByID(int id)
+        public MedicalRecord getMedicalRecordByID(int? id)
         {
             var context = new BookingDentistDbContext();
             var medicalRecord = context.MedicalRecords.FirstOrDefault(c => c.MediaRecordId == id);
