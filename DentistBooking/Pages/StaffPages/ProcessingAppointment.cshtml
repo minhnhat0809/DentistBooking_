@@ -4,7 +4,7 @@
     ViewData["Title"] = "Appointment Detail";
     //Layout = "/Pages/Shared/_Layout.cshtml";
     Layout = null;
-    var resultMessage = TempData["AppointmentDetail"] as string;
+    var resultMessage = TempData["ProcessingAppointment"] as string;
 }
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -20,6 +20,7 @@
                 <form method="post" asp-page-handler="Update">
                     <input type="hidden" asp-for="@Model.Appointment.AppointmentId" />
                     <input type="hidden" asp-for="@Model.Appointment.CustomerId" />
+                    <input type="hidden" id="selectedSlotId" name="Appointment.DentistSlotId" />
 
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label">Time Start</label>
@@ -109,7 +110,7 @@
 </div>
 
 <div class="text-center">
-    <a href="./ViewAppointments" class="btn btn-primary btn-sm mt-3">Back</a>
+    <a href="./ProcessingAppointmentList" class="btn btn-primary btn-sm mt-3">Back</a>
 </div>
 
 <!-- Modal -->
@@ -128,6 +129,7 @@
                         <tr>
                             <th>Time</th>
                             <th>Appointments</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody id="scheduleBody">
@@ -194,7 +196,7 @@
                     console.log(data);
                     var scheduleBody = $('#scheduleBody');
                     scheduleBody.empty();
-                    var slots = data.$values; // Access the array of slots
+                    var slots = data.$values; 
 
                     $.each(slots, function (index, slot) {
                         var appointmentsHtml = '';
@@ -218,8 +220,8 @@
                         var row = '<tr>' +
                             '<td>' + formattedSlotStart + ' - ' + formattedSlotEnd + '</td>' +
                             '<td>' + appointmentsHtml + '</td>' +
-                            '</tr>';
-
+                            '<td><button type="button" class="btn btn-success btn-sm book-slot-button" data-slot-id="' + slot.Id + '">Book</button></td>' +
+                            '</tr>'
                         scheduleBody.append(row);
                     });
 
@@ -229,6 +231,13 @@
                     alert('Error retrieving schedule.');
                 }
             });
+        });
+
+        $(document).on('click', '.book-slot-button', function () {
+            var slotId = $(this).attr('data-slot-id');
+            console.log(slotId);  
+            $('#selectedSlotId').val(slotId);
+            $('#scheduleModal').modal('hide');
         });
 
         function formatDate(date) {

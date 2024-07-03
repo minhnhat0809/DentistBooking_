@@ -54,7 +54,7 @@ namespace DentistBooking.Pages.StaffPages
                 Appointment.AppointmentId, Appointment.TimeStart, Appointment.TimeEnd, (int)Appointment.DentistSlotId);
             if (!result.Equals("Success"))
             {
-                TempData["AppointmentDetail"] = result;
+                TempData["ProcessingAppointment"] = result;
                 Appointment = appointmentService.GetAppointmentByID(Appointment.AppointmentId);
                 
                 Services = service.GetAllServicesForCustomer((int)Appointment.ServiceId);

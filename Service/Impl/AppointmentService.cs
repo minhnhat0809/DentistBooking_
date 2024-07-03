@@ -293,7 +293,13 @@ namespace Service.Impl
                     }
                 }
             }
+            appointment.ServiceId = serviceId;
+            appointment.Status = "Done";
+            appointment.DentistSlotId = dentistSlotId;
+            appointment.TimeStart = TimeStart;
+            appointment.TimeEnd = TimeEnd;
 
+            appointmentRepo.UpdateAppointment(appointment);
             return "Success";
         }
     }
