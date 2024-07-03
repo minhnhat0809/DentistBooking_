@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Service;
 using Service.Impl;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace DentistBooking.Pages.StaffPages
 {
@@ -12,12 +14,15 @@ namespace DentistBooking.Pages.StaffPages
         private readonly IDentistService dentistService;
         private readonly IService service;
         private readonly IUserService userService;
-        public ProcessingAppointmentModel(IAppointmentService appointmentService, IDentistService dentistService, IService service, IUserService userService)
+        private readonly IDentistSlotService dentistSlotService;
+        public ProcessingAppointmentModel(IAppointmentService appointmentService, IDentistService dentistService
+            , IService service, IUserService userService, IDentistSlotService dentistSlotService)
         {
             this.appointmentService = appointmentService;
             this.dentistService = dentistService;
             this.service = service;
             this.userService = userService;
+            this.dentistSlotService = dentistSlotService;
         }
 
         [BindProperty]
@@ -45,14 +50,11 @@ namespace DentistBooking.Pages.StaffPages
 
         public IActionResult OnPostUpdate()
         {
-            Dictionary<string, string> result = appointmentService.UpdateAppointmentForStaff((int)Appointment.ServiceId,
-                Appointment.AppointmentId, Appointment.TimeStart, Appointment.TimeEnd, Appointment.DentistSlotId);
-            if (!result.ContainsKey("Success"))
+             string result = appointmentService.UpdateAppointmentForStaff((int)Appointment.ServiceId,
+                Appointment.AppointmentId, Appointment.TimeStart, Appointment.TimeEnd, (int)Appointment.DentistSlotId);
+            if (!result.Equals("Success"))
             {
-                foreach (var item in result)
-                {
-                    TempData["AppointmentDetail"] = item.Value;
-                }
+                TempData["AppointmentDetail"] = result;
                 Appointment = appointmentService.GetAppointmentByID(Appointment.AppointmentId);
                 
                 Services = service.GetAllServicesForCustomer((int)Appointment.ServiceId);
@@ -71,6 +73,24 @@ namespace DentistBooking.Pages.StaffPages
             Dentists = userService.GetAllDentistsByService(serviceId).Result;
             var dentistList = Dentists.Select(d => new { userId = d.UserId, userName = d.UserName }).ToList();
             return new JsonResult(dentistList);
+        }
+
+        public IActionResult OnGetDentistSchedule(int dentistId, DateTime timeStart)
+        {
+            var dentistSlot = dentistSlotService.GetAllDentistSlotsByDentistAndDate(dentistId, DateOnly.FromDateTime(timeStart)).Result;
+            var schedule = dentistSlot.Select(d => new { 
+                Id = d.DentistSlotId,
+                TimeStart = d.TimeStart,
+                TimeEnd = d.TimeEnd,
+                Appointments = d.Appointments
+                }
+            ).ToList();
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve,
+                WriteIndented = true
+            };
+            return new JsonResult(schedule, options);
         }
 
 

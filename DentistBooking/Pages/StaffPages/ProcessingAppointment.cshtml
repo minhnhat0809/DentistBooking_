@@ -24,7 +24,7 @@
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label">Time Start</label>
                         <div class="col-sm-9">
-                            <input type="datetime-local" class="form-control" asp-for="@Model.Appointment.TimeStart" />
+                            <input type="datetime-local" id="timeStart" class="form-control" asp-for="@Model.Appointment.TimeStart" />
                         </div>
                     </div>
 
@@ -51,17 +51,19 @@
 
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label">Dentist</label>
-                        <div class="col-sm-9">
+                        <div class="col-sm-6">
                             <select id="dentistId" name="Appointment.DentistSlot.DentistId" class="form-control">
                                 @if (Model.Dentists != null)
                                 {
                                     @foreach (var s in Model.Dentists)
                                     {
-                                        <option value="@s.UserId" selected>@s.UserName</option>
+                                        <option value="@s.UserId">@s.UserName</option>
                                     }
-                                    
                                 }
                             </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <button type="button" class="btn btn-info btn-block" id="viewScheduleButton">View Schedule</button>
                         </div>
                     </div>
 
@@ -89,7 +91,7 @@
 
                     <div class="form-group row text-center">
                         <div class="col-sm-9 offset-sm-3">
-                            <button type="submit" class="btn btn-primary">Update</button>
+                            <button type="submit" class="btn btn-primary btn-block">Update</button>
                         </div>
                     </div>
                 </form>
@@ -105,9 +107,39 @@
         <div id="customAlertPlaceholder"></div>
     </div>
 </div>
-<br />
+
 <div class="text-center">
-    <a href="./ViewAppointments" class="btn btn-primary btn-sm">Back</a>
+    <a href="./ViewAppointments" class="btn btn-primary btn-sm mt-3">Back</a>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="scheduleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="scheduleModalLabel">Dentist Schedule</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Appointments</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scheduleBody">
+                        
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -129,14 +161,15 @@
                 alertPlaceholder.children('.alert').alert('close');
             }, 3000);
         }
+
         $('#serviceId').change(function () {
             var serviceId = $(this).val();
             var appointmentId = @Model.Appointment.AppointmentId;
             $.ajax({
                 url: '@Url.Page("/StaffPages/ProcessingAppointment", "DentistByService")',
-                data: { serviceId: serviceId},
+                data: { serviceId: serviceId },
                 type: 'GET',
-                success: function (data) {  
+                success: function (data) {
                     console.log('Data received from server:', data);
                     var dentistSelect = $('#dentistId');
                     dentistSelect.empty();
@@ -149,5 +182,64 @@
                 }
             });
         });
+
+        $('#viewScheduleButton').click(function () {
+            var dentistId = $('#dentistId').val();
+            var timeStart = $('#timeStart').val();
+            $.ajax({
+                url: '@Url.Page("/StaffPages/ProcessingAppointment", "DentistSchedule")',
+                data: { dentistId: dentistId, timeStart: timeStart },
+                type: 'GET',
+                success: function (data) {
+                    console.log(data);
+                    var scheduleBody = $('#scheduleBody');
+                    scheduleBody.empty();
+                    var slots = data.$values; // Access the array of slots
+
+                    $.each(slots, function (index, slot) {
+                        var appointmentsHtml = '';
+
+                        if (slot.Appointments && slot.Appointments.$values.length > 0) {
+                            $.each(slot.Appointments.$values, function (idx, appointment) {
+                                var formattedStart = formatDate(new Date(appointment.TimeStart));
+                                var formattedEnd = formatDate(new Date(appointment.TimeEnd));
+
+                                appointmentsHtml += '<div>' +
+                                    '<strong>' + formattedStart + ' - ' + formattedEnd + '</strong><br>' +
+                                    '</div>';
+                            });
+                        } else {
+                            appointmentsHtml = '<div>No appointments</div>';
+                        }
+
+                        var formattedSlotStart = formatDate(new Date(slot.TimeStart));
+                        var formattedSlotEnd = formatDate(new Date(slot.TimeEnd));
+
+                        var row = '<tr>' +
+                            '<td>' + formattedSlotStart + ' - ' + formattedSlotEnd + '</td>' +
+                            '<td>' + appointmentsHtml + '</td>' +
+                            '</tr>';
+
+                        scheduleBody.append(row);
+                    });
+
+                    $('#scheduleModal').modal('show');
+                },
+                error: function () {
+                    alert('Error retrieving schedule.');
+                }
+            });
+        });
+
+        function formatDate(date) {
+            var day = date.getDate().toString().padStart(2, '0');
+            var month = (date.getMonth() + 1).toString().padStart(2, '0');
+            var year = date.getFullYear();
+            var hours = date.getHours().toString().padStart(2, '0');
+            var minutes = date.getMinutes().toString().padStart(2, '0');
+            var seconds = date.getSeconds().toString().padStart(2, '0');
+
+            return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+        }
     });
 </script>

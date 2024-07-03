@@ -21,6 +21,6 @@ namespace Service
 
         List<Appointment> GetAllProcessingAppointment();
 
-        Dictionary<string, string> UpdateAppointmentForStaff(int serviceId, int appointmentId, DateTime TimeStart, DateTime TimeEnd, int dentistSlotId);
+        string UpdateAppointmentForStaff(int serviceId, int appointmentId, DateTime TimeStart, DateTime TimeEnd, int dentistSlotId);
     }
 }

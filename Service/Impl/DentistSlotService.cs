@@ -29,7 +29,7 @@ namespace Service.Impl
             return dentistSlots;
         }
 
-        public async Task<DentistSlot> GetDentistSlot(int dentistSlotId)
+        public async Task<DentistSlot> GetDentistSlotById(int dentistSlotId)
         {
             return await dentistSlotRepo.GetDentistSlotByID(dentistSlotId);
         }
