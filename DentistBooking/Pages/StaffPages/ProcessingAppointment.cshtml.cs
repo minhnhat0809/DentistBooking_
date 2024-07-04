@@ -25,11 +25,16 @@ namespace DentistBooking.Pages.StaffPages
             this.dentistSlotService = dentistSlotService;
         }
 
-        [BindProperty]
+        [BindProperty(SupportsGet = true)]
         public Appointment Appointment { get; set; } = default!;
 
         [BindProperty]
         public IList<User> Dentists { get; set; } = default!;
+        [BindProperty(SupportsGet = true)]
+        public TimeOnly DentistSlotTimeStart { get; set; } = default!;
+        [BindProperty(SupportsGet = true)]
+        public TimeOnly DentistSlotTimeEnd { get; set; } = default!;
+        
 
         public IList<BusinessObject.Service> Services { get; set; } = default!;
         public IActionResult OnGet(int id)
@@ -44,7 +49,8 @@ namespace DentistBooking.Pages.StaffPages
                 Services = service.GetAllServicesForCustomer((int)Appointment.ServiceId);
             }
             Dentists = userService.GetAllDentistsByService((int)Appointment.ServiceId).Result;
-
+            
+            HttpContext.Session.SetInt32("AppointmentId",Appointment.AppointmentId);
             return Page();
         }
 
@@ -56,8 +62,8 @@ namespace DentistBooking.Pages.StaffPages
             {
                 TempData["ProcessingAppointment"] = result;
                 Appointment = appointmentService.GetAppointmentByID(Appointment.AppointmentId);
-                
                 Services = service.GetAllServicesForCustomer((int)Appointment.ServiceId);
+                Dentists = userService.GetAllDentistsByService((int)Appointment.ServiceId).Result;
                 return Page();
             }
 
@@ -65,18 +71,19 @@ namespace DentistBooking.Pages.StaffPages
             Appointment = appointmentService.GetAppointmentByID(Appointment.AppointmentId);
             Services = service.GetAllServicesForCustomer((int)Appointment.ServiceId);
             Dentists = userService.GetAllDentistsByService((int)Appointment.ServiceId).Result;
-            return Page();
+            return RedirectToPage(new { id = Appointment.AppointmentId });
         }
 
         public IActionResult OnGetDentistByService(int id, int serviceId)
         {
             Dentists = userService.GetAllDentistsByService(serviceId).Result;
-            var dentistList = Dentists.Select(d => new { userId = d.UserId, userName = d.UserName }).ToList();
+            var dentistList = Dentists.Select(d => new { userId = d.UserId, userName = d.Name }).ToList();
             return new JsonResult(dentistList);
         }
 
         public IActionResult OnGetDentistSchedule(int dentistId, DateTime timeStart)
         {
+            HttpContext.Session.SetInt32("DentistId",dentistId);
             var dentistSlot = dentistSlotService.GetAllDentistSlotsByDentistAndDate(dentistId, DateOnly.FromDateTime(timeStart)).Result;
             var schedule = dentistSlot.Select(d => new { 
                 Id = d.DentistSlotId,
@@ -90,7 +97,31 @@ namespace DentistBooking.Pages.StaffPages
                 ReferenceHandler = ReferenceHandler.Preserve,
                 WriteIndented = true
             };
+            
             return new JsonResult(schedule, options);
+        }
+
+        public IActionResult OnPostCreateDentistSlot()
+        {
+            var apppointmentId = (int)HttpContext.Session.GetInt32("AppointmentId");
+            Appointment = appointmentService.GetAppointmentByID(apppointmentId);
+            var date = Appointment.TimeStart;
+            DateTime slotTimeStart = new DateTime(date.Year, date.Month, date.Day,
+                DentistSlotTimeStart.Hour, DentistSlotTimeStart.Minute, DentistSlotTimeStart.Second);
+            
+            DateTime slotTimeEnd = new DateTime(date.Year, date.Month, date.Day,
+                DentistSlotTimeEnd.Hour, DentistSlotTimeEnd.Minute, DentistSlotTimeEnd.Second);
+            
+            string result = dentistSlotService.CreateDentistSlot((int)HttpContext.Session.GetInt32("DentistId")
+                , slotTimeStart, slotTimeEnd);
+            if (!result.Equals("Success"))
+            {
+                TempData["ProcessingAppointment_DentistSlot"] = result;
+                return RedirectToPage(new { id = Appointment.AppointmentId });
+            }
+
+            TempData["ProcessingAppointment_DentistSlot"] = "Create dentist slot successfully!";
+            return RedirectToPage(new { id = Appointment.AppointmentId });
         }
 
 

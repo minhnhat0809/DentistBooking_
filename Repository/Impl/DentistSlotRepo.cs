@@ -15,5 +15,6 @@ namespace Repository.Impl
         public async Task<List<DentistSlot>> GetAllDentistSlotsByDentistAndDate(int id, DateOnly selectedDate) => await DentistSlotDAO.Instance.getAllDentistSlotsByDentist(id, selectedDate);
 
         public async Task<DentistSlot> GetDentistSlotByID(int dentistSlotId) => await DentistSlotDAO.Instance.getDentistSlotByID(dentistSlotId);
+        public void CreateDentistSlot(DentistSlot dentistSlot) => DentistSlotDAO.Instance.createDentistSlot(dentistSlot);
     }
 }

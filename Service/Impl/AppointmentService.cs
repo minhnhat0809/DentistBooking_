@@ -264,6 +264,12 @@ namespace Service.Impl
                 return "This dentist slot is not existed!";
             }
 
+            if (TimeStart < dentistSlot.TimeStart || TimeEnd > dentistSlot.TimeEnd)
+            {
+                return "The time of this appointment is out of range for this dentist slot!";
+            }
+            
+
             if (TimeStart > TimeEnd)
             {
                 return "Time Start is bigger than Time End!";

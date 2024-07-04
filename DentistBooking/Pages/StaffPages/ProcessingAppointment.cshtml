@@ -1,10 +1,12 @@
 ﻿@page
+@using BusinessObject
 @model DentistBooking.Pages.StaffPages.ProcessingAppointmentModel
 @{
     ViewData["Title"] = "Appointment Detail";
     //Layout = "/Pages/Shared/_Layout.cshtml";
     Layout = null;
     var resultMessage = TempData["ProcessingAppointment"] as string;
+    var result = TempData["ProcessingAppointment_DentistSlot"] as string;
 }
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -113,7 +115,6 @@
     <a href="./ProcessingAppointmentList" class="btn btn-primary btn-sm mt-3">Back</a>
 </div>
 
-<!-- Modal -->
 <div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="scheduleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -136,6 +137,27 @@
                         
                     </tbody>
                 </table>
+                <form id="createSlotForm" asp-page-handler="CreateDentistSlot">
+                    <input type="hidden" value="@Model.Appointment.TimeStart"/>
+                    <input type="hidden" value="@Model.Appointment.AppointmentId"/>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Slot Time Start</label>
+                        <div class="col-sm-9">
+                            <input type="time" id="slotTimeStart" name="DentistSlotTimeStart" asp-for="DentistSlotTimeStart" class="form-control" required/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-3 col-form-label">Slot Time End</label>
+                        <div class="col-sm-9">
+                            <input type="time" id="slotTimeEnd" name="DentistSlotTimeEnd" asp-for="DentistSlotTimeEnd" class="form-control" required/>
+                        </div>
+                    </div>
+                    <div class="form-group row text-center">
+                        <div class="col-sm-9 offset-sm-3">
+                            <button type="submit" class="btn btn-success btn-block">Create Dentist Slot</button>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -163,6 +185,21 @@
                 alertPlaceholder.children('.alert').alert('close');
             }, 3000);
         }
+        
+        var result = '@result';
+                if (result.trim() !== '') {
+                    var alertPlaceholder = $('#customAlertPlaceholder');
+                    var alertHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'
+                        + result
+                        + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
+                        + '<span aria-hidden="true">&times;</span>'
+                        + '</button></div>';
+                    alertPlaceholder.html(alertHtml);
+        
+                    setTimeout(function () {
+                        alertPlaceholder.children('.alert').alert('close');
+                    }, 3000);
+                }
 
         $('#serviceId').change(function () {
             var serviceId = $(this).val();
@@ -232,6 +269,33 @@
                 }
             });
         });
+        
+        $('#createSlotButton').click(function () {
+                    var slotTimeStart = $('#slotTimeStart').val();
+                    var slotTimeEnd = $('#slotTimeEnd').val();
+                    var date = $('#timeStart').val();
+        
+                    $.ajax({
+                        url: '@Url.Page("/StaffPages/ProcessingAppointment", "CreateDentistSlot")',
+                        data: {
+                            timeStart: slotTimeStart,
+                            timeEnd: slotTimeEnd,
+                            date: date
+                        },
+                        type: 'POST',
+                        
+                        success: function (data) {
+                            alert('Dentist slot created successfully.');
+                            $('#scheduleModal').modal('hide');
+                        },
+                        error: function () {
+                            console.log(this.data);
+                            alert('Error creating dentist slot.');
+                        }
+                    });
+                });
+       
+
 
         $(document).on('click', '.book-slot-button', function () {
             var slotId = $(this).attr('data-slot-id');

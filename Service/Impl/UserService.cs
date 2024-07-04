@@ -48,6 +48,27 @@ namespace Service.Impl
             return userList;
         }
 
+        public List<User> GetAllUserByType(string type)
+        {
+            List<User> userList = new List<User>();
+            switch (type)
+            {
+                case "All":
+                    userList = _userRepo.GetAllUsers();
+                    break;
+                case "Dentist":
+                    userList = _userRepo.GetAllUsers().Where(u => u.Role.RoleName.Equals("Dentist")).ToList();
+                    break;
+                case "Customer":
+                    userList = _userRepo.GetAllUsers().Where(u => u.Role.RoleName.Equals("Customer")).ToList();
+                    break;
+                default:
+                    userList = _userRepo.GetAllUsers();
+                    break;
+            }
+            return userList;
+        }
+
         public List<User> GetAllUsers()
         => _userRepo.GetAllUsers();
 
