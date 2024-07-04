@@ -28,7 +28,7 @@ namespace DataAccess
             }
         }
 
-        public Medicine getMedicineByID(int id)
+        public Medicine getMedicineByID(int? id)
         {
             var context = new BookingDentistDbContext();
             var medicine = context.Medicines.FirstOrDefault(c => c.MedicineId == id);

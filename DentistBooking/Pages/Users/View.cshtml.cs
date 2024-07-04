@@ -23,7 +23,7 @@ namespace DentistBooking.Pages.Users
 
         public async Task OnGetAsync()
         {
-            User = userService.GetAllUsers();
+            User =  userService.GetAllUsers();
         }
     }
 }

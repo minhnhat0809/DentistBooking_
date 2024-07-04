@@ -1,0 +1,56 @@
+﻿@page
+@model DentistBooking.Pages.StaffPages.Check_upSchedules.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>CheckupSchedule</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CheckupSchedule.TimeStart)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CheckupSchedule.TimeStart)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CheckupSchedule.TimeEnd)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CheckupSchedule.TimeEnd)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CheckupSchedule.Notes)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CheckupSchedule.Notes)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CheckupSchedule.Status)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CheckupSchedule.Status)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CheckupSchedule.Customer)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CheckupSchedule.CustomerName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CheckupSchedule.Dentist)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CheckupSchedule.DentistName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.CheckupSchedule.ScheduleId">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

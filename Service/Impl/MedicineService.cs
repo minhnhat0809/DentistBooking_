@@ -28,7 +28,7 @@ namespace Service.Impl
             }
         }
 
-        public Medicine GetById(int id)
+        public Medicine GetById(int? id)
         {
             if (id <= 0)
             {

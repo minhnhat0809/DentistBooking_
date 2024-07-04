@@ -17,6 +17,8 @@ namespace Repository
 
         Appointment GetAppointmentById(int id);
 
-        void UpdateAppointment(Appointment appointment);   
+        void UpdateAppointment(Appointment appointment);
+
+        List<Appointment> GetAllProcessingAppointment();
     }
 }

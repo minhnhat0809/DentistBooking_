@@ -3,6 +3,8 @@ using Repository.Impl;
 using Repository;
 using Service.Impl;
 using Service;
+using AutoMapper;
+using DentistBooking.AppStart;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +13,7 @@ builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
 {
     options.Conventions.AddPageRoute("/ForgetPassword", "/forget-password");
     options.Conventions.AddPageRoute("/Index", "/login");
-}); ;
+});
 
 builder.Services.AddSession(options =>
 {
@@ -20,6 +22,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.ConfigureAutoMapper();
 
 //Services
 builder.Services.AddScoped<IUserService, UserService>();

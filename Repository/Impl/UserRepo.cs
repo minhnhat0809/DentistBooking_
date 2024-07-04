@@ -18,7 +18,7 @@ namespace Repository.Impl
         public List<User> GetAllUsers()
         => UserDAO.Instance.getAllUsers();
 
-        public User GetById(int id)
+        public User GetById(int? id)
         => UserDAO.Instance.getUserByID(id);
 
         public async Task<User?> GetUserByUserName(string email) => await UserDAO.Instance.GetUserByUserName(email);

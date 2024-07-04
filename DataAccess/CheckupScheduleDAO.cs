@@ -28,16 +28,20 @@ namespace DataAccess
             }
         }
 
-        public List<CheckupSchedule> getAllCheckupSchedule()
+        public async Task<List<CheckupSchedule>> getAllCheckupSchedule()
         {
             var context = new BookingDentistDbContext();
-            var scheduleList = context.CheckupSchedules.ToList();
+            var scheduleList = await context.CheckupSchedules
+                .Include(x=>x.Customer)
+                .ToListAsync();
             return scheduleList;
         }
-        public CheckupSchedule getCheckupScheduleByID(int id)
+        public async Task<CheckupSchedule> getCheckupScheduleByID(int? id)
         {
             var context = new BookingDentistDbContext();
-            var clinic = context.CheckupSchedules.FirstOrDefault(c => c.ScheduleId == id);
+            var clinic = await context.CheckupSchedules
+                .Include(x=>x.Customer)
+                .FirstOrDefaultAsync(c => c.ScheduleId == id);
             return clinic;
         }
 

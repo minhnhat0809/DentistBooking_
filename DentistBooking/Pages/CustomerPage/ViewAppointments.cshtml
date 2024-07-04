@@ -28,7 +28,12 @@
                         <tr>
                             <td>@appointment.TimeStart.ToString("MM/dd/yyyy")</td>
                             <td>@appointment.TimeStart.ToString("hh\\:mm tt")</td>
-                            <td>@appointment.DentistSlot.Dentist.Name</td>
+                            @if(appointment.DentistSlot == null){
+                                <td></td>
+                            }else
+                            {
+                                <td>@appointment.DentistSlot.Dentist.Name</td>
+                            }                           
                             <td>
                                 <a asp-page="./AppointmentDetail" asp-route-id="@appointment.AppointmentId" class="btn btn-primary btn-sm">View Details</a>
                                 <form method="post" asp-page-handler="Delete" asp-route-id="@appointment.AppointmentId" class="d-inline">

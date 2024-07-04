@@ -18,5 +18,9 @@ namespace Service
         Appointment GetAppointmentByID(int id);
 
         Dictionary<string, string> UpdateAppointment(int serviceId, int appointmentId, DateTime TimeStart, int customerId);
+
+        List<Appointment> GetAllProcessingAppointment();
+
+        Dictionary<string, string> UpdateAppointmentForStaff(int serviceId, int appointmentId, DateTime TimeStart, DateTime TimeEnd, int? dentistSlotId);
     }
 }

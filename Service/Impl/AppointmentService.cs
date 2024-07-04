@@ -126,24 +126,6 @@ namespace Service.Impl
             Appointment appointment = appointmentRepo.GetAppointmentById(appointmentId);
             return appointment;
         }
-
-        public List<BusinessObject.Service> GetServiceOfDentistByDentistSlotID(int dentistSlotId, int serviceId)
-        {
-            DentistSlot dentistSlot = dentistSlotService.GetDentistSlot(dentistSlotId).Result;
-
-            BusinessObject.Service sErvice = service.GetServiceByID(serviceId);
-
-            List<BusinessObject.Service> services = service.GetAllServiceByDentist((int)dentistSlot.DentistId);
-
-            if (sErvice != null && services.Any(s => s.ServiceId == sErvice.ServiceId))
-            {
-                var s = services.FirstOrDefault(s => s.ServiceId == sErvice.ServiceId);
-                services.Remove(s);  
-                services.Insert(0, sErvice); 
-            }
-
-            return services;
-        }
         public Dictionary<string, string> UpdateAppointment(int serviceId, int appointmentId, DateTime TimeStart, int customerId)
         {
             Dictionary<string, string> errors = new Dictionary<string, string>();
@@ -243,7 +225,14 @@ namespace Service.Impl
             return isInMorning || isInAfternoon;
         }
 
+        public List<Appointment> GetAllProcessingAppointment()
+        {
+            return appointmentRepo.GetAllProcessingAppointment();
+        }
 
-
+        public Dictionary<string, string> UpdateAppointmentForStaff(int serviceId, int appointmentId, DateTime TimeStart, DateTime TimeEnd, int? dentistSlotId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

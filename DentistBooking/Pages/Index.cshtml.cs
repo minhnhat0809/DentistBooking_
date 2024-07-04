@@ -44,6 +44,9 @@ namespace DentistBooking.Pages
                     }else if (result.Result.Equals("Admin"))
                     {
                         return RedirectToPage("/Users/Index");
+                    }else if (result.Result.Equals("Staff"))
+                    {
+                        return RedirectToPage("/StaffPages/ProcessingAppointmentList");
                     }
                     else if (result.Result.Equals("Staff"))
                     {

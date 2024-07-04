@@ -72,5 +72,13 @@ namespace DataAccess
             context.Entry<Appointment>(appointment).State = EntityState.Modified;
             context.SaveChanges();
         }
+
+        public List<Appointment> getAllProcessingAppointment()
+        {
+            var context = new BookingDentistDbContext();
+            return context.Appointments.Include(ap => ap.DentistSlot)
+                .ThenInclude(dl => dl.Dentist)
+                .Where(ap => ap.Status.Equals("Processing")).ToList();
+        }
     }
 }
