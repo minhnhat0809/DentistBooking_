@@ -27,5 +27,8 @@ namespace Repository.Impl
             var model = await MedicalRecordDAO.Instance.getMedicalRecordByID(id);
             MedicalRecordDAO.Instance.deleteMedicalRecord(model);
         }
+
+        public async Task<IEnumerable<MedicalRecord>> GetMedicalRecordsByCustomerIdAsync(int customerId)
+        => await MedicalRecordDAO.Instance.GetMedicalRecordsByCustomerIdAsync(customerId);
     }
 }

@@ -36,19 +36,19 @@
             </div>
             <div class="form-group">
                 <label asp-for="Appointment.DentistSlotId" class="control-label"></label>
-                <select asp-for="Appointment.DentistSlotId" class ="form-control" asp-items="ViewBag.DentistSlotId"></select>
+                <select asp-for="Appointment.DentistSlotId" class="form-control" asp-items="ViewBag.DentistSlotId" id="DentistSlotId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Appointment.CustomerId" class="control-label"></label>
-                <select asp-for="Appointment.CustomerId" class ="form-control" asp-items="ViewBag.CustomerId"></select>
+                <select asp-for="Appointment.CustomerId" class="form-control" asp-items="ViewBag.CustomerId" id="CustomerId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Appointment.ServiceId" class="control-label"></label>
-                <select asp-for="Appointment.ServiceId" class ="form-control" asp-items="ViewBag.ServiceId"></select>
+                <select asp-for="Appointment.ServiceId" class="form-control" asp-items="ViewBag.ServiceId" id="ServiceId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Appointment.MedicalRecordId" class="control-label"></label>
-                <select asp-for="Appointment.MedicalRecordId" class ="form-control" asp-items="ViewBag.MedicalRecordId"></select>
+                <select asp-for="Appointment.MedicalRecordId" class="form-control" asp-items="ViewBag.MedicalRecordId" id="MedicalRecordId"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -62,5 +62,39 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#DentistSlotId').change(function () {
+                var dentistSlotId = $(this).val();
+                $.getJSON('@Url.Page("/StaffPages/Appointments/Create", "ServicesByDentistSlot")', { dentistSlotId: dentistSlotId }, function (data) {
+                    var serviceSelect = $('#ServiceId');
+                    serviceSelect.empty();
+                    $.each(data, function (index, item) {
+                        serviceSelect.append($('<option>', {
+                            value: item.value,
+                            text: item.text
+                        }));
+                    });
+                });
+            });
+
+            $('#CustomerId').change(function () {
+                var customerId = $(this).val();
+                $.getJSON('@Url.Page("/StaffPages/Appointments/Create", "MedicalRecordByCustomerId")', { customerId: customerId }, function (data) {
+                    var medicalRecordSelect = $('#MedicalRecordId');
+                    medicalRecordSelect.empty();
+                    $.each(data, function (index, item) {
+                        medicalRecordSelect.append($('<option>', {
+                            value: item.value,
+                            text: item.text
+                        }));
+                    });
+                });
+            });
+        });
+    </script>
 }

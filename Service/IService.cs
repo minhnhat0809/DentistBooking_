@@ -13,5 +13,7 @@ namespace Service
         public void CreateService(BusinessObject.Service service);
         public void UpdateService(BusinessObject.Service service);
         List<BusinessObject.Service> GetAllServicesForCustomer(int serviceId);
+        Task<IEnumerable<BusinessObject.Service>> GetAllServicesAsync();
+        Task<IEnumerable<BusinessObject.Service>> GetServicesByDentistSlotAsync(int dentistSlotId);
     }
 }

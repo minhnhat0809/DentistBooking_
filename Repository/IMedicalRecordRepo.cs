@@ -14,5 +14,6 @@ namespace Repository
         public void CreateMedicalRecord(MedicalRecord medical);
         public void UpdateMedicalRecord(MedicalRecord medical);
         public void DeleteMedicalRecord(int id);
+        Task<IEnumerable<MedicalRecord>> GetMedicalRecordsByCustomerIdAsync(int customerId);
     }
 }

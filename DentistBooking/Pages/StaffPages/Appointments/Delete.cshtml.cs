@@ -7,16 +7,17 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BusinessObject;
 using DataAccess;
+using Service;
 
 namespace DentistBooking.Pages.StaffPages.Appointments
 {
     public class DeleteModel : PageModel
     {
-        private readonly DataAccess.BookingDentistDbContext _context;
+        private readonly IAppointmentService _appointmentService;
 
-        public DeleteModel(DataAccess.BookingDentistDbContext context)
+        public DeleteModel(IAppointmentService appointmentService)
         {
-            _context = context;
+            _appointmentService = appointmentService;   
         }
 
         [BindProperty]
@@ -29,7 +30,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
                 return NotFound();
             }
 
-            var appointment = await _context.Appointments.FirstOrDefaultAsync(m => m.AppointmentId == id);
+            var appointment = _appointmentService.GetAppointmentByID(id.Value);
 
             if (appointment == null)
             {
@@ -49,14 +50,12 @@ namespace DentistBooking.Pages.StaffPages.Appointments
                 return NotFound();
             }
 
-            var appointment = await _context.Appointments.FindAsync(id);
+            var appointment = _appointmentService.GetAppointmentByID(id.Value);
             if (appointment != null)
             {
                 Appointment = appointment;
-                _context.Appointments.Remove(Appointment);
-                await _context.SaveChangesAsync();
             }
-
+            _appointmentService.DeleteAppointment(id.Value);
             return RedirectToPage("./Index");
         }
     }

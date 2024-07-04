@@ -41,6 +41,18 @@ namespace DataAccess
             var serviceList = await context.Services.ToListAsync();
             return serviceList;
         }
+        public async Task<List<Service>> GetServicesByDentistSlotAsync(int dentistSlotId)
+        {
+            var context = new BookingDentistDbContext();
+            var services = await context.DentistSlots
+                .Where(ds => ds.DentistSlotId == dentistSlotId)
+                .SelectMany(ds => ds.Dentist.DentistServices)
+                .Where(ds => ds.Status == true)
+                .Select(ds => ds.Service)
+                .Distinct()
+                .ToListAsync();
+            return services;
+        }
 
         public void deleteService(Service service)
         {

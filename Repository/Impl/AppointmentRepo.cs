@@ -12,6 +12,12 @@ namespace Repository.Impl
     {
         public async Task CreateAppointment(Appointment appointment) => await AppointmentDAO.Instance.createAppointment(appointment);
 
+        public void DeleteAppointment(int appointmentId)
+        {
+            var model = AppointmentDAO.Instance.getAppointmnentByID(appointmentId);
+            AppointmentDAO.Instance.deleteAppointment(model);
+        }
+
         public async Task<List<Appointment>> GetAllAppointments() => await AppointmentDAO.Instance.getAllAppointments();
 
         public async Task<List<Appointment>> GetAllAppointmentsOfCustomer(int customerId) => await AppointmentDAO.Instance.getAllAppointmentsOfCustomer(customerId);
