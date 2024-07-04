@@ -154,5 +154,29 @@ namespace Service.Impl
                 throw new ExceptionHandler.ServiceException("An error occurred while retrieving the medical record.", ex);
             }
         }
+
+        public async Task<IEnumerable<MedicalRecord>> GetMedicalRecordsByCustomerIdAsync(int customerId)
+        {
+            if (customerId <= 0)
+            {
+                throw new ArgumentException("Invalid medical customer ID.", nameof(customerId));
+            }
+
+            try
+            {
+                var models = await _medicalRecordRepo.GetMedicalRecordsByCustomerIdAsync(customerId);
+                if (models == null)
+                {
+                    throw new ExceptionHandler.NotFoundException($"Medical record not found.");
+                }
+
+                return models;
+            }
+            catch (Exception ex)
+            {
+                // Log exception
+                throw new ExceptionHandler.ServiceException("An error occurred while retrieving the medical record.", ex);
+            }
+        }
     }
 }

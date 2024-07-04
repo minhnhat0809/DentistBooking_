@@ -1,27 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using BusinessObject;
-using DataAccess;
+using Service;
 
 namespace DentistBooking.Pages.StaffPages.Appointments
 {
     public class EditModel : PageModel
     {
-        private readonly DataAccess.BookingDentistDbContext _context;
+        private readonly IAppointmentService _appointmentService;
+        private readonly IUserService _userService;
+        private readonly IDentistSlotService _dentistSlotService;
+        private readonly IService _service;
+        private readonly IMedicalRecordService _medicalRecordService;
 
-        public EditModel(DataAccess.BookingDentistDbContext context)
+        public EditModel(IAppointmentService appointmentService, IUserService userService, IDentistSlotService dentistSlotService, IService service, IMedicalRecordService medicalRecordService)
         {
-            _context = context;
+            _appointmentService = appointmentService;
+            _userService = userService;
+            _dentistSlotService = dentistSlotService;
+            _service = service;
+            _medicalRecordService = medicalRecordService;
         }
 
         [BindProperty]
-        public Appointment Appointment { get; set; } = default!;
+        public Appointment Appointment { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -30,52 +36,45 @@ namespace DentistBooking.Pages.StaffPages.Appointments
                 return NotFound();
             }
 
-            var appointment =  await _context.Appointments.FirstOrDefaultAsync(m => m.AppointmentId == id);
-            if (appointment == null)
+            Appointment = _appointmentService.GetAppointmentByID(id.Value);
+
+            if (Appointment == null)
             {
                 return NotFound();
             }
-            Appointment = appointment;
-           ViewData["CustomerId"] = new SelectList(_context.Users, "UserId", "Name");
-           ViewData["DentistSlotId"] = new SelectList(_context.DentistSlots, "DentistSlotId", "DentistSlotId");
-           ViewData["MedicalRecordId"] = new SelectList(_context.MedicalRecords, "MediaRecordId", "MediaRecordId");
-           ViewData["ServiceId"] = new SelectList(_context.Services, "ServiceId", "ServiceName");
+
+            ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers(), "UserId", "Name", Appointment.CustomerId);
+            ViewData["DentistSlotId"] = new SelectList(_dentistSlotService.GetAllDentistSlots().Result, "DentistSlotId", "DentistSlotId", Appointment.DentistSlotId);
+            ViewData["ServiceId"] = new SelectList(await _service.GetAllServices(), "ServiceId", "ServiceName", Appointment.ServiceId);
+            ViewData["MedicalRecordId"] = new SelectList(await _medicalRecordService.GetAllMedicalRecords(), "MedicalRecordId", "MedicalRecordId", Appointment.MedicalRecordId);
+
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
+                ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers(), "UserId", "Name", Appointment.CustomerId);
+                ViewData["DentistSlotId"] = new SelectList(_dentistSlotService.GetAllDentistSlots().Result, "DentistSlotId", "DentistSlotId", Appointment.DentistSlotId);
+                ViewData["ServiceId"] = new SelectList(_service.GetAllServices().Result, "ServiceId", "ServiceName", Appointment.ServiceId);
+                ViewData["MedicalRecordId"] = new SelectList(_medicalRecordService.GetAllMedicalRecords().Result, "MedicalRecordId", "MedicalRecordId", Appointment.MedicalRecordId);
                 return Page();
             }
 
-            _context.Attach(Appointment).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                _appointmentService.PutAppointment(Appointment);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception)
             {
-                if (!AppointmentExists(Appointment.AppointmentId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                // Handle exceptions appropriately
+                throw;
             }
 
             return RedirectToPage("./Index");
         }
 
-        private bool AppointmentExists(int id)
-        {
-            return _context.Appointments.Any(e => e.AppointmentId == id);
-        }
+        
     }
 }

@@ -52,7 +52,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="Appointment.MedicalRecordId" class="control-label"></label>
-                <select asp-for="Appointment.MedicalRecordId" class="form-control" asp-items="ViewBag.MedicalRecordId"></select>
+                <select asp-for="Appointment.MedicalRecordId" class="form-control" asp-items="@(ViewBag.MedicalRecordId as SelectList)"></select>
+
                 <span asp-validation-for="Appointment.MedicalRecordId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -67,5 +68,39 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#Appointment_DentistSlotId').change(function () {
+                var dentistSlotId = $(this).val();
+                $.getJSON('@Url.Page("/StaffPages/Appointments/Edit", "ServicesByDentistSlot")', { dentistSlotId: dentistSlotId }, function (data) {
+                    var serviceSelect = $('#Appointment_ServiceId');
+                    serviceSelect.empty();
+                    $.each(data, function (index, item) {
+                        serviceSelect.append($('<option>', {
+                            value: item.value,
+                            text: item.text
+                        }));
+                    });
+                });
+            });
+
+            $('#Appointment_CustomerId').change(function () {
+                var customerId = $(this).val();
+                $.getJSON('@Url.Page("/StaffPages/Appointments/Edit", "MedicalRecordByCustomerId")', { customerId: customerId }, function (data) {
+                    var medicalRecordSelect = $('#Appointment_MedicalRecordId');
+                    medicalRecordSelect.empty();
+                    $.each(data, function (index, item) {
+                        medicalRecordSelect.append($('<option>', {
+                            value: item.value,
+                            text: item.text
+                        }));
+                    });
+                });
+            });
+        });
+    </script>
 }

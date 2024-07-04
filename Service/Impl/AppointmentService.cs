@@ -1,5 +1,6 @@
 ﻿using BusinessObject;
 using Repository;
+using Service.Exeption;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,29 @@ namespace Service.Impl
             this.service = service;
             this.userRepo = userRepo;
         }
+        public void AddAppointment(Appointment appointment)
+        {
+            if (appointment == null)
+            {
+                throw new ArgumentNullException(nameof(appointment), "Schedule cannot be null.");
+            }
 
+            try
+            {
+                var existingSchedule = appointmentRepo.GetAppointmentById(appointment.AppointmentId);
+                if (existingSchedule != null)
+                {
+                    throw new InvalidOperationException($"Checkup schedule with ID {appointment.AppointmentId} already exists.");
+                }
+
+                appointmentRepo.CreateAppointment(appointment);
+            }
+            catch (Exception ex)
+            {
+                // Log exception
+                throw new ExceptionHandler.ServiceException("An error occurred while creating the checkup schedule.", ex);
+            }
+        }
         public async Task<Dictionary<string, string>> CreateAppointment(DateTime TimeStart, int customerId, DateOnly selectedDate, int serviceId)
         {
             Dictionary<string, string> errors = new Dictionary<string, string>();
@@ -233,6 +256,53 @@ namespace Service.Impl
         public Dictionary<string, string> UpdateAppointmentForStaff(int serviceId, int appointmentId, DateTime TimeStart, DateTime TimeEnd, int? dentistSlotId)
         {
             throw new NotImplementedException();
+        }
+
+        public void PutAppointment(Appointment appointment)
+        {
+            if (appointment == null)
+            {
+                throw new ArgumentNullException(nameof(appointment), "appointment cannot be null.");
+            }
+
+            try
+            {
+                var existing = appointmentRepo.GetAppointmentById(appointment.AppointmentId);
+                if (existing == null)
+                {
+                    throw new ExceptionHandler.NotFoundException($"Appointment with ID {appointment.AppointmentId} not found.");
+                }
+
+                appointmentRepo.UpdateAppointment(appointment);
+            }
+            catch (Exception ex)
+            {
+                // Log exception
+                throw new ExceptionHandler.ServiceException("An error occurred while updating.", ex);
+            }
+        }
+
+        public void DeleteAppointment(int appointmentId)
+        {
+            if (appointmentId <= 0)
+            {
+                throw new ArgumentException("Invalid appointment ID.", nameof(appointmentId));
+            }
+
+            try
+            {
+                var existing = appointmentRepo.GetAppointmentById(appointmentId);
+                if (existing == null)
+                {
+                    throw new ExceptionHandler.NotFoundException($"Appointment with ID {appointmentId} not found.");
+                }
+                appointmentRepo.DeleteAppointment(appointmentId); 
+            }
+            catch (Exception ex)
+            {
+                // Log exception
+                throw new ExceptionHandler.ServiceException("An error occurred while deleting the checkup schedule.", ex);
+            }
         }
     }
 }

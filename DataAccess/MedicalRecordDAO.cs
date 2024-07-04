@@ -45,6 +45,14 @@ namespace DataAccess
                 .ToListAsync();
             return medicalRecordList;
         }
+        public async Task<List<MedicalRecord>> GetMedicalRecordsByCustomerIdAsync(int customerId)
+        {
+            var context = new BookingDentistDbContext();
+            var medicalRecordList = await context.MedicalRecords
+            .Where(mr => mr.CustomerId == customerId)
+            .ToListAsync();
+            return medicalRecordList;
+        }
 
         public void deleteMedicalRecord(MedicalRecord medicalRecord)
         {

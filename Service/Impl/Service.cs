@@ -27,6 +27,11 @@ namespace Service.Impl
             return viewModels;
         }
 
+        public async Task<IEnumerable<BusinessObject.Service>> GetAllServicesAsync()
+        {
+            return await _servicerRepo.GetAllServicesAsync();
+        }
+
         public List<BusinessObject.Service> GetAllServicesForCustomer(int serviceId)
         {
             List<BusinessObject.Service> services = _servicerRepo.GetAllServices().Result;
@@ -51,6 +56,11 @@ namespace Service.Impl
         public BusinessObject.Service GetServiceByID(int id)
         {
             return _servicerRepo.GetServiceByID(id).Result;
+        }
+
+        public async Task<IEnumerable<BusinessObject.Service>> GetServicesByDentistSlotAsync(int dentistSlotId)
+        {
+           return await _servicerRepo.GetServicesByDentistSlotAsync(dentistSlotId);
         }
 
         public void UpdateService(BusinessObject.Service service)
