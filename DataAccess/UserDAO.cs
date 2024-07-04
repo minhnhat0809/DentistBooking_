@@ -38,7 +38,7 @@ namespace DataAccess
         public List<User> getAllUsers()
         {
             var context = new BookingDentistDbContext();
-            var userList = context.Users.ToList();
+            var userList = context.Users.Include(u => u.Role).ToList();
             return userList;
         }
 
