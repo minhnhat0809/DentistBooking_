@@ -3,6 +3,8 @@ using Repository.Impl;
 using Repository;
 using Service.Impl;
 using Service;
+using AutoMapper;
+using DentistBooking.AppStart;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,8 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+builder.Services.ConfigureAutoMapper();
 
 //Services
 builder.Services.AddScoped<IUserService, UserService>();

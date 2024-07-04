@@ -70,6 +70,6 @@ namespace DataAccess
             List<BusinessObject.Service> services = context.DentistServices.Where(ds => ds.DentistId == dentistId).Select(ds => ds.Service).ToList();
             return services;
         }
-
+        
     }
 }

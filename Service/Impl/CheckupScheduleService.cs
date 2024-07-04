@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using AutoMapper;
 using BusinessObject;
+using BusinessObject.DTO;
 using Repository;
 using Service.Exeption;
 
@@ -9,17 +11,32 @@ namespace Service.Impl
     public class CheckupScheduleService : ICheckupScheduleService
     {
         private readonly ICheckupScheduleRepo _scheduleRepo;
+        private readonly IUserRepo _userRepo;
+        private readonly IMapper _mapper;
 
-        public CheckupScheduleService(ICheckupScheduleRepo scheduleRepo)
+        public CheckupScheduleService(ICheckupScheduleRepo scheduleRepo, IMapper mapper, IUserRepo userRepo)
         {
             _scheduleRepo = scheduleRepo;
+            _mapper = mapper;
+            _userRepo = userRepo;
         }
 
-        public List<CheckupSchedule> GetAllCheckupSchedules()
+        public async Task<List<CheckupScheduleDto>> GetAllCheckupSchedules()
         {
             try
             {
-                return _scheduleRepo.GetAllCheckupSchedules();
+                var models = await _scheduleRepo.GetAllCheckupSchedules();
+                var viewModels = _mapper.Map<List<CheckupScheduleDto>>(models);
+                foreach (var viewModel in viewModels)
+                {
+                    var schedule = models.FirstOrDefault(x => x.ScheduleId == viewModel.ScheduleId);
+                    if (schedule != null)
+                    {
+                        viewModel.DentistName = _userRepo.GetById(schedule.DentistId).Name ?? "Unknown Dentist";
+                        viewModel.CustomerName = _userRepo.GetById(schedule.CustomerId).Name ?? "Unknown Customer";
+                    }
+                }
+                return viewModels;
             }
             catch (Exception ex)
             {
@@ -28,31 +45,8 @@ namespace Service.Impl
             }
         }
 
-        public CheckupSchedule GetById(int id)
-        {
-            if (id <= 0)
-            {
-                throw new ArgumentException("Invalid schedule ID.", nameof(id));
-            }
 
-            try
-            {
-                var model = _scheduleRepo.GetById(id);
-                if (model == null)
-                {
-                    throw new ExceptionHandler.NotFoundException($"Checkup schedule with ID {id} not found.");
-                }
-
-                return model;
-            }
-            catch (Exception ex)
-            {
-                // Log exception
-                throw new ExceptionHandler.ServiceException("An error occurred while retrieving the checkup schedule.", ex);
-            }
-        }
-
-        public void CreateCheckupSchedule(CheckupSchedule schedule)
+        public async void CreateCheckupSchedule(CheckupSchedule schedule)
         {
             if (schedule == null)
             {
@@ -61,7 +55,7 @@ namespace Service.Impl
 
             try
             {
-                var existingSchedule = _scheduleRepo.GetById(schedule.ScheduleId);
+                var existingSchedule = await _scheduleRepo.GetById(schedule.ScheduleId);
                 if (existingSchedule != null)
                 {
                     throw new InvalidOperationException($"Checkup schedule with ID {schedule.ScheduleId} already exists.");
@@ -76,7 +70,7 @@ namespace Service.Impl
             }
         }
 
-        public void UpdateCheckupSchedule(CheckupSchedule schedule)
+        public async void UpdateCheckupSchedule(CheckupSchedule schedule)
         {
             if (schedule == null)
             {
@@ -85,7 +79,7 @@ namespace Service.Impl
 
             try
             {
-                var existingSchedule = _scheduleRepo.GetById(schedule.ScheduleId);
+                var existingSchedule = await _scheduleRepo.GetById(schedule.ScheduleId);
                 if (existingSchedule == null)
                 {
                     throw new ExceptionHandler.NotFoundException($"Checkup schedule with ID {schedule.ScheduleId} not found.");
@@ -100,7 +94,7 @@ namespace Service.Impl
             }
         }
 
-        public void DeleteCheckupSchedule(int id)
+        public async void DeleteCheckupSchedule(int id)
         {
             if (id <= 0)
             {
@@ -109,7 +103,7 @@ namespace Service.Impl
 
             try
             {
-                var existingSchedule = _scheduleRepo.GetById(id);
+                var existingSchedule = await _scheduleRepo.GetById(id);
                 if (existingSchedule == null)
                 {
                     throw new ExceptionHandler.NotFoundException($"Checkup schedule with ID {id} not found.");
@@ -121,6 +115,58 @@ namespace Service.Impl
             {
                 // Log exception
                 throw new ExceptionHandler.ServiceException("An error occurred while deleting the checkup schedule.", ex);
+            }
+        }
+
+        public async Task<CheckupScheduleDto> GetDtoById(int? id)
+        {
+            if (id <= 0)
+            {
+                throw new ArgumentException("Invalid schedule ID.", nameof(id));
+            }
+
+            try
+            {
+                var model = await  _scheduleRepo.GetById(id);
+                if (model == null)
+                {
+                    throw new ExceptionHandler.NotFoundException($"Checkup schedule with ID {id} not found.");
+                }
+                var viewModel = _mapper.Map<CheckupScheduleDto>(model); 
+                    viewModel.DentistName = _userRepo.GetById(model.DentistId).Name ?? "Unknown Dentist";
+                    viewModel.CustomerName = _userRepo.GetById(model.CustomerId).Name ?? "Unknown Customer";
+                
+
+                return viewModel;
+            }
+            catch (Exception ex)
+            {
+                // Log exception
+                throw new ExceptionHandler.ServiceException("An error occurred while retrieving the checkup schedule.", ex);
+            }
+        }
+        public async Task<CheckupSchedule> GetById(int? id)
+        {
+            if (id <= 0)
+            {
+                throw new ArgumentException("Invalid schedule ID.", nameof(id));
+            }
+
+            try
+            {
+                var model = await _scheduleRepo.GetById(id);
+                if (model == null)
+                {
+                    throw new ExceptionHandler.NotFoundException($"Checkup schedule with ID {id} not found.");
+                }
+                
+
+                return model;
+            }
+            catch (Exception ex)
+            {
+                // Log exception
+                throw new ExceptionHandler.ServiceException("An error occurred while retrieving the checkup schedule.", ex);
             }
         }
     }

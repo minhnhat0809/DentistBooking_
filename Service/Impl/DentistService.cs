@@ -16,6 +16,8 @@ namespace Service.Impl
             this.dentistServiceRepo = dentistServiceRepo;
             this.service = service;
         }
+
+
         public List<BusinessObject.Service> GetAllServiceByDentist(int dentistId, int serviceId)
         {
             List<BusinessObject.Service> services = dentistServiceRepo.GetAllServiceByDentist(dentistId);

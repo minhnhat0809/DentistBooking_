@@ -10,11 +10,11 @@ namespace Repository.Impl
 {
     public class CheckupScheduleRepo : ICheckupScheduleRepo
     {
-        public List<CheckupSchedule> GetAllCheckupSchedules()
-            => CheckupScheduleDAO.Instance.getAllCheckupSchedule();
+        public async Task<List<CheckupSchedule>> GetAllCheckupSchedules()
+            => await CheckupScheduleDAO.Instance.getAllCheckupSchedule();
 
-        public CheckupSchedule GetById(int id)
-            => CheckupScheduleDAO.Instance.getCheckupScheduleByID(id);
+        public async Task<CheckupSchedule> GetById(int? id)
+            => await CheckupScheduleDAO.Instance.getCheckupScheduleByID(id);
 
         public void CreateCheckupSchedule(CheckupSchedule schedule)
             => CheckupScheduleDAO.Instance.createCheckupScheducle(schedule);
@@ -22,9 +22,9 @@ namespace Repository.Impl
         public void UpdateCheckupSchedule(CheckupSchedule schedule)
             => CheckupScheduleDAO.Instance.updateCheckupScheducle(schedule);
 
-        public void DeleteCheckupSchedule(int id)
+        public async void DeleteCheckupSchedule(int id)
         {
-            var model = CheckupScheduleDAO.Instance.getCheckupScheduleByID(id);
+            var model = await CheckupScheduleDAO.Instance.getCheckupScheduleByID(id);
             CheckupScheduleDAO.Instance.deleteCheckupSchedule(model);
         } 
     }

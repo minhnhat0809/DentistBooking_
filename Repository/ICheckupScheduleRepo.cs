@@ -9,8 +9,8 @@ namespace Repository
 {
     public interface ICheckupScheduleRepo
     {
-        public List<CheckupSchedule> GetAllCheckupSchedules();
-        public CheckupSchedule GetById(int id);
+        public Task<List<CheckupSchedule>> GetAllCheckupSchedules();
+        public Task<CheckupSchedule> GetById(int? id);
         public void CreateCheckupSchedule(CheckupSchedule schedule);
         public void UpdateCheckupSchedule(CheckupSchedule schedule);
         public void DeleteCheckupSchedule(int id);

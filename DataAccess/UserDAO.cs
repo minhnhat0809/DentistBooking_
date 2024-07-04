@@ -28,7 +28,7 @@ namespace DataAccess
             }
         }
 
-        public User getUserByID(int id)
+        public User getUserByID(int? id)
         {
             var context = new BookingDentistDbContext();
             var user = context.Users.FirstOrDefault(c => c.UserId == id);
