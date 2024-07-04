@@ -1,10 +1,5 @@
 ﻿using BusinessObject;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess
 {
@@ -28,7 +23,7 @@ namespace DataAccess
             }
         }
 
-        public Prescription getClinicByID(int id)
+        public Prescription getPrescriptionByID(int id)
         {
             var context = new BookingDentistDbContext();
             var prescription = context.Prescriptions.FirstOrDefault(c => c.PrescriptionId == id);
@@ -57,7 +52,7 @@ namespace DataAccess
             context.SaveChanges();
         }
 
-        public void updateClinic(Prescription prescription)
+        public void updatePrescription(Prescription prescription)
         {
             var context = new BookingDentistDbContext();
             context.Entry<Prescription>(prescription).State = EntityState.Modified;
