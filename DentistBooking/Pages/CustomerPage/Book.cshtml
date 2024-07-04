@@ -1,4 +1,5 @@
-﻿@page
+﻿
+@page
 @model DentistBooking.Pages.CustomerPage.BookModel
 @{
     ViewData["Title"] = "Book Appointment";
@@ -73,10 +74,10 @@
                 <label asp-for="selectedDate" for="datepicker">Select Date:</label>
                 <input asp-for="selectedDate" type="date" id="datepicker" name="selectedDate" class="form-control" autocomplete="off">
             </div>
-                <div class="form-group">
-                    <label asp-for="startTime">Start Time:</label>
-                    <input asp-for="startTime" type="time" id="startTime" name="startTime" class="form-control" required>
-                </div>
+            <div class="form-group">
+                <label asp-for="startTime">Start Time:</label>
+                <input asp-for="startTime" type="time" id="startTime" name="startTime" class="form-control" required>
+            </div>
             <button type="submit" class="btn btn-success btn-block">Book</button>
         </div>
     </form> 
@@ -88,7 +89,7 @@
     <br />
     <div id="customAlertPlaceholder"></div>
 
-<script>
+    <script>
     $(document).ready(function () {
         var today = new Date().toISOString().split('T')[0];
         $('#datepicker').val(today);

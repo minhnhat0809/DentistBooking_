@@ -42,7 +42,7 @@ namespace Service.Impl
                 return errors;
             }
 
-            DentistSlot dentistSlot = await dentistSlotService.GetDentistSlot(dentistSlotId);
+            DentistSlot dentistSlot = await dentistSlotService.GetDentistSlotById(dentistSlotId);
             if (dentistSlot == null)
             {
                 AddError("", "Internal Error At Finding Dentist Slot!");
@@ -78,17 +78,17 @@ namespace Service.Impl
             BusinessObject.Service sErvice = service.GetServiceByID(serviceId);
             if (sErvice == null)
             {
-                AddError("Service","Service is not existed!");
+                AddError("Service", "Service is not existed!");
                 return errors;
             }
 
             if (!CheckTimeStart(TimeStart))
             {
-                AddError("TimeStart","Time must be in range [8:00-11:30] & [13:00-19:00]");
+                AddError("TimeStart", "Time must be in range [8:00-11:30] & [13:00-19:00]");
                 return errors;
             }
 
-            DateTime combinedDateTime = new DateTime(selectedDate.Year, selectedDate.Month, 
+            DateTime combinedDateTime = new DateTime(selectedDate.Year, selectedDate.Month,
                 selectedDate.Day, TimeStart.Hour, TimeStart.Minute, TimeStart.Second);
 
 
@@ -144,7 +144,7 @@ namespace Service.Impl
             BusinessObject.Service sErvice = service.GetServiceByID(serviceId);
             if (sErvice == null)
             {
-                AddError("Service","Service is not existed!");
+                AddError("Service", "Service is not existed!");
                 return errors;
             }
 
@@ -157,27 +157,27 @@ namespace Service.Impl
             User cusomter = userRepo.GetById(customerId);
             if (cusomter == null)
             {
-                AddError("Customer","Customer is not existed!");
+                AddError("Customer", "Customer is not existed!");
                 return errors;
             }
 
             if (!CheckTimeStart(TimeStart))
             {
-                AddError("TimeStart","Time must be in range [8:00-11:30] & [13:00-19:00]");
+                AddError("TimeStart", "Time must be in range [8:00-11:30] & [13:00-19:00]");
                 return errors;
             }
 
             Appointment appointment = appointmentRepo.GetAppointmentById(appointmentId);
             if (appointment == null)
             {
-                AddError("Appointment","Appointment is not existed!");
+                AddError("Appointment", "Appointment is not existed!");
                 return errors;
             }
 
             switch (appointment.Status)
             {
                 case "Deleted":
-                    AddError("Status","Cannot update! This appointment is deleted!");
+                    AddError("Status", "Cannot update! This appointment is deleted!");
                     return errors;
                 case "Happening":
                     AddError("Status", "Cannot update! This appointment is happening!");
@@ -196,7 +196,7 @@ namespace Service.Impl
             appointment.TimeStart = TimeStart;
             appointment.TimeEnd = TimeStart.AddMinutes(30);
             appointment.Status = "Processing";
-            
+
             appointmentRepo.UpdateAppointment(appointment);
             AddError("Success", "Update successfully!");
             return errors;
@@ -204,24 +204,24 @@ namespace Service.Impl
 
         private bool IsOverlap(TimeSpan targetStart, TimeSpan apStart, TimeSpan apEnd)
         {
-           
+
             return (targetStart >= apStart && targetStart < apEnd);
         }
         private bool CheckTimeStart(DateTime TimeStart)
         {
-          
-            TimeSpan morningStart = new TimeSpan(8, 0, 0); 
-            TimeSpan morningEnd = new TimeSpan(11, 30, 0); 
-            TimeSpan afternoonStart = new TimeSpan(13, 0, 0); 
-            TimeSpan afternoonEnd = new TimeSpan(19, 0, 0); 
 
-           
+            TimeSpan morningStart = new TimeSpan(8, 0, 0);
+            TimeSpan morningEnd = new TimeSpan(11, 30, 0);
+            TimeSpan afternoonStart = new TimeSpan(13, 0, 0);
+            TimeSpan afternoonEnd = new TimeSpan(19, 0, 0);
+
+
             TimeSpan timeOfDay = TimeStart.TimeOfDay;
 
-            
+
             bool isInMorning = timeOfDay >= morningStart && timeOfDay <= morningEnd;
             bool isInAfternoon = timeOfDay >= afternoonStart && timeOfDay <= afternoonEnd;
-           
+
             return isInMorning || isInAfternoon;
         }
 
@@ -230,9 +230,83 @@ namespace Service.Impl
             return appointmentRepo.GetAllProcessingAppointment();
         }
 
-        public Dictionary<string, string> UpdateAppointmentForStaff(int serviceId, int appointmentId, DateTime TimeStart, DateTime TimeEnd, int? dentistSlotId)
+        public string UpdateAppointmentForStaff(int serviceId, int appointmentId, DateTime TimeStart, DateTime TimeEnd, int dentistSlotId)
         {
-            throw new NotImplementedException();
+
+            if (serviceId <= 0)
+            {
+                return "Service ID is empty!";
+            }
+
+            BusinessObject.Service sErvice = service.GetServiceByID(serviceId);
+            if (sErvice == null)
+            {
+                return "This service is not existed!";
+            }
+
+            if (appointmentId <= 0)
+            {
+                return "Appointment ID is empty!";
+            }
+            Appointment appointment = appointmentRepo.GetAppointmentById(appointmentId);
+            if (appointment == null)
+            {
+                return "This appointment is not existed!";
+            }
+
+            if (dentistSlotId <= 0)
+            {
+                return "Dentist slot ID is empty!";
+            }
+            DentistSlot dentistSlot = dentistSlotService.GetDentistSlotById(dentistSlotId).Result;
+            if (dentistSlot == null)
+            {
+                return "This dentist slot is not existed!";
+            }
+
+            if (TimeStart < dentistSlot.TimeStart || TimeEnd > dentistSlot.TimeEnd)
+            {
+                return "The time of this appointment is out of range for this dentist slot!";
+            }
+            
+
+            if (TimeStart > TimeEnd)
+            {
+                return "Time Start is bigger than Time End!";
+            }
+
+            if (!CheckTimeStart(TimeStart))
+            {
+                return "Time Start must be in range [08:00-11:30] & [13:00-19:00]";
+            }
+
+            var appoinmentList = dentistSlot.Appointments.ToList();
+            if (appoinmentList != null)
+            {
+                foreach (var ap in appoinmentList)
+                {
+                    TimeSpan apStartTime = ap.TimeStart.TimeOfDay;
+                    TimeSpan apEndTime = ap.TimeEnd.TimeOfDay;
+
+                    if (IsOverlap(TimeStart.TimeOfDay, apStartTime, apEndTime))
+                    {
+                        return $"There is an appointment overlapping at {ap.TimeStart} - {ap.TimeStart.Add(ap.TimeEnd.TimeOfDay)}";
+                    }
+
+                    if (IsOverlap(TimeStart.TimeOfDay.Add(new TimeSpan(0, 30, 0)), apStartTime, apEndTime))
+                    {
+                        return $"There is an appointment overlapping at " + $"{ap.TimeStart.ToString()} - {ap.TimeStart.Add(ap.TimeEnd.TimeOfDay).ToString()}. Your appoinment needs 30'";
+                    }
+                }
+            }
+            appointment.ServiceId = serviceId;
+            appointment.Status = "Done";
+            appointment.DentistSlotId = dentistSlotId;
+            appointment.TimeStart = TimeStart;
+            appointment.TimeEnd = TimeEnd;
+
+            appointmentRepo.UpdateAppointment(appointment);
+            return "Success";
         }
     }
 }

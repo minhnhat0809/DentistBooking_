@@ -16,6 +16,8 @@ namespace Service
 
         Task<List<User>?> GetAllDentistsByService(int serviceId);
 
+        List<User> GetAllUserByType(string type);
+
 
     }
 }

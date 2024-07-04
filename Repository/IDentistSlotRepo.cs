@@ -14,5 +14,7 @@ namespace Repository
         Task<List<DentistSlot>> GetAllDentistSlotsByDentistAndDate(int id, DateOnly selectedDate);
 
         Task<DentistSlot> GetDentistSlotByID(int dentistSlotId);
+
+        void CreateDentistSlot(DentistSlot dentistSlot);
     }
 }
