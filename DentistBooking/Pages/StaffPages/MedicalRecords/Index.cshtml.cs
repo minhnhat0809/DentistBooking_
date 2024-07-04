@@ -17,6 +17,7 @@ namespace DentistBooking.Pages.StaffPages.MedicalRecords
     {
         private readonly IMedicalRecordService _medicalRecordService;
 
+
         public IndexModel(IMedicalRecordService medicalRecordService)
         { 
             _medicalRecordService = medicalRecordService;
@@ -30,9 +31,20 @@ namespace DentistBooking.Pages.StaffPages.MedicalRecords
         public int PageSize { get; set; } = 5;
         public async Task<IActionResult> OnGetAsync()
         {
-            var medicalRecords = _medicalRecordService.GetAllMedicalRecords();
-            MedicalRecord = medicalRecords.Result.ToPagedList(PageNumber, PageSize);
-            return Page();
+            
+                var medicalRecords = await _medicalRecordService.GetAllMedicalRecords();
+                if (medicalRecords == null)
+                {
+                    // Handle null case if necessary
+                    MedicalRecord = new List<MedicalRecordDto>().ToPagedList(PageNumber, PageSize);
+                }
+                else
+                {
+                    MedicalRecord = medicalRecords.ToPagedList(PageNumber, PageSize);
+                }
+
+                return Page();
+            
         }
     }
 }

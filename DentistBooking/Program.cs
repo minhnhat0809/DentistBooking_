@@ -5,6 +5,8 @@ using Service.Impl;
 using Service;
 using AutoMapper;
 using DentistBooking.AppStart;
+using Microsoft.EntityFrameworkCore;
+using DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,10 @@ builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
     options.Conventions.AddPageRoute("/ForgetPassword", "/forget-password");
     options.Conventions.AddPageRoute("/Index", "/login");
 });
+
+builder.Services.AddDbContext<BookingDentistDbContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
+
 
 builder.Services.AddSession(options =>
 {
