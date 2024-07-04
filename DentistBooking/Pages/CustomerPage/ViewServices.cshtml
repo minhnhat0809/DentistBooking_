@@ -41,3 +41,22 @@
 }
     </tbody>
 </table>
+<div>
+    @if (Model.Service.HasPreviousPage)
+    {
+        <a asp-page="./Index" asp-route-pageNumber="@(Model.Service.PageNumber - 1)" asp-route-pageSize="@Model.PageSize">Previous</a>
+    }
+    else
+    {
+        <span>Previous</span>
+    }
+
+    @if (Model.Service.HasNextPage)
+    {
+        <a asp-page="./Index" asp-route-pageNumber="@(Model.Service.PageNumber + 1)" asp-route-pageSize="@Model.PageSize">Next</a>
+    }
+    else
+    {
+        <span>Next</span>
+    }
+</div>

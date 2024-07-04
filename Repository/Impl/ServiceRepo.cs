@@ -12,11 +12,11 @@ namespace Repository.Impl
         => ServiceDAO.Instance.deleteService(service);
 
 
-        public List<Service> GetAllServices()
-        => ServiceDAO.Instance.getAllServices();
+        public async Task<List<Service>> GetAllServices()
+        => await ServiceDAO.Instance.getAllServices();
 
-        public Service GetServiceByID(int id)
-        => ServiceDAO.Instance.getServiceByID(id);
+        public async Task<Service> GetServiceByID(int? id)
+        => await ServiceDAO.Instance.getServiceByID(id);
 
         public void UpdateService(Service service)
         =>ServiceDAO.Instance.updateService(service);

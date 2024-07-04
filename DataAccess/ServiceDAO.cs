@@ -28,17 +28,17 @@ namespace DataAccess
             }
         }
 
-        public Service getServiceByID(int id)
+        public async Task<Service> getServiceByID(int? id)
         {
             var context = new BookingDentistDbContext();
-            var service = context.Services.FirstOrDefault(c => c.ServiceId == id);
+            var service = await context.Services.FirstOrDefaultAsync(c => c.ServiceId == id);
             return service;
         }
 
-        public List<Service> getAllServices()
+        public async Task<List<Service>> getAllServices()
         {
             var context = new BookingDentistDbContext();
-            var serviceList = context.Services.ToList();
+            var serviceList = await context.Services.ToListAsync();
             return serviceList;
         }
 
