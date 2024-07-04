@@ -15,9 +15,9 @@ namespace DentistBooking.Pages.CustomerPage
 
         [BindProperty]
         public Clinic Clinic { get; set; } = default!;
-        public void OnGet()
+        public async void OnGet()
         {
-            Clinic = clinicService.GetById(1);
+            Clinic = await clinicService.GetById(1);
         }
     }
 }

@@ -38,7 +38,9 @@ namespace DataAccess
         public async Task<List<DentistSlot>> getAllDentistSlots()
         {
             var context = new BookingDentistDbContext();
-            var dentistSlotList = await context.DentistSlots.ToListAsync();
+            var dentistSlotList = await context.DentistSlots
+                .Include(x=>x.Dentist)
+                .ToListAsync();
             return dentistSlotList;
         }       
         public async Task<List<DentistSlot>> getAllDentistSlotsByDentist(int id, DateOnly selectedDate)

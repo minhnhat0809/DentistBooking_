@@ -15,11 +15,11 @@ namespace Service.Impl
             _clinicRepo = clinicRepo ?? throw new ArgumentNullException(nameof(clinicRepo));
         }
 
-        public List<Clinic> GetAllClinics()
+        public async Task<List<Clinic>> GetAllClinics()
         {
             try
             {
-                return _clinicRepo.GetAllClinics();
+                return await _clinicRepo.GetAllClinics();
             }
             catch (Exception ex)
             {
@@ -28,7 +28,7 @@ namespace Service.Impl
             }
         }
 
-        public Clinic GetById(int id)
+        public async Task<Clinic> GetById(int? id)
         {
             if (id <= 0)
             {
@@ -37,7 +37,7 @@ namespace Service.Impl
 
             try
             {
-                var model = _clinicRepo.GetById(id);
+                var model = await _clinicRepo.GetById(id);
                 if (model == null)
                 {
                     throw new ExceptionHandler.NotFoundException($"Clinic with ID {id} not found.");

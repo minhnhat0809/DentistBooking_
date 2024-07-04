@@ -1,4 +1,5 @@
 ﻿using BusinessObject;
+using BusinessObject.DTO;
 
 namespace Service
 {
@@ -6,7 +7,8 @@ namespace Service
     {
        
         public BusinessObject.Service GetServiceByID(int id);
-        public List<BusinessObject.Service> GetAllServices();
+        public Task<ServiceDto> GetDtoById(int id);
+        public Task<List<ServiceDto>> GetAllServices();
         public void DeleteService(BusinessObject.Service service);
         public void CreateService(BusinessObject.Service service);
         public void UpdateService(BusinessObject.Service service);

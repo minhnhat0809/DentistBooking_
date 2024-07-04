@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObject;
 using DataAccess;
 using Service;
+using X.PagedList;
+using BusinessObject.DTO;
+using Service.Impl;
 
 namespace DentistBooking.Pages.CustomerPage
 {
@@ -20,11 +23,18 @@ namespace DentistBooking.Pages.CustomerPage
             this.service = service;
         }
 
-        public IList<BusinessObject.Service> Service { get;set; } = default!;
+        public IPagedList<ServiceDto> Service { get;set; } = default!;
+        [BindProperty(SupportsGet = true)]
+        public int PageNumber { get; set; } = 1;
 
-        public async Task OnGetAsync()
+        [BindProperty(SupportsGet = true)]
+        public int PageSize { get; set; } = 5;
+
+        public async Task<IActionResult> OnGetAsync()
         {
-            Service = service.GetAllServices();
+            var services = await service.GetAllServices();
+            Service = services.ToPagedList(PageNumber, PageSize);
+            return Page();
         }
     }
 }
