@@ -1,12 +1,12 @@
 ﻿@page
-@model DentistBooking.Pages.Dentis.indexModel
+@model DentistBooking.Pages.Dentis.IndexModel
 
 @{
-    ViewData["Title"] = "index";
+    ViewData["Title"] = "Index";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>index</h1>
+<h1>Index</h1>
 
 <p>
     <a asp-page="Create">Create New</a>
@@ -15,45 +15,63 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.PrescriptionMedicine[0].Quantity)
+                @Html.DisplayNameFor(model => model.Appointment[0].TimeStart)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PrescriptionMedicine[0].Price)
+                @Html.DisplayNameFor(model => model.Appointment[0].TimeEnd)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PrescriptionMedicine[0].Status)
+                @Html.DisplayNameFor(model => model.Appointment[0].Diagnosis)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PrescriptionMedicine[0].Medicine)
+                @Html.DisplayNameFor(model => model.Appointment[0].Status)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PrescriptionMedicine[0].Prescription)
+                @Html.DisplayNameFor(model => model.Appointment[0].Customer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Appointment[0].DentistSlot)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Appointment[0].MedicalRecord)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Appointment[0].Service)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.PrescriptionMedicine) {
+@foreach (var item in Model.Appointment) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
+                @Html.DisplayFor(modelItem => item.TimeStart)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Price)
+                @Html.DisplayFor(modelItem => item.TimeEnd)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Diagnosis)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Medicine.MedicineName)
+                @Html.DisplayFor(modelItem => item.Customer.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Prescription.PrescriptionId)
+                @Html.DisplayFor(modelItem => item.DentistSlot.DentistSlotId)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.PrescriptionMedicineId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.PrescriptionMedicineId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.PrescriptionMedicineId">Delete</a>
+                @Html.DisplayFor(modelItem => item.MedicalRecord.MediaRecordId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Service.ServiceName)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.AppointmentId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.AppointmentId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.AppointmentId">Delete</a>
             </td>
         </tr>
 }
