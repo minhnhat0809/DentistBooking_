@@ -21,7 +21,7 @@ namespace DentistBooking.Pages.Dentis
         }
 
         [BindProperty]
-        public PrescriptionMedicine PrescriptionMedicine { get; set; } = default!;
+        public Appointment Appointment { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -30,14 +30,16 @@ namespace DentistBooking.Pages.Dentis
                 return NotFound();
             }
 
-            var prescriptionmedicine =  await _context.PrescriptionMedicines.FirstOrDefaultAsync(m => m.PrescriptionMedicineId == id);
-            if (prescriptionmedicine == null)
+            var appointment =  await _context.Appointments.FirstOrDefaultAsync(m => m.AppointmentId == id);
+            if (appointment == null)
             {
                 return NotFound();
             }
-            PrescriptionMedicine = prescriptionmedicine;
-           ViewData["MedicineId"] = new SelectList(_context.Medicines, "MedicineId", "MedicineName");
-           ViewData["PrescriptionId"] = new SelectList(_context.Prescriptions, "PrescriptionId", "PrescriptionId");
+            Appointment = appointment;
+           ViewData["CustomerId"] = new SelectList(_context.Users, "UserId", "Name");
+           ViewData["DentistSlotId"] = new SelectList(_context.DentistSlots, "DentistSlotId", "DentistSlotId");
+           ViewData["MedicalRecordId"] = new SelectList(_context.MedicalRecords, "MediaRecordId", "MediaRecordId");
+           ViewData["ServiceId"] = new SelectList(_context.Services, "ServiceId", "ServiceName");
             return Page();
         }
 
@@ -50,7 +52,7 @@ namespace DentistBooking.Pages.Dentis
                 return Page();
             }
 
-            _context.Attach(PrescriptionMedicine).State = EntityState.Modified;
+            _context.Attach(Appointment).State = EntityState.Modified;
 
             try
             {
@@ -58,7 +60,7 @@ namespace DentistBooking.Pages.Dentis
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PrescriptionMedicineExists(PrescriptionMedicine.PrescriptionMedicineId))
+                if (!AppointmentExists(Appointment.AppointmentId))
                 {
                     return NotFound();
                 }
@@ -71,9 +73,9 @@ namespace DentistBooking.Pages.Dentis
             return RedirectToPage("./Index");
         }
 
-        private bool PrescriptionMedicineExists(int id)
+        private bool AppointmentExists(int id)
         {
-            return _context.PrescriptionMedicines.Any(e => e.PrescriptionMedicineId == id);
+            return _context.Appointments.Any(e => e.AppointmentId == id);
         }
     }
 }
