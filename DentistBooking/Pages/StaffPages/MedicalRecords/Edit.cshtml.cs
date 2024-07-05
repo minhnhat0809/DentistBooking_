@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObject;
 using DataAccess;
 using Service;
+using Microsoft.AspNetCore.SignalR;
 
 namespace DentistBooking.Pages.StaffPages.MedicalRecords
 {
@@ -16,11 +17,13 @@ namespace DentistBooking.Pages.StaffPages.MedicalRecords
     {
         private readonly IMedicalRecordService _medicalRecordService;
         private readonly IUserService _userService;
+        private readonly IHubContext<SignalRHub> _hubContext;
 
-        public EditModel(IMedicalRecordService medicalRecordService, IUserService userService)
+        public EditModel(IMedicalRecordService medicalRecordService, IUserService userService, IHubContext<SignalRHub> hubContext)
         { 
             _medicalRecordService = medicalRecordService;   
             _userService = userService;
+            _hubContext = hubContext;
         }
 
         [BindProperty]
@@ -56,6 +59,7 @@ namespace DentistBooking.Pages.StaffPages.MedicalRecords
             try
             {
                 _medicalRecordService.UpdateMedicalRecord(MedicalRecord);
+                await _hubContext.Clients.All.SendAsync("ReloadMedicalRecords");
             }
             catch (DbUpdateConcurrencyException)
             {

@@ -10,7 +10,7 @@
     <WebStackScaffolding_IsPartialViewSelected>False</WebStackScaffolding_IsPartialViewSelected>
     <WebStackScaffolding_IsReferencingScriptLibrariesSelected>True</WebStackScaffolding_IsReferencingScriptLibrariesSelected>
     <WebStackScaffolding_DbContextTypeFullName>DataAccess.BookingDentistDbContext</WebStackScaffolding_DbContextTypeFullName>
-    <_SelectedScaffolderID>ModelBasedRazorPageScaffolder</_SelectedScaffolderID>
+    <_SelectedScaffolderID>ModelBasedCrudRazorPageScaffolder</_SelectedScaffolderID>
     <_SelectedScaffolderCategoryPath>root/Common/RazorPage</_SelectedScaffolderCategoryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

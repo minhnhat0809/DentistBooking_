@@ -69,10 +69,7 @@ namespace Service.Impl
             try
             {
                 var existingRecord = _medicalRecordRepo.GetById(medical.MediaRecordId);
-                if (existingRecord != null)
-                {
-                    throw new InvalidOperationException($"Medical record with ID {medical.MediaRecordId} already exists.");
-                }
+                
 
                 _medicalRecordRepo.CreateMedicalRecord(medical);
             }

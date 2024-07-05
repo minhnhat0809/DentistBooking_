@@ -17,6 +17,9 @@ namespace Repository.Impl
         public Prescription GetById(int id)
         => PrescriptionDAO.Instance.getPrescriptionByID(id);
 
+        public  async Task<Prescription> GetByIdWithMedicinesAsync(int id)
+        => await PrescriptionDAO.Instance.GetByIdWithMedicinesAsync(id);
+
         public List<Prescription> GetPrescriptions()
         => PrescriptionDAO.Instance.getAllPrescriptions();
     

@@ -1,5 +1,6 @@
 ﻿using BusinessObject;
 using Repository;
+using Repository.Impl;
 using Service.Exeption;
 
 namespace Service.Impl
@@ -7,11 +8,32 @@ namespace Service.Impl
     public class PrescriptionService : IPrescriptionService
     {
         private readonly IPrescriptionrepo _preScription;
+        private readonly IPrescriptionMedicineRepo _prescriptionMedicineRepo;
 
         public PrescriptionService(IPrescriptionrepo prescription)
         {
             _preScription = prescription ?? throw new ArgumentNullException(nameof(prescription));
         }
+
+        public void AddPrescriptionMedicine(PrescriptionMedicine prescriptionMedicine)
+        {
+            if (prescriptionMedicine == null)
+            {
+                throw new ArgumentNullException(nameof(prescriptionMedicine), "prescriptionMedicine cannot be null.");
+            }
+
+            try
+            {
+                _prescriptionMedicineRepo.AddPrescriptionMedicine(prescriptionMedicine);    
+
+            }
+            catch (Exception ex)
+            {
+                // Log exception
+                throw new ExceptionHandler.ServiceException("An error occurred while creating the prescription.", ex);
+            }
+        }
+
         public void CreatePrescription(Prescription prescription)
         {
             if (prescription == null)
@@ -84,6 +106,19 @@ namespace Service.Impl
             }
         }
 
+        public Task<Prescription> GetByIdWithMedicinesAsync(int id)
+        {
+            try
+            {
+                return _preScription.GetByIdWithMedicinesAsync(id);
+            }
+            catch (Exception ex)
+            {
+                // Log exception
+                throw new ExceptionHandler.ServiceException("An error occurred while retrieving Prescription.", ex);
+            }
+        }
+
         public List<Prescription> GetPrescriptions()
         {
             try
@@ -119,6 +154,27 @@ namespace Service.Impl
                 // Log exception
                 throw new ExceptionHandler.ServiceException("An error occurred while updating the prescription.", ex);
             }
+        }
+
+        public void UpdatePrescriptionMedicine(PrescriptionMedicine prescriptionMedicine)
+        {
+            if (prescriptionMedicine == null)
+            {
+                throw new ArgumentNullException(nameof(prescriptionMedicine), "prescriptionMedicine cannot be null.");
+            }
+
+            try
+            {
+                _prescriptionMedicineRepo.UpdatePrescriptionMedicine(prescriptionMedicine);
+
+
+            }
+            catch (Exception ex)
+            {
+                // Log exception
+                throw new ExceptionHandler.ServiceException("An error occurred while updating.", ex);
+            }
+
         }
     }
 }

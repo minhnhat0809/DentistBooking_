@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using BusinessObject;
 using DataAccess;
 using Service;
+using Microsoft.AspNetCore.SignalR;
 
 namespace DentistBooking.Pages.StaffPages.MedicalRecords
 {
@@ -15,11 +16,13 @@ namespace DentistBooking.Pages.StaffPages.MedicalRecords
     {
         private readonly IMedicalRecordService _medicalRecordService;
         private readonly IUserService _userService;
+        private readonly IHubContext<SignalRHub> _hubContext;
 
-        public CreateModel(IMedicalRecordService medicalRecordService, IUserService userService)
+        public CreateModel(IMedicalRecordService medicalRecordService, IUserService userService, IHubContext<SignalRHub> hubContext)
         {
             _medicalRecordService = medicalRecordService;
             _userService = userService;
+            _hubContext = hubContext;
         }
 
         public IActionResult OnGet()
@@ -39,6 +42,7 @@ namespace DentistBooking.Pages.StaffPages.MedicalRecords
                 return Page();
             }
             _medicalRecordService.CreateMedicalRecord(MedicalRecord);
+            await _hubContext.Clients.All.SendAsync("ReloadMedicalRecords");
 
             return RedirectToPage("./Index");
         }
