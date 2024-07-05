@@ -34,19 +34,38 @@ namespace DataAccess
             var prescriptionMedicine = context.PrescriptionMedicines.FirstOrDefault(c => c.PrescriptionMedicineId == id);
             return prescriptionMedicine;
         }
-
-        public List<PrescriptionMedicine> getAllPrescriptionMedicines()
+        public async Task<PrescriptionMedicine> GetByID(int id)
         {
             var context = new BookingDentistDbContext();
-            var prescriptionMedicines = context.PrescriptionMedicines.ToList();
+            var prescriptionMedicine = await context.PrescriptionMedicines.Include(x => x.Prescription)
+                .Include(x => x.Medicine)
+                .FirstOrDefaultAsync(c => c.PrescriptionMedicineId == id);
+            return prescriptionMedicine;
+        }
+        public async Task< List<PrescriptionMedicine>> getAllPrescriptionMedicines()
+        {
+            var context = new BookingDentistDbContext();
+            var prescriptionMedicines = await context.PrescriptionMedicines
+                .Include(x => x.Prescription)
+                .Include(x=>x.Medicine)
+                .ToListAsync();
+            return prescriptionMedicines;
+        }
+        public async Task<List<PrescriptionMedicine>> GetAllPrescriptionMedicinesByPrescriptionId(int id)
+        {
+            var context = new BookingDentistDbContext();
+            var prescriptionMedicines = await context.PrescriptionMedicines
+                .Include(x => x.Prescription)
+                .Include(x=>x.Medicine)
+                .Where(pm => pm.PrescriptionId == id)
+                .ToListAsync();
             return prescriptionMedicines;
         }
 
         public void deletePrescriptionMedicine(PrescriptionMedicine prescriptionMedicine)
         {
             var context = new BookingDentistDbContext();
-            prescriptionMedicine.Status = false;
-            context.Entry<PrescriptionMedicine>(prescriptionMedicine).State = EntityState.Modified;
+            context.PrescriptionMedicines.Remove(prescriptionMedicine);
             context.SaveChanges();
         }
 

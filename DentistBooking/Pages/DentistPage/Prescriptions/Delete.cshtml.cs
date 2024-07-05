@@ -33,7 +33,7 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions
                 return NotFound();
             }
 
-            var prescription = _prescriptionService.GetById(id.Value);
+            var prescription = await _prescriptionService.GetByIdWithMedicinesAsync(id.Value);
 
             if (prescription == null)
             {
@@ -53,7 +53,7 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions
                 return NotFound();
             }
 
-            var prescription = _prescriptionService.GetById(id.Value);
+            var prescription = await _prescriptionService.GetByIdWithMedicinesAsync(id.Value);
             if (prescription != null)
             {
                 Prescription = prescription;
