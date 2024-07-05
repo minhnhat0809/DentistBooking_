@@ -1,0 +1,26 @@
+﻿using Microsoft.AspNetCore.SignalR;
+
+public class SignalRHub : Hub
+{
+    public async Task ReloadAppointments()
+    {
+        await Clients.All.SendAsync("ReloadAppointments");
+    }
+    public async Task ReloadCheckupSchedules()
+    {
+        await Clients.All.SendAsync("ReloadCheckupSchedules");
+    }
+    public async Task ReloadMedicalRecords()
+    {
+        await Clients.All.SendAsync("ReloadMedicalRecords");
+    }
+    public async Task ReloadMedicines()
+    {
+        await Clients.All.SendAsync("ReloadMedicines");
+    }
+    public async Task ReloadPrescriptions()
+    {
+        await Clients.All.SendAsync("ReloadPrescriptions");
+    }
+}
+
