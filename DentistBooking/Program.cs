@@ -42,11 +42,11 @@ builder.Services.AddScoped<IService, Service.Impl.Service>();
 builder.Services.AddScoped<IClinicService, ClinicService>();
 builder.Services.AddScoped<IMedicineService, MedicineService>();
 builder.Services.AddScoped<IDentistService, DentistService>();
+builder.Services.AddScoped<IPrescriptionMedicinesService,  PrescriptionMedicinesService>();
 
 
 
-
-//Reposiroties
+//Repositories
 builder.Services.AddScoped<IAppointmentRepo, AppointmentRepo>();
 builder.Services.AddScoped<IClinicRepo, ClinicRepo>();
 builder.Services.AddScoped<ICheckupScheduleRepo, CheckupScheduleRepo>();
@@ -57,6 +57,7 @@ builder.Services.AddScoped<IServiceRepo, ServiceRepo>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddScoped<IDentistServiceRepo, DentistServiceRepo>();
 builder.Services.AddScoped<IMedicineRepo, MedicineRepo>();
+builder.Services.AddScoped<IPrescriptionMedicineRepo, PrescriptionMedicineRepo>();
 
 var app = builder.Build();
 

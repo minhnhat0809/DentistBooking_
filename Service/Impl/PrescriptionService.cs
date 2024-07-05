@@ -15,24 +15,7 @@ namespace Service.Impl
             _preScription = prescription ?? throw new ArgumentNullException(nameof(prescription));
         }
 
-        public void AddPrescriptionMedicine(PrescriptionMedicine prescriptionMedicine)
-        {
-            if (prescriptionMedicine == null)
-            {
-                throw new ArgumentNullException(nameof(prescriptionMedicine), "prescriptionMedicine cannot be null.");
-            }
-
-            try
-            {
-                _prescriptionMedicineRepo.AddPrescriptionMedicine(prescriptionMedicine);    
-
-            }
-            catch (Exception ex)
-            {
-                // Log exception
-                throw new ExceptionHandler.ServiceException("An error occurred while creating the prescription.", ex);
-            }
-        }
+        
 
         public void CreatePrescription(Prescription prescription)
         {
@@ -156,25 +139,6 @@ namespace Service.Impl
             }
         }
 
-        public void UpdatePrescriptionMedicine(PrescriptionMedicine prescriptionMedicine)
-        {
-            if (prescriptionMedicine == null)
-            {
-                throw new ArgumentNullException(nameof(prescriptionMedicine), "prescriptionMedicine cannot be null.");
-            }
-
-            try
-            {
-                _prescriptionMedicineRepo.UpdatePrescriptionMedicine(prescriptionMedicine);
-
-
-            }
-            catch (Exception ex)
-            {
-                // Log exception
-                throw new ExceptionHandler.ServiceException("An error occurred while updating.", ex);
-            }
-
-        }
+        
     }
 }
