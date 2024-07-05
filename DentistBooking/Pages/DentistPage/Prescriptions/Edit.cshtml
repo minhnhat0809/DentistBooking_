@@ -1,0 +1,113 @@
+﻿@page
+@model DentistBooking.Pages.DentistPage.Prescriptions.EditModel
+
+@{
+    ViewData["Title"] = "Edit Prescription";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Edit Prescription</h1>
+
+<h4>Prescription</h4>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div class="form-group">
+                <label asp-for="Prescription.Date" class="control-label"></label>
+                <input asp-for="Prescription.Date" class="form-control" />
+                <span asp-validation-for="Prescription.Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Prescription.Diagnosis" class="control-label"></label>
+                <input asp-for="Prescription.Diagnosis" class="form-control" />
+                <span asp-validation-for="Prescription.Diagnosis" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Prescription.Total" class="control-label"></label>
+                <input asp-for="Prescription.Total" class="form-control" />
+                <span asp-validation-for="Prescription.Total" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Prescription.Status" class="control-label"></label>
+                <input asp-for="Prescription.Status" class="form-control" />
+                <span asp-validation-for="Prescription.Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Prescription.AppointmentId" class="control-label"></label>
+                <select asp-for="Prescription.AppointmentId" class="form-control" asp-items="ViewBag.AppointmentId"></select>
+            </div>
+            <hr />
+            <h4>Medicines</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Medicine</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.PrescriptionMedicines.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                <select asp-for="@Model.PrescriptionMedicines[i].MedicineId" class="form-control" asp-items="(SelectList)ViewBag.MedicineId"></select>
+                            </td>
+                            <td>
+                                <input asp-for="@Model.PrescriptionMedicines[i].Quantity" class="form-control" />
+                            </td>
+                            <td>
+                                <input asp-for="@Model.PrescriptionMedicines[i].Price" class="form-control" />
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger" onclick="removeMedicine(@i)">Remove</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-secondary" onclick="addMedicine()">Add Medicine</button>
+            <hr />
+            <input type="submit" value="Save" class="btn btn-primary" />
+            <a asp-page="./Index" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function addMedicine() {
+            var newIndex = document.querySelectorAll('tbody tr').length;
+            var newRow = `
+                        <tr>
+                            <td>
+                                <select name="PrescriptionMedicines[${newIndex}].MedicineId" class="form-control">
+        @foreach (var medicine in (SelectList)ViewData["MedicineId"])
+        {
+                                            <option value="@medicine.Value">@medicine.Text</option>
+        }
+                                </select>
+                            </td>
+                            <td>
+                                <input name="PrescriptionMedicines[${newIndex}].Quantity" class="form-control" />
+                            </td>
+                            <td>
+                                <input name="PrescriptionMedicines[${newIndex}].Price" class="form-control" />
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger" onclick="removeMedicine(${newIndex})">Remove</button>
+                            </td>
+                        </tr>
+                    `;
+            document.querySelector('tbody').insertAdjacentHTML('beforeend', newRow);
+        }
+
+        function removeMedicine(index) {
+            document.querySelectorAll('tbody tr')[index].remove();
+        }
+    </script>
+}

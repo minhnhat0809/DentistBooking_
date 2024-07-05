@@ -9,6 +9,7 @@ using BusinessObject;
 using DataAccess;
 using Repository;
 using Service;
+using Microsoft.AspNetCore.SignalR;
 
 namespace DentistBooking.Pages.StaffPages.Check_upSchedules
 {
@@ -16,13 +17,17 @@ namespace DentistBooking.Pages.StaffPages.Check_upSchedules
     {
         private readonly ICheckupScheduleService _checkupScheduleService; 
         private readonly IUserService _userService;
+        private readonly IHubContext<SignalRHub> _hubContext;
         private readonly IDentistService _dentistService;
 
-        public CreateModel(ICheckupScheduleService checkupScheduleService, IUserService userService, IDentistService dentistService)
+        public CreateModel(ICheckupScheduleService checkupScheduleService, 
+            IUserService userService, IDentistService dentistService,
+            IHubContext<SignalRHub> hubContext)
         {
             _checkupScheduleService = checkupScheduleService;
             _userService = userService;
             _dentistService = dentistService;
+            _hubContext = hubContext;
         }
 
         public IActionResult OnGet()
@@ -43,6 +48,7 @@ namespace DentistBooking.Pages.StaffPages.Check_upSchedules
                 return Page();
             }
             _checkupScheduleService.CreateCheckupSchedule(CheckupSchedule);
+            await _hubContext.Clients.All.SendAsync("ReloadCheckupSchedules");
 
             return RedirectToPage("./Index");
         }

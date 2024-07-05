@@ -8,6 +8,7 @@ using BusinessObject;
 using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Service;
+using Microsoft.AspNetCore.SignalR;
 
 namespace DentistBooking.Pages.StaffPages.Appointments
 {
@@ -18,15 +19,19 @@ namespace DentistBooking.Pages.StaffPages.Appointments
         private readonly IDentistSlotService _dentistSlotService;
         private readonly IService _service;
         private readonly IMedicalRecordService _medicalRecordService;
-        private readonly BookingDentistDbContext _context;
+        private readonly IHubContext<SignalRHub> _hubContext;
 
-        public CreateModel(IAppointmentService appointmentService, IUserService userService, IDentistSlotService dentistSlotService, IService service, IMedicalRecordService medicalRecordService)
+        public CreateModel(IAppointmentService appointmentService, 
+            IUserService userService, IDentistSlotService dentistSlotService,
+            IService service, IMedicalRecordService medicalRecordService, 
+            IHubContext<SignalRHub> hubContext)
         {
             _appointmentService = appointmentService;
             _userService = userService;
             _dentistSlotService = dentistSlotService;
             _service = service;
             _medicalRecordService = medicalRecordService;
+            _hubContext = hubContext;
         }
         /*
          flow: pick dentist slot (GetAllDentistSlot) 
@@ -81,6 +86,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             }
 
             _appointmentService.AddAppointment(Appointment);
+            await _hubContext.Clients.All.SendAsync("ReloadAppointments");
 
             return RedirectToPage("./Index");
         }

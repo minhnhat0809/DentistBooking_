@@ -17,6 +17,7 @@ builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
     options.Conventions.AddPageRoute("/Index", "/login");
 });
 
+builder.Services.AddSignalR();
 builder.Services.AddDbContext<BookingDentistDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
 
@@ -75,6 +76,8 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+
+app.MapHub<SignalRHub>("/SignalRHub");
 
 app.UseSession();
 

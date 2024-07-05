@@ -26,14 +26,27 @@ namespace DataAccess
         public Prescription getPrescriptionByID(int id)
         {
             var context = new BookingDentistDbContext();
-            var prescription = context.Prescriptions.FirstOrDefault(c => c.PrescriptionId == id);
+            var prescription = context.Prescriptions
+                .Include(x=>x.Appointment) 
+                .FirstOrDefault(c => c.PrescriptionId == id);
             return prescription;
         }
 
         public List<Prescription> getAllPrescriptions()
         {
             var context = new BookingDentistDbContext();
-            var prescriptionList = context.Prescriptions.ToList();
+            var prescriptionList = context.Prescriptions
+                .Include (x=>x.Appointment)
+                .ToList();
+            return prescriptionList;
+        }
+        public async Task<Prescription> GetByIdWithMedicinesAsync(int id)
+        {
+            var context = new BookingDentistDbContext();
+            var prescriptionList = await context.Prescriptions
+                             .Include(p => p.PrescriptionMedicines)
+                             .ThenInclude(pm => pm.Medicine)
+                             .FirstOrDefaultAsync(p => p.PrescriptionId == id);
             return prescriptionList;
         }
 

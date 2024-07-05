@@ -10,29 +10,29 @@ using DataAccess;
 using Service;
 using Microsoft.AspNetCore.SignalR;
 
-namespace DentistBooking.Pages.StaffPages.MedicalRecords
+namespace DentistBooking.Pages.DentistPage.Prescriptions
 {
     public class CreateModel : PageModel
     {
-        private readonly IMedicalRecordService _medicalRecordService;
-        private readonly IUserService _userService;
+        private readonly IPrescriptionService _prescriptionService;
+        private readonly IAppointmentService _appointmentService;
         private readonly IHubContext<SignalRHub> _hubContext;
 
-        public CreateModel(IMedicalRecordService medicalRecordService, IUserService userService, IHubContext<SignalRHub> hubContext)
+        public CreateModel(IPrescriptionService prescriptionService, IHubContext<SignalRHub> hubContext, IAppointmentService appointmentService)
         {
-            _medicalRecordService = medicalRecordService;
-            _userService = userService;
             _hubContext = hubContext;
+            _prescriptionService = prescriptionService;
+            _appointmentService = appointmentService;
         }
 
         public IActionResult OnGet()
         {
-            ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers(), "UserId", "Name");
+        ViewData["AppointmentId"] = new SelectList(_appointmentService.GetAllAppointments().Result, "AppointmentId", "AppointmentId");
             return Page();
         }
 
         [BindProperty]
-        public MedicalRecord MedicalRecord { get; set; } = default!;
+        public Prescription Prescription { get; set; } = default!;
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
@@ -41,8 +41,8 @@ namespace DentistBooking.Pages.StaffPages.MedicalRecords
             {
                 return Page();
             }
-            _medicalRecordService.CreateMedicalRecord(MedicalRecord);
-            await _hubContext.Clients.All.SendAsync("ReloadMedicalRecords");
+            _prescriptionService.CreatePrescription(Prescription);
+            await _hubContext.Clients.All.SendAsync("ReloadPrescriptions");
 
             return RedirectToPage("./Index");
         }

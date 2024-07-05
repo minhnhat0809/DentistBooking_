@@ -32,8 +32,8 @@ namespace Service.Impl
                     var schedule = models.FirstOrDefault(x => x.ScheduleId == viewModel.ScheduleId);
                     if (schedule != null)
                     {
-                        viewModel.DentistName = _userRepo.GetById(schedule.DentistId).Name ?? "Unknown Dentist";
-                        viewModel.CustomerName = _userRepo.GetById(schedule.CustomerId).Name ?? "Unknown Customer";
+                        viewModel.DentistName = _userRepo.GetById(schedule.DentistId)?.Name ;
+                        viewModel.CustomerName = _userRepo.GetById(schedule.CustomerId)?.Name ;
                     }
                 }
                 return viewModels;

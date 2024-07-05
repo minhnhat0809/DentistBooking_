@@ -10,20 +10,21 @@ using DataAccess;
 using Service;
 using Microsoft.AspNetCore.SignalR;
 
-namespace DentistBooking.Pages.StaffPages.Check_upSchedules
+namespace DentistBooking.Pages.DentistPage.Prescriptions
 {
     public class DeleteModel : PageModel
     {
-        private readonly ICheckupScheduleService _checkupScheduleService;
+        private readonly IPrescriptionService _prescriptionService;
         private readonly IHubContext<SignalRHub> _hubContext;
-        public DeleteModel(ICheckupScheduleService checkupScheduleService, IHubContext<SignalRHub> hubContext)
+
+        public DeleteModel(IPrescriptionService prescriptionService, IHubContext<SignalRHub> hubContext)
         {
-            _checkupScheduleService = checkupScheduleService;   
-            _hubContext = hubContext;
+            _prescriptionService = prescriptionService; 
+            _hubContext = hubContext;   
         }
 
         [BindProperty]
-        public CheckupSchedule CheckupSchedule { get; set; } = default!;
+        public Prescription Prescription { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -32,14 +33,15 @@ namespace DentistBooking.Pages.StaffPages.Check_upSchedules
                 return NotFound();
             }
 
-            var checkupschedule = await _checkupScheduleService.GetById(id);
-            if (checkupschedule == null)
+            var prescription = _prescriptionService.GetById(id.Value);
+
+            if (prescription == null)
             {
                 return NotFound();
             }
             else
             {
-                CheckupSchedule = checkupschedule;
+                Prescription = prescription;
             }
             return Page();
         }
@@ -51,12 +53,12 @@ namespace DentistBooking.Pages.StaffPages.Check_upSchedules
                 return NotFound();
             }
 
-            var checkupschedule = await _checkupScheduleService.GetById(id);
-            if (checkupschedule != null)
+            var prescription = _prescriptionService.GetById(id.Value);
+            if (prescription != null)
             {
-                CheckupSchedule = checkupschedule;
-                _checkupScheduleService.DeleteCheckupSchedule(checkupschedule.ScheduleId);
-                await _hubContext.Clients.All.SendAsync("ReloadCheckupSchedules");
+                Prescription = prescription;
+                _prescriptionService.DeletePrescription(Prescription.PrescriptionId);
+                await _hubContext.Clients.All.SendAsync("ReloadPrescriptions");
             }
 
             return RedirectToPage("./Index");
