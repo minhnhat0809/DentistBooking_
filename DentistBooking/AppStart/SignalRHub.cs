@@ -22,5 +22,9 @@ public class SignalRHub : Hub
     {
         await Clients.All.SendAsync("ReloadPrescriptions");
     }
+    public async Task ReloadPrescriptionMedicines()
+    {
+        await Clients.All.SendAsync("ReloadPrescriptionMedicines");
+    }
 }
 

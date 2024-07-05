@@ -1,0 +1,61 @@
+﻿@page
+@model DentistBooking.Pages.Dentis.indexModel
+
+@{
+    ViewData["Title"] = "index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PrescriptionMedicine[0].Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrescriptionMedicine[0].Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrescriptionMedicine[0].Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrescriptionMedicine[0].Medicine)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrescriptionMedicine[0].Prescription)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.PrescriptionMedicine) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Medicine.MedicineName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Prescription.PrescriptionId)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.PrescriptionMedicineId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.PrescriptionMedicineId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.PrescriptionMedicineId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

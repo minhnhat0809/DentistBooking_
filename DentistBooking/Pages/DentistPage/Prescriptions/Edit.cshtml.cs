@@ -17,24 +17,17 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions
     {
         private readonly IPrescriptionService _prescriptionService;
         private readonly IAppointmentService _appointmentService;
-        private readonly IMedicineService _medicineService; // New service to handle medicines
         private readonly IHubContext<SignalRHub> _hubContext;
-
-        public EditModel(IPrescriptionService prescriptionService,
-            IAppointmentService appointmentService, IMedicineService medicineService,
+        public EditModel(IPrescriptionService prescriptionService, IAppointmentService appointmentService,
             IHubContext<SignalRHub> hubContext)
         {
             _prescriptionService = prescriptionService;
             _appointmentService = appointmentService;
-            _medicineService = medicineService; // Initialize the new service
             _hubContext = hubContext;
         }
 
         [BindProperty]
         public Prescription Prescription { get; set; } = default!;
-
-        [BindProperty]
-        public List<PrescriptionMedicine> PrescriptionMedicines { get; set; } = new List<PrescriptionMedicine>();
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -48,44 +41,23 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions
             {
                 return NotFound();
             }
-
             Prescription = prescription;
-            PrescriptionMedicines = Prescription.PrescriptionMedicines.ToList();
-
-            ViewData["AppointmentId"] = new SelectList( _appointmentService.GetAllAppointments().Result , "AppointmentId", "AppointmentId");
-            ViewData["MedicineId"] = new SelectList( _medicineService.GetAllMedicines(), "MedicineId", "Name");
-
+            ViewData["AppointmentId"] = new SelectList(_appointmentService.GetAllAppointments().Result, "AppointmentId", "AppointmentId");
             return Page();
         }
 
-
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
-                ViewData["AppointmentId"] = new SelectList(await _appointmentService.GetAllAppointments(), "AppointmentId", "AppointmentId");
-                ViewData["MedicineId"] = new SelectList( _medicineService.GetAllMedicines(), "MedicineId", "Name");
                 return Page();
             }
 
             try
             {
                 _prescriptionService.UpdatePrescription(Prescription);
-
-                foreach (var prescriptionMedicine in PrescriptionMedicines)
-                {
-                    if (prescriptionMedicine.PrescriptionMedicineId == 0)
-                    {
-                        // Add new PrescriptionMedicine
-                        _prescriptionService.AddPrescriptionMedicine(prescriptionMedicine);
-                    }
-                    else
-                    {
-                        // Update existing PrescriptionMedicine
-                        _prescriptionService.UpdatePrescriptionMedicine(prescriptionMedicine);
-                    }
-                }
-
                 await _hubContext.Clients.All.SendAsync("ReloadPrescriptions");
             }
             catch (DbUpdateConcurrencyException)
