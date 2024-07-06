@@ -20,5 +20,17 @@ namespace DentistBooking.Pages.StaffPages
         {
             Appointments = appointmentService.GetAllProcessingAppointment();
         }
+
+        public IActionResult OnPostDelete(int appointmentId)
+        {
+
+            string result = appointmentService.DeleteAppointment(appointmentId);
+            if (!result.Equals("Success"))
+            {
+                TempData["DeleteAppointment"] = result;
+            }
+            TempData["DeleteAppointment"] = "Delete successfully!";
+            return RedirectToPage();
+        }
     }
 }

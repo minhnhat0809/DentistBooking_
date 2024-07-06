@@ -25,7 +25,7 @@ namespace Service
         string AddAppointment(Appointment appointment);
         void PutAppointment(Appointment appointment);   
 
-        void DeleteAppointment(int appointmentId);
+        string DeleteAppointment(int appointmentId);
         
         string UpdateAppointments(int serviceId, int appointmentId, DateTime TimeStart, DateTime TimeEnd, int dentistSlotId, string status);
 
