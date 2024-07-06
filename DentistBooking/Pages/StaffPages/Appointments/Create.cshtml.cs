@@ -46,7 +46,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
         public IList<BusinessObject.Service> Services { get; set; } = default!;
         public IActionResult OnGet()
         {
-            ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers(), "UserId", "Name");
+            ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers().Result, "UserId", "Name");
             Status = _appointmentService.GetAllStatusOfAppointment(0);
             var dentistSlots =  _dentistSlotService.GetAllDentistSlots().Result;
             var dentistSlotSelectList = dentistSlots.Select(slot => new
