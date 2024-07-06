@@ -41,7 +41,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
         */
         public IActionResult OnGet()
         {
-            ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers(), "UserId", "Name");
+            ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers().Result, "UserId", "Name");
             ViewData["DentistSlotId"] = new SelectList(_dentistSlotService.GetAllDentistSlots().Result, "DentistSlotId", "DentistSlotId");
             ViewData["ServiceId"] = new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text");
             ViewData["MedicalRecordId"] = new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text");
@@ -78,7 +78,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
         {
             if (!ModelState.IsValid)
             {
-                ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers(), "UserId", "Name", Appointment.CustomerId);
+                ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers().Result, "UserId", "Name", Appointment.CustomerId);
                 ViewData["DentistSlotId"] = new SelectList(_dentistSlotService.GetAllDentistSlots().Result, "DentistSlotId", "DentistSlotId", Appointment.DentistSlotId);
                 ViewData["ServiceId"] = new SelectList(_service.GetAllServices().Result, "ServiceId", "ServiceName", Appointment.ServiceId);
                 ViewData["MedicalRecordId"] = new SelectList(_medicalRecordService.GetAllMedicalRecords().Result, "MedicalRecordId", "MedicalRecordId", Appointment.MedicalRecordId);

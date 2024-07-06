@@ -32,7 +32,7 @@ namespace DentistBooking.Pages.StaffPages.Check_upSchedules
 
         public IActionResult OnGet()
         {
-        ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers(), "UserId", "Name");
+        ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers().Result, "UserId", "Name");
         ViewData["DentistId"] = new SelectList(_userService.GetAllDentists().Result, "UserId", "Name");
             return Page();
         }
