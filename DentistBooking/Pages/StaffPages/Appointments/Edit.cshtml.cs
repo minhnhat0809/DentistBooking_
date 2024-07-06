@@ -65,7 +65,17 @@ namespace DentistBooking.Pages.StaffPages.Appointments
              
             try
             {
-                _appointmentService.PutAppointment(Appointment);    
+                string result = _appointmentService.UpdateAppointmentForStaff(Appointment.ServiceId.Value, Appointment.AppointmentId,
+                    Appointment.TimeStart, Appointment.TimeEnd, Appointment.DentistSlotId.Value);
+                if (!result.Equals("Success"))
+                {
+                    TempData["EditAppointment"] = result;
+                }
+                else
+                {
+                    TempData["EditAppointment"] = "Update successfully!";
+                }
+                
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -79,7 +89,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
                 }
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage(new{id = Appointment.AppointmentId});
         }
 
         private bool AppointmentExists(int id)

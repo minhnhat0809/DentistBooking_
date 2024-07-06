@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -44,36 +44,50 @@
     <div class="navcontainer">
         <nav class="nav">
             <div class="nav-upper-options">
-                <div class="nav-option option1">
+                <a href="/StaffPages/ViewUsers" class="nav-option option3">
                     <i class="fa-solid fa-user"></i>
-                    <a asp-page="/Users/View"> Users</a>
-                </div>
-
-                <div class="option2 nav-option">
+                    Users
+                </a>
+                
+                <a href="#" class="nav-option option3">
                     <i class="fa-solid fa-list"></i>
-                    <a> Services</a>
-                </div>
+                    Services
+                </a>
 
-                <div class="nav-option option3">
+                <a href="/Users/View" class="nav-option option3">
                     <i class="fa-solid fa-house-chimney-medical"></i>
-                    <a> Clinic</a>
-                </div>
+                    Clinic
+                </a>
 
-                <div class="nav-option option4">
-                    <i class="fa-solid fa-users"></i>
-                    <a> Customers</a>
-                </div>
-
-                <div class="nav-option option5">
+                <a href="/StaffPages/ViewDentistSlot" class="nav-option option3">
+                    <i class="fa-solid fa-house-chimney-medical"></i>
+                    Dentist Slot
+                </a>
+                
+                <a href="/StaffPages/Appointments/Index" class="nav-option option3">
                     <i class="fa-solid fa-calendar-days"></i>
-                    <a asp-page="/StaffPages/Appointments/Index"> Appointment</a>
-                </div>
+                    Appointment
+                </a>
+                
+                <a href="/StaffPages/Medicines/Index" class="nav-option option3">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    Medicine
+                </a>  
+                
+                <a href="/StaffPages/MedicalRecords/Index" class="nav-option option3">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    Medical Records
+                </a> 
+                
+                <a href="/StaffPages/Check-upSchedules/Index" class="nav-option option3">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    Check-up Schedule
+                </a>
 
                 <div class="nav-option logout">
                     <i class="fa-solid fa-arrow-right-from-bracket"></i>
                     <a>Logout</a>
                 </div>
-
             </div>
         </nav>
     </div>

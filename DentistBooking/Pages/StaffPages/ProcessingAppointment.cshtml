@@ -3,8 +3,7 @@
 @model DentistBooking.Pages.StaffPages.ProcessingAppointmentModel
 @{
     ViewData["Title"] = "Appointment Detail";
-    //Layout = "/Pages/Shared/_Layout.cshtml";
-    Layout = null;
+    Layout = "~/Pages/Shared/_StaffLayout.cshtml";
     var resultMessage = TempData["ProcessingAppointment"] as string;
     var result = TempData["ProcessingAppointment_DentistSlot"] as string;
 }

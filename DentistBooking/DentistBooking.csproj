@@ -22,4 +22,12 @@
     <PackageReference Include="X.PagedList.Mvc.Core" Version="9.1.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Staff\MedicineManagement\Create.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Staff\MedicineManagement\Delete.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Staff\MedicineManagement\Details.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Staff\MedicineManagement\Edit.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\Staff\MedicineManagement\Index.cshtml" />
+  </ItemGroup>
+
 </Project>
