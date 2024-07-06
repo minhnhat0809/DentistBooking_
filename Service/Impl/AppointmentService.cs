@@ -133,6 +133,31 @@ namespace Service.Impl
                     return errors;
                 }
 
+                List<Appointment> appointments = appointmentRepo.GetAllAppointmentsOfCustomer(customerId).Result;
+
+                var appoinmentList = appointments.Where(a => DateOnly.FromDateTime(a.TimeStart) == selectedDate).ToList();
+                
+                if (appoinmentList != null)
+                {
+                    foreach (var ap in appoinmentList)
+                    {
+                        TimeSpan apStartTime = ap.TimeStart.TimeOfDay;
+                        TimeSpan apEndTime = ap.TimeEnd.TimeOfDay;
+
+                        if (IsOverlap(TimeStart.TimeOfDay, apStartTime, apEndTime))
+                        {
+                            AddError("",$"There is an appointment overlapping at {ap.TimeStart} - {ap.TimeEnd.TimeOfDay}'");
+                            return errors;
+                        }
+
+                        if (IsOverlap(TimeStart.TimeOfDay.Add(new TimeSpan(0, 30, 0)), apStartTime, apEndTime))
+                        {
+                            AddError("",$"There is an appointment overlapping at " + $"{ap.TimeStart.ToString()} - {ap.TimeStart.Add(ap.TimeEnd.TimeOfDay).ToString()}. Your appoinment needs 30'");
+                            return errors;
+                        }
+                    }
+                }
+
                 DateTime combinedDateTime = new DateTime(selectedDate.Year, selectedDate.Month,
                     selectedDate.Day, TimeStart.Hour, TimeStart.Minute, TimeStart.Second);
 
