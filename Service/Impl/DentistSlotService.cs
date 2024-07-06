@@ -90,5 +90,22 @@ namespace Service.Impl
             dentistSlotRepo.CreateDentistSlot(dentistSlot);
             return "Success";
         }
+
+        public string DeleteDentistSlot(int dentistSlotId)
+        {
+            if (dentistSlotId <= 0)
+            {
+                return "Dentist slot ID is empty!";
+            }
+
+            DentistSlot dentistSlot = dentistSlotRepo.GetDentistSlotByID(dentistSlotId).Result;
+            if (dentistSlot == null)
+            {
+                return "This dentist slot is not exist!";
+            }
+            
+            dentistSlotRepo.DeleteDentistSlot(dentistSlot);
+            return "Success";
+        }
     }
 }

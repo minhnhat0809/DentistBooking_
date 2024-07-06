@@ -16,5 +16,7 @@ namespace Repository.Impl
 
         public async Task<DentistSlot> GetDentistSlotByID(int dentistSlotId) => await DentistSlotDAO.Instance.getDentistSlotByID(dentistSlotId);
         public void CreateDentistSlot(DentistSlot dentistSlot) => DentistSlotDAO.Instance.createDentistSlot(dentistSlot);
+
+        public void DeleteDentistSlot(DentistSlot dentistSlot) => DentistSlotDAO.Instance.deleteDentistSlot(dentistSlot);
     }
 }

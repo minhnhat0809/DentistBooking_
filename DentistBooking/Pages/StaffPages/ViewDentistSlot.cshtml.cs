@@ -29,6 +29,9 @@ public class ViewDentistSlot : PageModel
     public TimeOnly DentistSlotTimeEnd { get; set; } = default!;
 
     public IList<DentistSlot> DentistSlots = default!;
+
+    [BindProperty(SupportsGet = true)]
+    public int DentistSlotId { get; set; } = default!;
     public void OnGet()
     {
         Dentists = userService.GetAllUserByType("Dentist");
@@ -59,6 +62,19 @@ public class ViewDentistSlot : PageModel
         }
 
         TempData["DentistSlot"] = "Dentist slot create successfully!";
+        Dentists = userService.GetAllUserByType("Dentist");
+        return Page();
+    }
+
+    public IActionResult OnPostDeleteDentistSlot(int DentistSlotId)
+    {
+        string result = dentistSlotService.DeleteDentistSlot(DentistSlotId);
+        if (result.Equals("Success"))
+        {
+            TempData["DentistSlot"] = result;
+        }
+
+        TempData["DentistSlot"] = "Delete successfully!";
         Dentists = userService.GetAllUserByType("Dentist");
         return Page();
     }

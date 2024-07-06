@@ -16,5 +16,7 @@ namespace Service
         Task<DentistSlot> GetDentistSlotById(int dentistSlotId);
 
         string CreateDentistSlot(int dentistId, DateTime timeStart, DateTime timeEnd);
+
+        string DeleteDentistSlot(int dentistSlotId);
     }
 }
