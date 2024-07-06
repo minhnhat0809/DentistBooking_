@@ -60,11 +60,11 @@ namespace DentistBooking.Pages.StaffPages
                 Appointment.AppointmentId, Appointment.TimeStart, Appointment.TimeEnd, (int)Appointment.DentistSlotId);
             if (!result.Equals("Success"))
             {
-                TempData["ProcessingAppointment"] = result;
+                TempData["ProcessingAppointmentError"] = result;
                 Appointment = appointmentService.GetAppointmentByID(Appointment.AppointmentId);
                 Services = service.GetAllServicesForCustomer((int)Appointment.ServiceId);
                 Dentists = userService.GetAllDentistsByService((int)Appointment.ServiceId).Result;
-                return Page();
+                RedirectToPage(new { id = Appointment.AppointmentId });
             }
 
             TempData["ProcessingAppointment"] = "Appointment updated successfully!";

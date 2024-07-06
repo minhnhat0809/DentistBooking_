@@ -6,6 +6,7 @@
     //Layout = "~/Pages/Shared/_StaffLayout.cshtml";
     Layout = null;
     var resultMessage = TempData["ProcessingAppointment"] as string;
+    var resultMessageError = TempData["ProcessingAppointmentError"] as string;
     var result = TempData["ProcessingAppointment_DentistSlot"] as string;
 }
 
@@ -185,6 +186,21 @@
                 alertPlaceholder.children('.alert').alert('close');
             }, 3000);
         }
+        
+        var resultMessageError = '@resultMessageError';
+                if (resultMessageError.trim() !== '') {
+                    var alertPlaceholder = $('#customAlertPlaceholder');
+                    var alertHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'
+                        + resultMessageError
+                        + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
+                        + '<span aria-hidden="true">&times;</span>'
+                        + '</button></div>';
+                    alertPlaceholder.html(alertHtml);
+        
+                    setTimeout(function () {
+                        alertPlaceholder.children('.alert').alert('close');
+                    }, 3000);
+                }
         
         var result = '@result';
                 if (result.trim() !== '') {
