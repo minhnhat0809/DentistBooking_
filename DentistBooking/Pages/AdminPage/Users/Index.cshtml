@@ -77,9 +77,13 @@
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedDate)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
+                @if (item.Status == true)
+                {
+                    <td> Active </td>
+                }else {<td> Deactive </td>}
+            @* <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+            </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.Clinic.ClinicName)
             </td>
