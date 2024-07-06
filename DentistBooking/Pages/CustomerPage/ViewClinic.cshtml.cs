@@ -17,7 +17,7 @@ namespace DentistBooking.Pages.CustomerPage
         public Clinic Clinic { get; set; } = default!;
         public async void OnGet()
         {
-            Clinic = await clinicService.GetById(1);
+            Clinic = clinicService.GetById(1).Result;
         }
     }
 }

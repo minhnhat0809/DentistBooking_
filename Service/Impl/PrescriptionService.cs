@@ -102,6 +102,13 @@ namespace Service.Impl
             }
         }
 
+        public List<Prescription> GetAllPrescriptionByCustomer(int customerId)
+        {
+            List<Prescription> prescriptions = _preScription.GetPrescriptions();
+            prescriptions = prescriptions.Where(s => s.Appointment.CustomerId == customerId).ToList();
+            return prescriptions;
+        }
+
         public List<Prescription> GetPrescriptions()
         {
             try

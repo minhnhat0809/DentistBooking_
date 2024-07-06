@@ -11,5 +11,7 @@ namespace Service
         public void DeletePrescription(int id);
         Task<Prescription> GetByIdWithMedicinesAsync(int id);
 
+        List<Prescription> GetAllPrescriptionByCustomer(int customerId);
+
     }
 }

@@ -1,0 +1,43 @@
+@page
+@model DentistBooking.Pages.CustomerPage.ViewPrescriptions
+
+@{
+    ViewData["Title"] = "View Prescriptions";
+    Layout = "~/Pages/Shared/_CustomerLayout.cshtml";
+}
+
+<h1>Prescriptions</h1>
+
+@if (Model.Prescriptions != null && Model.Prescriptions.Count > 0)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Diagnosis</th>
+                <th>Total</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var prescription in Model.Prescriptions)
+            {
+                <tr>
+                    <td>@prescription.Date.ToString("yyyy-MM-dd")</td>
+                    <td>@prescription.Diagnosis</td>
+                    <td>@prescription.Total?.ToString("C")</td>
+                    <td>@(prescription.Status == true ? "Active" : "Inactive")</td>
+                    <td>
+                        <a asp-page="./PrescriptionDetail" asp-route-prescriptionId="@prescription.PrescriptionId" class="btn btn-info">Detail</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-warning" role="alert">
+        No prescriptions found for this customer.
+    </div>
+}
