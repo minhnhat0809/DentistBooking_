@@ -31,14 +31,24 @@ namespace DataAccess
         public Appointment getAppointmnentByID(int id)
         {
             var context = new BookingDentistDbContext();
-            var appointment = context.Appointments.Include(a => a.DentistSlot.Dentist).Include(a => a.Customer).FirstOrDefault(c => c.AppointmentId == id);
+            var appointment = context.Appointments
+                .Include(x => x.Customer)
+                .Include(x => x.DentistSlot)
+                .Include(x => x.MedicalRecord)
+                .Include(x => x.Service)
+                .FirstOrDefault(c => c.AppointmentId == id);
             return appointment;
         }
 
         public async Task<List<Appointment>> getAllAppointments()
         {
             var context = new BookingDentistDbContext();
-            var appointments = await context.Appointments.OrderBy(ap => ap.TimeStart).ToListAsync();
+            var appointments = await context.Appointments
+                .Include(x=>x.Customer)
+                .Include(x => x.DentistSlot)
+                .Include(x => x.MedicalRecord)
+                .Include(x => x.Service)
+                .OrderBy(ap => ap.TimeStart).ToListAsync();
             return appointments;
         }
 

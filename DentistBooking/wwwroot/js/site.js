@@ -8,3 +8,36 @@ let nav = document.querySelector(".navcontainer");
 menuicn.addEventListener("click", () => {
     nav.classList.toggle("navclose");
 })
+"use strict";
+
+var connection = new signalR.HubConnectionBuilder().withUrl("/SignalRHub").build();
+
+connection.on("ReloadAppointments", function () {
+    console.log("Reloading Appointments")
+    location.reload();
+})
+connection.on("ReloadCheckupSchedules", function () {
+    console.log("Reloading CheckupSchedules")
+    location.reload();
+})
+connection.on("ReloadMedicalRecords", function () {
+    console.log("Reloading MedicalRecords")
+    location.reload();
+})
+connection.on("ReloadMedicines", function () {
+    console.log("Reloading Medicines")
+    location.reload();
+})
+connection.on("ReloadPrescriptions", function () {
+    console.log("Reloading Prescriptions")
+    location.reload();
+})
+connection.on("ReloadPrescriptionMedicines", function () {
+    console.log("Reloading PrescriptionMedicines")
+    location.reload();
+})
+connection.start().then(function () {
+    console.log("Connected");
+}).catch(function (err) {
+    return console.error(err.toString());
+});

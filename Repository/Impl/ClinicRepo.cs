@@ -10,11 +10,11 @@ namespace Repository.Impl
 {
     public class ClinicRepo : IClinicRepo
     {
-        public List<Clinic> GetAllClinics()
-            => ClinicDAO.Instance.getAllClinics();
+        public async Task<List<Clinic>> GetAllClinics()
+            => await ClinicDAO.Instance.getAllClinics();
 
-        public Clinic GetById(int id)
-            => ClinicDAO.Instance.getClinicByID(id);
+        public async Task<Clinic> GetById(int? id)
+            => await ClinicDAO.Instance.getClinicByID(id);
 
         public void CreateClinic(Clinic clinic)
             => ClinicDAO.Instance.createClinic(clinic);
@@ -22,9 +22,9 @@ namespace Repository.Impl
         public void UpdateClinic(Clinic clinic)
             => ClinicDAO.Instance.updateClinic(clinic);
 
-        public void DeleteClinic(int id)
+        public async void DeleteClinic(int id)
         {
-            var model = ClinicDAO.Instance.getClinicByID(id);
+            var model = await ClinicDAO.Instance.getClinicByID(id);
             ClinicDAO.Instance.deleteClinic(model);
         }
     }

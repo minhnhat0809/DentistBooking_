@@ -69,10 +69,7 @@ namespace Service.Impl
             try
             {
                 var existingRecord = _medicalRecordRepo.GetById(medical.MediaRecordId);
-                if (existingRecord != null)
-                {
-                    throw new InvalidOperationException($"Medical record with ID {medical.MediaRecordId} already exists.");
-                }
+                
 
                 _medicalRecordRepo.CreateMedicalRecord(medical);
             }
@@ -147,6 +144,30 @@ namespace Service.Impl
                 }
 
                 return _mapper.Map<MedicalRecordDto>(model);
+            }
+            catch (Exception ex)
+            {
+                // Log exception
+                throw new ExceptionHandler.ServiceException("An error occurred while retrieving the medical record.", ex);
+            }
+        }
+
+        public async Task<IEnumerable<MedicalRecord>> GetMedicalRecordsByCustomerIdAsync(int customerId)
+        {
+            if (customerId <= 0)
+            {
+                throw new ArgumentException("Invalid medical customer ID.", nameof(customerId));
+            }
+
+            try
+            {
+                var models = await _medicalRecordRepo.GetMedicalRecordsByCustomerIdAsync(customerId);
+                if (models == null)
+                {
+                    throw new ExceptionHandler.NotFoundException($"Medical record not found.");
+                }
+
+                return models;
             }
             catch (Exception ex)
             {

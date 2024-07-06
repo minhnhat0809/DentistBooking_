@@ -1,4 +1,6 @@
 ﻿
+using AutoMapper;
+using BusinessObject.DTO;
 using Repository;
 
 namespace Service.Impl
@@ -6,9 +8,11 @@ namespace Service.Impl
     public class Service : IService
     {
         private readonly IServiceRepo _servicerRepo;
-        public Service(IServiceRepo repo)
+        private readonly IMapper _mapper;
+        public Service(IServiceRepo repo, IMapper mapper)
         {
             _servicerRepo = repo;
+            _mapper = mapper;
         }
         public void CreateService(BusinessObject.Service service)
         => _servicerRepo.CreateService(service);
@@ -16,12 +20,21 @@ namespace Service.Impl
         public void DeleteService(BusinessObject.Service service)
         =>_servicerRepo.DeleteService(service);
 
-        public List<BusinessObject.Service> GetAllServices()
-        => _servicerRepo.GetAllServices();
+        public async Task<List<ServiceDto>> GetAllServices()
+        {
+            List<BusinessObject.Service> models = await _servicerRepo.GetAllServices();
+            List<ServiceDto> viewModels = _mapper.Map<List<ServiceDto>>(models);
+            return viewModels;
+        }
+
+        public async Task<IEnumerable<BusinessObject.Service>> GetAllServicesAsync()
+        {
+            return await _servicerRepo.GetAllServicesAsync();
+        }
 
         public List<BusinessObject.Service> GetAllServicesForCustomer(int serviceId)
         {
-            List<BusinessObject.Service> services = _servicerRepo.GetAllServices();
+            List<BusinessObject.Service> services = _servicerRepo.GetAllServices().Result;
 
             BusinessObject.Service service = services.FirstOrDefault(s => s.ServiceId == serviceId);
             if (service != null)
@@ -32,8 +45,23 @@ namespace Service.Impl
             return services;
         }
 
+        public async Task<ServiceDto> GetDtoById(int id)
+        {
+            BusinessObject.Service model = await _servicerRepo.GetServiceByID(id);
+            return _mapper.Map<ServiceDto>(model);
+        }
+
+        
+
         public BusinessObject.Service GetServiceByID(int id)
-        => _servicerRepo.GetServiceByID(id);
+        {
+            return _servicerRepo.GetServiceByID(id).Result;
+        }
+
+        public async Task<IEnumerable<BusinessObject.Service>> GetServicesByDentistSlotAsync(int dentistSlotId)
+        {
+           return await _servicerRepo.GetServicesByDentistSlotAsync(dentistSlotId);
+        }
 
         public void UpdateService(BusinessObject.Service service)
         => _servicerRepo.UpdateService(service);

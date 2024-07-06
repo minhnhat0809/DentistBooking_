@@ -7,16 +7,20 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BusinessObject;
 using DataAccess;
+using Service;
+using Microsoft.AspNetCore.SignalR;
 
 namespace DentistBooking.Pages.StaffPages.Appointments
 {
     public class DeleteModel : PageModel
     {
-        private readonly DataAccess.BookingDentistDbContext _context;
+        private readonly IAppointmentService _appointmentService;
+        private readonly IHubContext<SignalRHub> _hubContext;
 
-        public DeleteModel(DataAccess.BookingDentistDbContext context)
+        public DeleteModel(IAppointmentService appointmentService, IHubContext<SignalRHub> hubContext)
         {
-            _context = context;
+            _appointmentService = appointmentService;   
+            _hubContext = hubContext;
         }
 
         [BindProperty]
@@ -29,7 +33,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
                 return NotFound();
             }
 
-            var appointment = await _context.Appointments.FirstOrDefaultAsync(m => m.AppointmentId == id);
+            var appointment = _appointmentService.GetAppointmentByID(id.Value);
 
             if (appointment == null)
             {
@@ -49,14 +53,13 @@ namespace DentistBooking.Pages.StaffPages.Appointments
                 return NotFound();
             }
 
-            var appointment = await _context.Appointments.FindAsync(id);
+            var appointment = _appointmentService.GetAppointmentByID(id.Value);
             if (appointment != null)
             {
                 Appointment = appointment;
-                _context.Appointments.Remove(Appointment);
-                await _context.SaveChangesAsync();
             }
-
+            _appointmentService.DeleteAppointment(id.Value);
+            await _hubContext.Clients.All.SendAsync("ReloadAppointments");
             return RedirectToPage("./Index");
         }
     }

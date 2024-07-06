@@ -8,16 +8,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using BusinessObject;
 using DataAccess;
 using Service;
+using Microsoft.AspNetCore.SignalR;
 
 namespace DentistBooking.Pages.StaffPages.Medicines
 {
     public class CreateModel : PageModel
     {
         private readonly IMedicineService _medicineService;
+        private readonly IHubContext<SignalRHub> _hubContext;
 
-        public CreateModel(IMedicineService medicineService)
+        public CreateModel(IMedicineService medicineService, IHubContext<SignalRHub> hubContext)
         {
             _medicineService = medicineService;
+            _hubContext = hubContext;
         }
 
         public IActionResult OnGet()
@@ -39,7 +42,7 @@ namespace DentistBooking.Pages.StaffPages.Medicines
             // add medicine
             _medicineService.CreateMedicine(Medicine);
             // signalR real-time
-
+            await _hubContext.Clients.All.SendAsync("ReloadMedicines");
             return RedirectToPage("./Index");
         }
     }

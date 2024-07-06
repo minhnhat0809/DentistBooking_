@@ -9,5 +9,7 @@ namespace Service
         public void CreatePrescription(Prescription prescription);
         public void UpdatePrescription(Prescription prescription);
         public void DeletePrescription(int id);
+        Task<Prescription> GetByIdWithMedicinesAsync(int id);
+
     }
 }

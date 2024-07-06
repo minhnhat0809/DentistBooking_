@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObject;
 using DataAccess;
 using Service;
+using Microsoft.AspNetCore.SignalR;
 
 namespace DentistBooking.Pages.StaffPages.Check_upSchedules
 {
@@ -16,11 +17,12 @@ namespace DentistBooking.Pages.StaffPages.Check_upSchedules
     {
         private readonly ICheckupScheduleService  _checkupScheduleService;
         private readonly IUserService _userService;
-
-        public EditModel(ICheckupScheduleService checkupScheduleService, IUserService userService)
+        private readonly IHubContext<SignalRHub> _hubContext;
+        public EditModel(ICheckupScheduleService checkupScheduleService, IUserService userService, IHubContext<SignalRHub> hubContext)
         {
             _checkupScheduleService = checkupScheduleService;
             _userService = userService;
+            _hubContext = hubContext;
         }
 
         [BindProperty]
@@ -57,6 +59,7 @@ namespace DentistBooking.Pages.StaffPages.Check_upSchedules
             try
             {
                 _checkupScheduleService.UpdateCheckupSchedule(CheckupSchedule);
+                await _hubContext.Clients.All.SendAsync("ReloadCheckupSchedules");
             }
             catch (DbUpdateConcurrencyException)
             {

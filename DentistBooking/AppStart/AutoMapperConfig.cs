@@ -17,6 +17,7 @@ namespace DentistBooking.AppStart
                     .ForMember(dest => dest.DentistName, opt => opt.MapFrom(src => src.Dentist.Name))
                     .ForMember(dest => dest.Customer, opt => opt.Ignore())
                     .ForMember(dest => dest.Dentist, opt => opt.Ignore());
+                mc.CreateMap<BusinessObject.Service, ServiceDto>().ReverseMap();
             });
             IMapper mapper = mapperConfiguration.CreateMapper();
             services.AddSingleton(mapper);

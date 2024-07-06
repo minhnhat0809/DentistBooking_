@@ -28,18 +28,30 @@ namespace DataAccess
             }
         }
 
-        public Service getServiceByID(int id)
+        public async Task<Service> getServiceByID(int? id)
         {
             var context = new BookingDentistDbContext();
-            var service = context.Services.FirstOrDefault(c => c.ServiceId == id);
+            var service = await context.Services.FirstOrDefaultAsync(c => c.ServiceId == id);
             return service;
         }
 
-        public List<Service> getAllServices()
+        public async Task<List<Service>> getAllServices()
         {
             var context = new BookingDentistDbContext();
-            var serviceList = context.Services.ToList();
+            var serviceList = await context.Services.ToListAsync();
             return serviceList;
+        }
+        public async Task<List<Service>> GetServicesByDentistSlotAsync(int dentistSlotId)
+        {
+            var context = new BookingDentistDbContext();
+            var services = await context.DentistSlots
+                .Where(ds => ds.DentistSlotId == dentistSlotId)
+                .SelectMany(ds => ds.Dentist.DentistServices)
+                .Where(ds => ds.Status == true)
+                .Select(ds => ds.Service)
+                .Distinct()
+                .ToListAsync();
+            return services;
         }
 
         public void deleteService(Service service)

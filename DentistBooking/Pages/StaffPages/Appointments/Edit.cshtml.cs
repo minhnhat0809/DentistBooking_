@@ -8,16 +8,27 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BusinessObject;
 using DataAccess;
+using Service;
 
 namespace DentistBooking.Pages.StaffPages.Appointments
 {
     public class EditModel : PageModel
     {
-        private readonly DataAccess.BookingDentistDbContext _context;
+        private readonly IAppointmentService _appointmentService;
+        private readonly IUserService _userService; 
+        private readonly IDentistSlotService _dentistSlotService;
+        private readonly IMedicalRecordService _medicalRecordService;
+        private readonly IService _service;
 
-        public EditModel(DataAccess.BookingDentistDbContext context)
+        public EditModel(IAppointmentService appointmentService, 
+            IUserService userService, IDentistSlotService dentistSlotService, 
+            IMedicalRecordService medicalRecordService, IService service)
         {
-            _context = context;
+            _appointmentService = appointmentService;
+            _userService = userService;
+            _dentistSlotService = dentistSlotService;
+            _medicalRecordService = medicalRecordService;
+            _service = service;
         }
 
         [BindProperty]
@@ -30,16 +41,16 @@ namespace DentistBooking.Pages.StaffPages.Appointments
                 return NotFound();
             }
 
-            var appointment =  await _context.Appointments.FirstOrDefaultAsync(m => m.AppointmentId == id);
+            var appointment = _appointmentService.GetAppointmentByID(id.Value);
             if (appointment == null)
             {
                 return NotFound();
             }
             Appointment = appointment;
-           ViewData["CustomerId"] = new SelectList(_context.Users, "UserId", "Name");
-           ViewData["DentistSlotId"] = new SelectList(_context.DentistSlots, "DentistSlotId", "DentistSlotId");
-           ViewData["MedicalRecordId"] = new SelectList(_context.MedicalRecords, "MediaRecordId", "MediaRecordId");
-           ViewData["ServiceId"] = new SelectList(_context.Services, "ServiceId", "ServiceName");
+            ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers(), "UserId", "Name");
+            ViewData["DentistSlotId"] = new SelectList(_dentistSlotService.GetAllDentistSlots().Result, "DentistSlotId", "DentistSlotId");
+            ViewData["ServiceId"] = new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text");
+            ViewData["MedicalRecordId"] = new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text");
             return Page();
         }
 
@@ -51,12 +62,10 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             {
                 return Page();
             }
-
-            _context.Attach(Appointment).State = EntityState.Modified;
-
+             
             try
             {
-                await _context.SaveChangesAsync();
+                _appointmentService.PutAppointment(Appointment);    
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -75,7 +84,29 @@ namespace DentistBooking.Pages.StaffPages.Appointments
 
         private bool AppointmentExists(int id)
         {
-            return _context.Appointments.Any(e => e.AppointmentId == id);
+            return _appointmentService.GetAllAppointments().Result.Any(e => e.AppointmentId == id);
+        }
+        public async Task<JsonResult> OnGetServicesByDentistSlotAsync(int dentistSlotId)
+        {
+            var services = await _service.GetServicesByDentistSlotAsync(dentistSlotId);
+            var serviceList = services.Select(s => new SelectListItem
+            {
+                Value = s.ServiceId.ToString(),
+                Text = s.ServiceName
+            }).ToList();
+
+            return new JsonResult(serviceList);
+        }
+        public async Task<JsonResult> OnGetMedicalRecordByCustomerIdAsync(int customerId)
+        {
+            var medicalRecords = await _medicalRecordService.GetMedicalRecordsByCustomerIdAsync(customerId);
+            var medicalRecordList = medicalRecords.Select(mr => new SelectListItem
+            {
+                Value = mr.MediaRecordId.ToString(),
+                Text = mr.MediaRecordId.ToString()
+            }).ToList();
+
+            return new JsonResult(medicalRecordList);
         }
     }
 }

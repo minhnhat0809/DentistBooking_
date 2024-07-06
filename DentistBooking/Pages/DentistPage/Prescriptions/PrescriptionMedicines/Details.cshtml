@@ -1,0 +1,50 @@
+﻿@page
+@model DentistBooking.Pages.DentistPage.Prescriptions.PrescriptionMedicines.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>PrescriptionMedicine</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PrescriptionMedicine.Quantity)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PrescriptionMedicine.Quantity)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PrescriptionMedicine.Price)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PrescriptionMedicine.Price)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PrescriptionMedicine.Status)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PrescriptionMedicine.Status)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PrescriptionMedicine.Medicine)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PrescriptionMedicine.Medicine.MedicineName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PrescriptionMedicine.Prescription)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PrescriptionMedicine.Prescription.PrescriptionId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.PrescriptionMedicine.PrescriptionMedicineId">Edit</a> |
+    <a asp-page="./Index" asp-route-id="@Model.PrescriptionMedicine.PrescriptionId">Back to List</a>
+</div>

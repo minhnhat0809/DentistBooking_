@@ -15,7 +15,6 @@ public partial class BookingDentistDbContext : DbContext
         : base(options)
     {
     }
-
     public virtual DbSet<Appointment> Appointments { get; set; }
 
     public virtual DbSet<CheckupSchedule> CheckupSchedules { get; set; }

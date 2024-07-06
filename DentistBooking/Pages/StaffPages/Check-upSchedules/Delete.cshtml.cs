@@ -8,16 +8,18 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObject;
 using DataAccess;
 using Service;
+using Microsoft.AspNetCore.SignalR;
 
 namespace DentistBooking.Pages.StaffPages.Check_upSchedules
 {
     public class DeleteModel : PageModel
     {
         private readonly ICheckupScheduleService _checkupScheduleService;
-
-        public DeleteModel(ICheckupScheduleService checkupScheduleService)
+        private readonly IHubContext<SignalRHub> _hubContext;
+        public DeleteModel(ICheckupScheduleService checkupScheduleService, IHubContext<SignalRHub> hubContext)
         {
             _checkupScheduleService = checkupScheduleService;   
+            _hubContext = hubContext;
         }
 
         [BindProperty]
@@ -54,6 +56,7 @@ namespace DentistBooking.Pages.StaffPages.Check_upSchedules
             {
                 CheckupSchedule = checkupschedule;
                 _checkupScheduleService.DeleteCheckupSchedule(checkupschedule.ScheduleId);
+                await _hubContext.Clients.All.SendAsync("ReloadCheckupSchedules");
             }
 
             return RedirectToPage("./Index");
