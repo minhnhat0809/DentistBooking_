@@ -43,7 +43,7 @@ namespace DentistBooking.Pages
                         return RedirectToPage("/CustomerPage/ViewServices");
                     }else if (result.Result.Equals("Admin"))
                     {
-                        return RedirectToPage("/Users/Index");
+                        return RedirectToPage("/Users/View");
                     }else if (result.Result.Equals("Staff"))
                     {
                         return RedirectToPage("/StaffPages/ProcessingAppointmentList");

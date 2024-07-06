@@ -28,6 +28,7 @@
     <_ContentIncludedByDefault Remove="Pages\Staff\MedicineManagement\Details.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\Staff\MedicineManagement\Edit.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\Staff\MedicineManagement\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\table-style.css" />
   </ItemGroup>
 
 </Project>

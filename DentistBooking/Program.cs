@@ -15,6 +15,12 @@ builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
 {
     options.Conventions.AddPageRoute("/ForgetPassword", "/forget-password");
     options.Conventions.AddPageRoute("/Index", "/login");
+    options.Conventions.AddPageRoute("/Users/View", "/users-management");
+    options.Conventions.AddPageRoute("/AdminPage/Services/Index", "/services");
+    options.Conventions.AddPageRoute("/AdminPage/Clinics/Index", "/clinics");
+    options.Conventions.AddPageRoute("/AdminPage/DentistSlots/Index", "/dentist-slots");
+    options.Conventions.AddPageRoute("/AdminPage/MedicalRecords/Index", "/medical-records");
+    options.Conventions.AddPageRoute("/AdminPage/Medicines/Index", "/medicine");
 });
 
 builder.Services.AddSignalR();

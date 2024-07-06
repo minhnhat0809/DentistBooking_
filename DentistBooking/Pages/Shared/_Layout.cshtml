@@ -15,8 +15,8 @@
         <div class="logosec">
             <div class="logo">Dentist Booking</div>
             <i class="fa-solid fa-bars icn menuicn align-content-center"
-                id="menuicn" 
-                alt="menu-icon"></i>
+               id="menuicn"
+               alt="menu-icon"></i>
         </div>
 
         <div class="searchbar">
@@ -40,56 +40,62 @@
         </div>
 
     </header>
-<div class="main-container">
-    <div class="navcontainer">
-        <nav class="nav">
-            <div class="nav-upper-options">
-                <div class="nav-option option1">
-                    <i class="fa-solid fa-user"></i>
-                    <a asp-page="/Users/View"> Users</a>
-                </div>
+    <div class="main-container">
+        <div class="navcontainer">
+            <nav class="nav">
+                <div class="nav-upper-options">
+                    <div class="nav-option option1">
+                        <i class="fa-solid fa-user"></i>
+                        <a class="nav-link" href="/users-management"> Users</a>
+                    </div>
 
-                <div class="option2 nav-option">
-                    <i class="fa-solid fa-list"></i>
-                    <a> Services</a>
-                </div>
+                    <div class="option2 nav-option">
+                        <i class="fa-solid fa-list"></i>
+                        <a class="nav-link" href="/services"> Services</a>
+                    </div>
 
-                <div class="nav-option option3">
-                    <i class="fa-solid fa-house-chimney-medical"></i>
-                    <a> Clinic</a>
-                </div>
+                    <div class="nav-option option3">
+                        <i class="fa-solid fa-house-chimney-medical"></i>
+                        <a class="nav-link" href="/clinics"> Clinics</a>
+                    </div>
 
-                <div class="nav-option option4">
-                    <i class="fa-solid fa-users"></i>
-                    <a> Customers</a>
-                </div>
+                    <div class="nav-option option3">
+                        <i class="fa-solid fa-clipboard-list pe-1"></i>
+                        <a class="nav-link" href="/medical-records"> Medical Record</a>
+                    </div>
 
-                <div class="nav-option option5">
-                    <i class="fa-solid fa-calendar-days"></i>
-                    <a asp-page="/StaffPages/Appointments/Index"> Appointment</a>
-                </div>
+                    <div class="nav-option option3">
+                        <i class="fa-solid fa-pills"></i>
+                        <a class="nav-link" href="/medicine"> Medicines</a>
+                    </div>
+                    
+                    <div class="nav-option option3">
+                        <i class="fa-regular fa-calendar-check"></i>
+                        <a class="nav-link" href="/dentist-slots"> Dentist's Slots</a>
+                    </div>
 
-                <div class="nav-option logout">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                    <a>Logout</a>
-                </div>
+                    <div class="nav-option logout">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        <a class="nav-link" href="/login">Logout</a>
+                    </div>
 
+                </div>
+            </nav>
+        </div>
+
+        <div class="vw-100 bg-opacity-10 bg-dark">
+            <div class="cus-container">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
             </div>
-        </nav>
-    </div>
-
-    <div class="vw-100 bg-opacity-10 bg-dark">
-        <div class="cus-container">
-            <main role="main" class="pb-3">
-                @RenderBody()
-            </main>
         </div>
     </div>
-</div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/nav-option.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
