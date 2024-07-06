@@ -19,7 +19,7 @@ public class ViewDentistSlot : PageModel
     public int? SelectedDentistId { get; set; }
 
     [BindProperty(SupportsGet = true)]
-    public DateTime SelectedDate { get; set; }
+    public DateOnly SelectedDate { get; set; }
 
     public IList<User> Dentists = default!;
     
@@ -37,7 +37,7 @@ public class ViewDentistSlot : PageModel
     public IActionResult OnPostViewDentistSlot()
     {
         DentistSlots = dentistSlotService.GetAllDentistSlotsByDentistAndDate((int)SelectedDentistId, 
-            DateOnly.FromDateTime(SelectedDate)).Result;
+            SelectedDate).Result;
 
         Dentists = userService.GetAllUserByType("Dentist");
         return Page();
