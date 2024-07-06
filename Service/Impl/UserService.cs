@@ -72,23 +72,22 @@ namespace Service.Impl
             switch (type)
             {
                 case "All":
-                    userList = _userRepo.GetAllUsers();
+                    userList =  _userRepo.GetAllUsers().Result;
                     break;
                 case "Dentist":
-                    userList = _userRepo.GetAllUsers().Where(u => u.Role.RoleName.Equals("Dentist")).ToList();
+                    userList = _userRepo.GetAllUsers().Result.Where(u => u.Role.RoleName.Equals("Dentist")).ToList();
                     break;
                 case "Customer":
-                    userList = _userRepo.GetAllUsers().Where(u => u.Role.RoleName.Equals("Customer")).ToList();
+                    userList = _userRepo.GetAllUsers().Result.Where(u => u.Role.RoleName.Equals("Customer")).ToList();
                     break;
                 default:
-                    userList = _userRepo.GetAllUsers();
+                    userList = _userRepo.GetAllUsers().Result;
                     break;
             }
             return userList;
         }
 
-        public List<User> GetAllUsers()
-        => _userRepo.GetAllUsers();
+        
 
         public async Task<User> GetById(int id)
         {
