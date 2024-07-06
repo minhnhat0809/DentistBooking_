@@ -47,7 +47,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
                 return NotFound();
             }
             Appointment = appointment;
-            ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers(), "UserId", "Name");
+            ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers().Result, "UserId", "Name");
             ViewData["DentistSlotId"] = new SelectList(_dentistSlotService.GetAllDentistSlots().Result, "DentistSlotId", "DentistSlotId");
             ViewData["ServiceId"] = new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text");
             ViewData["MedicalRecordId"] = new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text");

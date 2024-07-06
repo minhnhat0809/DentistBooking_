@@ -28,17 +28,34 @@ namespace DataAccess
             }
         }
 
-        public User getUserByID(int? id)
+        public async Task<User> getUserByID(int? id)
         {
             var context = new BookingDentistDbContext();
-            var user = context.Users.FirstOrDefault(c => c.UserId == id);
+            var user = await context.Users
+                .Include(x=>x.Clinic)
+                .Include(x=>x.Role)
+                .FirstOrDefaultAsync(c => c.UserId == id);
             return user;
         }
 
-        public List<User> getAllUsers()
+        public async Task<List<User>> getAllUsers()
         {
             var context = new BookingDentistDbContext();
-            var userList = context.Users.Include(u => u.Role).ToList();
+            var userList = await context.Users
+                .Include(x=>x.Role)
+                .Include(x=>x.Clinic)
+                .ToListAsync();
+            return userList;
+        }
+        
+        public async Task<List<User>> GetAllCustomer()
+        {
+            var context = new BookingDentistDbContext();
+            var userList = await context.Users
+                .Include(x => x.Role)
+                .Include(x => x.Clinic)
+                .Where(u => u.Role.RoleName.Equals("Customer"))
+                .ToListAsync();
             return userList;
         }
 

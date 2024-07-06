@@ -32,8 +32,8 @@ namespace Service.Impl
                     var schedule = models.FirstOrDefault(x => x.ScheduleId == viewModel.ScheduleId);
                     if (schedule != null)
                     {
-                        viewModel.DentistName = _userRepo.GetById(schedule.DentistId)?.Name ;
-                        viewModel.CustomerName = _userRepo.GetById(schedule.CustomerId)?.Name ;
+                        viewModel.DentistName = _userRepo.GetById(schedule.DentistId)?.Result.Name ;
+                        viewModel.CustomerName = _userRepo.GetById(schedule.CustomerId)?.Result.Name ;
                     }
                 }
                 return viewModels;
@@ -133,8 +133,8 @@ namespace Service.Impl
                     throw new ExceptionHandler.NotFoundException($"Checkup schedule with ID {id} not found.");
                 }
                 var viewModel = _mapper.Map<CheckupScheduleDto>(model); 
-                    viewModel.DentistName = _userRepo.GetById(model.DentistId).Name ?? "Unknown Dentist";
-                    viewModel.CustomerName = _userRepo.GetById(model.CustomerId).Name ?? "Unknown Customer";
+                    viewModel.DentistName = _userRepo.GetById(model.DentistId).Result.Name ?? "Unknown Dentist";
+                    viewModel.CustomerName = _userRepo.GetById(model.CustomerId).Result.Name ?? "Unknown Customer";
                 
 
                 return viewModel;
