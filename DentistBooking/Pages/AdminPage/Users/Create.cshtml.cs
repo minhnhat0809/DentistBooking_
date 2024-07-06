@@ -8,31 +8,28 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using BusinessObject;
 using DataAccess;
 using Service;
-using Microsoft.AspNetCore.SignalR;
 
-namespace DentistBooking.Pages.StaffPages.MedicalRecords
+namespace DentistBooking.Pages.AdminPage.Users
 {
     public class CreateModel : PageModel
     {
-        private readonly IMedicalRecordService _medicalRecordService;
         private readonly IUserService _userService;
-        private readonly IHubContext<SignalRHub> _hubContext;
-
-        public CreateModel(IMedicalRecordService medicalRecordService, IUserService userService, IHubContext<SignalRHub> hubContext)
+        private readonly IClinicService _clinicService;
+        public CreateModel(IUserService userService, IClinicService clinicService)
         {
-            _medicalRecordService = medicalRecordService;
             _userService = userService;
-            _hubContext = hubContext;
+            _clinicService = clinicService;
         }
 
         public IActionResult OnGet()
         {
-            ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers().Result, "UserId", "Name");
+            ViewData["ClinicId"] = new SelectList( _clinicService.GetAllClinics().Result, "ClinicId", "ClinicName");
+            ViewData["RoleId"] = new SelectList( _userService.GetAllRoles().Result, "RoleId", "RoleName");
             return Page();
         }
 
         [BindProperty]
-        public MedicalRecord MedicalRecord { get; set; } = default!;
+        public User User { get; set; } = default!;
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
@@ -41,8 +38,9 @@ namespace DentistBooking.Pages.StaffPages.MedicalRecords
             {
                 return Page();
             }
-            _medicalRecordService.CreateMedicalRecord(MedicalRecord);
-            await _hubContext.Clients.All.SendAsync("ReloadMedicalRecords");
+            User.CreatedDate = DateTime.Now;
+            User.Status = true;
+            _userService.CreateUser(User);
 
             return RedirectToPage("./Index");
         }

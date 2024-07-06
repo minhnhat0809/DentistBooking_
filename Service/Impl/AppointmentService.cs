@@ -177,7 +177,7 @@ namespace Service.Impl
                 return errors;
             }
 
-            User cusomter = userRepo.GetById(customerId);
+            User cusomter = userRepo.GetById(customerId).Result;
             if (cusomter == null)
             {
                 AddError("Customer","Customer is not existed!");

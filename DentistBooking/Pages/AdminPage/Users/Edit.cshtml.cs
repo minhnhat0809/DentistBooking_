@@ -9,24 +9,22 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObject;
 using DataAccess;
 using Service;
-using Microsoft.AspNetCore.SignalR;
 
-namespace DentistBooking.Pages.StaffPages.Check_upSchedules
+namespace DentistBooking.Pages.AdminPage.Users
 {
     public class EditModel : PageModel
     {
-        private readonly ICheckupScheduleService  _checkupScheduleService;
         private readonly IUserService _userService;
-        private readonly IHubContext<SignalRHub> _hubContext;
-        public EditModel(ICheckupScheduleService checkupScheduleService, IUserService userService, IHubContext<SignalRHub> hubContext)
+        private readonly IClinicService _clinicService;
+
+        public EditModel(IUserService userService, IClinicService clinicService)
         {
-            _checkupScheduleService = checkupScheduleService;
             _userService = userService;
-            _hubContext = hubContext;
+            _clinicService = clinicService;
         }
 
         [BindProperty]
-        public CheckupSchedule CheckupSchedule { get; set; } = default!;
+        public User User { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -35,14 +33,14 @@ namespace DentistBooking.Pages.StaffPages.Check_upSchedules
                 return NotFound();
             }
 
-            var checkupschedule = await _checkupScheduleService.GetById(id);
-            if (checkupschedule == null)
+            var user = await _userService.GetById(id.Value);
+            if (user == null)
             {
                 return NotFound();
             }
-            CheckupSchedule = checkupschedule;
-           ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers().Result, "UserId", "Name");
-           ViewData["DentistId"] = new SelectList(_userService.GetAllDentists().Result, "UserId", "Name");
+            User = user;
+            ViewData["ClinicId"] = new SelectList(_clinicService.GetAllClinics().Result, "ClinicId", "ClinicName");
+            ViewData["RoleId"] = new SelectList(_userService.GetAllRoles().Result, "RoleId", "RoleName");
             return Page();
         }
 
@@ -55,15 +53,15 @@ namespace DentistBooking.Pages.StaffPages.Check_upSchedules
                 return Page();
             }
 
+            
 
             try
             {
-                _checkupScheduleService.UpdateCheckupSchedule(CheckupSchedule);
-                await _hubContext.Clients.All.SendAsync("ReloadCheckupSchedules");
+                _userService.UpdateUser(User);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CheckupScheduleExists(CheckupSchedule.ScheduleId))
+                if (!UserExists(User.UserId))
                 {
                     return NotFound();
                 }
@@ -76,9 +74,9 @@ namespace DentistBooking.Pages.StaffPages.Check_upSchedules
             return RedirectToPage("./Index");
         }
 
-        private bool CheckupScheduleExists(int id)
+        private bool UserExists(int id)
         {
-            return _checkupScheduleService.GetAllCheckupSchedules().Result.Any(e => e.ScheduleId == id);
+            return _userService.GetAllUsers().Result.Any(e => e.UserId == id);
         }
     }
 }

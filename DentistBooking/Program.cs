@@ -58,7 +58,7 @@ builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddScoped<IDentistServiceRepo, DentistServiceRepo>();
 builder.Services.AddScoped<IMedicineRepo, MedicineRepo>();
 builder.Services.AddScoped<IPrescriptionMedicineRepo, PrescriptionMedicineRepo>();
-
+builder.Services.AddScoped<IRoleRepo, RoleRepo>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
