@@ -66,22 +66,22 @@ namespace Service.Impl
                 throw new ExceptionHandler.ServiceException("An error occurred while retrieving", ex);
             }
         }
-        public List<User> GetAllUserByType(string type)
+        public  List<User> GetAllUserByType(string type)
         {
             List<User> userList = new List<User>();
             switch (type)
             {
                 case "All":
-                    userList =  _userRepo.GetAllUsers().Result;
+                    userList =   _userRepo.GetAllUsers().Result;
                     break;
                 case "Dentist":
-                    userList = _userRepo.GetAllUsers().Result.Where(u => u.Role.RoleName.Equals("Dentist")).ToList();
+                    userList =  _userRepo.GetAllDentists().Result;   
                     break;
                 case "Customer":
-                    userList = _userRepo.GetAllUsers().Result.Where(u => u.Role.RoleName.Equals("Customer")).ToList();
+                    userList =  _userRepo.GetAllCustomer().Result;
                     break;
                 default:
-                    userList = _userRepo.GetAllUsers().Result;
+                    userList =  _userRepo.GetAllUsers().Result;
                     break;
             }
             return userList;
