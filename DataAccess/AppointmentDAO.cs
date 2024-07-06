@@ -64,7 +64,7 @@ namespace DataAccess
         public void deleteAppointment(Appointment appointment)
         {
             var context = new BookingDentistDbContext();
-            appointment.Status = "Deleted";
+            appointment.Status = "Delete";
             context.Entry<Appointment>(appointment).State = EntityState.Modified;
             context.SaveChanges();
         }

@@ -16,6 +16,6 @@ namespace Service
         public void UpdateMedicalRecord(MedicalRecord medical);
         public void DeleteMedicalRecord(int id);
         public Task<MedicalRecordDto> GetDtoById(int? id);
-        Task<IEnumerable<MedicalRecord>> GetMedicalRecordsByCustomerIdAsync(int customerId);
+        Task<List<MedicalRecord>> GetMedicalRecordsByCustomerIdAsync(int customerId);
     }
 }

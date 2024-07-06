@@ -48,7 +48,7 @@ namespace DataAccess
         public async Task<List<MedicalRecord>> GetMedicalRecordsByCustomerIdAsync(int customerId)
         {
             var context = new BookingDentistDbContext();
-            var medicalRecordList = await context.MedicalRecords
+            var medicalRecordList = await context.MedicalRecords.Include(m => m.Customer)
             .Where(mr => mr.CustomerId == customerId)
             .ToListAsync();
             return medicalRecordList;
