@@ -11,15 +11,19 @@ namespace Repository.Impl
         public void DeleteUser(User id)
         => UserDAO.Instance.deleteUser(id);
 
+        public async Task<List<User>> GetAllCustomer()
+        => await UserDAO.Instance.GetAllCustomer();
+
+
         public async Task<List<User>> GetAllDentists() => await UserDAO.Instance.GetAllDentists();
 
         public async Task<List<User>> GetAllDentistsByService(int serviceId) => await UserDAO.Instance.GetAllDentistsByService(serviceId);
 
-        public List<User> GetAllUsers()
-        => UserDAO.Instance.getAllUsers();
+        public async Task<List<User>> GetAllUsers()
+        => await UserDAO.Instance.getAllUsers();
 
-        public User GetById(int? id)
-        => UserDAO.Instance.getUserByID(id);
+        public async Task<User> GetById(int? id)
+        => await UserDAO.Instance.getUserByID(id);
 
         public async Task<User?> GetUserByUserName(string email) => await UserDAO.Instance.GetUserByUserName(email);
 
