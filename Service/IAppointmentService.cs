@@ -22,10 +22,14 @@ namespace Service
         List<Appointment> GetAllProcessingAppointment();
 
         string UpdateAppointmentForStaff(int serviceId, int appointmentId, DateTime TimeStart, DateTime TimeEnd, int dentistSlotId);
-        void AddAppointment(Appointment appointment);
+        string AddAppointment(Appointment appointment);
         void PutAppointment(Appointment appointment);   
 
-        void DeleteAppointment(int appointmentId);
+        string DeleteAppointment(int appointmentId);
+        
+        string UpdateAppointments(int serviceId, int appointmentId, DateTime TimeStart, DateTime TimeEnd, int dentistSlotId, string status);
+
+        List<string> GetAllStatusOfAppointment(int appointmentId);
 
 
     }

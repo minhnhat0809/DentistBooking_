@@ -39,12 +39,26 @@ namespace DentistBooking.Pages.StaffPages.Appointments
 	        -> choose Customer (GetAllCustomer) 
 	        -> medical record auto pick by customerID (GetMedicalRecordByCustomerId)
         */
+        public IList<string> Status { get; set; } = default!;
+
+        public IList<MedicalRecord> MedicalRecords { get; set; } = default!;
+
+        public IList<BusinessObject.Service> Services { get; set; } = default!;
         public IActionResult OnGet()
         {
-            ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers().Result, "UserId", "Name");
-            ViewData["DentistSlotId"] = new SelectList(_dentistSlotService.GetAllDentistSlots().Result, "DentistSlotId", "DentistSlotId");
+            ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers(), "UserId", "Name");
+            Status = _appointmentService.GetAllStatusOfAppointment(0);
+            var dentistSlots =  _dentistSlotService.GetAllDentistSlots().Result;
+            var dentistSlotSelectList = dentistSlots.Select(slot => new
+            {
+                slot.DentistSlotId,
+                DisplayText =
+                    $"{slot.Dentist.Name} ({slot.TimeStart.ToString("HH:mm")} - {slot.TimeEnd.ToString("HH:mm")})"
+            });
+            ViewData["DentistSlotId"] = new SelectList(dentistSlotSelectList, "DentistSlotId", "DisplayText");
+
             ViewData["ServiceId"] = new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text");
-            ViewData["MedicalRecordId"] = new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text");
+
             return Page();
         }
 
@@ -68,7 +82,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             var medicalRecordList = medicalRecords.Select(mr => new SelectListItem
             {
                 Value = mr.MediaRecordId.ToString(),
-                Text = mr.MediaRecordId.ToString()
+                Text = mr.Customer.Name +"-"+ mr.Diagnosis
             }).ToList();
 
             return new JsonResult(medicalRecordList);
@@ -78,17 +92,19 @@ namespace DentistBooking.Pages.StaffPages.Appointments
         {
             if (!ModelState.IsValid)
             {
-                ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers().Result, "UserId", "Name", Appointment.CustomerId);
-                ViewData["DentistSlotId"] = new SelectList(_dentistSlotService.GetAllDentistSlots().Result, "DentistSlotId", "DentistSlotId", Appointment.DentistSlotId);
-                ViewData["ServiceId"] = new SelectList(_service.GetAllServices().Result, "ServiceId", "ServiceName", Appointment.ServiceId);
-                ViewData["MedicalRecordId"] = new SelectList(_medicalRecordService.GetAllMedicalRecords().Result, "MedicalRecordId", "MedicalRecordId", Appointment.MedicalRecordId);
-                return Page();
+                return RedirectToPage();
             }
 
-            _appointmentService.AddAppointment(Appointment);
+            string result = _appointmentService.AddAppointment(Appointment);
+            if (result.Equals("Success"))
+            {
+                TempData["CreateAppointment"] = result;
+            }
+
+            TempData["CreateAppointment"] = "Create successfully!";
             await _hubContext.Clients.All.SendAsync("ReloadAppointments");
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Create");
         }
     }
 }
