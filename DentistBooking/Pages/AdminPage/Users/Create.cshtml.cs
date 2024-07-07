@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using BusinessObject;
 using DataAccess;
 using Service;
+using Microsoft.AspNetCore.SignalR;
 
 namespace DentistBooking.Pages.AdminPage.Users
 {
@@ -15,10 +16,12 @@ namespace DentistBooking.Pages.AdminPage.Users
     {
         private readonly IUserService _userService;
         private readonly IClinicService _clinicService;
-        public CreateModel(IUserService userService, IClinicService clinicService)
+        private readonly IHubContext<SignalRHub> _hubContext;
+        public CreateModel(IUserService userService, IClinicService clinicService, IHubContext<SignalRHub> hubContext)
         {
             _userService = userService;
             _clinicService = clinicService;
+            _hubContext = hubContext;
         }
 
         public IActionResult OnGet()
@@ -41,7 +44,7 @@ namespace DentistBooking.Pages.AdminPage.Users
             User.CreatedDate = DateTime.Now;
             User.Status = true;
             _userService.CreateUser(User);
-
+            await _hubContext.Clients.All.SendAsync("ReloadUsers");
             return RedirectToPage("./Index");
         }
     }

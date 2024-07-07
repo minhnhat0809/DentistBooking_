@@ -42,7 +42,7 @@ namespace DentistBooking.Pages.StaffPages.MedicalRecords
                 return NotFound();
             }
             MedicalRecord = medicalrecord;
-           ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers().Result, "UserId", "Name");
+            ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers().Result, "UserId", "Name");
             return Page();
         }
 
@@ -58,6 +58,8 @@ namespace DentistBooking.Pages.StaffPages.MedicalRecords
            
             try
             {
+                MedicalRecord.TimeStart = DateTime.Now; 
+                MedicalRecord.Duration = TimeOnly.FromDateTime(MedicalRecord.TimeStart);
                 _medicalRecordService.UpdateMedicalRecord(MedicalRecord);
                 await _hubContext.Clients.All.SendAsync("ReloadMedicalRecords");
             }

@@ -36,6 +36,14 @@ connection.on("ReloadPrescriptionMedicines", function () {
     console.log("Reloading PrescriptionMedicines")
     location.reload();
 })
+connection.on("ReloadServices", function () {
+    console.log("Reloading Servives")
+    location.reload();
+})
+connection.on("ReloadUsers", function () {
+    console.log("Reloading Users")
+    location.reload();
+})
 connection.start().then(function () {
     console.log("Connected");
 }).catch(function (err) {

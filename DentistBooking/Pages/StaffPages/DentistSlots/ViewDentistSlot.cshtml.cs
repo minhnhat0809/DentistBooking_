@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Service;
 
-namespace DentistBooking.Pages.StaffPages;
+namespace DentistBooking.Pages.StaffPages.DentistSlots;
 
 public class ViewDentistSlot : PageModel
 {
