@@ -7,16 +7,17 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BusinessObject;
 using DataAccess;
+using Service;
 
-namespace DentistBooking.Pages.Users
+namespace DentistBooking.Pages.AdminPage.Users
 {
     public class DetailsModel : PageModel
     {
-        private readonly BookingDentistDbContext _context;
+        private readonly IUserService _userService;
 
-        public DetailsModel(BookingDentistDbContext context)
+        public DetailsModel(IUserService userService)
         {
-            _context = context;
+            _userService = userService;
         }
 
         public User User { get; set; } = default!;
@@ -28,7 +29,7 @@ namespace DentistBooking.Pages.Users
                 return NotFound();
             }
 
-            var user = await _context.Users.FirstOrDefaultAsync(m => m.UserId == id);
+            var user = await _userService.GetById(id.Value);
             if (user == null)
             {
                 return NotFound();

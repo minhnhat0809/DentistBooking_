@@ -1,5 +1,4 @@
-﻿
-@page
+﻿@page
 @model DentistBooking.Pages.CustomerPage.BookModel
 @{
     ViewData["Title"] = "Book Appointment";
@@ -7,10 +6,8 @@
     var resultMessage = TempData["Book"] as string;
 }
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
 <style>
@@ -69,7 +66,7 @@
 
     <form method="post" asp-page-handler="Book" class="mb-5">
         <div class="form-row">
-            <input type="hidden" asp-for="@Model.serviceId"/>
+            <input type="hidden" asp-for="@Model.serviceId" />
             <div class="form-group col-md-6">
                 <label asp-for="selectedDate" for="datepicker">Select Date:</label>
                 <input asp-for="selectedDate" type="date" id="datepicker" name="selectedDate" class="form-control" autocomplete="off">
@@ -80,7 +77,7 @@
             </div>
             <button type="submit" class="btn btn-success btn-block">Book</button>
         </div>
-    </form> 
+    </form>
     <br />
     <div class="text-xl-center">
         <a href="./ViewServices" class="btn btn-primary btn-sm">Back</a>
@@ -90,10 +87,11 @@
     <div id="customAlertPlaceholder"></div>
 
     <script>
-    $(document).ready(function () {
-        var today = new Date().toISOString().split('T')[0];
-        $('#datepicker').val(today);
-    });
+        $(document).ready(function () {
+            const dateControl = document.querySelector('input[type="date"]'); 
+            const today = new Date().toISOString().split('T')[0];
+            dateControl.value = today;
+        });
 
         $(document).ready(function () {
             var resultMessage = '@resultMessage';
@@ -111,5 +109,5 @@
                 }, 3000);
             }
         });
-</script>
+    </script>
 </div>

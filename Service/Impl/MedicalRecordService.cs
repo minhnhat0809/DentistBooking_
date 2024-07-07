@@ -69,8 +69,10 @@ namespace Service.Impl
             try
             {
                 var existingRecord = _medicalRecordRepo.GetById(medical.MediaRecordId);
-                
 
+
+                medical.TimeStart = DateTime.Now;
+                medical.Duration = TimeOnly.FromDateTime(medical.TimeStart);
                 _medicalRecordRepo.CreateMedicalRecord(medical);
             }
             catch (Exception ex)
@@ -94,7 +96,9 @@ namespace Service.Impl
                 {
                     throw new ExceptionHandler.NotFoundException($"Medical record with ID {medical.MediaRecordId} not found.");
                 }
-
+                medical.TimeStart = DateTime.Now;
+                medical.Duration = TimeOnly.FromDateTime(medical.TimeStart);
+                
                 _medicalRecordRepo.UpdateMedicalRecord(medical);
             }
             catch (Exception ex)
@@ -152,7 +156,7 @@ namespace Service.Impl
             }
         }
 
-        public async Task<IEnumerable<MedicalRecord>> GetMedicalRecordsByCustomerIdAsync(int customerId)
+        public async Task<List<MedicalRecord>> GetMedicalRecordsByCustomerIdAsync(int customerId)
         {
             if (customerId <= 0)
             {
@@ -162,12 +166,16 @@ namespace Service.Impl
             try
             {
                 var models = await _medicalRecordRepo.GetMedicalRecordsByCustomerIdAsync(customerId);
+                var medicalRecords = models.ToList();
+                var s = medicalRecords.Where(m => m.CustomerId == customerId).FirstOrDefault();
+                medicalRecords.Remove(s);
+                medicalRecords.Insert(0, s);
                 if (models == null)
                 {
                     throw new ExceptionHandler.NotFoundException($"Medical record not found.");
                 }
 
-                return models;
+                return medicalRecords;
             }
             catch (Exception ex)
             {

@@ -7,16 +7,17 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BusinessObject;
 using DataAccess;
+using Service;
 
-namespace DentistBooking.Pages.Users
+namespace DentistBooking.Pages.AdminPage.Users
 {
     public class DeleteModel : PageModel
     {
-        private readonly BookingDentistDbContext _context;
+        private readonly IUserService _userService;
 
-        public DeleteModel(BookingDentistDbContext context)
+        public DeleteModel(IUserService userService)
         {
-            _context = context;
+            _userService = userService;
         }
 
         [BindProperty]
@@ -29,7 +30,7 @@ namespace DentistBooking.Pages.Users
                 return NotFound();
             }
 
-            var user = await _context.Users.FirstOrDefaultAsync(m => m.UserId == id);
+            var user = await _userService.GetById(id.Value);
 
             if (user == null)
             {
@@ -49,12 +50,11 @@ namespace DentistBooking.Pages.Users
                 return NotFound();
             }
 
-            var user = await _context.Users.FindAsync(id);
+            var user = await _userService.GetById(id.Value);
             if (user != null)
             {
                 User = user;
-                _context.Users.Remove(User);
-                await _context.SaveChangesAsync();
+                _userService.DeleteUser(user);
             }
 
             return RedirectToPage("./Index");

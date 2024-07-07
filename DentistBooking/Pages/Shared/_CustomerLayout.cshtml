@@ -1,6 +1,4 @@
 ﻿﻿
-<!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -45,26 +43,30 @@
         <div class="navcontainer">
             <nav class="nav">
                 <div class="nav-upper-options">
-                    <a href="/CustomerPage/ViewAppointments" class="nav-option option2">
-                        <i class="fa-solid fa-calendar-days"></i>
-                        My Appointment
-                    </a>
-                    <a href="/CustomerPage/ViewClinic" class="nav-option option3">
-                        <i class="fa-solid fa-house-chimney-medical"></i>
-                        Clinic
-                    </a>
-                    <a href="/CustomerPage/ViewServices" class="nav-option option3">
-                        <i class="fa-solid fa-stethoscope"></i>
-                        Service
-                    </a>
-                    <a href="#" class="nav-option option3">
-                        <i class="fa-solid fa-chalkboard-user"></i>
-                        Medicine Precription
-                    </a>
-                    <a href="#" class="nav-option logout">
+                    <div class="nav-option option2">
+                        <i class="fa-solid fa-users"></i>
+                        <a class="nav-link" href="/appointment/view"> Appointment</a>
+                    </div>
+                    <div class="nav-option option3">
+                        <i class="fa-solid fa-check-to-slot"></i>
+                        <a class="nav-link" href="/book"> Booking</a>
+                    </div>
+                    <div class="nav-option option2">
+                        <i class="fa-solid fa-users"></i>
+                        <a class="nav-link" href="/clinic/view"> Clinic Detail</a>
+                    </div>
+                    <div class="nav-option option2">
+                        <i class="fa-solid fa-users"></i>
+                        <a class="nav-link" href="/services/view"> Services</a>
+                    </div>
+                    <div class="nav-option option3">
+                        <i class="fa-solid fa-check-to-slot"></i>
+                        <a class="nav-link" href="/prescriptions/view"> Prescription</a>
+                    </div>
+                    <div class="nav-option option4">
                         <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                        Logout
-                    </a>
+                        <a class="nav-link" href="/login"> Logout</a>
+                    </div>
                 </div>
             </nav>
         </div>
@@ -81,6 +83,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/nav-option.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

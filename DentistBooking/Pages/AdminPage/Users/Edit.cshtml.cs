@@ -8,16 +8,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BusinessObject;
 using DataAccess;
+using Service;
 
-namespace DentistBooking.Pages.Users
+namespace DentistBooking.Pages.AdminPage.Users
 {
     public class EditModel : PageModel
     {
-        private readonly BookingDentistDbContext _context;
+        private readonly IUserService _userService;
+        private readonly IClinicService _clinicService;
 
-        public EditModel(BookingDentistDbContext context)
+        public EditModel(IUserService userService, IClinicService clinicService)
         {
-            _context = context;
+            _userService = userService;
+            _clinicService = clinicService;
         }
 
         [BindProperty]
@@ -30,14 +33,14 @@ namespace DentistBooking.Pages.Users
                 return NotFound();
             }
 
-            var user = await _context.Users.FirstOrDefaultAsync(m => m.UserId == id);
+            var user = await _userService.GetById(id.Value);
             if (user == null)
             {
                 return NotFound();
             }
             User = user;
-            ViewData["ClinicId"] = new SelectList(_context.Clinics, "ClinicId", "Address");
-            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "RoleName");
+            ViewData["ClinicId"] = new SelectList(_clinicService.GetAllClinics().Result, "ClinicId", "ClinicName");
+            ViewData["RoleId"] = new SelectList(_userService.GetAllRoles().Result, "RoleId", "RoleName");
             return Page();
         }
 
@@ -50,11 +53,11 @@ namespace DentistBooking.Pages.Users
                 return Page();
             }
 
-            _context.Attach(User).State = EntityState.Modified;
+            
 
             try
             {
-                await _context.SaveChangesAsync();
+                _userService.UpdateUser(User);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -73,7 +76,7 @@ namespace DentistBooking.Pages.Users
 
         private bool UserExists(int id)
         {
-            return _context.Users.Any(e => e.UserId == id);
+            return _userService.GetAllUsers().Result.Any(e => e.UserId == id);
         }
     }
 }

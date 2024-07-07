@@ -1,6 +1,8 @@
 ﻿using BusinessObject;
 using BusinessObject.DTO;
 using Repository;
+using Repository.Impl;
+using Service.Exeption;
 using Service.Lib;
 
 namespace Service.Impl
@@ -8,9 +10,11 @@ namespace Service.Impl
     public class UserService : IUserService
     {
         private readonly IUserRepo _userRepo;
-        public UserService(IUserRepo repo)
+        private readonly IRoleRepo _roleRepo;
+        public UserService(IUserRepo repo, IRoleRepo roleRepo)
         {
             _userRepo = repo;
+            _roleRepo = roleRepo;
         }
         private bool IsValidUser(User user)
         {
@@ -48,32 +52,61 @@ namespace Service.Impl
             return userList;
         }
 
-        public List<User> GetAllUserByType(string type)
+        public async Task<List<User>> GetAllUsers()
+        {
+            try
+            {
+                var models = await _userRepo.GetAllUsers();
+                
+                return models;
+            }
+            catch (Exception ex)
+            {
+                // Log exception
+                throw new ExceptionHandler.ServiceException("An error occurred while retrieving", ex);
+            }
+        }
+        public  List<User> GetAllUserByType(string type)
         {
             List<User> userList = new List<User>();
             switch (type)
             {
                 case "All":
-                    userList = _userRepo.GetAllUsers();
+                    userList =   _userRepo.GetAllUsers().Result;
                     break;
                 case "Dentist":
-                    userList = _userRepo.GetAllUsers().Where(u => u.Role.RoleName.Equals("Dentist")).ToList();
+                    userList =  _userRepo.GetAllDentists().Result;   
                     break;
                 case "Customer":
-                    userList = _userRepo.GetAllUsers().Where(u => u.Role.RoleName.Equals("Customer")).ToList();
+                    userList =  _userRepo.GetAllCustomer().Result;
                     break;
                 default:
-                    userList = _userRepo.GetAllUsers();
+                    userList =  _userRepo.GetAllUsers().Result;
                     break;
             }
             return userList;
         }
 
-        public List<User> GetAllUsers()
-        => _userRepo.GetAllUsers();
+        
 
-        public User GetById(int id)
-        => _userRepo.GetById(id);
+        public async Task<User> GetById(int id)
+        {
+            if(id == null)
+            {
+                throw new ExceptionHandler.ServiceException("id not found");
+            }
+            try
+            {
+                var models = await _userRepo.GetById(id);
+
+                return models;
+            }
+            catch (Exception ex)
+            {
+                // Log exception
+                throw new ExceptionHandler.ServiceException("An error occurred while retrieving", ex);
+            }
+        }
 
         public async Task<ResponseDTO> Login(string email, string password)
         {
@@ -121,6 +154,35 @@ namespace Service.Impl
             }
              _userRepo.UpdateUser(user);
         }
-          
+
+        public async Task<List<User>> GetAllCustomers()
+        {
+            try
+            {
+                var models = await _userRepo.GetAllCustomer();
+
+                return models;
+            }
+            catch (Exception ex)
+            {
+                // Log exception
+                throw new ExceptionHandler.ServiceException("An error occurred while retrieving", ex);
+            }
+        }
+
+        public async Task<List<Role>> GetAllRoles()
+        {
+            try
+            {
+                var models = await _roleRepo.GetAll();
+
+                return models;
+            }
+            catch (Exception ex)
+            {
+                // Log exception
+                throw new ExceptionHandler.ServiceException("An error occurred while retrieving", ex);
+            }
+        }
     }
 }

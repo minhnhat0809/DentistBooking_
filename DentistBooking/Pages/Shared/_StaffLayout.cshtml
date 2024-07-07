@@ -9,6 +9,17 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/responsive.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/DentistBooking.styles.css" asp-append-version="true" />
+
+    <!-- Bootstrap Datepicker CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+        
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <!-- Additional scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 </head>
 <body>
     <header>
@@ -49,18 +60,18 @@
                     Users
                 </a>
                 
-                <a href="#" class="nav-option option3">
+                <a href="/StaffPages/Service/Index" class="nav-option option3">
                     <i class="fa-solid fa-list"></i>
                     Services
                 </a>
 
-                <a href="/Users/View" class="nav-option option3">
+                <a href="/StaffPages/Clinics/Details" class="nav-option option3">
                     <i class="fa-solid fa-house-chimney-medical"></i>
                     Clinic
                 </a>
 
                 <a href="/StaffPages/ViewDentistSlot" class="nav-option option3">
-                    <i class="fa-solid fa-house-chimney-medical"></i>
+                    <i class="fa-solid fa-check-to-slot"></i>
                     Dentist Slot
                 </a>
                 
@@ -70,17 +81,17 @@
                 </a>
                 
                 <a href="/StaffPages/Medicines/Index" class="nav-option option3">
-                    <i class="fa-solid fa-calendar-days"></i>
+                    <i class="fa-solid fa-pills"></i>
                     Medicine
                 </a>  
                 
                 <a href="/StaffPages/MedicalRecords/Index" class="nav-option option3">
-                    <i class="fa-solid fa-calendar-days"></i>
+                    <i class="fa-solid fa-clipboard-user"></i>
                     Medical Records
                 </a> 
                 
                 <a href="/StaffPages/Check-upSchedules/Index" class="nav-option option3">
-                    <i class="fa-solid fa-calendar-days"></i>
+                    <i class="fa-regular fa-calendar-check"></i>
                     Check-up Schedule
                 </a>
 

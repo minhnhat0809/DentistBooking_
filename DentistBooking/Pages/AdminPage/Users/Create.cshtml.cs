@@ -6,23 +6,25 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BusinessObject;
+using DataAccess;
 using Service;
 
-namespace DentistBooking.Pages.Users
+namespace DentistBooking.Pages.AdminPage.Users
 {
     public class CreateModel : PageModel
     {
-        private readonly IUserService userService;
-
-        public CreateModel(IUserService userService)
+        private readonly IUserService _userService;
+        private readonly IClinicService _clinicService;
+        public CreateModel(IUserService userService, IClinicService clinicService)
         {
-            this.userService = userService;
+            _userService = userService;
+            _clinicService = clinicService;
         }
 
         public IActionResult OnGet()
         {
-            //ViewData["ClinicId"] = new SelectList(clinicService., "ClinicId", "Address");
-            //ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "RoleName");
+            ViewData["ClinicId"] = new SelectList( _clinicService.GetAllClinics().Result, "ClinicId", "ClinicName");
+            ViewData["RoleId"] = new SelectList( _userService.GetAllRoles().Result, "RoleId", "RoleName");
             return Page();
         }
 
@@ -36,8 +38,9 @@ namespace DentistBooking.Pages.Users
             {
                 return Page();
             }
-
-            userService.CreateUser(User);
+            User.CreatedDate = DateTime.Now;
+            User.Status = true;
+            _userService.CreateUser(User);
 
             return RedirectToPage("./Index");
         }

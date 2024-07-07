@@ -31,7 +31,7 @@ namespace Service.Impl
             return dentistSlots;
         }
 
-        public async Task<DentistSlot> GetDentistSlotById(int dentistSlotId)
+        public async  Task<DentistSlot> GetDentistSlotById(int dentistSlotId)
         {
             return await dentistSlotRepo.GetDentistSlotByID(dentistSlotId);
         }
@@ -43,7 +43,7 @@ namespace Service.Impl
                 return "Dentist Id is null!";
             }
 
-            User dentist = userRepo.GetById(dentistId);
+            User dentist = userRepo.GetById(dentistId).Result;
             if (dentist == null)
             {
                 return "Dentist is not exist!";

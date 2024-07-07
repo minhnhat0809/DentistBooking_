@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,13 +16,13 @@ namespace DentistBooking.Pages.StaffPages.Appointments
     public class EditModel : PageModel
     {
         private readonly IAppointmentService _appointmentService;
-        private readonly IUserService _userService; 
+        private readonly IUserService _userService;
         private readonly IDentistSlotService _dentistSlotService;
         private readonly IMedicalRecordService _medicalRecordService;
         private readonly IService _service;
 
-        public EditModel(IAppointmentService appointmentService, 
-            IUserService userService, IDentistSlotService dentistSlotService, 
+        public EditModel(IAppointmentService appointmentService,
+            IUserService userService, IDentistSlotService dentistSlotService,
             IMedicalRecordService medicalRecordService, IService service)
         {
             _appointmentService = appointmentService;
@@ -31,9 +32,13 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             _service = service;
         }
 
-        [BindProperty]
-        public Appointment Appointment { get; set; } = default!;
+        [BindProperty] public Appointment Appointment { get; set; } = default!;
 
+        public IList<string> Status { get; set; } = default!;
+
+        public IList<MedicalRecord> MedicalRecords { get; set; } = default!;
+
+        public IList<BusinessObject.Service> Services { get; set; } = default!;
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -46,27 +51,36 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             {
                 return NotFound();
             }
+
             Appointment = appointment;
-            ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers(), "UserId", "Name");
-            ViewData["DentistSlotId"] = new SelectList(_dentistSlotService.GetAllDentistSlots().Result, "DentistSlotId", "DentistSlotId");
-            ViewData["ServiceId"] = new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text");
-            ViewData["MedicalRecordId"] = new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text");
+            Status = _appointmentService.GetAllStatusOfAppointment(appointment.AppointmentId);
+            var dentistSlots = await _dentistSlotService.GetAllDentistSlots();
+            var dentistSlotSelectList = dentistSlots.Select(slot => new
+            {
+                slot.DentistSlotId,
+                DisplayText =
+                    $"{slot.Dentist.Name} ({slot.TimeStart.ToString("HH:mm")} - {slot.TimeEnd.ToString("HH:mm")})"
+            });
+            ViewData["DentistSlotId"] = new SelectList(dentistSlotSelectList, "DentistSlotId", "DisplayText");
+            Services = _service.GetAllServicesForCustomer(appointment.ServiceId.Value);
+            
+            MedicalRecords = _medicalRecordService.GetMedicalRecordsByCustomerIdAsync(appointment.CustomerId.Value).Result;
+            
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
-             
+
             try
             {
-                string result = _appointmentService.UpdateAppointmentForStaff(Appointment.ServiceId.Value, Appointment.AppointmentId,
-                    Appointment.TimeStart, Appointment.TimeEnd, Appointment.DentistSlotId.Value);
+                string result = _appointmentService.UpdateAppointments(Appointment.ServiceId.Value,
+                    Appointment.AppointmentId,
+                    Appointment.TimeStart, Appointment.TimeEnd, Appointment.DentistSlotId.Value, Appointment.Status);
                 if (!result.Equals("Success"))
                 {
                     TempData["EditAppointment"] = result;
@@ -75,7 +89,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
                 {
                     TempData["EditAppointment"] = "Update successfully!";
                 }
-                
+
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -89,13 +103,14 @@ namespace DentistBooking.Pages.StaffPages.Appointments
                 }
             }
 
-            return RedirectToPage(new{id = Appointment.AppointmentId});
+            return RedirectToPage(new { id = Appointment.AppointmentId });
         }
 
         private bool AppointmentExists(int id)
         {
             return _appointmentService.GetAllAppointments().Result.Any(e => e.AppointmentId == id);
         }
+
         public async Task<JsonResult> OnGetServicesByDentistSlotAsync(int dentistSlotId)
         {
             var services = await _service.GetServicesByDentistSlotAsync(dentistSlotId);
@@ -107,16 +122,6 @@ namespace DentistBooking.Pages.StaffPages.Appointments
 
             return new JsonResult(serviceList);
         }
-        public async Task<JsonResult> OnGetMedicalRecordByCustomerIdAsync(int customerId)
-        {
-            var medicalRecords = await _medicalRecordService.GetMedicalRecordsByCustomerIdAsync(customerId);
-            var medicalRecordList = medicalRecords.Select(mr => new SelectListItem
-            {
-                Value = mr.MediaRecordId.ToString(),
-                Text = mr.MediaRecordId.ToString()
-            }).ToList();
-
-            return new JsonResult(medicalRecordList);
-        }
+        
     }
 }

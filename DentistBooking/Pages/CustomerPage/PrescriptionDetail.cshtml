@@ -1,0 +1,90 @@
+@page
+@model DentistBooking.Pages.CustomerPage.PrescriptionDetail
+
+@{
+    Layout = "/Pages/Shared/_CustomerLayout.cshtml";
+}
+<style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            margin-top: 20px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table thead {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .table th,
+        .table td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #dee2e6;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .alert {
+            margin-top: 20px;
+            color: #856404;
+            background-color: #fff3cd;
+            border-color: #ffeeba;
+            padding: 15px;
+            border-radius: 8px;
+        }
+    </style>
+<h1>Medicines</h1>
+
+<div>
+    @if (Model.PrescriptionMedicines != null && Model.PrescriptionMedicines.Count > 0)
+    {
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var medicine in Model.PrescriptionMedicines)
+                {
+                    <tr>
+                        <td>@medicine.Medicine.MedicineName</td>
+                        <td>@medicine.Medicine.Type</td>
+                        <td>@medicine.Quantity</td>
+                        <td>@(medicine.Price.HasValue ? String.Format("{0:N3} VND", medicine.Price.Value) : "N/A")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-warning" role="alert">
+            No medicines found.
+        </div>
+    }
+</div>

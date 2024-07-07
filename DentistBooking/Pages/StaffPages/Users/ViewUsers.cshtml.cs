@@ -2,8 +2,9 @@ using BusinessObject;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Service;
+using X.PagedList;
 
-namespace DentistBooking.Pages.StaffPages;
+namespace DentistBooking.Pages.StaffPages.Users;
 
 public class ViewUsers : PageModel
 {
@@ -16,13 +17,15 @@ public class ViewUsers : PageModel
 
     public IList<User> Users { get; set; } = default!;
 
-    [BindProperty(SupportsGet = true)] 
+
+    [BindProperty(SupportsGet = true)]
     public string SelectedUserType { get; set; } = default!;
-    
-    public List<string> Types = new List<string> {"All", "Dentist", "Customer"};
+
+    public List<string> Types = new List<string> { "All", "Dentist", "Customer" };
 
     public void OnGet()
     {
         Users = userService.GetAllUserByType(SelectedUserType);
+
     }
 }

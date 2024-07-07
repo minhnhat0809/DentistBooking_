@@ -1,4 +1,5 @@
 @page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model DentistBooking.Pages.StaffPages.ViewDentistSlot
 
 @{
@@ -57,27 +58,18 @@
         .form-control {
             max-width: 300px;
         }
+
+        /* Additional styles for the datepicker */
+        .datepicker-dropdown {
+            top: calc(100% + 10px) !important; /* Adjust the distance from the input */
+            left: 0 !important; /* Align with the left edge of the input */
+            z-index: 10000; /* Ensure it is on top */
+        }
     </style>
 </head>
 <body>
     <div class="container mt-4">
         <h2>Select Dentist and Date</h2>
-        <form method="post" asp-page-handler="ViewDentistSlot">
-            <div class="form-group">
-                <label for="dentistSelect">Select Dentist:</label>
-                <select id="dentistSelect" class="form-control" asp-for="SelectedDentistId">
-                    @foreach (var dentist in Model.Dentists)
-                    {
-                        <option value="@dentist.UserId">@dentist.Name</option>
-                    }
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="datePicker">Select Date:</label>
-                <input type="text" id="datePicker" class="form-control" asp-for="SelectedDate">
-            </div>
-            <button type="submit" class="btn btn-primary">View Dentist Slot</button>
-        </form>
         
         <form id="createSlotForm" asp-page-handler="CreateDentistSlot">
             <input type="hidden" asp-for="@Model.SelectedDentistId"/>
@@ -99,6 +91,23 @@
                     <button type="submit" class="btn btn-success btn-block">Create Dentist Slot</button>
                 </div>
             </div>
+        </form>
+        
+        <form method="post" asp-page-handler="ViewDentistSlot">
+                    <div class="form-group">
+                        <label for="dentistSelect">Select Dentist:</label>
+                        <select id="dentistSelect" class="form-control" asp-for="SelectedDentistId">
+                            @foreach (var dentist in Model.Dentists)
+                            {
+                                <option value="@dentist.UserId">@dentist.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="datePicker">Select Date:</label>
+                        <input type="text" id="datePicker" class="form-control" asp-for="SelectedDate">
+                    </div>
+                    <button type="submit" class="btn btn-primary">View Dentist Slot</button>
         </form>
 
         @if (Model.DentistSlots != null && Model.DentistSlots.Count > 0)
@@ -138,7 +147,8 @@
             $('#datePicker').datepicker({
                 format: 'yyyy-mm-dd',
                 autoclose: true,
-                todayHighlight: true
+                todayHighlight: true,
+                startDate: new Date()
             });
         });
     </script>

@@ -42,7 +42,7 @@ namespace DentistBooking.Pages.StaffPages.MedicalRecords
                 return NotFound();
             }
             MedicalRecord = medicalrecord;
-           ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers(), "UserId", "Name");
+           ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers().Result, "UserId", "Name");
             return Page();
         }
 

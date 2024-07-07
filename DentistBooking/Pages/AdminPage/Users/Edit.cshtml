@@ -1,5 +1,5 @@
 ﻿@page
-@model EditModel
+@model DentistBooking.Pages.AdminPage.Users.EditModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -17,7 +17,7 @@
             <input type="hidden" asp-for="User.UserId" />
             <div class="form-group">
                 <label asp-for="User.UserName" class="control-label"></label>
-                <input asp-for="User.UserName" class="form-control" />
+                <input asp-for="User.UserName" class="form-control" readonly />
                 <span asp-validation-for="User.UserName" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -52,8 +52,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="User.CreatedDate" class="control-label"></label>
-                <input asp-for="User.CreatedDate" class="form-control" />
-                <span asp-validation-for="User.CreatedDate" class="text-danger"></span>
+                <input asp-for="User.CreatedDate" class="form-control" readonly />
+                @* <span asp-validation-for="User.CreatedDate" class="text-danger"></span> *@
             </div>
             <div class="form-group">
                 <label asp-for="User.Status" class="control-label"></label>
