@@ -9,16 +9,19 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObject;
 using DataAccess;
 using Service;
+using Microsoft.AspNetCore.SignalR;
 
 namespace DentistBooking.Pages.StaffPages.Service
 {
     public class EditModel : PageModel
     {
         private readonly IService _service;
+        private readonly IHubContext<SignalRHub> _hubContext;
 
-        public EditModel(IService service)
+        public EditModel(IService service, IHubContext<SignalRHub> hubContext)
         {
             _service = service;
+            _hubContext = hubContext;
         }
 
         [BindProperty]
@@ -53,6 +56,7 @@ namespace DentistBooking.Pages.StaffPages.Service
             try
             {
                 _service.UpdateService(Service);
+                await _hubContext.Clients.All.SendAsync("ReloadServices");
             }
             catch (DbUpdateConcurrencyException)
             {
