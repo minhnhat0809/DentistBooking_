@@ -69,8 +69,10 @@ namespace Service.Impl
             try
             {
                 var existingRecord = _medicalRecordRepo.GetById(medical.MediaRecordId);
-                
 
+
+                medical.TimeStart = DateTime.Now;
+                medical.Duration = TimeOnly.FromDateTime(medical.TimeStart);
                 _medicalRecordRepo.CreateMedicalRecord(medical);
             }
             catch (Exception ex)
@@ -94,7 +96,9 @@ namespace Service.Impl
                 {
                     throw new ExceptionHandler.NotFoundException($"Medical record with ID {medical.MediaRecordId} not found.");
                 }
-
+                medical.TimeStart = DateTime.Now;
+                medical.Duration = TimeOnly.FromDateTime(medical.TimeStart);
+                
                 _medicalRecordRepo.UpdateMedicalRecord(medical);
             }
             catch (Exception ex)

@@ -1,0 +1,57 @@
+﻿@page
+@model DentistBooking.Pages.DentistPage.Customers.MedicalRecords.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>MedicalRecord</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="MedicalRecord.MediaRecordId" />
+            @* <div class="form-group">
+                <label asp-for="MedicalRecord.TimeStart" class="control-label"></label>
+                <input asp-for="MedicalRecord.TimeStart" class="form-control" />
+                <span asp-validation-for="MedicalRecord.TimeStart" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MedicalRecord.Duration" class="control-label"></label>
+                <input asp-for="MedicalRecord.Duration" class="form-control" />
+                <span asp-validation-for="MedicalRecord.Duration" class="text-danger"></span>
+            </div> *@
+            <div class="form-group">
+                <label asp-for="MedicalRecord.Diagnosis" class="control-label"></label>
+                <input asp-for="MedicalRecord.Diagnosis" class="form-control" />
+                <span asp-validation-for="MedicalRecord.Diagnosis" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MedicalRecord.Status" class="control-label"></label>
+                <input asp-for="MedicalRecord.Status" class="form-control" />
+                <span asp-validation-for="MedicalRecord.Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+               
+                <input type="hidden" asp-for="MedicalRecord.CustomerId" class="form-control" readonly="readonly" />
+                <span asp-validation-for="MedicalRecord.CustomerId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./../Details" asp-route-id="@Model.MedicalRecord.CustomerId">Back to Customer Details</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

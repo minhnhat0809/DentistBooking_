@@ -1,0 +1,67 @@
+﻿@page
+@model DentistBooking.Pages.StaffPages.Service.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Service[0].ServiceName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Service[0].Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Service[0].Status)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Service) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            @if(item.Status == true){
+            <td>Active</td>
+            }else{ 
+            <td>Inactive</td>
+            }
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.ServiceId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.ServiceId">Details</a> 
+                
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<div>
+    @if (Model.Service.HasPreviousPage)
+    {
+    <a asp-page="./Index" asp-route-pageNumber="@(Model.Service.PageNumber - 1)" asp-route-pageSize="@Model.PageSize">Previous</a>
+    }
+    else
+    {
+    <span>Previous</span>
+    }
+
+    @if (Model.Service.HasNextPage)
+    {
+    <a asp-page="./Index" asp-route-pageNumber="@(Model.Service.PageNumber + 1)" asp-route-pageSize="@Model.PageSize">Next</a>
+    }
+    else
+    {
+    <span>Next</span>
+    }
+</div>

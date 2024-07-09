@@ -1,0 +1,58 @@
+﻿@page
+@model DentistBooking.Pages.DentistPage.Customers.MedicalRecords.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+           @*  <th>
+                @Html.DisplayNameFor(model => model.MedicalRecord[0].TimeStart)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MedicalRecord[0].Duration)
+            </th> *@
+            <th>
+                @Html.DisplayNameFor(model => model.MedicalRecord[0].Diagnosis)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MedicalRecord[0].Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MedicalRecord[0].Customer)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.MedicalRecord) {
+        <tr>
+            @* <td>
+                @Html.DisplayFor(modelItem => item.TimeStart)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Duration)
+            </td> *@
+            <td>
+                @Html.DisplayFor(modelItem => item.Diagnosis)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Customer.Name)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.MediaRecordId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.MediaRecordId">Details</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
