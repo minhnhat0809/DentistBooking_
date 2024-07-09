@@ -15,6 +15,24 @@ builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
 {
     options.Conventions.AddPageRoute("/ForgetPassword", "/forget-password");
     options.Conventions.AddPageRoute("/Index", "/login");
+    options.Conventions.AddPageRoute("/AdminPage/Users/Index", "/users-management");
+    options.Conventions.AddPageRoute("/AdminPage/Services/Index", "/services");
+    options.Conventions.AddPageRoute("/AdminPage/Clinics/Index", "/clinics");
+    options.Conventions.AddPageRoute("/AdminPage/DentistSlots/Index", "/dentist-slots");
+    options.Conventions.AddPageRoute("/AdminPage/MedicalRecords/Index", "/medical-records");
+    options.Conventions.AddPageRoute("/AdminPage/Medicines/Index", "/medicine");
+
+    options.Conventions.AddPageRoute("/DentistPage/Customers/Index", "/customers");
+    options.Conventions.AddPageRoute("/DentistPage/Customers/MedicalRecords/Index", "/customers/medical-records");
+    options.Conventions.AddPageRoute("/DentistPage/Prescriptions/Index", "/prescriptions");
+    options.Conventions.AddPageRoute("/DentistPage/Precriptions/PrecriptionMedicones/Index", "/prescriptions/medicine");
+
+    options.Conventions.AddPageRoute("/CustomerPage/ViewServices", "/services/view");
+    options.Conventions.AddPageRoute("/CustomerPage/ViewPrescriptions", "/prescriptions/view");
+    options.Conventions.AddPageRoute("/CustomerPage/ViewClinic", "/clinic/view");
+    options.Conventions.AddPageRoute("/CustomerPage/ViewAppointments", "/appointment/view");
+    options.Conventions.AddPageRoute("/CustomerPage/Book", "/book");
+
 });
 
 builder.Services.AddSignalR();
