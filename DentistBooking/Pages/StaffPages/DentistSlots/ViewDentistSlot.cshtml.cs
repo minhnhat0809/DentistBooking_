@@ -21,6 +21,9 @@ public class ViewDentistSlot : PageModel
     [BindProperty(SupportsGet = true)]
     public DateOnly SelectedDate { get; set; }
 
+    [BindProperty(SupportsGet = true)]
+    public DateOnly SelectedDateForDentist { get; set; }
+
     public IList<User> Dentists = default!;
     
     [BindProperty(SupportsGet = true)]
@@ -45,7 +48,7 @@ public class ViewDentistSlot : PageModel
 
     public IActionResult OnPostCreateDentistSlot()
     {
-        var date = SelectedDate;
+        var date = SelectedDateForDentist;
         DateTime slotTimeStart = new DateTime(date.Year, date.Month, date.Day,
             DentistSlotTimeStart.Hour, DentistSlotTimeStart.Minute, DentistSlotTimeStart.Second);
             
