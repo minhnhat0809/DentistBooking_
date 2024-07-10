@@ -9,6 +9,7 @@ using BusinessObject;
 using DataAccess;
 using Service;
 using Microsoft.AspNetCore.SignalR;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.AdminPage.Users
 {
@@ -32,7 +33,7 @@ namespace DentistBooking.Pages.AdminPage.Users
         }
 
         [BindProperty]
-        public User User { get; set; } = default!;
+        public UserDto User { get; set; } = default!;
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()

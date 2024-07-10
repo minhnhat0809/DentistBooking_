@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Service;
 using BusinessObject;
 using Microsoft.EntityFrameworkCore;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.DentistPage.Prescriptions
 {
@@ -18,7 +19,7 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions
             _prescriptionService = prescriptionService;
         }
 
-        public Prescription Prescription { get; set; } = default!;
+        public PrescriptionDto Prescription { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {

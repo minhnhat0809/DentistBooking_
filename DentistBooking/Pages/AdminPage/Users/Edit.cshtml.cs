@@ -10,6 +10,7 @@ using BusinessObject;
 using DataAccess;
 using Service;
 using Microsoft.AspNetCore.SignalR;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.AdminPage.Users
 {
@@ -26,7 +27,7 @@ namespace DentistBooking.Pages.AdminPage.Users
         }
 
         [BindProperty]
-        public User User { get; set; } = default!;
+        public UserDto User { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {

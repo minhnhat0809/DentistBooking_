@@ -30,7 +30,7 @@ namespace DentistBooking.Pages.AdminPage.Services
                 return NotFound();
             }
 
-            var service = await _service.GetDtoById(id);
+            var service = await _service.GetServiceByID(id);
             if (service == null)
             {
                 return NotFound();

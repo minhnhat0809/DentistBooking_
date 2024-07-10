@@ -1,4 +1,6 @@
-﻿using BusinessObject;
+﻿using AutoMapper;
+using BusinessObject;
+using BusinessObject.DTO;
 using Repository;
 using Repository.Impl;
 using System;
@@ -13,37 +15,80 @@ namespace Service.Impl
     {
         private readonly IDentistSlotRepo dentistSlotRepo;
         private readonly IUserRepo userRepo;
+        private readonly IMapper mapper;
 
-        public DentistSlotService(IDentistSlotRepo dentistSlotRepo, IUserRepo userRepo)
+        public DentistSlotService(IDentistSlotRepo dentistSlotRepo, IUserRepo userRepo, IMapper mapper)
         {
             this.dentistSlotRepo = dentistSlotRepo;
             this.userRepo = userRepo;
+            this.mapper = mapper;
         }
-        public async Task<List<DentistSlot>> GetAllDentistSlots()
+        public async Task<List<DentistSlotDto>> GetAllDentistSlots()
         {
-            List<DentistSlot> dentistServiceList = await dentistSlotRepo.GetAllDentistSlots();
-            return dentistServiceList;
+            try
+            {
+                var models = await dentistSlotRepo.GetAllDentistSlots();
+                if(models == null) 
+                {
+                    throw new Exception("dentist slot not found");
+                }
+                var viewModels = mapper.Map<List<DentistSlotDto>>(models);
+                return viewModels;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("error at get all dentist slot", ex);
+            }
         }
 
-        public async Task<List<DentistSlot>> GetAllDentistSlotsByDentistAndDate(int id, DateOnly selectedDate)
+        public async Task<List<DentistSlotDto>> GetAllDentistSlotsByDentistAndDate(int id, DateOnly selectedDate)
         {
-            List<DentistSlot> dentistSlots = await dentistSlotRepo.GetAllDentistSlotsByDentistAndDate(id, selectedDate);
-            return dentistSlots;
+            try
+            {
+                var models = await dentistSlotRepo.GetAllDentistSlotsByDentistAndDate(id, selectedDate);
+                if (models != null)
+                {
+                    throw new Exception("dentist slot not found");
+                }
+                var viewModels = mapper.Map<List<DentistSlotDto>>(models);
+                return viewModels;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("error at get all dentist slot", ex);
+            }
         }
 
-        public async  Task<DentistSlot> GetDentistSlotById(int dentistSlotId)
+        public async  Task<DentistSlotDto> GetDentistSlotById(int dentistSlotId)
         {
-            return await dentistSlotRepo.GetDentistSlotByID(dentistSlotId);
+
+            try
+            {
+                var model = await dentistSlotRepo.GetDentistSlotByID(dentistSlotId);
+                if (model != null)
+                {
+                    throw new Exception("dentist slot not found");
+                }
+                var viewModel = mapper.Map<DentistSlotDto>(model);
+                return viewModel;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("error at get all dentist slot", ex);
+            }
         }
 
-        public string CreateDentistSlot(int dentistId, DateTime timeStart, DateTime timeEnd)
+        public async Task<string> CreateDentistSlot(int dentistId, DateTime timeStart, DateTime timeEnd)
         {
             if (dentistId <= 0)
             {
                 return "Dentist Id is null!";
             }
 
-            User dentist = userRepo.GetById(dentistId).Result;
+            User dentist = await userRepo.GetById(dentistId);
             if (dentist == null)
             {
                 return "Dentist is not exist!";

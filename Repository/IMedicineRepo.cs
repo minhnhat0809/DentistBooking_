@@ -9,8 +9,8 @@ namespace Repository
 {
     public interface IMedicineRepo
     {
-        public List<Medicine> GetAllMedicines();
-        public Medicine GetById(int? id);
+        public Task<List<Medicine>> GetAllMedicines();
+        public Task<Medicine> GetById(int? id);
         public void CreateMedicine(Medicine medicine);
         public void UpdateMedicine(Medicine medicine);
         public void DeleteMedicine(int id);

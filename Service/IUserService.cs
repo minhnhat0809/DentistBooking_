@@ -5,18 +5,18 @@ namespace Service
 {
     public interface IUserService
     {
-        public Task<List<User>> GetAllUsers();
-        public Task<User> GetById(int id);
-        public void CreateUser(User user);
-        public void UpdateUser(User user);
-        public void DeleteUser(User id);
+        public Task<List<UserDto>> GetAllUsers();
+        public Task<UserDto> GetById(int id);
+        public void CreateUser(UserDto user);
+        public void UpdateUser(UserDto user);
+        public void DeleteUser(UserDto id);
 
         Task<ResponseDTO> Login(string userName, string password);
-        Task<List<User>?> GetAllDentists();
-        Task<List<User>> GetAllCustomers();
-        Task<List<User>?> GetAllDentistsByService(int serviceId);
-        Task<List<Role>> GetAllRoles();
-        List<User> GetAllUserByType(string type);
+        Task<List<UserDto>?> GetAllDentists();
+        Task<List<UserDto>> GetAllCustomers();
+        Task<List<UserDto>?> GetAllDentistsByService(int serviceId);
+        Task<List<RoleDto>> GetAllRoles();
+        Task<List<UserDto>> GetAllUserByType(string type);
 
     }
 }

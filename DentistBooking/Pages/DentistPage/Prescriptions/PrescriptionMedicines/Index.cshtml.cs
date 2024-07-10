@@ -8,6 +8,7 @@ using BusinessObject;
 using Service;
 using Service.Impl;
 using X.PagedList;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.DentistPage.Prescriptions.PrescriptionMedicines
 {
@@ -20,7 +21,7 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions.PrescriptionMedicines
             _prescriptionMedicinesService = prescriptionMedicinesService;
         }
 
-        public IPagedList<PrescriptionMedicine> PrescriptionMedicine { get; set; } = default!;
+        public IPagedList<PrescriptionMedicineDto> PrescriptionMedicine { get; set; } = default!;
         public int PrescriptionId { get; set; }
 
         [BindProperty(SupportsGet = true)]

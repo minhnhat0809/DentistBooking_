@@ -1,4 +1,6 @@
-﻿using Repository;
+﻿using AutoMapper;
+using BusinessObject.DTO;
+using Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,29 +12,32 @@ namespace Service.Impl
     public class DentistService : IDentistService
     {
         private readonly IDentistServiceRepo dentistServiceRepo;
-        private readonly IService service;
-        public DentistService(IDentistServiceRepo dentistServiceRepo, IService service)
+        private readonly IServiceRepo serviceRepo;
+        private readonly IMapper mapper;
+        public DentistService(IDentistServiceRepo dentistServiceRepo, IServiceRepo serviceRepo, IMapper mapper)
         {
             this.dentistServiceRepo = dentistServiceRepo;
-            this.service = service;
+            this.serviceRepo = serviceRepo;
+            this.mapper = mapper;
         }
 
 
-        public List<BusinessObject.Service> GetAllServiceByDentist(int dentistId, int serviceId)
+        public async Task<List<ServiceDto>> GetAllServiceByDentist(int dentistId, int serviceId)
         {
-            List<BusinessObject.Service> services = dentistServiceRepo.GetAllServiceByDentist(dentistId);
-            BusinessObject.Service sErvice = service.GetServiceByID(serviceId);
+            List<BusinessObject.Service> services = await dentistServiceRepo.GetAllServiceByDentist(dentistId);
+            BusinessObject.Service service = await serviceRepo.GetServiceByID(serviceId);
 
             foreach (var s in services)
             {
                 if (s.ServiceId == serviceId)
                 {
                     services.Remove(s);
-                    services.Insert(0, sErvice);
+                    services.Insert(0, service);
                     break;
                 }
             }
-            return services;
+            var viewModels = mapper.Map<List<ServiceDto>>(services);
+            return viewModels;
         }
 
 

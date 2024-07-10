@@ -8,20 +8,23 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObject;
 using DataAccess;
 using Service;
+using BusinessObject.DTO;
+using Microsoft.AspNetCore.SignalR;
 
 namespace DentistBooking.Pages.AdminPage.Clinics
 {
     public class DeleteModel : PageModel
     {
         private readonly IClinicService _clinicService;
-
-        public DeleteModel(IClinicService clinicService)
+        private readonly IHubContext<SignalRHub> _hubContext;
+        public DeleteModel(IClinicService clinicService, IHubContext<SignalRHub> hubContext)
         {
             _clinicService = clinicService;
+            _hubContext = hubContext;
         }
 
         [BindProperty]
-        public Clinic Clinic { get; set; } = default!;
+        public ClinicDto Clinic { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -55,6 +58,8 @@ namespace DentistBooking.Pages.AdminPage.Clinics
             {
                 Clinic = clinic;
                 _clinicService.DeleteClinic(Clinic.ClinicId);
+                await _hubContext.Clients.All.SendAsync("ReloadClinics");
+
             }
 
             return RedirectToPage("./Index");

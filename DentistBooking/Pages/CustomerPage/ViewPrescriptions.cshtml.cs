@@ -1,4 +1,5 @@
 using BusinessObject;
+using BusinessObject.DTO;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Service;
@@ -13,10 +14,10 @@ public class ViewPrescriptions : PageModel
     {
         this.prescriptionService = prescriptionService;
     }
-    public IList<Prescription> Prescriptions { get; set; }
-    public void OnGet()
+    public IList<PrescriptionDto> Prescriptions { get; set; }
+    public async void OnGet()
     {
-        Prescriptions = prescriptionService.GetAllPrescriptionByCustomer
+        Prescriptions = await prescriptionService.GetAllPrescriptionByCustomer
             (Int32.Parse(HttpContext.Session.GetString("ID")));
     }
 }

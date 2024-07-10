@@ -18,10 +18,10 @@ namespace BusinessObject.DTO
 
         public bool? Status { get; set; }
 
-        public string? CustomerName { get; set; }
+        public int? CustomerId { get; set; }
 
-        public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+        public virtual ICollection<AppointmentDto> Appointments { get; set; } = new List<AppointmentDto>();
 
-        public virtual User? Customer { get; set; }
+        public virtual UserDto? Customer { get; set; }
     }
 }

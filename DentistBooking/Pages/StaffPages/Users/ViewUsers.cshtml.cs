@@ -1,4 +1,5 @@
 using BusinessObject;
+using BusinessObject.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Service;
@@ -15,7 +16,7 @@ public class ViewUsers : PageModel
         this.userService = userService;
     }
 
-    public IList<User> Users { get; set; } = default!;
+    public IList<UserDto> Users { get; set; } = default!;
 
 
     [BindProperty(SupportsGet = true)]
@@ -25,7 +26,7 @@ public class ViewUsers : PageModel
 
     public void OnGet()
     {
-        Users = userService.GetAllUserByType(SelectedUserType);
+        Users = userService.GetAllUserByType(SelectedUserType).Result;
 
     }
 }

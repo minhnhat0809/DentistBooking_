@@ -35,31 +35,7 @@ namespace Service.Impl
             }
         }
 
-        public async Task<MedicalRecord> GetById(int? id)
-        {
-            if (id <= 0)
-            {
-                throw new ArgumentException("Invalid medical record ID.", nameof(id));
-            }
-
-            try
-            {
-                var model = await _medicalRecordRepo.GetById(id);
-                if (model == null)
-                {
-                    throw new ExceptionHandler.NotFoundException($"Medical record with ID {id} not found.");
-                }
-
-                return model;
-            }
-            catch (Exception ex)
-            {
-                // Log exception
-                throw new ExceptionHandler.ServiceException("An error occurred while retrieving the medical record.", ex);
-            }
-        }
-
-        public void CreateMedicalRecord(MedicalRecord medical)
+        public async void CreateMedicalRecord(MedicalRecordDto medical)
         {
             if (medical == null)
             {
@@ -68,12 +44,13 @@ namespace Service.Impl
 
             try
             {
-                var existingRecord = _medicalRecordRepo.GetById(medical.MediaRecordId);
+                var model = await _medicalRecordRepo.GetById(medical.MediaRecordId);
 
 
                 medical.TimeStart = DateTime.Now;
                 medical.Duration = TimeOnly.FromDateTime(medical.TimeStart);
-                _medicalRecordRepo.CreateMedicalRecord(medical);
+                model = _mapper.Map<MedicalRecord>(medical);
+                _medicalRecordRepo.CreateMedicalRecord(model);
             }
             catch (Exception ex)
             {
@@ -82,7 +59,7 @@ namespace Service.Impl
             }
         }
 
-        public void UpdateMedicalRecord(MedicalRecord medical)
+        public async void UpdateMedicalRecord(MedicalRecordDto medical)
         {
             if (medical == null)
             {
@@ -91,15 +68,17 @@ namespace Service.Impl
 
             try
             {
-                var existingRecord = _medicalRecordRepo.GetById(medical.MediaRecordId);
-                if (existingRecord == null)
+                var model = await _medicalRecordRepo.GetById(medical.MediaRecordId);
+                if (model == null)
                 {
                     throw new ExceptionHandler.NotFoundException($"Medical record with ID {medical.MediaRecordId} not found.");
                 }
                 medical.TimeStart = DateTime.Now;
                 medical.Duration = TimeOnly.FromDateTime(medical.TimeStart);
                 
-                _medicalRecordRepo.UpdateMedicalRecord(medical);
+                model = _mapper.Map<MedicalRecord>(medical);
+
+                _medicalRecordRepo.UpdateMedicalRecord(model);
             }
             catch (Exception ex)
             {
@@ -132,7 +111,7 @@ namespace Service.Impl
             }
         }
 
-        public async Task<MedicalRecordDto> GetDtoById(int? id)
+        public async Task<MedicalRecordDto> GetById(int? id)
         {
             if (id <= 0)
             {
@@ -156,7 +135,7 @@ namespace Service.Impl
             }
         }
 
-        public async Task<List<MedicalRecord>> GetMedicalRecordsByCustomerIdAsync(int customerId)
+        public async Task<List<MedicalRecordDto>> GetMedicalRecordsByCustomerIdAsync(int customerId)
         {
             if (customerId <= 0)
             {
@@ -174,8 +153,8 @@ namespace Service.Impl
                 {
                     throw new ExceptionHandler.NotFoundException($"Medical record not found.");
                 }
-
-                return medicalRecords;
+                var viewModels = _mapper.Map<List<MedicalRecordDto>>(medicalRecords);
+                return viewModels;
             }
             catch (Exception ex)
             {

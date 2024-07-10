@@ -64,10 +64,10 @@ namespace DataAccess
             context.SaveChanges();
         }
 
-        public List<BusinessObject.Service> getAllServiceByDentist(int dentistId)
+        public async Task< List<BusinessObject.Service>> getAllServiceByDentist(int dentistId)
         {
             var context = new BookingDentistDbContext();
-            List<BusinessObject.Service> services = context.DentistServices.Where(ds => ds.DentistId == dentistId).Select(ds => ds.Service).ToList();
+            List<BusinessObject.Service> services = await context.DentistServices.Where(ds => ds.DentistId == dentistId).Select(ds => ds.Service).ToListAsync();
             return services;
         }
         

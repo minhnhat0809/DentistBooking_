@@ -27,7 +27,7 @@
                 @Html.DisplayNameFor(model => model.MedicalRecord[0].Status)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MedicalRecord[0].CustomerName)
+                @Html.DisplayNameFor(model => model.MedicalRecord[0].CustomerId)
             </th>
             <th></th>
         </tr>
@@ -48,7 +48,7 @@
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CustomerName)
+                    @Html.DisplayFor(modelItem => item.Customer.Name)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.MediaRecordId">Edit</a> |

@@ -5,6 +5,7 @@ using Service;
 using Service.Impl;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.StaffPages
 {
@@ -26,65 +27,65 @@ namespace DentistBooking.Pages.StaffPages
         }
 
         [BindProperty(SupportsGet = true)]
-        public Appointment Appointment { get; set; } = default!;
+        public AppointmentDto Appointment { get; set; } = default!;
 
         [BindProperty]
-        public IList<User> Dentists { get; set; } = default!;
+        public IList<UserDto> Dentists { get; set; } = default!;
         [BindProperty(SupportsGet = true)]
         public TimeOnly DentistSlotTimeStart { get; set; } = default!;
         [BindProperty(SupportsGet = true)]
         public TimeOnly DentistSlotTimeEnd { get; set; } = default!;
         
 
-        public IList<BusinessObject.Service> Services { get; set; } = default!;
-        public IActionResult OnGet(int id)
+        public IList<ServiceDto> Services { get; set; } = default!;
+        public async Task<IActionResult> OnGet(int id)
         {
-            Appointment = appointmentService.GetAppointmentByID(id);
+            Appointment = await appointmentService.GetAppointmentByID(id);
             if (Appointment.DentistSlot != null)
             {
-                Services = dentistService.GetAllServiceByDentist((int)Appointment.DentistSlot.DentistId, (int)Appointment.ServiceId);
+                Services = await dentistService.GetAllServiceByDentist((int)Appointment.DentistSlot.DentistId, (int)Appointment.ServiceId);
             }
             else
             {
-                Services = service.GetAllServicesForCustomer((int)Appointment.ServiceId);
+                Services = await service.GetAllServicesForCustomer((int)Appointment.ServiceId);
             }
-            Dentists = userService.GetAllDentistsByService((int)Appointment.ServiceId).Result;
+            Dentists = await userService.GetAllDentistsByService((int)Appointment.ServiceId);
             
             HttpContext.Session.SetInt32("AppointmentId",Appointment.AppointmentId);
             return Page();
         }
 
-        public IActionResult OnPostUpdate()
+        public async Task<IActionResult> OnPostUpdate()
         {
-             string result = appointmentService.UpdateAppointmentForStaff((int)Appointment.ServiceId,
+             string result = await appointmentService.UpdateAppointmentForStaff((int)Appointment.ServiceId,
                 Appointment.AppointmentId, Appointment.TimeStart, Appointment.TimeEnd, (int)Appointment.DentistSlotId);
             if (!result.Equals("Success"))
             {
                 TempData["ProcessingAppointmentError"] = result;
-                Appointment = appointmentService.GetAppointmentByID(Appointment.AppointmentId);
-                Services = service.GetAllServicesForCustomer((int)Appointment.ServiceId);
-                Dentists = userService.GetAllDentistsByService((int)Appointment.ServiceId).Result;
+                Appointment = await appointmentService.GetAppointmentByID(Appointment.AppointmentId);
+                Services = await service.GetAllServicesForCustomer((int)Appointment.ServiceId);
+                Dentists = await userService.GetAllDentistsByService((int)Appointment.ServiceId);
                 RedirectToPage(new { id = Appointment.AppointmentId });
             }
 
             TempData["ProcessingAppointment"] = "Appointment updated successfully!";
-            Appointment = appointmentService.GetAppointmentByID(Appointment.AppointmentId);
-            Services = service.GetAllServicesForCustomer((int)Appointment.ServiceId);
-            Dentists = userService.GetAllDentistsByService((int)Appointment.ServiceId).Result;
+            Appointment = await appointmentService.GetAppointmentByID(Appointment.AppointmentId);
+            Services = await service.GetAllServicesForCustomer((int)Appointment.ServiceId);
+            Dentists = await userService.GetAllDentistsByService((int)Appointment.ServiceId);
             return RedirectToPage(new { id = Appointment.AppointmentId });
         }
 
-        public IActionResult OnGetDentistByService(int id, int serviceId)
+        public async Task<IActionResult> OnGetDentistByService(int id, int serviceId)
         {
-            Dentists = userService.GetAllDentistsByService(serviceId).Result;
+            Dentists = await userService.GetAllDentistsByService(serviceId);
             var dentistList = Dentists.Select(d => new { userId = d.UserId, userName = d.Name }).ToList();
             return new JsonResult(dentistList);
         }
 
-        public IActionResult OnGetDentistSchedule(int dentistId, DateTime timeStart)
+        public async Task<IActionResult> OnGetDentistSchedule(int dentistId, DateTime timeStart)
         {
             HttpContext.Session.SetInt32("DentistId",dentistId);
-            var dentistSlot = dentistSlotService.GetAllDentistSlotsByDentistAndDate(dentistId, DateOnly.FromDateTime(timeStart)).Result;
+            var dentistSlot = await dentistSlotService.GetAllDentistSlotsByDentistAndDate(dentistId, DateOnly.FromDateTime(timeStart));
             var schedule = dentistSlot.Select(d => new { 
                 Id = d.DentistSlotId,
                 TimeStart = d.TimeStart,
@@ -101,10 +102,10 @@ namespace DentistBooking.Pages.StaffPages
             return new JsonResult(schedule, options);
         }
 
-        public IActionResult OnPostCreateDentistSlot()
+        public async Task<IActionResult> OnPostCreateDentistSlot()
         {
             var apppointmentId = (int)HttpContext.Session.GetInt32("AppointmentId");
-            Appointment = appointmentService.GetAppointmentByID(apppointmentId);
+            Appointment = await appointmentService.GetAppointmentByID(apppointmentId);
             var date = Appointment.TimeStart;
             DateTime slotTimeStart = new DateTime(date.Year, date.Month, date.Day,
                 DentistSlotTimeStart.Hour, DentistSlotTimeStart.Minute, DentistSlotTimeStart.Second);
@@ -112,7 +113,7 @@ namespace DentistBooking.Pages.StaffPages
             DateTime slotTimeEnd = new DateTime(date.Year, date.Month, date.Day,
                 DentistSlotTimeEnd.Hour, DentistSlotTimeEnd.Minute, DentistSlotTimeEnd.Second);
             
-            string result = dentistSlotService.CreateDentistSlot((int)HttpContext.Session.GetInt32("DentistId")
+            string result = await dentistSlotService.CreateDentistSlot((int)HttpContext.Session.GetInt32("DentistId")
                 , slotTimeStart, slotTimeEnd);
             if (!result.Equals("Success"))
             {

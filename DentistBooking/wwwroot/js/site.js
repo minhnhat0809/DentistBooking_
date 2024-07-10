@@ -44,6 +44,10 @@ connection.on("ReloadUsers", function () {
     console.log("Reloading Users")
     location.reload();
 })
+connection.on("ReloadClinics", function () {
+    console.log("Reloading Clinic")
+    location.reload();
+})
 connection.start().then(function () {
     console.log("Connected");
 }).catch(function (err) {

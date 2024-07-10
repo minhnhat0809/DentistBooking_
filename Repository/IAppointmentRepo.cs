@@ -15,11 +15,11 @@ namespace Repository
 
         Task<List<Appointment>> GetAllAppointmentsOfCustomer(int customerId);
 
-        Appointment GetAppointmentById(int id);
+        Task<Appointment> GetAppointmentById(int id);
 
         void UpdateAppointment(Appointment appointment);
         void DeleteAppointment(int appointmentId);
 
-        List<Appointment> GetAllProcessingAppointment();
+        Task<List<Appointment>> GetAllProcessingAppointment();
     }
 }

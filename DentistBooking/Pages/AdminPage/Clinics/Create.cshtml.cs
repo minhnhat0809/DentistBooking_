@@ -7,16 +7,20 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BusinessObject;
 using DataAccess;
+using Repository;
+using Service;
+using BusinessObject.DTO;
+using Microsoft.AspNetCore.SignalR;
 
 namespace DentistBooking.Pages.AdminPage.Clinics
 {
     public class CreateModel : PageModel
     {
-        private readonly DataAccess.BookingDentistDbContext _context;
-
-        public CreateModel(DataAccess.BookingDentistDbContext context)
+        private readonly IClinicService _clinicService;
+        private readonly IHubContext<SignalRHub> _hubContext;
+        public CreateModel(IClinicService clinicService)
         {
-            _context = context;
+            _clinicService = clinicService;
         }
 
         public IActionResult OnGet()
@@ -25,7 +29,7 @@ namespace DentistBooking.Pages.AdminPage.Clinics
         }
 
         [BindProperty]
-        public Clinic Clinic { get; set; } = default!;
+        public ClinicDto Clinic { get; set; } = default!;
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
@@ -35,9 +39,8 @@ namespace DentistBooking.Pages.AdminPage.Clinics
                 return Page();
             }
 
-            _context.Clinics.Add(Clinic);
-            await _context.SaveChangesAsync();
-
+            _clinicService.CreateClinic(Clinic);
+            await _hubContext.Clients.All.SendAsync("ReloadClinics");
             return RedirectToPage("./Index");
         }
     }

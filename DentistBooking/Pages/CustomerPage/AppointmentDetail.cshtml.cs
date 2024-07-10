@@ -1,4 +1,5 @@
 using BusinessObject;
+using BusinessObject.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Service;
@@ -18,26 +19,26 @@ namespace DentistBooking.Pages.CustomerPage
         }
 
         [BindProperty]
-        public Appointment Appointment { get; set; } = default!;
+        public AppointmentDto Appointment { get; set; } = default!;
 
-        public IList<BusinessObject.Service> Services { get; set; } = default!;
-        public void OnGet(int id)
+        public IList<ServiceDto> Services { get; set; } = default!;
+        public async void OnGet(int id)
         {
-            Appointment = appointmentService.GetAppointmentByID(id);
+            Appointment = await appointmentService.GetAppointmentByID(id);
             if (Appointment.DentistSlot != null)
             {
-                Services = dentistService.GetAllServiceByDentist((int)Appointment.DentistSlot.DentistId, (int)Appointment.ServiceId);
+                Services = await dentistService.GetAllServiceByDentist((int)Appointment.DentistSlot.DentistId, (int)Appointment.ServiceId);
             }
             else
             {
-                Services = service.GetAllServicesForCustomer((int)Appointment.ServiceId);
+                Services = await service.GetAllServicesForCustomer((int)Appointment.ServiceId);
             }
         }
 
-        public IActionResult OnPostUpdate()
+        public async Task<IActionResult> OnPostUpdate()
         {
 
-            Dictionary<string, string> result = appointmentService.UpdateAppointment((int)Appointment.ServiceId, 
+            Dictionary<string, string> result = await appointmentService.UpdateAppointment((int)Appointment.ServiceId, 
                 Appointment.AppointmentId, Appointment.TimeStart, (int)Appointment.CustomerId);
             if (!result.ContainsKey("Success"))
             {
@@ -45,27 +46,27 @@ namespace DentistBooking.Pages.CustomerPage
         {
                     TempData["AppointmentDetail"] = item.Value;
                 }
-                Appointment = appointmentService.GetAppointmentByID(Appointment.AppointmentId);
+                Appointment = await appointmentService.GetAppointmentByID(Appointment.AppointmentId);
                 if (Appointment.DentistSlot != null)
                 {
-                    Services = dentistService.GetAllServiceByDentist((int)Appointment.DentistSlot.DentistId, (int)Appointment.ServiceId);
+                    Services = await dentistService.GetAllServiceByDentist((int)Appointment.DentistSlot.DentistId, (int)Appointment.ServiceId);
                 }
                 else
                 {
-                    Services = service.GetAllServicesForCustomer((int)Appointment.ServiceId);
+                    Services = await service.GetAllServicesForCustomer((int)Appointment.ServiceId);
                 }
                 return Page();
             }
 
             TempData["AppointmentDetail"] = "Appointment updated successfully!";
-            Appointment = appointmentService.GetAppointmentByID(Appointment.AppointmentId);
+            Appointment = await appointmentService.GetAppointmentByID(Appointment.AppointmentId);
             if (Appointment.DentistSlot != null)
             {
-                Services = dentistService.GetAllServiceByDentist((int)Appointment.DentistSlot.DentistId, (int)Appointment.ServiceId);
+                Services = await dentistService.GetAllServiceByDentist((int)Appointment.DentistSlot.DentistId, (int)Appointment.ServiceId);
             }
             else
             {
-                Services = service.GetAllServicesForCustomer((int)Appointment.ServiceId);
+                Services = await service.GetAllServicesForCustomer((int)Appointment.ServiceId);
             }
             return Page();
         }

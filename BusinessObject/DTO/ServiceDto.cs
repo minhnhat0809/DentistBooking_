@@ -16,8 +16,8 @@ namespace BusinessObject.DTO
 
         public bool? Status { get; set; }
 
-        public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+        public virtual ICollection<AppointmentDto> Appointments { get; set; } = new List<AppointmentDto>();
 
-        public virtual ICollection<DentistService> DentistServices { get; set; } = new List<DentistService>();
+        public virtual ICollection<DentistServiceDto> DentistServices { get; set; } = new List<DentistServiceDto>();
     }
 }

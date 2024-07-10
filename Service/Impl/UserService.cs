@@ -1,5 +1,7 @@
-﻿using BusinessObject;
+﻿using AutoMapper;
+using BusinessObject;
 using BusinessObject.DTO;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Repository;
 using Repository.Impl;
 using Service.Exeption;
@@ -11,12 +13,14 @@ namespace Service.Impl
     {
         private readonly IUserRepo _userRepo;
         private readonly IRoleRepo _roleRepo;
-        public UserService(IUserRepo repo, IRoleRepo roleRepo)
+        private readonly IMapper _mapper;
+        public UserService(IUserRepo repo, IRoleRepo roleRepo, IMapper mapper)
         {
             _userRepo = repo;
             _roleRepo = roleRepo;
+            _mapper = mapper;
         }
-        private bool IsValidUser(User user)
+        private bool IsValidUser(UserDto user)
         {
             return user != null &&
                    (Validation.ValidateUserName(user.UserName) &&
@@ -25,40 +29,85 @@ namespace Service.Impl
                     Validation.ValidatePhoneNumber(user.PhoneNumber) &&
                     Validation.ValidateEmail(user.Email));
         }
-        public void CreateUser(User user)
+        public void CreateUser(UserDto user)
         {    
             if (!IsValidUser(user))
             {
                 throw new ArgumentException("Invalid user data. Please check all fields.");
             }
-
-            _userRepo.CreateUser(user);
+            var model = _mapper.Map<User>(user);
+            _userRepo.CreateUser(model);
         }
 
-        public void DeleteUser(User id)
-        => _userRepo.DeleteUser(id);
-
-        public async Task<List<User>?> GetAllDentists()
+        public async void DeleteUser(UserDto user)
         {
-            List<User> userList = await _userRepo.GetAllDentists();
-            return userList;
+            try
+            {
+                var model = await _userRepo.GetById(user.UserId);
+                if(model == null)
+                {
+                    throw new ArgumentException("Not found user");
+                }
+                _userRepo.DeleteUser(model);
+            }
+            catch (Exception ex)
+            {
+
+                throw new ArgumentException("Error while delete user", ex);
+            }
         }
 
-        public async Task<List<User>?> GetAllDentistsByService(int serviceId)
+        public async Task<List<UserDto>?> GetAllDentists()
         {
-            List<User> userList = await _userRepo.GetAllDentistsByService(serviceId);
+            try
+            {
+                var models = await _userRepo.GetAllDentists();
+                if (models == null)
+                {
+                    throw new ArgumentException("Not found users");
+                }
+                var viewModels  = _mapper.Map<List<UserDto>>(models);
+                return viewModels;
+            }
+            catch (Exception ex)
+            {
+
+                throw new ArgumentException("Error while delete user", ex);
+            }
             
-
-            return userList;
         }
 
-        public async Task<List<User>> GetAllUsers()
+        public async Task<List<UserDto>?> GetAllDentistsByService(int serviceId)
+        {
+            try
+            {
+                var models = await _userRepo.GetAllDentistsByService(serviceId);
+                if (models == null)
+                {
+                    throw new ArgumentException("Not found users");
+                }
+                var viewModels = _mapper.Map<List<UserDto>>(models);
+                return viewModels;
+            }
+            catch (Exception ex)
+            {
+
+                throw new ArgumentException("Error while delete user", ex);
+            }
+
+        }
+
+        public async Task<List<UserDto>> GetAllUsers()
         {
             try
             {
                 var models = await _userRepo.GetAllUsers();
-                
-                return models;
+                if (models == null)
+                {
+                    throw new ArgumentException("Not found users");
+                }
+                var viewModels = _mapper.Map<List<UserDto>>(models);
+                return viewModels;
             }
             catch (Exception ex)
             {
@@ -66,30 +115,43 @@ namespace Service.Impl
                 throw new ExceptionHandler.ServiceException("An error occurred while retrieving", ex);
             }
         }
-        public  List<User> GetAllUserByType(string type)
+
+        public  async Task<List<UserDto>> GetAllUserByType(string type)
         {
-            List<User> userList = new List<User>();
-            switch (type)
+            List<User> models = new List<User>();
+            
+            try
             {
-                case "All":
-                    userList =   _userRepo.GetAllUsers().Result;
-                    break;
-                case "Dentist":
-                    userList =  _userRepo.GetAllDentists().Result;   
-                    break;
-                case "Customer":
-                    userList =  _userRepo.GetAllCustomer().Result;
-                    break;
-                default:
-                    userList =  _userRepo.GetAllUsers().Result;
-                    break;
+                switch (type)
+                {
+                    case "All":
+                        models = _userRepo.GetAllUsers().Result;
+                        break;
+                    case "Dentist":
+                        models = await _userRepo.GetAllDentists();
+                        break;
+                    case "Customer":
+                        models = await _userRepo.GetAllCustomer();
+                        break;
+                    default:
+                        models = await _userRepo.GetAllUsers();
+                        break;
+                }
+                if(models == null)
+                {
+                    throw new ArgumentException("not found users");
+                }
+                var viewModels = _mapper.Map<List<UserDto>>(models);
+                return viewModels;
             }
-            return userList;
+            catch (Exception ex)
+            {
+
+                throw new ArgumentException("Error while delete user", ex);
+            }
         }
 
-        
-
-        public async Task<User> GetById(int id)
+        public async Task<UserDto> GetById(int id)
         {
             if(id == null)
             {
@@ -97,9 +159,9 @@ namespace Service.Impl
             }
             try
             {
-                var models = await _userRepo.GetById(id);
-
-                return models;
+                var model = await _userRepo.GetById(id);
+                var viewModel = _mapper.Map<UserDto>(model);
+                return viewModel;
             }
             catch (Exception ex)
             {
@@ -146,22 +208,23 @@ namespace Service.Impl
             }            
         }
 
-        public void UpdateUser(User user)
+        public void UpdateUser(UserDto user)
         {
             if (!IsValidUser(user))
             {
                 throw new ArgumentException("Invalid user data. Please check all fields.");
             }
-             _userRepo.UpdateUser(user);
+            var model = _mapper.Map<User>(user);
+             _userRepo.UpdateUser(model);
         }
 
-        public async Task<List<User>> GetAllCustomers()
+        public async Task<List<UserDto>> GetAllCustomers()
         {
             try
             {
                 var models = await _userRepo.GetAllCustomer();
-
-                return models;
+                var viewModels = _mapper.Map<List<UserDto>>(models);  
+                return viewModels;
             }
             catch (Exception ex)
             {
@@ -170,13 +233,13 @@ namespace Service.Impl
             }
         }
 
-        public async Task<List<Role>> GetAllRoles()
+        public async Task<List<RoleDto>> GetAllRoles()
         {
             try
             {
                 var models = await _roleRepo.GetAll();
-
-                return models;
+                var viewModels = _mapper.Map<List<RoleDto>>(models);
+                return viewModels;
             }
             catch (Exception ex)
             {

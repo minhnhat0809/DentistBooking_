@@ -9,6 +9,7 @@ using BusinessObject;
 using DataAccess;
 using Service;
 using Microsoft.AspNetCore.SignalR;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.DentistPage.Prescriptions
 {
@@ -32,7 +33,7 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions
         }
 
         [BindProperty]
-        public Prescription Prescription { get; set; } = default!;
+        public PrescriptionDto Prescription { get; set; } = default!;
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()

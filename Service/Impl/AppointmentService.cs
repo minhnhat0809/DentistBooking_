@@ -1,4 +1,6 @@
-﻿using BusinessObject;
+﻿using AutoMapper;
+using BusinessObject;
+using BusinessObject.DTO;
 using Repository;
 using Service.Exeption;
 using System;
@@ -12,18 +14,22 @@ namespace Service.Impl
     public class AppointmentService : IAppointmentService
     {
         private readonly IAppointmentRepo appointmentRepo;
-        private readonly IDentistSlotService dentistSlotService;
-        private readonly IService service;
+        private readonly IDentistSlotRepo dentistSlotRepo;
+        private readonly IServiceRepo serviceRepo;
         private readonly IUserRepo userRepo;
+        private readonly IMapper mapper;
 
-        public AppointmentService(IAppointmentRepo appointmentRepo, IDentistSlotService dentistSlotService, IService service, IUserRepo userRepo)
+        public AppointmentService(IAppointmentRepo appointmentRepo, IDentistSlotRepo dentistSlotRepo, 
+            IServiceRepo serviceRepo, IUserRepo userRepo,
+            IMapper mapper)
         {
             this.appointmentRepo = appointmentRepo;
-            this.dentistSlotService = dentistSlotService;
-            this.service = service;
+            this.dentistSlotRepo = dentistSlotRepo;
+            this.serviceRepo = serviceRepo;
             this.userRepo = userRepo;
+            this.mapper = mapper;   
         }
-        public string AddAppointment(Appointment appointment)
+        public async Task<string> AddAppointment(AppointmentDto appointment)
         {
             try
             {
@@ -37,8 +43,8 @@ namespace Service.Impl
                     return "Service ID is empty!";
                 }
 
-                BusinessObject.Service sErvice = service.GetServiceByID(appointment.ServiceId.Value);
-                if (sErvice == null)
+                BusinessObject.Service serviceDto = await serviceRepo.GetServiceByID(appointment.ServiceId.Value);
+                if (serviceDto == null)
                 {
                     return "This service is not existed!";
                 }
@@ -47,7 +53,7 @@ namespace Service.Impl
                 {
                     return "Dentist slot ID is empty!";
                 }
-                DentistSlot dentistSlot = dentistSlotService.GetDentistSlotById(appointment.DentistSlotId.Value).Result;
+                DentistSlot dentistSlot = await dentistSlotRepo.GetDentistSlotByID(appointment.DentistSlotId.Value);
                 if (dentistSlot == null)
                 {
                     return "This dentist slot is not existed!";
@@ -96,8 +102,8 @@ namespace Service.Impl
                         }
                     }
                 }
-                
-                appointmentRepo.CreateAppointment(appointment);
+                var viewModel = mapper.Map<Appointment>(appointment);   
+                appointmentRepo.CreateAppointment(viewModel);
                 return "Success";
             }
             catch (Exception e)
@@ -120,8 +126,8 @@ namespace Service.Impl
 
             try
             {
-                BusinessObject.Service sErvice = service.GetServiceByID(serviceId);
-                if (sErvice == null)
+                BusinessObject.Service serviceDto = await serviceRepo.GetServiceByID(serviceId);
+                if (serviceDto == null)
                 {
                     AddError("Service", "Service is not existed!");
                     return errors;
@@ -133,7 +139,7 @@ namespace Service.Impl
                     return errors;
                 }
 
-                List<Appointment> appointments = appointmentRepo.GetAllAppointmentsOfCustomer(customerId).Result;
+                List<Appointment> appointments = await appointmentRepo.GetAllAppointmentsOfCustomer(customerId);
 
                 var appoinmentList = appointments.Where(a => DateOnly.FromDateTime(a.TimeStart) == selectedDate).ToList();
                 
@@ -180,29 +186,32 @@ namespace Service.Impl
             }
         }
 
-        public async Task<List<Appointment>> GetAllAppointments()
+        public async Task<List<AppointmentDto>> GetAllAppointments()
         {
             List<Appointment> appointmentList = new List<Appointment>();
 
             appointmentList = await appointmentRepo.GetAllAppointments();
 
-            return appointmentList;
+            var viewModels = mapper.Map<List<AppointmentDto>>(appointmentList);  
+            return viewModels;
         }
 
-        public async Task<List<Appointment>> GetALlAppointmentsOfCustomer(int customerId)
+        public async Task<List<AppointmentDto>> GetALlAppointmentsOfCustomer(int customerId)
         {
             List<Appointment> appointmentList = new List<Appointment>();
 
             appointmentList = await appointmentRepo.GetAllAppointmentsOfCustomer(customerId);
-            return appointmentList;
+            var viewModels = mapper.Map<List<AppointmentDto>>(appointmentList);
+            return viewModels;
         }
 
-        public Appointment GetAppointmentByID(int appointmentId)
+        public async Task<AppointmentDto> GetAppointmentByID(int appointmentId)
         {
-            Appointment appointment = appointmentRepo.GetAppointmentById(appointmentId);
-            return appointment;
+            Appointment appointment = await appointmentRepo.GetAppointmentById(appointmentId);
+            var viewModel = mapper.Map<AppointmentDto>(appointment);
+            return viewModel;
         }
-        public Dictionary<string, string> UpdateAppointment(int serviceId, int appointmentId, DateTime TimeStart, int customerId)
+        public async Task<Dictionary<string, string>> UpdateAppointment(int serviceId, int appointmentId, DateTime TimeStart, int customerId)
         {
             Dictionary<string, string> errors = new Dictionary<string, string>();
             void AddError(string field, string message)
@@ -217,8 +226,8 @@ namespace Service.Impl
                 return errors;
             }
 
-            BusinessObject.Service sErvice = service.GetServiceByID(serviceId);
-            if (sErvice == null)
+            BusinessObject.Service serviceDto = await serviceRepo.GetServiceByID(serviceId);
+            if (serviceDto == null)
             {
                 AddError("Service", "Service is not existed!");
                 return errors;
@@ -243,7 +252,7 @@ namespace Service.Impl
                 return errors;
             }
 
-            Appointment appointment = appointmentRepo.GetAppointmentById(appointmentId);
+            Appointment appointment = await appointmentRepo.GetAppointmentById(appointmentId);
             if (appointment == null)
             {
                 AddError("Appointment", "Appointment is not existed!");
@@ -307,12 +316,14 @@ namespace Service.Impl
             return isInMorning || isInAfternoon;
         }
 
-        public List<Appointment> GetAllProcessingAppointment()
+        public async Task<List<AppointmentDto>> GetAllProcessingAppointment()
         {
-            return appointmentRepo.GetAllProcessingAppointment();
+            var models = await appointmentRepo.GetAllProcessingAppointment();
+            var viewModels = mapper.Map<List<AppointmentDto>>(models);  
+            return viewModels;
         }
 
-        public string UpdateAppointmentForStaff(int serviceId, int appointmentId, DateTime TimeStart, DateTime TimeEnd, int dentistSlotId)
+        public async Task<string> UpdateAppointmentForStaff(int serviceId, int appointmentId, DateTime TimeStart, DateTime TimeEnd, int dentistSlotId)
         {
             try
             {
@@ -321,8 +332,8 @@ namespace Service.Impl
                 return "Service ID is empty!";
             }
 
-            BusinessObject.Service sErvice = service.GetServiceByID(serviceId);
-            if (sErvice == null)
+            BusinessObject.Service serviceModel = await serviceRepo.GetServiceByID(serviceId);
+            if (serviceModel == null)
             {
                 return "This service is not existed!";
             }
@@ -331,7 +342,7 @@ namespace Service.Impl
             {
                 return "Appointment ID is empty!";
             }
-            Appointment appointment = appointmentRepo.GetAppointmentById(appointmentId);
+            Appointment appointment = await appointmentRepo.GetAppointmentById(appointmentId);
             if (appointment == null)
             {
                 return "This appointment is not existed!";
@@ -341,7 +352,7 @@ namespace Service.Impl
             {
                 return "Dentist slot ID is empty!";
             }
-            DentistSlot dentistSlot = dentistSlotService.GetDentistSlotById(dentistSlotId).Result;
+            DentistSlot dentistSlot = await dentistSlotRepo.GetDentistSlotByID(dentistSlotId);
             if (dentistSlot == null)
             {
                 return "This dentist slot is not existed!";
@@ -398,7 +409,7 @@ namespace Service.Impl
             
         }
 
-        public void PutAppointment(Appointment appointment)
+        public async void PutAppointment(AppointmentDto appointment)
         {
             if (appointment == null)
             {
@@ -407,13 +418,13 @@ namespace Service.Impl
 
             try
             {
-                var existing = appointmentRepo.GetAppointmentById(appointment.AppointmentId);
-                if (existing == null)
+                var model = await appointmentRepo.GetAppointmentById(appointment.AppointmentId);
+                if (model == null)
                 {
                     throw new ExceptionHandler.NotFoundException($"Appointment with ID {appointment.AppointmentId} not found.");
                 }
-
-                appointmentRepo.UpdateAppointment(appointment);
+                model = mapper.Map<Appointment>(appointment);  
+                appointmentRepo.UpdateAppointment(model);
             }
             catch (Exception ex)
             {
@@ -422,7 +433,7 @@ namespace Service.Impl
             }
         }
 
-        public string DeleteAppointment(int appointmentId)
+        public async Task<string> DeleteAppointment(int appointmentId)
         {
             if (appointmentId <= 0)
             {
@@ -431,7 +442,7 @@ namespace Service.Impl
 
             try
             {
-                var existing = appointmentRepo.GetAppointmentById(appointmentId);
+                var existing = await appointmentRepo.GetAppointmentById(appointmentId);
                 if (existing == null)
                 {
                     return $"Appointment with ID {appointmentId} not found.";
@@ -445,7 +456,7 @@ namespace Service.Impl
                 return "An error occurred while deleting the checkup schedule.";
             }
         }
-        public string UpdateAppointments(int serviceId, int appointmentId, DateTime TimeStart, DateTime TimeEnd, int dentistSlotId,
+        public async Task<string> UpdateAppointments(int serviceId, int appointmentId, DateTime TimeStart, DateTime TimeEnd, int dentistSlotId,
             string status)
         {
             try
@@ -455,8 +466,8 @@ namespace Service.Impl
                 return "Service ID is empty!";
             }
 
-            BusinessObject.Service sErvice = service.GetServiceByID(serviceId);
-            if (sErvice == null)
+            BusinessObject.Service serviceDto = await serviceRepo.GetServiceByID(serviceId);
+            if (serviceDto == null)
             {
                 return "This service is not existed!";
             }
@@ -465,7 +476,7 @@ namespace Service.Impl
             {
                 return "Appointment ID is empty!";
             }
-            Appointment appointment = appointmentRepo.GetAppointmentById(appointmentId);
+            Appointment appointment = await appointmentRepo.GetAppointmentById(appointmentId);
             if (appointment == null)
             {
                 return "This appointment is not existed!";
@@ -475,7 +486,7 @@ namespace Service.Impl
             {
                 return "Dentist slot ID is empty!";
             }
-            DentistSlot dentistSlot = dentistSlotService.GetDentistSlotById(dentistSlotId).Result;
+            DentistSlot dentistSlot = await dentistSlotRepo.GetDentistSlotByID(dentistSlotId);
             if (dentistSlot == null)
             {
                 return "This dentist slot is not existed!";
@@ -539,14 +550,14 @@ namespace Service.Impl
             }
         }
 
-        public List<string> GetAllStatusOfAppointment(int appointmentId)
+        public async Task<List<string>> GetAllStatusOfAppointment(int appointmentId)
         {
             List<string> statusList = new List<string> { "Success", "Done", "Finished", "Delete", "Processing"};
             if (appointmentId == 0)
             {
                 return statusList;
             }
-            Appointment appointment = appointmentRepo.GetAppointmentById(appointmentId);
+            Appointment appointment = await appointmentRepo.GetAppointmentById(appointmentId);
 
             var s = statusList.Where(s => s.Equals(appointment.Status)).FirstOrDefault();
             statusList.Remove(s);

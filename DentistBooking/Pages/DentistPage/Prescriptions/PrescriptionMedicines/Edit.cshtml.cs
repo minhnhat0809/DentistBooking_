@@ -11,6 +11,7 @@ using DataAccess;
 using Service.Impl;
 using Microsoft.AspNetCore.SignalR;
 using Service;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.DentistPage.Prescriptions.PrescriptionMedicines
 {
@@ -33,7 +34,7 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions.PrescriptionMedicines
         }
 
         [BindProperty]
-        public PrescriptionMedicine PrescriptionMedicine { get; set; } = default!;
+        public PrescriptionMedicineDto PrescriptionMedicine { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -48,8 +49,8 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions.PrescriptionMedicines
                 return NotFound();
             }
             PrescriptionMedicine = prescriptionmedicine;
-            ViewData["MedicineId"] = new SelectList(_medicineService.GetAllMedicines(), "MedicineId", "MedicineName");
-            ViewData["PrescriptionId"] = new SelectList(_prescriptionService.GetPrescriptions(), "PrescriptionId", "PrescriptionId");
+            ViewData["MedicineId"] = new SelectList(await _medicineService.GetAllMedicines(), "MedicineId", "MedicineName");
+            ViewData["PrescriptionId"] = new SelectList(await _prescriptionService.GetPrescriptions(), "PrescriptionId", "PrescriptionId");
             return Page();
         }
 

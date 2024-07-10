@@ -10,6 +10,7 @@ using BusinessObject;
 using DataAccess;
 using Service;
 using Microsoft.AspNetCore.SignalR;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.StaffPages.Service
 {
@@ -25,7 +26,7 @@ namespace DentistBooking.Pages.StaffPages.Service
         }
 
         [BindProperty]
-        public BusinessObject.Service Service { get; set; } = default!;
+        public ServiceDto Service { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -34,7 +35,7 @@ namespace DentistBooking.Pages.StaffPages.Service
                 return NotFound();
             }
 
-            var service =  _service.GetServiceByID(id);
+            var service = await _service.GetServiceByID(id);
             if (service == null)
             {
                 return NotFound();

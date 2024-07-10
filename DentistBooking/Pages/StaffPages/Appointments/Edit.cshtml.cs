@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObject;
 using DataAccess;
 using Service;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.StaffPages.Appointments
 {
@@ -32,13 +33,13 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             _service = service;
         }
 
-        [BindProperty] public Appointment Appointment { get; set; } = default!;
+        [BindProperty] public AppointmentDto Appointment { get; set; } = default!;
 
         public IList<string> Status { get; set; } = default!;
 
-        public IList<MedicalRecord> MedicalRecords { get; set; } = default!;
+        public IList<MedicalRecordDto> MedicalRecords { get; set; } = default!;
 
-        public IList<BusinessObject.Service> Services { get; set; } = default!;
+        public IList<ServiceDto> Services { get; set; } = default!;
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -46,14 +47,14 @@ namespace DentistBooking.Pages.StaffPages.Appointments
                 return NotFound();
             }
 
-            var appointment = _appointmentService.GetAppointmentByID(id.Value);
+            var appointment = await _appointmentService.GetAppointmentByID(id.Value);
             if (appointment == null)
             {
                 return NotFound();
             }
 
             Appointment = appointment;
-            Status = _appointmentService.GetAllStatusOfAppointment(appointment.AppointmentId);
+            Status = await _appointmentService.GetAllStatusOfAppointment(appointment.AppointmentId);
             var dentistSlots = await _dentistSlotService.GetAllDentistSlots();
             var dentistSlotSelectList = dentistSlots.Select(slot => new
             {
@@ -62,7 +63,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
                     $"{slot.Dentist.Name} ({slot.TimeStart.ToString("HH:mm")} - {slot.TimeEnd.ToString("HH:mm")})"
             });
             ViewData["DentistSlotId"] = new SelectList(dentistSlotSelectList, "DentistSlotId", "DisplayText");
-            Services = _service.GetAllServicesForCustomer(appointment.ServiceId.Value);
+            Services = await _service.GetAllServicesForCustomer(appointment.ServiceId.Value);
             
             MedicalRecords = _medicalRecordService.GetMedicalRecordsByCustomerIdAsync(appointment.CustomerId.Value).Result;
             
@@ -78,7 +79,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
 
             try
             {
-                string result = _appointmentService.UpdateAppointments(Appointment.ServiceId.Value,
+                string result = await _appointmentService.UpdateAppointments(Appointment.ServiceId.Value,
                     Appointment.AppointmentId,
                     Appointment.TimeStart, Appointment.TimeEnd, Appointment.DentistSlotId.Value, Appointment.Status);
                 if (!result.Equals("Success"))
