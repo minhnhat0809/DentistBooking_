@@ -261,7 +261,10 @@ namespace Service.Impl
                 case "Expired":
                     AddError("Status", "Cannot update! This appointment is expired!");
                     return errors;
-                case "Done":
+                case "Finished":
+                    AddError("Status", "Cannot update! This appointment is finished!");
+                    return errors;
+                    case "Done":
                     AddError("Status", "Cannot update! This appointment is done!");
                     return errors;
                 default:

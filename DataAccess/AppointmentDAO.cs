@@ -34,6 +34,7 @@ namespace DataAccess
             var appointment = context.Appointments
                 .Include(x => x.Customer)
                 .Include(x => x.DentistSlot)
+                .ThenInclude(d => d.Dentist)
                 .Include(x => x.MedicalRecord)
                 .Include(x => x.Service)
                 .FirstOrDefault(c => c.AppointmentId == id);
