@@ -62,15 +62,15 @@ namespace DentistBooking.Pages.StaffPages
             {
                 TempData["ProcessingAppointmentError"] = result;
                 Appointment = appointmentService.GetAppointmentByID(Appointment.AppointmentId);
-                Services = service.GetAllServicesForCustomer((int)Appointment.ServiceId);
-                Dentists = userService.GetAllDentistsByService((int)Appointment.ServiceId).Result;
+                Services = service.GetAllServicesForCustomer(Appointment.ServiceId.Value);
+                Dentists = userService.GetAllDentistsByService(Appointment.ServiceId.Value).Result;
                 RedirectToPage(new { id = Appointment.AppointmentId });
             }
 
             TempData["ProcessingAppointment"] = "Appointment updated successfully!";
             Appointment = appointmentService.GetAppointmentByID(Appointment.AppointmentId);
-            Services = service.GetAllServicesForCustomer((int)Appointment.ServiceId);
-            Dentists = userService.GetAllDentistsByService((int)Appointment.ServiceId).Result;
+            Services = service.GetAllServicesForCustomer(Appointment.ServiceId.Value);
+            Dentists = userService.GetAllDentistsByService(Appointment.ServiceId.Value).Result;
             return RedirectToPage(new { id = Appointment.AppointmentId });
         }
 

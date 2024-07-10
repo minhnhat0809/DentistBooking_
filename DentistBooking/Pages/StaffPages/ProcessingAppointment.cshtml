@@ -3,16 +3,12 @@
 @model DentistBooking.Pages.StaffPages.ProcessingAppointmentModel
 @{
     ViewData["Title"] = "Appointment Detail";
-    //Layout = "~/Pages/Shared/_StaffLayout.cshtml";
-    Layout = null;
+    Layout = "~/Pages/Shared/_StaffLayout.cshtml";
     var resultMessage = TempData["ProcessingAppointment"] as string;
     var resultMessageError = TempData["ProcessingAppointmentError"] as string;
     var result = TempData["ProcessingAppointment_DentistSlot"] as string;
 }
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
-<div class="container mt-5">
     <div class="card shadow-sm">
         <div class="card-header bg-primary text-white">
             <h3 class="mb-0">Appointment Detail</h3>
@@ -67,7 +63,7 @@
                             </select>
                         </div>
                         <div class="col-sm-3">
-                            <button type="button" class="btn btn-info btn-block" id="viewScheduleButton">View Schedule</button>
+                        <button type="button" class="btn btn-info btn-block" id="viewScheduleButton" data-toggle="modal" data-target="#exampleModal">View Schedule</button>
                         </div>
                     </div>
 
@@ -110,13 +106,12 @@
         <br />
         <div id="customAlertPlaceholder"></div>
     </div>
-</div>
 
 <div class="text-center">
     <a href="./ProcessingAppointmentList" class="btn btn-primary btn-sm mt-3">Back</a>
 </div>
 
-<div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="scheduleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -166,7 +161,6 @@
         </div>
     </div>
 </div>
-
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
