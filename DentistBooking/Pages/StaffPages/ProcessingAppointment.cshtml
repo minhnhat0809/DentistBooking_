@@ -19,37 +19,36 @@
                 <form method="post" asp-page-handler="Update">
                     <input type="hidden" asp-for="@Model.Appointment.AppointmentId" />
                     <input type="hidden" asp-for="@Model.Appointment.CustomerId" />
-                    <input type="hidden" id="selectedSlotId" name="Appointment.DentistSlotId" />
 
-                    <div class="form-group row">
+                <div class="form-group row m-2">
                         <label class="col-sm-3 col-form-label">Time Start</label>
                         <div class="col-sm-9">
                             <input type="datetime-local" id="timeStart" class="form-control" asp-for="@Model.Appointment.TimeStart" />
                         </div>
                     </div>
 
-                    <div class="form-group row">
+                <div class="form-group row m-2">
                         <label class="col-sm-3 col-form-label">Time End</label>
                         <div class="col-sm-9">
                             <input type="datetime-local" class="form-control" asp-for="@Model.Appointment.TimeEnd" />
                         </div>
                     </div>
 
-                    <div class="form-group row">
+                <div class="form-group row m-2">
                         <label class="col-sm-3 col-form-label">Diagnosis</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" asp-for="@Model.Appointment.Diagnosis" />
                         </div>
                     </div>
 
-                    <div class="form-group row">
+                <div class="form-group row m-2">
                         <label class="col-sm-3 col-form-label">Status</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" asp-for="@Model.Appointment.Status" readonly />
                         </div>
                     </div>
 
-                    <div class="form-group row">
+                <div class="form-group row m-2">
                         <label class="col-sm-3 col-form-label">Dentist</label>
                         <div class="col-sm-6">
                             <select id="dentistId" name="Appointment.DentistSlot.DentistId" class="form-control">
@@ -67,29 +66,28 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
+                <div class="form-group row m-2">
+                    <label class="col-sm-3 col-form-label">Dentist slot</label>
+                    <div class="col-sm-9">
+                        <input type="text" id="selectedSlotId" name="Appointment.DentistSlotId" readonly />
+                    </div>
+                </div>
+
+                    <div class="form-group row m-2">
                         <label class="col-sm-3 col-form-label">Customer</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control-plaintext" value="@Model.Appointment.Customer?.Name" readonly />
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Services</label>
+                <div class="form-group row m-2">
+                        <label class="col-sm-3 col-form-label">Service</label>
                         <div class="col-sm-9">
-                            <select id="serviceId" name="Appointment.ServiceId" class="form-control">
-                                @if (Model.Services != null)
-                                {
-                                    @foreach (var s in Model.Services)
-                                    {
-                                        <option value="@s.ServiceId">@s.ServiceName</option>
-                                    }
-                                }
-                            </select>
+                        <input type="text" asp-for="@Model.Appointment.ServiceId" value="@Model.Service.ServiceName" readonly />
                         </div>
                     </div>
 
-                    <div class="form-group row text-center">
+                    <div class="form-group row text-center m-2">
                         <div class="col-sm-9 offset-sm-3">
                             <button type="submit" class="btn btn-primary btn-block">Update</button>
                         </div>
@@ -178,7 +176,7 @@
 
             setTimeout(function () {
                 alertPlaceholder.children('.alert').alert('close');
-            }, 3000);
+            }, 5000);
         }
         
         var resultMessageError = '@resultMessageError';
@@ -193,7 +191,7 @@
         
                     setTimeout(function () {
                         alertPlaceholder.children('.alert').alert('close');
-                    }, 3000);
+                    }, 5000);
                 }
         
         var result = '@result';
@@ -208,29 +206,8 @@
         
                     setTimeout(function () {
                         alertPlaceholder.children('.alert').alert('close');
-                    }, 3000);
+                    }, 5000);
                 }
-
-        $('#serviceId').change(function () {
-            var serviceId = $(this).val();
-            var appointmentId = @Model.Appointment.AppointmentId;
-            $.ajax({
-                url: '@Url.Page("/StaffPages/ProcessingAppointment", "DentistByService")',
-                data: { serviceId: serviceId },
-                type: 'GET',
-                success: function (data) {
-                    console.log('Data received from server:', data);
-                    var dentistSelect = $('#dentistId');
-                    dentistSelect.empty();
-                    $.each(data, function (index, dentist) {
-                        dentistSelect.append('<option value="' + dentist.userId + '">' + dentist.userName + '</option>');
-                    });
-                },
-                error: function () {
-                    alert('Error retrieving dentist information.');
-                }
-            });
-        });
 
         $('#viewScheduleButton').click(function () {
             var dentistId = $('#dentistId').val();
@@ -272,7 +249,7 @@
                         scheduleBody.append(row);
                     });
 
-                    $('#scheduleModal').modal('show');
+                    //$('#scheduleModal').modal('show');
                 },
                 error: function () {
                     alert('Error retrieving schedule.');
@@ -296,7 +273,7 @@
                         
                         success: function (data) {
                             alert('Dentist slot created successfully.');
-                            $('#scheduleModal').modal('hide');
+                            //$('#scheduleModal').modal('hide');
                         },
                         error: function () {
                             console.log(this.data);
@@ -311,7 +288,18 @@
             var slotId = $(this).attr('data-slot-id');
             console.log(slotId);  
             $('#selectedSlotId').val(slotId);
-            $('#scheduleModal').modal('hide');
+            var alertPlaceholder = $('#customAlertPlaceholder');
+            var s = "Book successfully!";
+            var alertHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'
+                + s
+                + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
+                + '<span aria-hidden="true">&times;</span>'
+                + '</button></div>';
+            alertPlaceholder.html(alertHtml);
+
+            setTimeout(function () {
+                alertPlaceholder.children('.alert').alert('close');
+            }, 5000);
         });
 
         function formatDate(date) {
