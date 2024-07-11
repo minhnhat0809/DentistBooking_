@@ -9,10 +9,12 @@ namespace DentistBooking.Pages.CustomerPage
     public class BookModel : PageModel
     {
         private readonly IAppointmentService appointmentService;
+        private readonly IService service;
 
-        public BookModel(IAppointmentService appointmentService)
+        public BookModel(IAppointmentService appointmentService, IService service)
         {
             this.appointmentService = appointmentService;
+            this.service = service;
 
         }
         [BindProperty]
@@ -25,10 +27,13 @@ namespace DentistBooking.Pages.CustomerPage
         [BindProperty]
         public int serviceId { get; set; }
 
+        public IList<BusinessObject.Service> Services { get; set; } = default!;
+
 
         public void OnGet(int id)
         {
             serviceId = id;
+            Services = service.GetAllServicesForCustomer(serviceId);
         }
 
         public async Task<IActionResult> OnPostBookAsync()
@@ -51,7 +56,7 @@ namespace DentistBooking.Pages.CustomerPage
                 return Page();
             }
             TempData["Book"] = "Appointment created successfully!";
-            return Page();
+            return RedirectToPage(new {id = serviceId});
         }
     }
 }

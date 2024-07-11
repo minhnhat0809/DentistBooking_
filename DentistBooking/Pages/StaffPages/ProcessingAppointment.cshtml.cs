@@ -36,18 +36,13 @@ namespace DentistBooking.Pages.StaffPages
         public TimeOnly DentistSlotTimeEnd { get; set; } = default!;
         
 
-        public IList<BusinessObject.Service> Services { get; set; } = default!;
+        public BusinessObject.Service Service { get; set; } = default!;
         public IActionResult OnGet(int id)
         {
             Appointment = appointmentService.GetAppointmentByID(id);
-            if (Appointment.DentistSlot != null)
-            {
-                Services = dentistService.GetAllServiceByDentist((int)Appointment.DentistSlot.DentistId, (int)Appointment.ServiceId);
-            }
-            else
-            {
-                Services = service.GetAllServicesForCustomer((int)Appointment.ServiceId);
-            }
+
+            Service = service.GetServiceByID(Appointment.ServiceId.Value);
+
             Dentists = userService.GetAllDentistsByService((int)Appointment.ServiceId).Result;
             
             HttpContext.Session.SetInt32("AppointmentId",Appointment.AppointmentId);
@@ -56,29 +51,30 @@ namespace DentistBooking.Pages.StaffPages
 
         public IActionResult OnPostUpdate()
         {
+            if (!Appointment.DentistSlotId.HasValue)
+            {
+                TempData["ProcessingAppointmentError"] = "Please choose dentist slot!";
+                Appointment = appointmentService.GetAppointmentByID(Appointment.AppointmentId);
+                Service = service.GetServiceByID(Appointment.ServiceId.Value);
+                Dentists = userService.GetAllDentistsByService(Appointment.ServiceId.Value).Result;
+                return RedirectToPage(new { id = Appointment.AppointmentId });
+            }
              string result = appointmentService.UpdateAppointmentForStaff((int)Appointment.ServiceId,
                 Appointment.AppointmentId, Appointment.TimeStart, Appointment.TimeEnd, (int)Appointment.DentistSlotId);
             if (!result.Equals("Success"))
             {
                 TempData["ProcessingAppointmentError"] = result;
                 Appointment = appointmentService.GetAppointmentByID(Appointment.AppointmentId);
-                Services = service.GetAllServicesForCustomer(Appointment.ServiceId.Value);
+                Service = service.GetServiceByID(Appointment.ServiceId.Value);
                 Dentists = userService.GetAllDentistsByService(Appointment.ServiceId.Value).Result;
                 RedirectToPage(new { id = Appointment.AppointmentId });
             }
 
             TempData["ProcessingAppointment"] = "Appointment updated successfully!";
             Appointment = appointmentService.GetAppointmentByID(Appointment.AppointmentId);
-            Services = service.GetAllServicesForCustomer(Appointment.ServiceId.Value);
+            Service = service.GetServiceByID(Appointment.ServiceId.Value);
             Dentists = userService.GetAllDentistsByService(Appointment.ServiceId.Value).Result;
             return RedirectToPage(new { id = Appointment.AppointmentId });
-        }
-
-        public IActionResult OnGetDentistByService(int id, int serviceId)
-        {
-            Dentists = userService.GetAllDentistsByService(serviceId).Result;
-            var dentistList = Dentists.Select(d => new { userId = d.UserId, userName = d.Name }).ToList();
-            return new JsonResult(dentistList);
         }
 
         public IActionResult OnGetDentistSchedule(int dentistId, DateTime timeStart)

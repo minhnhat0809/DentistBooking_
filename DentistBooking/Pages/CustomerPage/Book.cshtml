@@ -75,12 +75,24 @@
                 <label asp-for="startTime">Start Time:</label>
                 <input asp-for="startTime" type="time" id="startTime" name="startTime" class="form-control" required>
             </div>
-            <button type="submit" class="btn btn-success btn-block">Book</button>
+            <div class="form-group">
+                <label asp-for="serviceId">Service:</label>
+                <select name="serviceId" class="form-control">
+                    @if (Model.Services != null)
+                    {
+                        @foreach (var s in Model.Services)
+                        {
+                            <option value="@s.ServiceId">@s.ServiceName</option>
+                        }
+                    }
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success btn-block m-3">Book</button>
         </div>
     </form>
     <br />
     <div class="text-xl-center">
-        <a href="./ViewServices" class="btn btn-primary btn-sm">Back</a>
+        <a href="services/view" class="btn btn-primary btn-sm">Back</a>
     </div>
 
     <br />
