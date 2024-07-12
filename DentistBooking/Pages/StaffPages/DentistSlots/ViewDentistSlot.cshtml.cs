@@ -1,4 +1,5 @@
 using BusinessObject;
+using BusinessObject.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Service;
@@ -24,29 +25,29 @@ public class ViewDentistSlot : PageModel
     [BindProperty(SupportsGet = true)]
     public DateOnly SelectedDateForDentist { get; set; }
 
-    public IList<User> Dentists = default!;
+    public IList<UserDto> Dentists = default!;
     
     [BindProperty(SupportsGet = true)]
     public TimeOnly DentistSlotTimeStart { get; set; } = default!;
     [BindProperty(SupportsGet = true)]
     public TimeOnly DentistSlotTimeEnd { get; set; } = default!;
 
-    public IList<DentistSlot> DentistSlots = default!;
-    public void OnGet()
+    public IList<DentistSlotDto> DentistSlots = default!;
+    public async void OnGet()
     {
-        Dentists = userService.GetAllUserByType("Dentist");
+        Dentists = await userService.GetAllUserByType("Dentist");
     }
 
-    public IActionResult OnPostViewDentistSlot()
+    public async Task<IActionResult> OnPostViewDentistSlot()
     {
         DentistSlots = dentistSlotService.GetAllDentistSlotsByDentistAndDate((int)SelectedDentistId, 
             SelectedDate).Result;
 
-        Dentists = userService.GetAllUserByType("Dentist");
+        Dentists = await userService.GetAllUserByType("Dentist");
         return Page();
     }
 
-    public IActionResult OnPostCreateDentistSlot()
+    public async Task<IActionResult> OnPostCreateDentistSlot()
     {
         var date = SelectedDateForDentist;
         DateTime slotTimeStart = new DateTime(date.Year, date.Month, date.Day,
@@ -55,14 +56,14 @@ public class ViewDentistSlot : PageModel
         DateTime slotTimeEnd = new DateTime(date.Year, date.Month, date.Day,
             DentistSlotTimeEnd.Hour, DentistSlotTimeEnd.Minute, DentistSlotTimeEnd.Second);
         
-        string result = dentistSlotService.CreateDentistSlot(SelectedDentistId.Value, slotTimeStart, slotTimeEnd);
+        string result = await dentistSlotService.CreateDentistSlot(SelectedDentistId.Value, slotTimeStart, slotTimeEnd);
         if (!result.Equals("Success"))
         {
             TempData["DentistSlot"] = result;
         }
 
         TempData["DentistSlot"] = "Dentist slot create successfully!";
-        Dentists = userService.GetAllUserByType("Dentist");
+        Dentists = await userService.GetAllUserByType("Dentist");
         return Page();
     }
 }
