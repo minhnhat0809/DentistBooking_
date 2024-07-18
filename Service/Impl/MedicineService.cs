@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using AutoMapper;
 using BusinessObject;
+using BusinessObject.DTO;
 using Repository;
 using Service.Exeption;
 
@@ -9,17 +11,20 @@ namespace Service.Impl
     public class MedicineService : IMedicineService
     {
         private readonly IMedicineRepo _medicineRepo;
+        private readonly IMapper _mapper;
 
-        public MedicineService(IMedicineRepo medicineRepo)
+        public MedicineService(IMedicineRepo medicineRepo, IMapper mapper)
         {
             _medicineRepo = medicineRepo ?? throw new ArgumentNullException(nameof(medicineRepo));
+            _mapper = mapper;
         }
 
-        public List<Medicine> GetAllMedicines()
+        public async Task<List<MedicineDto>> GetAllMedicines()
         {
             try
             {
-                return _medicineRepo.GetAllMedicines();
+                var models = await _medicineRepo.GetAllMedicines();
+                return _mapper.Map<List<MedicineDto>>(models);
             }
             catch (Exception ex)
             {
@@ -28,7 +33,7 @@ namespace Service.Impl
             }
         }
 
-        public Medicine GetById(int? id)
+        public async Task<MedicineDto> GetById(int? id)
         {
             if (id <= 0)
             {
@@ -37,13 +42,13 @@ namespace Service.Impl
 
             try
             {
-                var model = _medicineRepo.GetById(id);
+                var model = await _medicineRepo.GetById(id);
                 if (model == null)
                 {
                     throw new ExceptionHandler.NotFoundException($"Medicine with ID {id} not found.");
                 }
-
-                return model;
+                var viewModel = _mapper.Map<MedicineDto>(model);
+                return viewModel;
             }
             catch (Exception ex)
             {
@@ -52,7 +57,7 @@ namespace Service.Impl
             }
         }
 
-        public void CreateMedicine(Medicine medicine)
+        public async void CreateMedicine(MedicineDto medicine)
         {
             if (medicine == null)
             {
@@ -61,13 +66,13 @@ namespace Service.Impl
 
             try
             {
-                var existingMedicine = _medicineRepo.GetById(medicine.MedicineId);
-                if (existingMedicine != null)
+                var model = await _medicineRepo.GetById(medicine.MedicineId);
+                if (model != null)
                 {
                     throw new InvalidOperationException($"Medicine with ID {medicine.MedicineId} already exists.");
                 }
-
-                _medicineRepo.CreateMedicine(medicine);
+                model = _mapper.Map<Medicine>(medicine);
+                _medicineRepo.CreateMedicine(model);
             }
             catch (Exception ex)
             {
@@ -76,7 +81,7 @@ namespace Service.Impl
             }
         }
 
-        public void UpdateMedicine(Medicine medicine)
+        public async void UpdateMedicine(MedicineDto medicine)
         {
             if (medicine == null)
             {
@@ -85,13 +90,13 @@ namespace Service.Impl
 
             try
             {
-                var existingMedicine = _medicineRepo.GetById(medicine.MedicineId);
-                if (existingMedicine == null)
+                var model =await _medicineRepo.GetById(medicine.MedicineId);
+                if (model == null)
                 {
                     throw new ExceptionHandler.NotFoundException($"Medicine with ID {medicine.MedicineId} not found.");
                 }
-
-                _medicineRepo.UpdateMedicine(medicine);
+                model = _mapper.Map<Medicine>(medicine);
+                _medicineRepo.UpdateMedicine(model);
             }
             catch (Exception ex)
             {
@@ -100,7 +105,7 @@ namespace Service.Impl
             }
         }
 
-        public void DeleteMedicine(int id)
+        public async void DeleteMedicine(int id)
         {
             if (id <= 0)
             {
@@ -109,7 +114,7 @@ namespace Service.Impl
 
             try
             {
-                var existingMedicine = _medicineRepo.GetById(id);
+                var existingMedicine = await _medicineRepo.GetById(id);
                 if (existingMedicine == null)
                 {
                     throw new ExceptionHandler.NotFoundException($"Medicine with ID {id} not found.");

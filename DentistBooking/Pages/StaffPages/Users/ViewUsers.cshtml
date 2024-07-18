@@ -1,0 +1,145 @@
+@page
+@model DentistBooking.Pages.StaffPages.Users.ViewUsers
+
+@{
+    Layout = "~/Pages/Shared/_StaffLayout.cshtml";
+}
+
+<head>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        h2 {
+            color: #343a40;
+            margin-top: 20px;
+        }
+
+        .form-inline {
+            margin-bottom: 20px;
+        }
+
+        .table {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .table th,
+        .table td {
+            border: 2px solid #343a40;
+            padding: 12px 15px;
+        }
+
+        .table thead th {
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            background-color: #343a40;
+            color: #ffffff;
+        }
+
+        .table tbody tr {
+            transition: all 0.3s ease-in-out;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .badge {
+            padding: 8px 12px;
+            font-size: 0.875rem;
+            font-weight: bold;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .badge-success {
+            background-color: #28a745;
+            color: #ffffff;
+        }
+
+        .badge-secondary {
+            background-color: #6c757d;
+            color: #ffffff;
+        }
+
+        .form-control {
+            max-width: 300px;
+        }
+    </style>
+</head>
+
+<h2 class="my-4">User List</h2>
+
+<form method="get" class="form-inline mb-4">
+    <label for="userTypeSelect" class="mr-2 font-weight-bold">View: </label>
+    <select id="userTypeSelect" asp-for="SelectedUserType" class="form-control mr-2" onchange="this.form.submit()">
+        @foreach (var item in Model.Types)
+        {
+            <option value="@item">@item</option>
+        }
+    </select>
+    <noscript>
+        <input type="submit" value="Filter" class="btn btn-primary"/>
+    </noscript>
+</form>
+
+@if (Model.Users != null && Model.Users.Count > 0)
+{
+    <div class="table-responsive">
+        <table class="table table-hover table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>User ID</th>
+                    <th>User Name</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.Users)
+                {
+                    <tr>
+                        <td>@user.UserId</td>
+                        <td>@user.UserName</td>
+                        <td>@user.Name</td>
+                        <td>@user.Email</td>
+                        <td>@user.PhoneNumber</td>
+                        <td>
+                            <span class="badge @(user.Status == true ? "badge-success" : "badge-secondary")">
+                                @(user.Status == true ? "Active" : "Inactive")
+                            </span>
+                        </td>
+                        <td>
+                            <a asp-page="./Details" asp-route-id="@user.UserId" class="btn btn-info btn-sm">View</a>
+                            <a asp-page="./Edit" asp-route-id="@user.UserId" class="btn btn-warning btn-sm">Edit</a>
+                            
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning" role="alert">
+        No users found for the selected type.
+    </div>
+} 
+<script>
+    document.getElementById('userTypeSelect').addEventListener('change', function () {
+        document.querySelector('form').submit();
+    });
+</script>
+
+
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+
+<script src="~/js/site.js"></script>

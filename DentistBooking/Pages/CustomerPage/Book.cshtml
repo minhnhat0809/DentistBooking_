@@ -6,10 +6,8 @@
     var resultMessage = TempData["Book"] as string;
 }
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
 <style>
@@ -68,31 +66,44 @@
 
     <form method="post" asp-page-handler="Book" class="mb-5">
         <div class="form-row">
-            <input type="hidden" asp-for="@Model.serviceId"/>
+            <input type="hidden" asp-for="@Model.serviceId" />
             <div class="form-group col-md-6">
                 <label asp-for="selectedDate" for="datepicker">Select Date:</label>
                 <input asp-for="selectedDate" type="date" id="datepicker" name="selectedDate" class="form-control" autocomplete="off">
             </div>
-                <div class="form-group">
-                    <label asp-for="startTime">Start Time:</label>
-                    <input asp-for="startTime" type="time" id="startTime" name="startTime" class="form-control" required>
-                </div>
-            <button type="submit" class="btn btn-success btn-block">Book</button>
+            <div class="form-group">
+                <label asp-for="startTime">Start Time:</label>
+                <input asp-for="startTime" type="time" id="startTime" name="startTime" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label asp-for="serviceId">Service:</label>
+                <select name="serviceId" class="form-control">
+                    @if (Model.Services != null)
+                    {
+                        @foreach (var s in Model.Services)
+                        {
+                            <option value="@s.ServiceId">@s.ServiceName</option>
+                        }
+                    }
+                </select>
+            </div>
+            <button type="submit" class="btn btn-success btn-block m-3">Book</button>
         </div>
-    </form> 
+    </form>
     <br />
     <div class="text-xl-center">
-        <a href="./ViewServices" class="btn btn-primary btn-sm">Back</a>
+        <a href="services/view" class="btn btn-primary btn-sm">Back</a>
     </div>
 
     <br />
     <div id="customAlertPlaceholder"></div>
 
-<script>
-    $(document).ready(function () {
-        var today = new Date().toISOString().split('T')[0];
-        $('#datepicker').val(today);
-    });
+    <script>
+        $(document).ready(function () {
+            const dateControl = document.querySelector('input[type="date"]'); 
+            const today = new Date().toISOString().split('T')[0];
+            dateControl.value = today;
+        });
 
         $(document).ready(function () {
             var resultMessage = '@resultMessage';
@@ -110,5 +121,5 @@
                 }, 3000);
             }
         });
-</script>
+    </script>
 </div>

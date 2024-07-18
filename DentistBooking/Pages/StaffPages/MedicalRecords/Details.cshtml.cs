@@ -30,7 +30,7 @@ namespace DentistBooking.Pages.StaffPages.MedicalRecords
                 return NotFound();
             }
 
-            var medicalrecord = await _medicalRecordService.GetDtoById(id);
+            var medicalrecord = await _medicalRecordService.GetById(id);
             if (medicalrecord == null)
             {
                 return NotFound();

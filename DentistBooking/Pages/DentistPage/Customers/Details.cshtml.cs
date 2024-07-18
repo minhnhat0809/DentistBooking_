@@ -9,6 +9,7 @@ using BusinessObject;
 using DataAccess;
 using Service;
 using X.PagedList;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.DentistPage.Customers
 {
@@ -23,8 +24,8 @@ namespace DentistBooking.Pages.DentistPage.Customers
             _medicalRecordService = medicalRecordService;
         }
 
-        public User User { get; set; } = default!;
-        public IPagedList<MedicalRecord> MedicalRecords { get; set; } = default!;
+        public UserDto User { get; set; } = default!;
+        public IPagedList<MedicalRecordDto> MedicalRecords { get; set; } = default!;
 
         [BindProperty(SupportsGet = true)]
         public int PageNumber { get; set; } = 1;
@@ -46,8 +47,11 @@ namespace DentistBooking.Pages.DentistPage.Customers
             else
             {
                 User = user;
-                var medicals = await _medicalRecordService.GetMedicalRecordsByCustomerIdAsync(user.UserId);
-                MedicalRecords = medicals.ToPagedList(PageNumber, PageSize);
+                
+                if(user.MedicalRecords.Count!=0){
+                    var medicals = await _medicalRecordService.GetMedicalRecordsByCustomerIdAsync(user.UserId);
+                    MedicalRecords = medicals.ToPagedList(PageNumber, PageSize);
+                }
             }
             return Page();
         }

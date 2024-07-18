@@ -3,7 +3,8 @@
 
 @{
     ViewData["Title"] = "Edit";
-    Layout = "~/Pages/Shared/_Layout.cshtml";
+    Layout = "~/Pages/Shared/_StaffLayout.cshtml";
+    var result = TempData["EditAppointment"] as string;
 }
 
 <h1>Edit</h1>
@@ -32,27 +33,45 @@
             </div>
             <div class="form-group">
                 <label asp-for="Appointment.Status" class="control-label"></label>
-                <input asp-for="Appointment.Status" class="form-control" />
+                <select name="Appointment.Status" class="form-control">
+                    @if (Model.Status != null)
+                    {
+                         @foreach (var s in Model.Status)
+                            { <option value="@s">@s</option> }
+                    }
+                </select>
                 <span asp-validation-for="Appointment.Status" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Appointment.DentistSlotId" class="control-label"></label>
+                <label asp-for="Appointment.DentistSlotId" class="control-label">Dentist</label>
                 <select asp-for="Appointment.DentistSlotId" class="form-control" asp-items="ViewBag.DentistSlotId" id="DentistSlotId"></select>
                 <span asp-validation-for="Appointment.DentistSlotId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Appointment.CustomerId" class="control-label"></label>
-                <select asp-for="Appointment.CustomerId" class="form-control" asp-items="ViewBag.CustomerId" id="CustomerId"></select>
-                <span asp-validation-for="Appointment.CustomerId" class="text-danger"></span>
+                <label asp-for="Appointment.CustomerId" class="control-label">Customer</label>
+                <input asp-for="Appointment.CustomerId" class="form-control" />
             </div>
             <div class="form-group">
-                <label asp-for="Appointment.ServiceId" class="control-label"></label>
-                <select asp-for="Appointment.ServiceId" class="form-control" asp-items="ViewBag.ServiceId" id="ServiceId"></select>
+                <label asp-for="Appointment.ServiceId" class="control-label">Service</label>
+                <select name="Appointment.ServiceId" id="ServiceId" class="form-control">
+                    @if (Model.Services != null)
+                                    {
+                                         @foreach (var s in Model.Services)
+                                            { <option value="@s.ServiceId">@s.ServiceName</option> }
+                                    }
+                </select>
                 <span asp-validation-for="Appointment.ServiceId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Appointment.MedicalRecordId" class="control-label"></label>
-                <select asp-for="Appointment.MedicalRecordId" class="form-control" asp-items="ViewBag.MedicalRecordId" id="MedicalRecordId"></select>
+                <label asp-for="Appointment.MedicalRecordId" class="control-label">Medical Record</label>
+                <select name="Appointment.MedicalRecordId" id="MedicalRecordId" class="form-control">
+                                    @if (Model.MedicalRecords != null)
+                                                    {
+                                                         @foreach (var s in Model.MedicalRecords)
+                                                            { <option value="@s.MediaRecordId"> @s.Customer.Name - @s.Diagnosis</option> }
+                                                    }
+                                </select>
+                                <span asp-validation-for="Appointment.ServiceId" class="text-danger"></span>
                 <span asp-validation-for="Appointment.MedicalRecordId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -61,6 +80,9 @@
         </form>
     </div>
 </div>
+<br/>
+<br/>
+<div id="customAlertPlaceholder"></div>
 
 <div>
     <a asp-page="./Index">Back to List</a>
@@ -71,9 +93,23 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-
     <script type="text/javascript">
         $(document).ready(function () {
+            var result = '@result';
+                            if (result.trim() !== '') {
+                                var alertPlaceholder = $('#customAlertPlaceholder');
+                                var alertHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'
+                                    + result
+                                    + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
+                                    + '<span aria-hidden="true">&times;</span>'
+                                    + '</button></div>';
+                                alertPlaceholder.html(alertHtml);
+                    
+                                setTimeout(function () {
+                                    alertPlaceholder.children('.alert').alert('close');
+                                }, 3000);
+                            }
+                            
             $('#DentistSlotId').change(function () {
                 var dentistSlotId = $(this).val();
                 $.getJSON('@Url.Page("/StaffPages/Appointments/Create", "ServicesByDentistSlot")', { dentistSlotId: dentistSlotId }, function (data) {
@@ -88,19 +124,7 @@
                 });
             });
 
-            $('#CustomerId').change(function () {
-                var customerId = $(this).val();
-                $.getJSON('@Url.Page("/StaffPages/Appointments/Create", "MedicalRecordByCustomerId")', { customerId: customerId }, function (data) {
-                    var medicalRecordSelect = $('#MedicalRecordId');
-                    medicalRecordSelect.empty();
-                    $.each(data, function (index, item) {
-                        medicalRecordSelect.append($('<option>', {
-                            value: item.value,
-                            text: item.text
-                        }));
-                    });
-                });
-            });
+            
         });
     </script>
 }

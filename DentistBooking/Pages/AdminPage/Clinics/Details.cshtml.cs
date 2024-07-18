@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObject;
 using DataAccess;
 using Service;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.AdminPage.Clinics
 {
@@ -20,7 +21,7 @@ namespace DentistBooking.Pages.AdminPage.Clinics
             _clinicService = clinicService; 
         }
 
-        public Clinic Clinic { get; set; } = default!;
+        public ClinicDto Clinic { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {

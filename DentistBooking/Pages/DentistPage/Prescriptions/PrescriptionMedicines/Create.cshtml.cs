@@ -7,6 +7,7 @@ using BusinessObject;
 using Service.Impl;
 using Service;
 using Microsoft.AspNetCore.SignalR;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.DentistPage.Prescriptions.PrescriptionMedicines
 {
@@ -29,19 +30,19 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions.PrescriptionMedicines
         }
 
         [BindProperty]
-        public PrescriptionMedicine PrescriptionMedicine { get; set; } = new PrescriptionMedicine();
+        public PrescriptionMedicineDto PrescriptionMedicine { get; set; } = new PrescriptionMedicineDto();
 
         public SelectList PrescriptionIdSelectList { get; set; }
         public SelectList MedicineIdSelectList { get; set; }
 
-        public IActionResult OnGet(int id)
+        public async Task<IActionResult> OnGet(int id)
         {
             // Initialize PrescriptionId and make it view-only
             PrescriptionMedicine.PrescriptionId = id;
 
             // Populate dropdowns
-            PrescriptionIdSelectList = new SelectList(_prescriptionService.GetPrescriptions(), "PrescriptionId", "PrescriptionId", id);
-            MedicineIdSelectList = new SelectList(_medicineService.GetAllMedicines(), "MedicineId", "MedicineName");
+            PrescriptionIdSelectList = new SelectList(await _prescriptionService.GetPrescriptions(), "PrescriptionId", "PrescriptionId", id);
+            MedicineIdSelectList = new SelectList(await _medicineService.GetAllMedicines(), "MedicineId", "MedicineName");
 
             return Page();
         }
@@ -50,9 +51,11 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions.PrescriptionMedicines
         {
             if (!ModelState.IsValid)
             {
+                PrescriptionIdSelectList = new SelectList(await _prescriptionService.GetPrescriptions(), "PrescriptionId", "PrescriptionId", PrescriptionMedicine.PrescriptionId);
+                MedicineIdSelectList = new SelectList(await _medicineService.GetAllMedicines(), "MedicineId", "MedicineName");
                 return Page();
             }
-
+            PrescriptionMedicine.Status = true;
             _prescriptionMedicinesService.AddPrescriptionMedicine(PrescriptionMedicine);
             await _hubContext.Clients.All.SendAsync("ReloadPrescriptionMedicines");
 

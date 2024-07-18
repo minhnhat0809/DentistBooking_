@@ -3,7 +3,7 @@
 
 @{
     ViewData["Title"] = "Details";
-    Layout = "~/Pages/Shared/_Layout.cshtml";
+    Layout = "~/Pages/Shared/_DentistLayout.cshtml";
 }
 
 <h1>Details</h1>
@@ -80,32 +80,41 @@
         </dd>
     </dl>
 </div>
-<div>
-    <h4>Medical Records</h4>
+
+@if (Model.MedicalRecords != null && Model.MedicalRecords.Any())
+{
+    <div>
+        <h4>Medical Records</h4>
    
     
-    <table class="table">
-        <thead>
-            <tr>
-                <th>@Html.DisplayNameFor(model => model.MedicalRecords.First().Diagnosis)</th>
-                <th>@Html.DisplayNameFor(model => model.MedicalRecords.First().Status)</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var record in Model.MedicalRecords)
-            {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => record.Diagnosis)</td>
-                    <td>@Html.DisplayFor(modelItem => record.Status)</td>
-                    <td>
-                        <a asp-page="./MedicalRecords/Edit" asp-route-id="@record.MediaRecordId" class="btn btn-primary">Edit</a>
-                    </td>
+                    <th>@Html.DisplayNameFor(model => model.MedicalRecords.First().Diagnosis)</th>
+                    <th>@Html.DisplayNameFor(model => model.MedicalRecords.First().Status)</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                @foreach (var record in Model.MedicalRecords)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => record.Diagnosis)</td>
+                        <td>@Html.DisplayFor(modelItem => record.Status)</td>
+                        <td>
+                            <a asp-page="./MedicalRecords/Edit" asp-route-id="@record.MediaRecordId" class="btn btn-primary">Edit</a>|
+                            <a asp-page="./MedicalRecords/Details" asp-route-id="@record.MediaRecordId" class="btn btn-primary">Detail</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>  
+}
 <div>
 
     <a asp-page="./Index">Back to List</a>
 </div>
+
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+
+<script src="~/js/site.js"></script>

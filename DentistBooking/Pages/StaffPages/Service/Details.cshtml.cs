@@ -21,7 +21,7 @@ namespace DentistBooking.Pages.StaffPages.Service
             _service = service;
         }
 
-        public ServiceDto Service { get; set; } = default!;
+        public BusinessObject.DTO.ServiceDto Service { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -30,7 +30,7 @@ namespace DentistBooking.Pages.StaffPages.Service
                 return NotFound();
             }
 
-            var service = await _service.GetDtoById(id);
+            var service = await _service.GetServiceByID(id);
             if (service == null)
             {
                 return NotFound();

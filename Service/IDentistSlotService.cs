@@ -1,4 +1,5 @@
 ﻿using BusinessObject;
+using BusinessObject.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,12 @@ namespace Service
 {
     public interface IDentistSlotService
     {
-        Task<List<DentistSlot>> GetAllDentistSlots();
+        Task<List<DentistSlotDto>> GetAllDentistSlots();
 
-        Task<List<DentistSlot>> GetAllDentistSlotsByDentistAndDate(int id, DateOnly selectedDate);
+        Task<List<DentistSlotDto>> GetAllDentistSlotsByDentistAndDate(int id, DateOnly selectedDate);
 
-        Task<DentistSlot> GetDentistSlot(int dentistSlotId);
+        Task<DentistSlotDto> GetDentistSlotById(int dentistSlotId);
+
+        Task<string> CreateDentistSlot(int dentistId, DateTime timeStart, DateTime timeEnd);
     }
 }

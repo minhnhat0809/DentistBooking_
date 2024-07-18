@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace BusinessObject;
 
@@ -24,7 +25,7 @@ public partial class Appointment
     public int? MedicalRecordId { get; set; }
 
     public virtual User? Customer { get; set; }
-
+    [JsonIgnore]
     public virtual DentistSlot? DentistSlot { get; set; }
 
     public virtual MedicalRecord? MedicalRecord { get; set; }

@@ -27,13 +27,7 @@ namespace DataAccess
                 }
             }
         }
-
-        public PrescriptionMedicine getDentistServiceByID(int id)
-        {
-            var context = new BookingDentistDbContext();
-            var prescriptionMedicine = context.PrescriptionMedicines.FirstOrDefault(c => c.PrescriptionMedicineId == id);
-            return prescriptionMedicine;
-        }
+        
         public async Task<PrescriptionMedicine> GetByID(int id)
         {
             var context = new BookingDentistDbContext();
@@ -47,6 +41,7 @@ namespace DataAccess
             var context = new BookingDentistDbContext();
             var prescriptionMedicines = await context.PrescriptionMedicines
                 .Include(x => x.Prescription)
+                .ThenInclude(p => p.Appointment)
                 .Include(x=>x.Medicine)
                 .ToListAsync();
             return prescriptionMedicines;

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using AutoMapper;
 using BusinessObject;
+using BusinessObject.DTO;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Repository;
 using Service.Exeption;
 
@@ -9,17 +12,19 @@ namespace Service.Impl
     public class ClinicService : IClinicService
     {
         private readonly IClinicRepo _clinicRepo;
-
-        public ClinicService(IClinicRepo clinicRepo)
+        private readonly IMapper _mapper;
+        public ClinicService(IClinicRepo clinicRepo, IMapper mapper)
         {
             _clinicRepo = clinicRepo ?? throw new ArgumentNullException(nameof(clinicRepo));
+            _mapper = mapper;
         }
 
-        public async Task<List<Clinic>> GetAllClinics()
+        public async Task<List<ClinicDto>> GetAllClinics()
         {
             try
             {
-                return await _clinicRepo.GetAllClinics();
+                var models = await _clinicRepo.GetAllClinics();
+                return _mapper.Map<List<ClinicDto>>(models);
             }
             catch (Exception ex)
             {
@@ -28,7 +33,7 @@ namespace Service.Impl
             }
         }
 
-        public async Task<Clinic> GetById(int? id)
+        public async Task<ClinicDto> GetById(int? id)
         {
             if (id <= 0)
             {
@@ -43,7 +48,7 @@ namespace Service.Impl
                     throw new ExceptionHandler.NotFoundException($"Clinic with ID {id} not found.");
                 }
 
-                return model;
+                return _mapper.Map<ClinicDto>(model);
             }
             catch (Exception ex)
             {
@@ -52,22 +57,21 @@ namespace Service.Impl
             }
         }
 
-        public void CreateClinic(Clinic clinic)
+        public async void CreateClinic(ClinicDto clinic)
         {
             if (clinic == null)
             {
                 throw new ArgumentNullException(nameof(clinic), "Clinic cannot be null.");
             }
-
             try
             {
-                var existingClinic = _clinicRepo.GetById(clinic.ClinicId);
-                if (existingClinic != null)
+                var model = await _clinicRepo.GetById(clinic.ClinicId);
+                if (model != null)
                 {
                     throw new InvalidOperationException($"Clinic with ID {clinic.ClinicId} already exists.");
                 }
-
-                _clinicRepo.CreateClinic(clinic);
+                model = _mapper.Map<Clinic>(clinic); 
+                _clinicRepo.CreateClinic(model);
             }
             catch (Exception ex)
             {
@@ -76,7 +80,7 @@ namespace Service.Impl
             }
         }
 
-        public void UpdateClinic(Clinic clinic)
+        public async void UpdateClinic(ClinicDto clinic)
         {
             if (clinic == null)
             {
@@ -85,13 +89,13 @@ namespace Service.Impl
 
             try
             {
-                var existingClinic = _clinicRepo.GetById(clinic.ClinicId);
-                if (existingClinic == null)
+                var model = await _clinicRepo.GetById(clinic.ClinicId);
+                if (model == null)
                 {
                     throw new ExceptionHandler.NotFoundException($"Clinic with ID {clinic.ClinicId} not found.");
                 }
-
-                _clinicRepo.UpdateClinic(clinic);
+                model = _mapper.Map<Clinic>(clinic);
+                _clinicRepo.UpdateClinic(model);
             }
             catch (Exception ex)
             {
@@ -109,8 +113,8 @@ namespace Service.Impl
 
             try
             {
-                var existingClinic = _clinicRepo.GetById(id);
-                if (existingClinic == null)
+                var model = _clinicRepo.GetById(id);
+                if (model == null)
                 {
                     throw new ExceptionHandler.NotFoundException($"Clinic with ID {id} not found.");
                 }

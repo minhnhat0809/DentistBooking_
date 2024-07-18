@@ -45,27 +45,18 @@
         <div class="navcontainer">
             <nav class="nav">
                 <div class="nav-upper-options">
-
-                    <a href="#" class="nav-option option2">
-                        <i class="fa-solid fa-calendar-days"></i>
-                        My Appointment
-                    </a>
-                    <a href="#" class="nav-option option2">
-                        <i class="fa-solid fa-stethoscope"></i>
-                        Services
-                    </a>
-                    <a href="#" class="nav-option option4">
+                    <div class="nav-option option2">
                         <i class="fa-solid fa-users"></i>
-                        Customers
-                    </a>
-                    <a href="#" class="nav-option option6">
-                        <i class="fa-solid fa-gear"></i>
-                        Settings
-                    </a>
-                    <a href="#" class="nav-option logout">
+                        <a class="nav-link" href="/customers"> Customers</a>
+                    </div>
+                    <div class="nav-option option3">
+                        <i class="fa-solid fa-check-to-slot"></i>
+                        <a class="nav-link" href="/prescriptions"> Precription</a>
+                    </div>
+                    <div class="nav-option option4">
                         <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                        Logout
-                    </a>
+                        <a class="nav-link" href="/login"> Logout</a>
+                    </div>             
                 </div>
             </nav>
         </div>
@@ -82,6 +73,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/nav-option.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

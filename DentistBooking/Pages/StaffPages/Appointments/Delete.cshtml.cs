@@ -9,6 +9,7 @@ using BusinessObject;
 using DataAccess;
 using Service;
 using Microsoft.AspNetCore.SignalR;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.StaffPages.Appointments
 {
@@ -24,7 +25,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
         }
 
         [BindProperty]
-        public Appointment Appointment { get; set; } = default!;
+        public AppointmentDto Appointment { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -33,7 +34,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
                 return NotFound();
             }
 
-            var appointment = _appointmentService.GetAppointmentByID(id.Value);
+            var appointment = await _appointmentService.GetAppointmentByID(id.Value);
 
             if (appointment == null)
             {
@@ -53,7 +54,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
                 return NotFound();
             }
 
-            var appointment = _appointmentService.GetAppointmentByID(id.Value);
+            var appointment = await _appointmentService.GetAppointmentByID(id.Value);
             if (appointment != null)
             {
                 Appointment = appointment;

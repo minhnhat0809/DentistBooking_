@@ -1,0 +1,166 @@
+@page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model DentistBooking.Pages.StaffPages.DentistSlots.ViewDentistSlot
+
+@{
+    Layout = "~/Pages/Shared/_StaffLayout.cshtml";
+}
+
+<html>
+<head>
+    <title>Select Dentist and Date</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        h2 {
+            color: #343a40;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .table {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+            .table th,
+            .table td {
+                border: 2px solid #343a40;
+                padding: 12px 15px;
+            }
+
+            .table thead th {
+                text-transform: uppercase;
+                font-size: 0.875rem;
+                background-color: #343a40;
+                color: #ffffff;
+            }
+
+            .table tbody tr {
+                transition: all 0.3s ease-in-out;
+            }
+
+                .table tbody tr:hover {
+                    background-color: #f1f1f1;
+                }
+
+        .form-control {
+            max-width: 300px;
+        }
+
+        /* Additional styles for the datepicker */
+        .datepicker-dropdown {
+            top: calc(100% + 10px) !important; /* Adjust the distance from the input */
+            left: 0 !important; /* Align with the left edge of the input */
+            z-index: 10000; /* Ensure it is on top */
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>Select Dentist and Date</h2>
+
+        <form id="createSlotForm" asp-page-handler="CreateDentistSlot">
+            <input type="hidden" asp-for="@Model.SelectedDentistId" />
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label" for="datePicker">Select Date:</label>
+                <div class="col-sm-9">
+                    <input type="date" id="datePicker" class="form-control" asp-for="SelectedDateForDentist">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Slot Time Start</label>
+                <div class="col-sm-9">
+                    <input type="time" id="slotTimeStart" name="DentistSlotTimeStart" asp-for="DentistSlotTimeStart" class="form-control" required />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Slot Time End</label>
+                <div class="col-sm-9">
+                    <input type="time" id="slotTimeEnd" name="DentistSlotTimeEnd" asp-for="DentistSlotTimeEnd" class="form-control" required />
+                </div>
+            </div>
+            <div class="form-group row text-center">
+                <div class="col-sm-9 offset-sm-3">
+                    <button type="submit" class="btn btn-success btn-block">Create Dentist Slot</button>
+                </div>
+            </div>
+        </form>
+
+        <form method="post" asp-page-handler="ViewDentistSlot">
+            <div class="form-group">
+                <label for="dentistSelect">Select Dentist:</label>
+                <select id="dentistSelect" class="form-control" asp-for="SelectedDentistId">
+                    @foreach (var dentist in Model.Dentists)
+                    {
+                        <option value="@dentist.UserId">@dentist.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="datePicker">Select Date:</label>
+                <input type="date" id="datePicker" class="form-control" asp-for="SelectedDate">
+            </div>
+            <button type="submit" class="btn btn-primary">View Dentist Slot</button>
+        </form>
+
+        @if (Model.DentistSlots != null && Model.DentistSlots.Count > 0)
+        {
+            <div class="table-responsive">
+                <table class="table table-hover table-striped table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Time Start</th>
+                            <th>Time End</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var slot in Model.DentistSlots)
+                        {
+                            <tr>
+                                <td>@slot.TimeStart.ToString("HH:mm")</td>
+                                <td>@slot.TimeEnd.ToString("HH:mm")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else if (Model.SelectedDentistId.HasValue)
+        {
+            <div class="alert alert-warning" role="alert">
+                No slots found for the selected dentist and date.
+            </div>
+        }
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#datePicker').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayHighlight: true,
+                startDate: new Date()
+            });
+        });
+        $(document).ready(function () {
+            const dateControl = document.querySelector('input[type="date"]');
+            const today = new Date().toISOString().split('T')[0];
+            dateControl.value = today;
+        });
+    </script>
+</body>
+</html>

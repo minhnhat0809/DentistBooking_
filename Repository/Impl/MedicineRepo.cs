@@ -10,11 +10,11 @@ namespace Repository.Impl
 {
     public class MedicineRepo : IMedicineRepo
     {
-        public List<Medicine> GetAllMedicines()
-            => MedicineDAO.Instance.getAllMedicines();
+        public async Task<List<Medicine>> GetAllMedicines()
+            => await MedicineDAO.Instance.getAllMedicines();
 
-        public Medicine GetById(int? id)
-            => MedicineDAO.Instance.getMedicineByID(id);
+        public async Task<Medicine> GetById(int? id)
+            => await MedicineDAO.Instance.getMedicineByID(id);
 
         public void CreateMedicine(Medicine medicine)
             => MedicineDAO.Instance.createMedicine(medicine);
@@ -24,7 +24,7 @@ namespace Repository.Impl
 
         public void DeleteMedicine(int id)
         {
-            var model = MedicineDAO.Instance.getMedicineByID(id);
+            var model = MedicineDAO.Instance.getMedicineByID(id).Result;
             MedicineDAO.Instance.deleteMedicine(model);
         }
     }

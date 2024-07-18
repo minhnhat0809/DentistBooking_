@@ -1,4 +1,6 @@
-﻿using BusinessObject;
+﻿using AutoMapper;
+using BusinessObject;
+using BusinessObject.DTO;
 using Repository;
 using Repository.Impl;
 using Service.Exeption;
@@ -9,15 +11,17 @@ namespace Service.Impl
     {
         private readonly IPrescriptionrepo _preScription;
         private readonly IPrescriptionMedicineRepo _prescriptionMedicineRepo;
+        private readonly IMapper _mapper;
 
-        public PrescriptionService(IPrescriptionrepo prescription)
+        public PrescriptionService(IPrescriptionrepo prescription, IMapper mapper)
         {
             _preScription = prescription ?? throw new ArgumentNullException(nameof(prescription));
+            _mapper = mapper;
         }
 
         
 
-        public void CreatePrescription(Prescription prescription)
+        public async void CreatePrescription(PrescriptionDto prescription)
         {
             if (prescription == null)
             {
@@ -26,13 +30,13 @@ namespace Service.Impl
 
             try
             {
-                var existingPrescription = _preScription.GetById(prescription.PrescriptionId);
-                if (existingPrescription != null)
+                var model = await _preScription.GetById(prescription.PrescriptionId);
+                if (model != null)
                 {
                     throw new InvalidOperationException($"Medicine with ID {prescription.PrescriptionId} already exists.");
                 }
-
-                _preScription.CreatePrescription(prescription);
+                model = _mapper.Map<Prescription>(prescription);
+                _preScription.CreatePrescription(model);
             }
             catch (Exception ex)
             {
@@ -41,7 +45,7 @@ namespace Service.Impl
             }
         }
 
-        public void DeletePrescription(int id)
+        public async void DeletePrescription(int id)
         {
             if (id <= 0)
             {
@@ -50,13 +54,13 @@ namespace Service.Impl
 
             try
             {
-                var existingMedicine = _preScription.GetById(id);
-                if (existingMedicine == null)
+                var model = await _preScription.GetById(id);
+                if (model == null)
                 {
                     throw new ExceptionHandler.NotFoundException($"Prescription with ID {id} not found.");
                 }
 
-                _preScription.DeletePrescription(id);
+                _preScription.DeletePrescription(model.PrescriptionId);
             }
             catch (Exception ex)
             {
@@ -65,7 +69,7 @@ namespace Service.Impl
             }
         }
 
-        public Prescription GetById(int id)
+        public async Task<PrescriptionDto> GetById(int id)
         {
             if (id <= 0)
             {
@@ -74,13 +78,13 @@ namespace Service.Impl
 
             try
             {
-                var model = _preScription.GetById(id);
+                var model =  await _preScription.GetById(id);
                 if (model == null)
                 {
                     throw new ExceptionHandler.NotFoundException($"Prescription with ID {id} not found.");
                 }
-
-                return model;
+                var viewModel = _mapper.Map<PrescriptionDto>(model);    
+                return viewModel;
             }
             catch (Exception ex)
             {
@@ -89,11 +93,12 @@ namespace Service.Impl
             }
         }
 
-        public Task<Prescription> GetByIdWithMedicinesAsync(int id)
+        public async Task<PrescriptionDto> GetByIdWithMedicinesAsync(int id)
         {
             try
             {
-                return _preScription.GetByIdWithMedicinesAsync(id);
+                var model = await _preScription.GetByIdWithMedicinesAsync(id);
+                return _mapper.Map<PrescriptionDto>(model);
             }
             catch (Exception ex)
             {
@@ -102,11 +107,21 @@ namespace Service.Impl
             }
         }
 
-        public List<Prescription> GetPrescriptions()
+        public async Task<List<PrescriptionDto>> GetAllPrescriptionByCustomer(int customerId)
         {
+            if(customerId == 0)
+            {
+                throw new Exception("user not found");
+            }
             try
             {
-                return _preScription.GetPrescriptions();
+                var models = await _preScription.GetPrescriptions();
+                if (models == null)
+                {
+                    throw new Exception("Prescriptions not found");
+                }
+                var viewModel = _mapper.Map<List<PrescriptionDto>>(models);
+                return viewModel.Where(s => s.Appointment.CustomerId == customerId).ToList(); 
             }
             catch (Exception ex)
             {
@@ -115,7 +130,26 @@ namespace Service.Impl
             }
         }
 
-        public void UpdatePrescription(Prescription prescription)
+        public async Task<List<PrescriptionDto>> GetPrescriptions()
+
+        {
+            try
+            {
+                var models = await _preScription.GetPrescriptions();
+                if(models == null)
+                {
+                    throw new Exception("Prescriptions not found");
+                }
+                return _mapper.Map<List<PrescriptionDto>>(models);
+            }
+            catch (Exception ex)
+            {
+                // Log exception
+                throw new ExceptionHandler.ServiceException("An error occurred while retrieving Prescription.", ex);
+            }
+        }
+
+        public async void UpdatePrescription(PrescriptionDto prescription)
         {
             if (prescription == null)
             {
@@ -124,13 +158,13 @@ namespace Service.Impl
 
             try
             {
-                var existingMedicine = _preScription.GetById(prescription.PrescriptionId);
-                if (existingMedicine == null)
+                var model = await _preScription.GetById(prescription.PrescriptionId);
+                if (model == null)
                 {
                     throw new ExceptionHandler.NotFoundException($"prescription with ID {prescription.PrescriptionId} not found.");
                 }
-
-                _preScription.UpdatePrescription(prescription);
+                model = _mapper.Map<Prescription>(prescription);
+                _preScription.UpdatePrescription(model);
             }
             catch (Exception ex)
             {

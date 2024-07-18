@@ -9,6 +9,7 @@ using BusinessObject;
 using DataAccess;
 using Service.Impl;
 using Microsoft.AspNetCore.SignalR;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.DentistPage.Prescriptions.PrescriptionMedicines
 {
@@ -24,7 +25,7 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions.PrescriptionMedicines
         }
 
         [BindProperty]
-        public PrescriptionMedicine PrescriptionMedicine { get; set; } = default!;
+        public PrescriptionMedicineDto PrescriptionMedicine { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
