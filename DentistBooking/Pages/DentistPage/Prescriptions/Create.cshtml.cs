@@ -40,8 +40,11 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions
         {
             if (!ModelState.IsValid)
             {
+                ViewData["AppointmentId"] = new SelectList(_appointmentService.GetAllAppointments().Result, "AppointmentId", "AppointmentId");
                 return Page();
             }
+            Prescription.Date = DateOnly.FromDateTime(DateTime.Now);
+            Prescription.Status = true;
             _prescriptionService.CreatePrescription(Prescription);
             await _hubContext.Clients.All.SendAsync("ReloadPrescriptions");
 

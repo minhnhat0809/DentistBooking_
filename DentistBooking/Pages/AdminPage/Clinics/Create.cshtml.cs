@@ -18,9 +18,10 @@ namespace DentistBooking.Pages.AdminPage.Clinics
     {
         private readonly IClinicService _clinicService;
         private readonly IHubContext<SignalRHub> _hubContext;
-        public CreateModel(IClinicService clinicService)
+        public CreateModel(IClinicService clinicService, IHubContext<SignalRHub> hubContext)
         {
             _clinicService = clinicService;
+            _hubContext = hubContext;
         }
 
         public IActionResult OnGet()
@@ -38,7 +39,7 @@ namespace DentistBooking.Pages.AdminPage.Clinics
             {
                 return Page();
             }
-
+            Clinic.Status = true;
             _clinicService.CreateClinic(Clinic);
             await _hubContext.Clients.All.SendAsync("ReloadClinics");
             return RedirectToPage("./Index");

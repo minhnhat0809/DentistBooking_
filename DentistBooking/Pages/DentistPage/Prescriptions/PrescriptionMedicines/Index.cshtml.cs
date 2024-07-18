@@ -31,13 +31,13 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions.PrescriptionMedicines
         public int PageSize { get; set; } = 5;
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            PrescriptionId = id;
+            PrescriptionId = id;    
             var prescriptionMedicines = await _prescriptionMedicinesService.GetAllPrescriptionMedicinesByPrescriptionId(id);
-            PrescriptionMedicine = prescriptionMedicines.ToPagedList(PageNumber, PageSize); 
-            if (PrescriptionMedicine == null || !PrescriptionMedicine.Any())
+            if (prescriptionMedicines == null || !prescriptionMedicines.Any())
             {
                 return NotFound();
             }
+            PrescriptionMedicine = prescriptionMedicines.ToPagedList(PageNumber, PageSize);
             return Page();
         }
     }

@@ -47,8 +47,11 @@ namespace DentistBooking.Pages.DentistPage.Customers
             else
             {
                 User = user;
-                var medicals = await _medicalRecordService.GetMedicalRecordsByCustomerIdAsync(user.UserId);
-                MedicalRecords = medicals.ToPagedList(PageNumber, PageSize);
+                
+                if(user.MedicalRecords.Count!=0){
+                    var medicals = await _medicalRecordService.GetMedicalRecordsByCustomerIdAsync(user.UserId);
+                    MedicalRecords = medicals.ToPagedList(PageNumber, PageSize);
+                }
             }
             return Page();
         }

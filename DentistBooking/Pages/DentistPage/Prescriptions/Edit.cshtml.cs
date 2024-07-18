@@ -38,6 +38,7 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions
             }
 
             var prescription = await _prescriptionService.GetByIdWithMedicinesAsync(id.Value);
+            prescription.PrescriptionMedicines = prescription.PrescriptionMedicines.Where(x=>x.Status == true).ToList();
             if (prescription == null)
             {
                 return NotFound();
@@ -53,6 +54,8 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions
         {
             if (!ModelState.IsValid)
             {
+
+                ViewData["AppointmentId"] = new SelectList(_appointmentService.GetAllAppointments().Result, "AppointmentId", "AppointmentId");
                 return Page();
             }
 

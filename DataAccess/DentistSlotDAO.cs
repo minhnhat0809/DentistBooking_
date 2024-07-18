@@ -31,7 +31,10 @@ namespace DataAccess
         public async Task<DentistSlot> getDentistSlotByID(int id)
         {
             var context = new BookingDentistDbContext();
-            var dentistSlot = await context.DentistSlots.Include(ds => ds.Appointments).FirstOrDefaultAsync(c => c.DentistSlotId == id);
+            var dentistSlot = await context.DentistSlots
+                .Include(x=> x.Dentist)
+                .Include(ds => ds.Appointments)
+                .FirstOrDefaultAsync(c => c.DentistSlotId == id);
             return dentistSlot;
         }
 

@@ -67,7 +67,7 @@ namespace Service.Impl
             try
             {
                 var model = await dentistSlotRepo.GetDentistSlotByID(dentistSlotId);
-                if (model != null)
+                if (model == null)
                 {
                     throw new Exception("dentist slot not found");
                 }

@@ -27,8 +27,7 @@ namespace DentistBooking.Pages.AdminPage.Users
 
         public IActionResult OnGet()
         {
-            ViewData["ClinicId"] = new SelectList( _clinicService.GetAllClinics().Result, "ClinicId", "ClinicName");
-            ViewData["RoleId"] = new SelectList( _userService.GetAllRoles().Result, "RoleId", "RoleName");
+            PopulateSelectLists();
             return Page();
         }
 
@@ -40,13 +39,20 @@ namespace DentistBooking.Pages.AdminPage.Users
         {
             if (!ModelState.IsValid)
             {
+                PopulateSelectLists();
                 return Page();
             }
             User.CreatedDate = DateTime.Now;
+            
             User.Status = true;
             _userService.CreateUser(User);
             await _hubContext.Clients.All.SendAsync("ReloadUsers");
             return RedirectToPage("./Index");
+        }
+        private void PopulateSelectLists()
+        {
+            ViewData["ClinicId"] = new SelectList(_clinicService.GetAllClinics().Result, "ClinicId", "ClinicName");
+            ViewData["RoleId"] = new SelectList(_userService.GetAllRoles().Result, "RoleId", "RoleName");
         }
     }
 }

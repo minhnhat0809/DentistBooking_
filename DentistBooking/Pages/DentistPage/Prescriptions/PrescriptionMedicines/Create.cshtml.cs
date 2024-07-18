@@ -51,9 +51,11 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions.PrescriptionMedicines
         {
             if (!ModelState.IsValid)
             {
+                PrescriptionIdSelectList = new SelectList(await _prescriptionService.GetPrescriptions(), "PrescriptionId", "PrescriptionId", PrescriptionMedicine.PrescriptionId);
+                MedicineIdSelectList = new SelectList(await _medicineService.GetAllMedicines(), "MedicineId", "MedicineName");
                 return Page();
             }
-
+            PrescriptionMedicine.Status = true;
             _prescriptionMedicinesService.AddPrescriptionMedicine(PrescriptionMedicine);
             await _hubContext.Clients.All.SendAsync("ReloadPrescriptionMedicines");
 

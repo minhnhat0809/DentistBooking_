@@ -41,9 +41,13 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Price)
                 </td>
-                <td>
+                @if (item.Status == true)
+                {
+                    <td>Active</td>
+                } else { <td>Inactive</td>}
+                @* <td>
                     @Html.DisplayFor(modelItem => item.Status)
-                </td>
+                </td> *@
                 <td>
                     @Html.DisplayFor(modelItem => item.Medicine.MedicineName)
                 </td>
@@ -81,10 +85,10 @@
 </div>
 
 
+<div>
+    <a asp-page="./../Edit" asp-route-id="@Model.PrescriptionId">Back to Prescription Edit</a>
+</div>
+
 <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
 
 <script src="~/js/site.js"></script>
-
-<div>
-    <a asp-page="./../Index">Back to List</a>
-</div>

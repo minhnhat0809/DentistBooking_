@@ -6,7 +6,7 @@
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Dentist Slots</h1>
 
 <p>
     <a asp-page="Create">Create New</a>
@@ -38,16 +38,21 @@
             <td>
                 @Html.DisplayFor(modelItem => item.TimeEnd)
             </td>
+                @if(item.Status == true)
+                {
+                    <td>Active</td>
+                }else {<td>Inactive</td>}
+                @* 
             <td>
                 @Html.DisplayFor(modelItem => item.Status)
-            </td>
+            </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.Dentist.Name)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.DentistSlotId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.DentistSlotId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.DentistSlotId">Delete</a>
+               
+                <a asp-page="./Details" asp-route-id="@item.DentistSlotId">Details</a> 
+               
             </td>
         </tr>
 }

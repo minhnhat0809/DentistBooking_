@@ -53,6 +53,7 @@ namespace DentistBooking.Pages.DentistPage.Customers.MedicalRecords
         {
             if (!ModelState.IsValid)
             {
+                ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers().Result, "UserId", "Name");
                 return Page();
             }
 
@@ -74,7 +75,7 @@ namespace DentistBooking.Pages.DentistPage.Customers.MedicalRecords
                 }
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./../Details", new { id = MedicalRecord.CustomerId });
         }
 
         private bool MedicalRecordExists(int id)

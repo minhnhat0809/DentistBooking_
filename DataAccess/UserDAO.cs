@@ -34,6 +34,7 @@ namespace DataAccess
             var user = await context.Users
                 .Include(x=>x.Clinic)
                 .Include(x=>x.Role)
+                .Include(x=>x.MedicalRecords)
                 .FirstOrDefaultAsync(c => c.UserId == id);
             return user;
         }

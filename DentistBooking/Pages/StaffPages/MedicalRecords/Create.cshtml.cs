@@ -44,6 +44,7 @@ namespace DentistBooking.Pages.StaffPages.MedicalRecords
             }
             MedicalRecord.TimeStart = DateTime.Now;
             MedicalRecord.Duration = TimeOnly.FromDateTime(MedicalRecord.TimeStart);
+            MedicalRecord.Status = true;
             _medicalRecordService.CreateMedicalRecord(MedicalRecord);
             await _hubContext.Clients.All.SendAsync("ReloadMedicalRecords");
 

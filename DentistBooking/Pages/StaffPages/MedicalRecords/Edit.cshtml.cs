@@ -53,6 +53,7 @@ namespace DentistBooking.Pages.StaffPages.MedicalRecords
         {
             if (!ModelState.IsValid)
             {
+                ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers().Result, "UserId", "Name");
                 return Page();
             }
 

@@ -54,6 +54,8 @@ namespace DentistBooking.Pages.StaffPages.Users
         {
             if (!ModelState.IsValid)
             {
+                ViewData["ClinicId"] = new SelectList(_clinicService.GetAllClinics().Result, "ClinicId", "ClinicName");
+                ViewData["RoleId"] = new SelectList(_userService.GetAllRoles().Result, "RoleId", "RoleName");
                 return Page();
             }
 

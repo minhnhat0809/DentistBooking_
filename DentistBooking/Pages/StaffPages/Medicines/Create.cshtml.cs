@@ -41,6 +41,7 @@ namespace DentistBooking.Pages.StaffPages.Medicines
                 return Page();
             }
             // add medicine
+            Medicine.Status = true;
             _medicineService.CreateMedicine(Medicine);
             // signalR real-time
             await _hubContext.Clients.All.SendAsync("ReloadMedicines");

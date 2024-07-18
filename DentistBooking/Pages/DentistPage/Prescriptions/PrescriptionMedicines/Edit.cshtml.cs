@@ -60,6 +60,8 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions.PrescriptionMedicines
         {
             if (!ModelState.IsValid)
             {
+                ViewData["MedicineId"] = new SelectList(await _medicineService.GetAllMedicines(), "MedicineId", "MedicineName");
+                ViewData["PrescriptionId"] = new SelectList(await _prescriptionService.GetPrescriptions(), "PrescriptionId", "PrescriptionId");
                 return Page();
             }
 
@@ -79,7 +81,6 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions.PrescriptionMedicines
                     throw;
                 }
             }
-            var id = PrescriptionMedicine.PrescriptionId;
             return RedirectToPage("./Index", new { id = PrescriptionMedicine.PrescriptionId });
         }
 

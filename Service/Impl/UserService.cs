@@ -20,21 +20,9 @@ namespace Service.Impl
             _roleRepo = roleRepo;
             _mapper = mapper;
         }
-        private bool IsValidUser(UserDto user)
-        {
-            return user != null &&
-                   (Validation.ValidateUserName(user.UserName) &&
-                    Validation.ValidateName(user.Name) &&
-                    Validation.ValidatePassword(user.Password) &&                  
-                    Validation.ValidatePhoneNumber(user.PhoneNumber) &&
-                    Validation.ValidateEmail(user.Email));
-        }
+        
         public void CreateUser(UserDto user)
-        {    
-            if (!IsValidUser(user))
-            {
-                throw new ArgumentException("Invalid user data. Please check all fields.");
-            }
+        {   
             var model = _mapper.Map<User>(user);
             _userRepo.CreateUser(model);
         }
@@ -210,10 +198,8 @@ namespace Service.Impl
 
         public void UpdateUser(UserDto user)
         {
-            if (!IsValidUser(user))
-            {
-                throw new ArgumentException("Invalid user data. Please check all fields.");
-            }
+           
+
             var model = _mapper.Map<User>(user);
              _userRepo.UpdateUser(model);
         }
