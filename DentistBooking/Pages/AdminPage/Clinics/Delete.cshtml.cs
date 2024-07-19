@@ -57,7 +57,7 @@ namespace DentistBooking.Pages.AdminPage.Clinics
             if (clinic != null)
             {
                 Clinic = clinic;
-                _clinicService.DeleteClinic(Clinic.ClinicId);
+                await _clinicService.DeleteClinic(Clinic.ClinicId);
                 await _hubContext.Clients.All.SendAsync("ReloadClinics");
 
             }
