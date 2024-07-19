@@ -90,14 +90,12 @@ namespace Service.Impl
                             TimeSpan apStartTime = ap.TimeStart.TimeOfDay;
                             TimeSpan apEndTime = ap.TimeEnd.TimeOfDay;
 
-                            if (IsOverlap(appointment.TimeStart.TimeOfDay, apStartTime, apEndTime))
-                            {
-                                return $"There is an appointment overlapping at {ap.TimeStart} - {ap.TimeEnd.TimeOfDay}";
-                            }
+                            TimeSpan timeStart = appointment.TimeStart.TimeOfDay;
+                            TimeSpan timeEnd = appointment.TimeStart.AddMinutes(30).TimeOfDay;
 
-                            if (IsOverlap(appointment.TimeStart.TimeOfDay.Add(new TimeSpan(0, 30, 0)), apStartTime, apEndTime))
+                            if ((timeStart >= apStartTime && timeStart < apEndTime) || (timeStart < apStartTime && timeEnd > apStartTime))
                             {
-                                return $"There is an appointment overlapping at " + $"{ap.TimeStart.ToString()} - {ap.TimeStart.Add(ap.TimeEnd.TimeOfDay).ToString()}. Your appoinment needs 30'";
+                                return $"There is an appointment overlapping at {ap.TimeStart} - {ap.TimeEnd.TimeOfDay}'";
                             }
                         }
                     }
@@ -150,15 +148,12 @@ namespace Service.Impl
                         TimeSpan apStartTime = ap.TimeStart.TimeOfDay;
                         TimeSpan apEndTime = ap.TimeEnd.TimeOfDay;
 
-                        if (IsOverlap(TimeStart.TimeOfDay, apStartTime, apEndTime))
+                        TimeSpan timeStart = TimeStart.TimeOfDay;
+                        TimeSpan timeEnd = TimeStart.AddMinutes(30).TimeOfDay;
+
+                        if ((timeStart >= apStartTime && timeStart < apEndTime) || (timeStart < apStartTime && timeEnd > apStartTime))
                         {
                             AddError("",$"There is an appointment overlapping at {ap.TimeStart} - {ap.TimeEnd.TimeOfDay}'");
-                            return errors;
-                        }
-
-                        if (IsOverlap(TimeStart.TimeOfDay.Add(new TimeSpan(0, 30, 0)), apStartTime, apEndTime))
-                        {
-                            AddError("",$"There is an appointment overlapping at " + $"{ap.TimeStart.ToString()} - {ap.TimeStart.Add(ap.TimeEnd.TimeOfDay).ToString()}. Your appoinment needs 30'");
                             return errors;
                         }
                     }
@@ -295,12 +290,6 @@ namespace Service.Impl
                 return errors;
             }
         }
-
-        private bool IsOverlap(TimeSpan targetStart, TimeSpan apStart, TimeSpan apEnd)
-        {
-
-            return (targetStart >= apStart && targetStart < apEnd);
-        }
         private bool CheckTimeStart(DateTime TimeStart)
         {
 
@@ -385,14 +374,12 @@ namespace Service.Impl
                     TimeSpan apStartTime = ap.TimeStart.TimeOfDay;
                     TimeSpan apEndTime = ap.TimeEnd.TimeOfDay;
 
-                    if (IsOverlap(TimeStart.TimeOfDay, apStartTime, apEndTime))
-                    {
-                        return $"There is an appointment overlapping at {ap.TimeStart} - {ap.TimeEnd.TimeOfDay}";
-                    }
+                    TimeSpan timeStart = TimeStart.TimeOfDay;
+                    TimeSpan timeEnd = TimeStart.AddMinutes(30).TimeOfDay;
 
-                    if (IsOverlap(TimeStart.TimeOfDay.Add(new TimeSpan(0, 30, 0)), apStartTime, apEndTime))
+                    if ((timeStart >= apStartTime && timeStart < apEndTime) || (timeStart < apStartTime && timeEnd > apStartTime))
                     {
-                        return $"There is an appointment overlapping at " + $"{ap.TimeStart.ToString()} - {ap.TimeStart.Add(ap.TimeEnd.TimeOfDay).ToString()}. Your appoinment needs 30'";
+                        return $"There is an appointment overlapping at {ap.TimeStart} - {ap.TimeEnd.TimeOfDay}'";
                     }
                 }
             }
@@ -526,14 +513,12 @@ namespace Service.Impl
                         TimeSpan apStartTime = ap.TimeStart.TimeOfDay;
                         TimeSpan apEndTime = ap.TimeEnd.TimeOfDay;
 
-                        if (IsOverlap(TimeStart.TimeOfDay, apStartTime, apEndTime))
-                        {
-                            return $"There is an appointment overlapping at {ap.TimeStart} - {ap.TimeEnd.TimeOfDay}";
-                        }
+                        TimeSpan timeStart = TimeStart.TimeOfDay;
+                        TimeSpan timeEnd = TimeStart.AddMinutes(30).TimeOfDay;
 
-                        if (IsOverlap(TimeStart.TimeOfDay.Add(new TimeSpan(0, 30, 0)), apStartTime, apEndTime))
+                        if ((timeStart >= apStartTime && timeStart < apEndTime) || (timeStart < apStartTime && timeEnd > apStartTime))
                         {
-                            return $"There is an appointment overlapping at " + $"{ap.TimeStart.ToString()} - {ap.TimeStart.Add(ap.TimeEnd.TimeOfDay).ToString()}. Your appoinment needs 30'";
+                            return $"There is an appointment overlapping at {ap.TimeStart} - {ap.TimeEnd.TimeOfDay}'";
                         }
                     }
                 }
