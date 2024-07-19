@@ -209,11 +209,13 @@ namespace Service.Impl
         {
             try
             {
-                User? models = await _userRepo.GetById(user.UserId);
-                if(models != null)
+                if (user == null) { throw new ArgumentNullException(nameof(user)); }
+                User? model = await _userRepo.GetById(user.UserId);
+                if(model!=null)
                 {
-                    await _userRepo.UpdateUser(models);
-                } throw new Exception("User not found!");
+                    model = _mapper.Map<User>(user);
+                    await _userRepo.UpdateUser(model);
+                }
             }
             catch (Exception ex)
             {

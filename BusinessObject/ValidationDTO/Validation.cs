@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace BusinessObject.ValidationDTO
 {
@@ -44,5 +45,26 @@ namespace BusinessObject.ValidationDTO
             return ValidationResult.Success;
         }
     }
-    
+    public class PhoneNumberAttribute : ValidationAttribute
+    {
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            if (value == null)
+            {
+                return new ValidationResult("Phone number is required.");
+            }
+
+            var phoneNumber = value.ToString();
+
+            // Regular expression to match phone numbers starting with 0 or +84 followed by exactly 9 digits
+            var regex = new Regex(@"^(0\d{9})$");
+
+            if (!regex.IsMatch(phoneNumber))
+            {
+                return new ValidationResult("Invalid phone number format. It should start with 0 by exactly 9 digits.");
+            }
+
+            return ValidationResult.Success;
+        }
+    }
 }

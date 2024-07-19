@@ -31,7 +31,7 @@ namespace BusinessObject.DTO
         [StringLength(10, ErrorMessage = "Gender must be up to 10 characters long.")]
         public string? Gender { get; set; }
 
-        [Phone(ErrorMessage = "Invalid phone number format.")]
+        [PhoneNumber]
         public string? PhoneNumber { get; set; }
 
         [EmailAddress(ErrorMessage = "Invalid email address format.")]
