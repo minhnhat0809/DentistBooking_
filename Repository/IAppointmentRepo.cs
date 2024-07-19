@@ -17,8 +17,8 @@ namespace Repository
 
         Task<Appointment> GetAppointmentById(int id);
 
-        void UpdateAppointment(Appointment appointment);
-        void DeleteAppointment(int appointmentId);
+        Task UpdateAppointment(Appointment appointment);
+        Task DeleteAppointment(int appointmentId);
 
         Task<List<Appointment>> GetAllProcessingAppointment();
     }

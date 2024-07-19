@@ -73,13 +73,15 @@
                 <span asp-validation-for="User.Status" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="User.ClinicId" class="control-label"></label>
-                <select asp-for="User.ClinicId" class="form-control" asp-items="ViewBag.ClinicId"></select>
+                <label asp-for="User.Clinic" class="control-label"></label>
+                @*<select asp-for="User.ClinicId" class="form-control" asp-items="ViewBag.ClinicId"></select>*@
+                <input asp-for="User.Clinic.ClinicName" class="form-control" readonly/>
             </div>
             <div class="form-group">
-                <label asp-for="User.RoleId" class="control-label"></label>
-                <select asp-for="User.RoleId" class="form-control" asp-items="ViewBag.RoleId"></select>
-                <span asp-validation-for="User.RoleId" class="text-danger"></span>
+                <label asp-for="User.Role" class="control-label"></label>
+                @* <select asp-for="User.RoleId" class="form-control" asp-items="ViewBag.RoleId"></select>
+                <span asp-validation-for="User.RoleId" class="text-danger"></span> *@
+                <input asp-for="User.Role.RoleName" class="form-control" readonly/>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
