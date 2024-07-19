@@ -10,10 +10,10 @@ namespace Service
 {
     public interface IClinicService
     {
-        public Task<List<ClinicDto>> GetAllClinics();
-        public Task<ClinicDto> GetById(int? id);
-        public void CreateClinic(ClinicDto clinic);
-        public void UpdateClinic(ClinicDto clinic);
-        public void DeleteClinic(int id);
+        Task<List<ClinicDto>> GetAllClinics();
+        Task<ClinicDto> GetById(int? id);
+        Task CreateClinic(ClinicDto clinic);
+        Task UpdateClinic(ClinicDto clinic);
+        Task DeleteClinic(int id);
     }
 }

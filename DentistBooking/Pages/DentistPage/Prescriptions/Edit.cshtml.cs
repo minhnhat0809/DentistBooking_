@@ -61,7 +61,7 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions
 
             try
             {
-                _prescriptionService.UpdatePrescription(Prescription);
+                await _prescriptionService.UpdatePrescription(Prescription);
                 await _hubContext.Clients.All.SendAsync("ReloadPrescriptions");
             }
             catch (DbUpdateConcurrencyException)

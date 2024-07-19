@@ -9,11 +9,11 @@ namespace Repository
 {
     public interface IMedicalRecordRepo
     {
-        public Task<List<MedicalRecord>> GetAllMedicalRecords();
-        public Task<MedicalRecord> GetById(int? id);
-        public void CreateMedicalRecord(MedicalRecord medical);
-        public void UpdateMedicalRecord(MedicalRecord medical);
-        public void DeleteMedicalRecord(int id);
+        Task<List<MedicalRecord>> GetAllMedicalRecords();
+        Task<MedicalRecord> GetById(int? id);
+        Task CreateMedicalRecord(MedicalRecord medical);
+        Task UpdateMedicalRecord(MedicalRecord medical);
+        Task DeleteMedicalRecord(int id);
         Task<IEnumerable<MedicalRecord>> GetMedicalRecordsByCustomerIdAsync(int customerId);
     }
 }

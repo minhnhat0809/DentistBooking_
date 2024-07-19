@@ -56,7 +56,7 @@ namespace DentistBooking.Pages.StaffPages.Service
 
             try
             {
-                _service.UpdateService(Service);
+                await _service.UpdateService(Service);
                 await _hubContext.Clients.All.SendAsync("ReloadServices");
             }
             catch (DbUpdateConcurrencyException)

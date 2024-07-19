@@ -57,7 +57,7 @@ namespace Service.Impl
             }
         }
 
-        public async void CreateClinic(ClinicDto clinic)
+        public async Task CreateClinic(ClinicDto clinic)
         {
             if (clinic == null)
             {
@@ -71,7 +71,7 @@ namespace Service.Impl
                     throw new InvalidOperationException($"Clinic with ID {clinic.ClinicId} already exists.");
                 }
                 model = _mapper.Map<Clinic>(clinic); 
-                _clinicRepo.CreateClinic(model);
+                await _clinicRepo.CreateClinic(model);
             }
             catch (Exception ex)
             {
@@ -80,7 +80,7 @@ namespace Service.Impl
             }
         }
 
-        public async void UpdateClinic(ClinicDto clinic)
+        public async Task UpdateClinic(ClinicDto clinic)
         {
             if (clinic == null)
             {
@@ -95,7 +95,7 @@ namespace Service.Impl
                     throw new ExceptionHandler.NotFoundException($"Clinic with ID {clinic.ClinicId} not found.");
                 }
                 model = _mapper.Map<Clinic>(clinic);
-                _clinicRepo.UpdateClinic(model);
+                await _clinicRepo.UpdateClinic(model);
             }
             catch (Exception ex)
             {
@@ -104,7 +104,7 @@ namespace Service.Impl
             }
         }
 
-        public void DeleteClinic(int id)
+        public async Task DeleteClinic(int id)
         {
             if (id <= 0)
             {
@@ -113,13 +113,13 @@ namespace Service.Impl
 
             try
             {
-                var model = _clinicRepo.GetById(id);
+                var model = await _clinicRepo.GetById(id);
                 if (model == null)
                 {
                     throw new ExceptionHandler.NotFoundException($"Clinic with ID {id} not found.");
                 }
 
-                _clinicRepo.DeleteClinic(id);
+                await _clinicRepo.DeleteClinic(id);
             }
             catch (Exception ex)
             {

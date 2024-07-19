@@ -40,7 +40,7 @@ namespace DentistBooking.Pages.AdminPage.Clinics
                 return Page();
             }
             Clinic.Status = true;
-            _clinicService.CreateClinic(Clinic);
+            await _clinicService.CreateClinic(Clinic);
             await _hubContext.Clients.All.SendAsync("ReloadClinics");
             return RedirectToPage("./Index");
         }

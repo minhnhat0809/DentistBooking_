@@ -55,7 +55,7 @@ namespace DentistBooking.Pages.StaffPages.Check_upSchedules
             if (checkupschedule != null)
             {
                 CheckupSchedule = checkupschedule;
-                _checkupScheduleService.DeleteCheckupSchedule(checkupschedule.ScheduleId);
+                await _checkupScheduleService.DeleteCheckupSchedule(checkupschedule.ScheduleId);
                 await _hubContext.Clients.All.SendAsync("ReloadCheckupSchedules");
             }
 

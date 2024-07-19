@@ -58,7 +58,7 @@ namespace DentistBooking.Pages.StaffPages.MedicalRecords
             if (medicalrecord != null)
             {
                 MedicalRecord = medicalrecord;
-                _medicalRecordService.DeleteMedicalRecord(MedicalRecord.MediaRecordId);
+                await _medicalRecordService.DeleteMedicalRecord(MedicalRecord.MediaRecordId);
                 await _hubContext.Clients.All.SendAsync("ReloadMedicalRecords");
             }
 

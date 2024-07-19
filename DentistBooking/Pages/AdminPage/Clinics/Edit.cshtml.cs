@@ -57,7 +57,7 @@ namespace DentistBooking.Pages.AdminPage.Clinics
 
             try
             {
-                _clinicService.UpdateClinic(Clinic);
+                await _clinicService.UpdateClinic(Clinic);
                 await _hubContext.Clients.All.SendAsync("ReloadClinics");
             }
             catch (DbUpdateConcurrencyException)

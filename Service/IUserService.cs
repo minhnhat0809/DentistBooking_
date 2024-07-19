@@ -5,11 +5,11 @@ namespace Service
 {
     public interface IUserService
     {
-        public Task<List<UserDto>> GetAllUsers();
-        public Task<UserDto> GetById(int id);
-        public void CreateUser(UserDto user);
-        public void UpdateUser(UserDto user);
-        public void DeleteUser(UserDto id);
+        Task<List<UserDto>> GetAllUsers();
+        Task<UserDto> GetById(int id);
+        Task CreateUser(UserDto user);
+        Task UpdateUser(UserDto user);
+        Task DeleteUser(UserDto id);
 
         Task<ResponseDTO> Login(string userName, string password);
         Task<List<UserDto>?> GetAllDentists();

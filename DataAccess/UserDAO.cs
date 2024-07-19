@@ -60,26 +60,26 @@ namespace DataAccess
             return userList;
         }
 
-        public void deleteUser(User user)
+        public async Task deleteUser(User user)
         {
             var context = new BookingDentistDbContext();
             user.Status = false;
             context.Entry<User>(user).State = EntityState.Modified;
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public void createUser(User user)
+        public async Task createUser(User user)
         {
             var context = new BookingDentistDbContext();
             context.Users.Add(user);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public void updateUser(User user)
+        public async Task updateUser(User user)
         {
             var context = new BookingDentistDbContext();
             context.Entry<User>(user).State = EntityState.Modified;
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
         public async Task<User?> GetUserByUserName(string email)

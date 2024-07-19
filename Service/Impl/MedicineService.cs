@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using AutoMapper;
 using BusinessObject;
 using BusinessObject.DTO;
@@ -57,7 +58,7 @@ namespace Service.Impl
             }
         }
 
-        public async void CreateMedicine(MedicineDto medicine)
+        public async Task CreateMedicine(MedicineDto medicine)
         {
             if (medicine == null)
             {
@@ -72,7 +73,7 @@ namespace Service.Impl
                     throw new InvalidOperationException($"Medicine with ID {medicine.MedicineId} already exists.");
                 }
                 model = _mapper.Map<Medicine>(medicine);
-                _medicineRepo.CreateMedicine(model);
+                await _medicineRepo.CreateMedicine(model);
             }
             catch (Exception ex)
             {
@@ -81,7 +82,7 @@ namespace Service.Impl
             }
         }
 
-        public async void UpdateMedicine(MedicineDto medicine)
+        public async Task UpdateMedicine(MedicineDto medicine)
         {
             if (medicine == null)
             {
@@ -96,7 +97,7 @@ namespace Service.Impl
                     throw new ExceptionHandler.NotFoundException($"Medicine with ID {medicine.MedicineId} not found.");
                 }
                 model = _mapper.Map<Medicine>(medicine);
-                _medicineRepo.UpdateMedicine(model);
+                await _medicineRepo.UpdateMedicine(model);
             }
             catch (Exception ex)
             {
@@ -105,7 +106,7 @@ namespace Service.Impl
             }
         }
 
-        public async void DeleteMedicine(int id)
+        public async Task DeleteMedicine(int id)
         {
             if (id <= 0)
             {
@@ -120,7 +121,7 @@ namespace Service.Impl
                     throw new ExceptionHandler.NotFoundException($"Medicine with ID {id} not found.");
                 }
 
-                _medicineRepo.DeleteMedicine(id);
+                await _medicineRepo.DeleteMedicine(id);
             }
             catch (Exception ex)
             {

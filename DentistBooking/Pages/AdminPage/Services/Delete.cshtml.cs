@@ -58,7 +58,7 @@ namespace DentistBooking.Pages.AdminPage.Services
             if (service != null)
             {
                 Service = service;
-                _service.DeleteService(service);
+                await _service.DeleteService(service);
                 await _hubContext.Clients.All.SendAsync("ReloadServices");
             }
 

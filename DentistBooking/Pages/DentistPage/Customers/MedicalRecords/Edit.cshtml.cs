@@ -60,7 +60,7 @@ namespace DentistBooking.Pages.DentistPage.Customers.MedicalRecords
 
             try
             {
-                _medicalRecordService.UpdateMedicalRecord(MedicalRecord);
+                await _medicalRecordService.UpdateMedicalRecord(MedicalRecord);
                 await _hubContext.Clients.All.SendAsync("ReloadMedicalRecords");
             }
             catch (DbUpdateConcurrencyException)

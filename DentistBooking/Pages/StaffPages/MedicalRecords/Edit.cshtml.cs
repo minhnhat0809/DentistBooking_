@@ -62,7 +62,7 @@ namespace DentistBooking.Pages.StaffPages.MedicalRecords
             {
                 MedicalRecord.TimeStart = DateTime.Now; 
                 MedicalRecord.Duration = TimeOnly.FromDateTime(MedicalRecord.TimeStart);
-                _medicalRecordService.UpdateMedicalRecord(MedicalRecord);
+                await _medicalRecordService.UpdateMedicalRecord(MedicalRecord);
                 await _hubContext.Clients.All.SendAsync("ReloadMedicalRecords");
             }
             catch (DbUpdateConcurrencyException)

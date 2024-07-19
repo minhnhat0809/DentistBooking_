@@ -44,25 +44,25 @@ namespace DataAccess
         }
 
 
-        public void delete(Role role)
+        public async Task delete(Role role)
         {
             var context = new BookingDentistDbContext();
             context.Roles .Remove(role); 
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public void create(Role role)
+        public async Task create(Role role)
         {
             var context = new BookingDentistDbContext();
             context.Roles.Add(role);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public void update(Role role)
+        public async Task update(Role role)
         {
             var context = new BookingDentistDbContext();
             context.Entry<Role>(role).State = EntityState.Modified;
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
     }
 }

@@ -15,6 +15,6 @@ namespace Repository
 
         Task<DentistSlot> GetDentistSlotByID(int dentistSlotId);
 
-        void CreateDentistSlot(DentistSlot dentistSlot);
+        Task CreateDentistSlot(DentistSlot dentistSlot);
     }
 }

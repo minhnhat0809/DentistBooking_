@@ -59,7 +59,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             {
                 Appointment = appointment;
             }
-            _appointmentService.DeleteAppointment(id.Value);
+            await _appointmentService.DeleteAppointment(id.Value);
             await _hubContext.Clients.All.SendAsync("ReloadAppointments");
             return RedirectToPage("./Index");
         }

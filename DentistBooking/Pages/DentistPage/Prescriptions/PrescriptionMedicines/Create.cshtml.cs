@@ -56,7 +56,7 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions.PrescriptionMedicines
                 return Page();
             }
             PrescriptionMedicine.Status = true;
-            _prescriptionMedicinesService.AddPrescriptionMedicine(PrescriptionMedicine);
+            await _prescriptionMedicinesService.AddPrescriptionMedicine(PrescriptionMedicine);
             await _hubContext.Clients.All.SendAsync("ReloadPrescriptionMedicines");
 
             return RedirectToPage("./Index", new { id = PrescriptionMedicine.PrescriptionId });

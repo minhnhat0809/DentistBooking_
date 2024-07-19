@@ -10,22 +10,22 @@ namespace Repository.Impl
 {
     public interface IRoleRepo
     {
-        public Task<List<Role>> GetAll();
-        public Task<Role> GetById(int? id);
-        public void Create(Role schedule);
-        public void Update(Role schedule);
-        public void Delete(int id);
+        Task<List<Role>> GetAll();
+        Task<Role> GetById(int? id);
+        Task Create(Role schedule);
+        Task Update(Role schedule);
+        Task Delete(int id);
 
     }
     public class RoleRepo : IRoleRepo
     {
-        public  void Create(Role schedule)
-        =>  RoleDAO.Instance.create(schedule);
+        public async Task Create(Role schedule)
+        => await RoleDAO.Instance.create(schedule);
 
-        public async void Delete(int id)
+        public async Task Delete(int id)
         { 
             var model = await RoleDAO.Instance.getByID(id);
-            RoleDAO.Instance.delete(model);
+            await RoleDAO.Instance.delete(model);
         }
         public async Task<List<Role>> GetAll()
         => await RoleDAO.Instance.getAll();
@@ -33,7 +33,7 @@ namespace Repository.Impl
         public async Task<Role> GetById(int? id)
         => await RoleDAO.Instance.getByID(id);
 
-        public void Update(Role schedule)
-        => RoleDAO.Instance.update(schedule);
+        public async Task Update(Role schedule)
+        => await RoleDAO.Instance.update(schedule);
     }
 }

@@ -4,11 +4,11 @@ namespace Repository
 {
     public interface IServiceRepo
     {
-        public Task<Service> GetServiceByID(int? id);
-        public Task<List<Service>> GetAllServices();
-        public void DeleteService(Service service);
-        public void CreateService(Service service);
-        public void UpdateService(Service service);
+        Task<Service> GetServiceByID(int? id);
+        Task<List<Service>> GetAllServices();
+        Task DeleteService(Service service);
+        Task CreateService(Service service);
+        Task UpdateService(Service service);
 
         Task<IEnumerable<Service>> GetAllServicesAsync();
         Task<IEnumerable<Service>> GetServicesByDentistSlotAsync(int dentistSlotId);

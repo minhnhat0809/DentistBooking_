@@ -54,7 +54,7 @@ namespace DentistBooking.Pages.StaffPages.Check_upSchedules
                 return Page();
             }
             CheckupSchedule.Status = true;
-            _checkupScheduleService.CreateCheckupSchedule(CheckupSchedule);
+            await _checkupScheduleService.CreateCheckupSchedule(CheckupSchedule);
             await _hubContext.Clients.All.SendAsync("ReloadCheckupSchedules");
 
             return RedirectToPage("./Index");

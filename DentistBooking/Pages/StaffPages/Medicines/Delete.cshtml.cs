@@ -58,7 +58,7 @@ namespace DentistBooking.Pages.StaffPages.Medicines
             if (medicine != null)
             {
                 Medicine = medicine;
-                _medicineService.DeleteMedicine(Medicine.MedicineId);
+                await _medicineService.DeleteMedicine(Medicine.MedicineId);
                 // signalR real-time
 
                 await _hubContext.Clients.All.SendAsync("ReloadMedicines");

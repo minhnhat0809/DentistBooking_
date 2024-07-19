@@ -16,16 +16,16 @@ namespace Repository.Impl
         public async Task<CheckupSchedule> GetById(int? id)
             => await CheckupScheduleDAO.Instance.getCheckupScheduleByID(id);
 
-        public void CreateCheckupSchedule(CheckupSchedule schedule)
-            => CheckupScheduleDAO.Instance.createCheckupScheducle(schedule);
+        public async Task CreateCheckupSchedule(CheckupSchedule schedule)
+            => await CheckupScheduleDAO.Instance.createCheckupScheducle(schedule);
 
-        public void UpdateCheckupSchedule(CheckupSchedule schedule)
-            => CheckupScheduleDAO.Instance.updateCheckupScheducle(schedule);
+        public async Task UpdateCheckupSchedule(CheckupSchedule schedule)
+            => await CheckupScheduleDAO.Instance.updateCheckupScheducle(schedule);
 
-        public async void DeleteCheckupSchedule(int id)
+        public async Task DeleteCheckupSchedule(int id)
         {
             var model = await CheckupScheduleDAO.Instance.getCheckupScheduleByID(id);
-            CheckupScheduleDAO.Instance.deleteCheckupSchedule(model);
+            await CheckupScheduleDAO.Instance.deleteCheckupSchedule(model);
         } 
     }
 }

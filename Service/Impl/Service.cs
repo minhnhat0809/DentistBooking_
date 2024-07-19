@@ -16,7 +16,7 @@ namespace Service.Impl
             _servicerRepo = repo;
             _mapper = mapper;
         }
-        public async void CreateService(ServiceDto service)
+        public async Task CreateService(ServiceDto service)
         {
             try
             {
@@ -26,7 +26,7 @@ namespace Service.Impl
                     throw new InvalidOperationException("Service exist yet!");
                 }
                 model = _mapper.Map<BusinessObject.Service>(service);   
-                _servicerRepo.CreateService(model);
+                await _servicerRepo.CreateService(model);
             }
             catch (Exception ex)
             {
@@ -35,7 +35,7 @@ namespace Service.Impl
             }
         }
 
-        public async void DeleteService(ServiceDto service)
+        public async Task DeleteService(ServiceDto service)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace Service.Impl
                     throw new InvalidOperationException("Services not found!");
                 }
                 model = _mapper.Map<BusinessObject.Service>(service);
-                _servicerRepo.DeleteService(model);
+                await _servicerRepo.DeleteService(model);
             }
             catch (Exception ex)
             {
@@ -148,7 +148,7 @@ namespace Service.Impl
             }
         }
 
-        public async void UpdateService(ServiceDto service)
+        public async Task UpdateService(ServiceDto service)
         {
             try
             {
@@ -158,7 +158,7 @@ namespace Service.Impl
                     throw new InvalidOperationException("Service not found!");
                 }
                 model = _mapper.Map<BusinessObject.Service>(service); 
-                _servicerRepo.UpdateService(model); 
+                await _servicerRepo.UpdateService(model); 
             }
             catch (Exception ex)
             {

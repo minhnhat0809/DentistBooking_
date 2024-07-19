@@ -10,10 +10,10 @@ namespace Service
 {
     public interface IMedicineService
     {
-        public Task<List<MedicineDto>> GetAllMedicines();
-        public Task<MedicineDto> GetById(int? id);
-        public void  CreateMedicine(MedicineDto medicine);
-        public void UpdateMedicine(MedicineDto medicine);
-        public void DeleteMedicine(int id);
+        Task<List<MedicineDto>> GetAllMedicines();
+        Task<MedicineDto> GetById(int? id);
+        Task CreateMedicine(MedicineDto medicine);
+        Task UpdateMedicine(MedicineDto medicine);
+        Task DeleteMedicine(int id);
     }
 }

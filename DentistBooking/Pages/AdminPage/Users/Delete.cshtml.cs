@@ -57,7 +57,7 @@ namespace DentistBooking.Pages.AdminPage.Users
             if (user != null)
             {
                 User = user;
-                _userService.DeleteUser(user);
+                await _userService.DeleteUser(user);
                 await _hubContext.Clients.All.SendAsync("ReloadUsers");
             }
 

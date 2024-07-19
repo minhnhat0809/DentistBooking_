@@ -58,7 +58,7 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions.PrescriptionMedicines
             if (prescriptionmedicine != null)
             {
                 PrescriptionMedicine = prescriptionmedicine;
-                _prescriptionMedicinesService.DeletePrescriptionMedicine(prescriptionmedicine);
+                await _prescriptionMedicinesService.DeletePrescriptionMedicine(prescriptionmedicine);
                 await _hubContext.Clients.All.SendAsync("ReloadPrescriptionMedicines");
             }
 

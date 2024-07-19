@@ -45,7 +45,7 @@ namespace DentistBooking.Pages.AdminPage.Users
             User.CreatedDate = DateTime.Now;
             
             User.Status = true;
-            _userService.CreateUser(User);
+            await _userService.CreateUser(User);
             await _hubContext.Clients.All.SendAsync("ReloadUsers");
             return RedirectToPage("./Index");
         }

@@ -42,26 +42,26 @@ namespace DataAccess
             return medicineList;
         }
 
-        public void deleteMedicine(Medicine medicine)
+        public async Task deleteMedicine(Medicine medicine)
         {
             var context = new BookingDentistDbContext();
             medicine.Status = false;
             context.Entry<Medicine>(medicine).State = EntityState.Modified;
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public void createMedicine(Medicine medicine)
+        public async Task createMedicine(Medicine medicine)
         {
             var context = new BookingDentistDbContext();
             context.Medicines.Add(medicine);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public void updateMedicine(Medicine medicine)
+        public async Task updateMedicine(Medicine medicine)
         {
             var context = new BookingDentistDbContext();
             context.Entry<Medicine>(medicine).State = EntityState.Modified;
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
     }
 }
