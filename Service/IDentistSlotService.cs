@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BusinessObject.Result;
 
 namespace Service
 {
@@ -16,6 +17,8 @@ namespace Service
 
         Task<DentistSlotDto> GetDentistSlotById(int dentistSlotId);
 
-        Task<string> CreateDentistSlot(int dentistId, DateTime timeStart, DateTime timeEnd);
+        Task<string> CreateDentistSlot(int dentistId, DateTime timeStart, DateTime timeEnd, int RoomId);
+
+        ListDentistSlotResult GetDentistSlotByServiceAndDate(int serviceId, DateTime timeStart);
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections;
 using BusinessObject;
 using BusinessObject.DTO;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +34,10 @@ public class ViewDentistSlot : PageModel
     public TimeOnly DentistSlotTimeEnd { get; set; } = default!;
 
     public IList<DentistSlotDto> DentistSlots = default!;
+    
+    public IList<Room> Rooms { get; set; }
+    
+    public int RoomId { get; set; }
     public async void OnGet()
     {
         Dentists = await userService.GetAllUserByType("Dentist");
@@ -56,7 +61,7 @@ public class ViewDentistSlot : PageModel
         DateTime slotTimeEnd = new DateTime(date.Year, date.Month, date.Day,
             DentistSlotTimeEnd.Hour, DentistSlotTimeEnd.Minute, DentistSlotTimeEnd.Second);
         
-        string result = await dentistSlotService.CreateDentistSlot(SelectedDentistId.Value, slotTimeStart, slotTimeEnd);
+        string result = await dentistSlotService.CreateDentistSlot(SelectedDentistId.Value, slotTimeStart, slotTimeEnd, RoomId);
         if (!result.Equals("Success"))
         {
             TempData["DentistSlot"] = result;

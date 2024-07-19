@@ -55,6 +55,16 @@ namespace DataAccess
             return dentistSlotList;
         }
 
+        public async Task<List<DentistSlot>> getAllDentistSlotsByRoomAndDate(int roomId, DateTime selectedDate)
+        {
+            var context = new BookingDentistDbContext();
+            var dentistSlotList = await context.DentistSlots
+                .Where(ds => ds.RoomId == roomId && ds.TimeStart.Equals(selectedDate))
+                .OrderBy(ds => ds.TimeStart).ToListAsync();
+            return dentistSlotList;
+        }
+
+        
         public async Task deleteDentistSlot(DentistSlot dentistSlot)
         {
             var context = new BookingDentistDbContext();
@@ -75,6 +85,15 @@ namespace DataAccess
             var context = new BookingDentistDbContext();
             context.Entry<DentistSlot>(dentistSlot).State = EntityState.Modified;
             await context.SaveChangesAsync();
+        }
+
+        public List<DentistSlot> getAllDentistSlotsByServiceAndDate(int serviceId, DateTime timeStart)
+        {
+            var context = new BookingDentistDbContext();
+            return context.DentistSlots.Include(dl => dl.Dentist).ThenInclude(d => d.DentistServices)
+                .Where(dl => dl.Dentist.DentistServices.Any(ds => ds.ServiceId == serviceId && ds.Status == true) && 
+                             dl.TimeStart<= timeStart && dl.TimeEnd > timeStart)
+                .ToList();
         }
     }
 }

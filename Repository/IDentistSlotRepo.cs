@@ -12,9 +12,13 @@ namespace Repository
         Task<List<DentistSlot>> GetAllDentistSlots();
 
         Task<List<DentistSlot>> GetAllDentistSlotsByDentistAndDate(int id, DateOnly selectedDate);
+        
+        Task<List<DentistSlot>> GetAllDentistSlotsByRoomAndDate(int roomId, DateTime selectedDate);
 
         Task<DentistSlot> GetDentistSlotByID(int dentistSlotId);
 
         Task CreateDentistSlot(DentistSlot dentistSlot);
+
+        List<DentistSlot> GetAllDentistSlotByServiceAndTimeStart(int serviceId, DateTime timeStart);
     }
 }

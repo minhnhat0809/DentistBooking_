@@ -1,3 +1,4 @@
+using System.Collections;
 using BusinessObject;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -16,14 +17,17 @@ namespace DentistBooking.Pages.StaffPages
         private readonly IService service;
         private readonly IUserService userService;
         private readonly IDentistSlotService dentistSlotService;
+
+        private readonly IRoomService roomService;
         public ProcessingAppointmentModel(IAppointmentService appointmentService, IDentistService dentistService
-            , IService service, IUserService userService, IDentistSlotService dentistSlotService)
+            , IService service, IUserService userService, IDentistSlotService dentistSlotService, IRoomService roomService)
         {
             this.appointmentService = appointmentService;
             this.dentistService = dentistService;
             this.service = service;
             this.userService = userService;
             this.dentistSlotService = dentistSlotService;
+            this.roomService = roomService;
         }
 
         [BindProperty(SupportsGet = true)]
@@ -35,7 +39,11 @@ namespace DentistBooking.Pages.StaffPages
         public TimeOnly DentistSlotTimeStart { get; set; } = default!;
         [BindProperty(SupportsGet = true)]
         public TimeOnly DentistSlotTimeEnd { get; set; } = default!;
+
+        public IList<Room> Rooms { get; set; } = default!;
         
+        [BindProperty(SupportsGet = true)]
+        public int RoomId { get; set; }
 
         public ServiceDto Service { get; set; } = default!;
         public async Task<IActionResult> OnGet(int id)
@@ -44,7 +52,11 @@ namespace DentistBooking.Pages.StaffPages
 
             Service = await service.GetServiceByID(Appointment.ServiceId.Value);
 
+            Rooms =  roomService.GetAllRooms().Result.Rooms;
+
             Dentists = await userService.GetAllDentistsByService((int)Appointment.ServiceId);
+            
+            
             
             HttpContext.Session.SetInt32("AppointmentId",Appointment.AppointmentId);
             return Page();
@@ -58,6 +70,7 @@ namespace DentistBooking.Pages.StaffPages
                 Appointment = await appointmentService.GetAppointmentByID(Appointment.AppointmentId);
                 Service = await service.GetServiceByID(Appointment.ServiceId.Value);
                 Dentists = await userService.GetAllDentistsByService(Appointment.ServiceId.Value);
+                Rooms =  roomService.GetAllRooms().Result.Rooms;
                 return RedirectToPage(new { id = Appointment.AppointmentId });
             }
             string result = await appointmentService.UpdateAppointmentForStaff((int)Appointment.ServiceId,
@@ -68,6 +81,7 @@ namespace DentistBooking.Pages.StaffPages
                 Appointment = await appointmentService.GetAppointmentByID(Appointment.AppointmentId);
                 Service = await service.GetServiceByID(Appointment.ServiceId.Value);
                 Dentists = await userService.GetAllDentistsByService(Appointment.ServiceId.Value);
+                Rooms =  roomService.GetAllRooms().Result.Rooms;
                 RedirectToPage(new { id = Appointment.AppointmentId });
             }
 
@@ -75,6 +89,7 @@ namespace DentistBooking.Pages.StaffPages
             Appointment = await appointmentService.GetAppointmentByID(Appointment.AppointmentId);
             Service = await service.GetServiceByID(Appointment.ServiceId.Value);
             Dentists = await userService.GetAllDentistsByService(Appointment.ServiceId.Value);
+            Rooms =  roomService.GetAllRooms().Result.Rooms;
             return RedirectToPage(new { id = Appointment.AppointmentId });
         }
 
@@ -110,7 +125,7 @@ namespace DentistBooking.Pages.StaffPages
                 DentistSlotTimeEnd.Hour, DentistSlotTimeEnd.Minute, DentistSlotTimeEnd.Second);
             
             string result = await dentistSlotService.CreateDentistSlot((int)HttpContext.Session.GetInt32("DentistId")
-                , slotTimeStart, slotTimeEnd);
+                , slotTimeStart, slotTimeEnd, RoomId);
             if (!result.Equals("Success"))
             {
                 TempData["ProcessingAppointment_DentistSlot"] = result;
