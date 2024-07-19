@@ -117,7 +117,7 @@ namespace Service.Impl
                 return "Time must be in range [8:00-12:00] , [13:00-17:00], [17:00-19:30]!";
             }
 
-            List<DentistSlot> dentistSlots = dentistSlotRepo.GetAllDentistSlotsByDentistAndDate(dentistId, DateOnly.FromDateTime(timeStart)).Result;
+            List<DentistSlot> dentistSlots = await dentistSlotRepo.GetAllDentistSlotsByDentistAndDate(dentistId, DateOnly.FromDateTime(timeStart));
             if (dentistSlots.Count > 0)
             {
                 if (dentistSlots.Any(dl => dl.TimeStart == timeStart))
@@ -132,7 +132,7 @@ namespace Service.Impl
             dentistSlot.TimeEnd = timeEnd;
             dentistSlot.Status = true;
             
-            dentistSlotRepo.CreateDentistSlot(dentistSlot);
+            await dentistSlotRepo.CreateDentistSlot(dentistSlot);
             return "Success";
         }
     }

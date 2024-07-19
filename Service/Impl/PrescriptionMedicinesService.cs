@@ -13,12 +13,12 @@ namespace Service.Impl
 {
     public interface IPrescriptionMedicinesService
     {
-        public Task<List<PrescriptionMedicineDto>> GetAllPrescriptionMedicines();
-        public Task<List<PrescriptionMedicineDto>> GetAllPrescriptionMedicinesByPrescriptionId( int preId);
-        public Task<PrescriptionMedicineDto> GetById(int? id);
-        public void AddPrescriptionMedicine(PrescriptionMedicineDto prescriptionMedicine);
-        public void DeletePrescriptionMedicine(PrescriptionMedicineDto prescriptionMedicine);
-        public void UpdatePrescriptionMedicine(PrescriptionMedicineDto prescriptionMedicine);
+        Task<List<PrescriptionMedicineDto>> GetAllPrescriptionMedicines();
+        Task<List<PrescriptionMedicineDto>> GetAllPrescriptionMedicinesByPrescriptionId( int preId);
+        Task<PrescriptionMedicineDto> GetById(int? id);
+        Task AddPrescriptionMedicine(PrescriptionMedicineDto prescriptionMedicine);
+        Task DeletePrescriptionMedicine(PrescriptionMedicineDto prescriptionMedicine);
+        Task UpdatePrescriptionMedicine(PrescriptionMedicineDto prescriptionMedicine);
     }
     public class PrescriptionMedicinesService : IPrescriptionMedicinesService
     {
@@ -29,7 +29,7 @@ namespace Service.Impl
             _prescriptionMedicineRepo = prescriptionMedicineRepo;
             _mapper = mapper;
         }
-        public async void UpdatePrescriptionMedicine(PrescriptionMedicineDto prescriptionMedicine)
+        public async Task UpdatePrescriptionMedicine(PrescriptionMedicineDto prescriptionMedicine)
         {
             if (prescriptionMedicine == null)
             {
@@ -44,7 +44,7 @@ namespace Service.Impl
                     throw new ArgumentException("PrescriptionMedicine not found");
                 }
                 model = _mapper.Map<PrescriptionMedicine>(prescriptionMedicine);
-                _prescriptionMedicineRepo.UpdatePrescriptionMedicine(model);
+                await _prescriptionMedicineRepo.UpdatePrescriptionMedicine(model);
 
 
             }
@@ -55,7 +55,7 @@ namespace Service.Impl
             }
 
         }
-        public async void AddPrescriptionMedicine(PrescriptionMedicineDto prescriptionMedicine)
+        public async Task AddPrescriptionMedicine(PrescriptionMedicineDto prescriptionMedicine)
         {
             if (prescriptionMedicine == null)
             {
@@ -70,7 +70,7 @@ namespace Service.Impl
                     throw new ArgumentException("PrescriptionMedicine exist yet");
                 }
                 model = _mapper.Map<PrescriptionMedicine>(prescriptionMedicine);
-                _prescriptionMedicineRepo.AddPrescriptionMedicine(model);
+                await _prescriptionMedicineRepo.AddPrescriptionMedicine(model);
 
             }
             catch (Exception ex)
@@ -112,7 +112,7 @@ namespace Service.Impl
             }
         }
 
-        public async void DeletePrescriptionMedicine(PrescriptionMedicineDto prescriptionMedicine)
+        public async Task DeletePrescriptionMedicine(PrescriptionMedicineDto prescriptionMedicine)
         {
             if (prescriptionMedicine == null)
             {
@@ -127,7 +127,7 @@ namespace Service.Impl
                     throw new ArgumentException("PrescriptionMedicine not found");
                 }
                 model = _mapper.Map<PrescriptionMedicine>(prescriptionMedicine);
-                _prescriptionMedicineRepo.DeletePrescriptionMedicine(model);
+                await _prescriptionMedicineRepo.DeletePrescriptionMedicine(model);
 
             }
             catch (Exception ex)

@@ -21,13 +21,22 @@ namespace Service.Impl
             _mapper = mapper;
         }
         
-        public void CreateUser(UserDto user)
-        {   
-            var model = _mapper.Map<User>(user);
-            _userRepo.CreateUser(model);
+        public async Task CreateUser(UserDto user)
+        { 
+            try
+            {
+                if (user == null) { throw new ArgumentNullException(nameof(user)); }
+                User? model = _mapper.Map<User>(user);  
+                await _userRepo.CreateUser(model);  
+            }
+            catch (Exception ex)
+            {
+                // Log exception
+                throw new ExceptionHandler.ServiceException("An error occurred while retrieving", ex);
+            }
         }
 
-        public async void DeleteUser(UserDto user)
+        public async Task DeleteUser(UserDto user)
         {
             try
             {
@@ -36,7 +45,7 @@ namespace Service.Impl
                 {
                     throw new ArgumentException("Not found user");
                 }
-                _userRepo.DeleteUser(model);
+                 await _userRepo.DeleteUser(model);
             }
             catch (Exception ex)
             {
@@ -196,12 +205,21 @@ namespace Service.Impl
             }            
         }
 
-        public void UpdateUser(UserDto user)
+        public async Task UpdateUser(UserDto user)
         {
-           
-
-            var model = _mapper.Map<User>(user);
-             _userRepo.UpdateUser(model);
+            try
+            {
+                User? models = await _userRepo.GetById(user.UserId);
+                if(models != null)
+                {
+                    await _userRepo.UpdateUser(models);
+                } throw new Exception("User not found!");
+            }
+            catch (Exception ex)
+            {
+                // Log exception
+                throw new ExceptionHandler.ServiceException("An error occurred while retrieving", ex);
+            }
         }
 
         public async Task<List<UserDto>> GetAllCustomers()

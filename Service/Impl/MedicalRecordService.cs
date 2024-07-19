@@ -35,7 +35,7 @@ namespace Service.Impl
             }
         }
 
-        public async void CreateMedicalRecord(MedicalRecordDto medical)
+        public async Task CreateMedicalRecord(MedicalRecordDto medical)
         {
             if (medical == null)
             {
@@ -50,7 +50,7 @@ namespace Service.Impl
                 medical.TimeStart = DateTime.Now;
                 medical.Duration = TimeOnly.FromDateTime(medical.TimeStart);
                 model = _mapper.Map<MedicalRecord>(medical);
-                _medicalRecordRepo.CreateMedicalRecord(model);
+                await _medicalRecordRepo.CreateMedicalRecord(model);
             }
             catch (Exception ex)
             {
@@ -59,7 +59,7 @@ namespace Service.Impl
             }
         }
 
-        public async void UpdateMedicalRecord(MedicalRecordDto medical)
+        public async Task UpdateMedicalRecord(MedicalRecordDto medical)
         {
             if (medical == null)
             {
@@ -78,7 +78,7 @@ namespace Service.Impl
                 
                 model = _mapper.Map<MedicalRecord>(medical);
 
-                _medicalRecordRepo.UpdateMedicalRecord(model);
+                await _medicalRecordRepo.UpdateMedicalRecord(model);
             }
             catch (Exception ex)
             {
@@ -87,7 +87,7 @@ namespace Service.Impl
             }
         }
 
-        public void DeleteMedicalRecord(int id)
+        public async Task DeleteMedicalRecord(int id)
         {
             if (id <= 0)
             {
@@ -96,13 +96,13 @@ namespace Service.Impl
 
             try
             {
-                var existingRecord = _medicalRecordRepo.GetById(id);
+                var existingRecord = await _medicalRecordRepo.GetById(id);
                 if (existingRecord == null)
                 {
                     throw new ExceptionHandler.NotFoundException($"Medical record with ID {id} not found.");
                 }
 
-                _medicalRecordRepo.DeleteMedicalRecord(id);
+                await _medicalRecordRepo.DeleteMedicalRecord(id);
             }
             catch (Exception ex)
             {

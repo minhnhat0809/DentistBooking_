@@ -21,7 +21,7 @@ namespace Service.Impl
 
         
 
-        public async void CreatePrescription(PrescriptionDto prescription)
+        public async Task CreatePrescription(PrescriptionDto prescription)
         {
             if (prescription == null)
             {
@@ -36,7 +36,7 @@ namespace Service.Impl
                     throw new InvalidOperationException($"Medicine with ID {prescription.PrescriptionId} already exists.");
                 }
                 model = _mapper.Map<Prescription>(prescription);
-                _preScription.CreatePrescription(model);
+                await _preScription.CreatePrescription(model);
             }
             catch (Exception ex)
             {
@@ -45,7 +45,7 @@ namespace Service.Impl
             }
         }
 
-        public async void DeletePrescription(int id)
+        public async Task DeletePrescription(int id)
         {
             if (id <= 0)
             {
@@ -60,7 +60,7 @@ namespace Service.Impl
                     throw new ExceptionHandler.NotFoundException($"Prescription with ID {id} not found.");
                 }
 
-                _preScription.DeletePrescription(model.PrescriptionId);
+                await _preScription.DeletePrescription(model.PrescriptionId);
             }
             catch (Exception ex)
             {
@@ -149,7 +149,7 @@ namespace Service.Impl
             }
         }
 
-        public async void UpdatePrescription(PrescriptionDto prescription)
+        public async Task UpdatePrescription(PrescriptionDto prescription)
         {
             if (prescription == null)
             {
@@ -164,7 +164,7 @@ namespace Service.Impl
                     throw new ExceptionHandler.NotFoundException($"prescription with ID {prescription.PrescriptionId} not found.");
                 }
                 model = _mapper.Map<Prescription>(prescription);
-                _preScription.UpdatePrescription(model);
+                await _preScription.UpdatePrescription(model);
             }
             catch (Exception ex)
             {
