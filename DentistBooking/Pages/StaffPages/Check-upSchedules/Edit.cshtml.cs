@@ -60,7 +60,7 @@ namespace DentistBooking.Pages.StaffPages.Check_upSchedules
 
             try
             {
-                _checkupScheduleService.UpdateCheckupSchedule(CheckupSchedule);
+                await _checkupScheduleService.UpdateCheckupSchedule(CheckupSchedule);
                 await _hubContext.Clients.All.SendAsync("ReloadCheckupSchedules");
             }
             catch (DbUpdateConcurrencyException)

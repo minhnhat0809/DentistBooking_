@@ -39,7 +39,7 @@ namespace DentistBooking.Pages.AdminPage.Services
                 return Page();
             }
             Service.Status = true; 
-            _service.CreateService(Service);
+            await _service.CreateService(Service);
             await _hubContext.Clients.All.SendAsync("ReloadServices");
             return RedirectToPage("./Index");
         }

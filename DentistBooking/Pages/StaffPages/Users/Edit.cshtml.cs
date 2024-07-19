@@ -63,7 +63,7 @@ namespace DentistBooking.Pages.StaffPages.Users
 
             try
             {
-                _userService.UpdateUser(User);
+                await _userService.UpdateUser(User);
                 await _hubContext.Clients.All.SendAsync("ReloadUsers");
             }
             catch (DbUpdateConcurrencyException)
