@@ -54,26 +54,26 @@ namespace DataAccess
             return medicalRecordList;
         }
 
-        public void deleteMedicalRecord(MedicalRecord medicalRecord)
+        public async Task deleteMedicalRecord(MedicalRecord medicalRecord)
         {
             var context = new BookingDentistDbContext();
             medicalRecord.Status = false;
             context.Entry<MedicalRecord>(medicalRecord).State = EntityState.Modified;
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public void createMedicalRecord(MedicalRecord medicalRecord)
+        public async Task createMedicalRecord(MedicalRecord medicalRecord)
         {
             var context = new BookingDentistDbContext();
             context.MedicalRecords.Add(medicalRecord);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public void updateMedicalRecord(MedicalRecord medicalRecord)
+        public async Task updateMedicalRecord(MedicalRecord medicalRecord)
         {
             var context = new BookingDentistDbContext();
             context.Entry<MedicalRecord>(medicalRecord).State = EntityState.Modified;
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
     }
 }

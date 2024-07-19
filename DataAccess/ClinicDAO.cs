@@ -42,26 +42,26 @@ namespace DataAccess
             return clinicList;
         }
 
-        public void deleteClinic(Clinic clinic)
+        public async Task deleteClinic(Clinic clinic)
         {
             var context = new BookingDentistDbContext();
             clinic.Status = false;
             context.Entry<Clinic>(clinic).State = EntityState.Modified;
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public void createClinic(Clinic clinic)
+        public async Task createClinic(Clinic clinic)
         {
             var context = new BookingDentistDbContext();
             context.Clinics.Add(clinic);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public void updateClinic(Clinic clinic)
+        public async Task updateClinic(Clinic clinic)
         {
             var context = new BookingDentistDbContext();
             context.Entry<Clinic>(clinic).State = EntityState.Modified;
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
     }
 }

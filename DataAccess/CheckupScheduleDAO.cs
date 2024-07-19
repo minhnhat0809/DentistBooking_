@@ -52,26 +52,26 @@ namespace DataAccess
             return checkupScheducleList;
         }
 
-        public void deleteCheckupSchedule(CheckupSchedule checkupScheducle)
+        public async Task deleteCheckupSchedule(CheckupSchedule checkupScheducle)
         {
             var context = new BookingDentistDbContext();
             checkupScheducle.Status = false;
             context.Entry<CheckupSchedule>(checkupScheducle).State = EntityState.Modified;
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public void createCheckupScheducle(CheckupSchedule checkupScheducle)
+        public async Task createCheckupScheducle(CheckupSchedule checkupScheducle)
         {
             var context = new BookingDentistDbContext();
             context.CheckupSchedules.Add(checkupScheducle);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public void updateCheckupScheducle(CheckupSchedule checkupScheducle)
+        public async Task updateCheckupScheducle(CheckupSchedule checkupScheducle)
         {
             var context = new BookingDentistDbContext();
             context.Entry<CheckupSchedule>(checkupScheducle).State = EntityState.Modified;
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
     }
 }

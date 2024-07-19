@@ -54,26 +54,26 @@ namespace DataAccess
             return services;
         }
 
-        public void deleteService(Service service)
+        public async Task deleteService(Service service)
         {
             var context = new BookingDentistDbContext();
             service.Status = false;
             context.Entry<Service>(service).State = EntityState.Modified;
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public void createService(Service service)
+        public async Task createService(Service service)
         {
             var context = new BookingDentistDbContext();
             context.Services.Add(service);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public void updateService(Service service)
+        public async Task updateService(Service service)
         {
             var context = new BookingDentistDbContext();
             context.Entry<Service>(service).State = EntityState.Modified;
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
     }

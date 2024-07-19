@@ -51,26 +51,26 @@ namespace DataAccess
             return prescriptionList;
         }
 
-        public void deletePrescription(Prescription prescription)
+        public async Task deletePrescription(Prescription prescription)
         {
             var context = new BookingDentistDbContext();
             prescription.Status = false;
             context.Entry<Prescription>(prescription).State = EntityState.Modified;
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public void createPrescription(Prescription prescription)
+        public async Task createPrescription(Prescription prescription)
         {
             var context = new BookingDentistDbContext();
             context.Prescriptions.Add(prescription);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public void updatePrescription(Prescription prescription)
+        public async Task updatePrescription(Prescription prescription)
         {
             var context = new BookingDentistDbContext();
             context.Entry<Prescription>(prescription).State = EntityState.Modified;
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
     }
 }

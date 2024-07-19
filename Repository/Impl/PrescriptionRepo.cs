@@ -5,13 +5,13 @@ namespace Repository.Impl
 {
     public class PrescriptionRepo : IPrescriptionrepo
     {
-        public void CreatePrescription(Prescription prescription)
-        => PrescriptionDAO.Instance.createPrescription(prescription);
+        public async Task CreatePrescription(Prescription prescription)
+        => await PrescriptionDAO.Instance.createPrescription(prescription);
 
-        public async void DeletePrescription(int id)
+        public async Task DeletePrescription(int id)
         {
             var model = await PrescriptionDAO.Instance.getPrescriptionByID(id);
-            PrescriptionDAO.Instance.deletePrescription(model);
+            await PrescriptionDAO.Instance.deletePrescription(model);
         }
 
         public async Task<Prescription> GetById(int id)
@@ -24,7 +24,7 @@ namespace Repository.Impl
         => await PrescriptionDAO.Instance.getAllPrescriptions();
     
 
-        public void UpdatePrescription(Prescription prescription)
-        => PrescriptionDAO.Instance.updatePrescription(prescription);
+        public async Task UpdatePrescription(Prescription prescription)
+        => await PrescriptionDAO.Instance.updatePrescription(prescription);
 }
 }
