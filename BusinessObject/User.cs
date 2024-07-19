@@ -29,11 +29,19 @@ public partial class User
 
     public int? RoleId { get; set; }
 
-    public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+    public virtual ICollection<Appointment> AppointmentCreateByNavigations { get; set; } = new List<Appointment>();
+
+    public virtual ICollection<Appointment> AppointmentCustomers { get; set; } = new List<Appointment>();
+
+    public virtual ICollection<Appointment> AppointmentModifiedByNavigations { get; set; } = new List<Appointment>();
+
+    public virtual ICollection<CheckupSchedule> CheckupScheduleCreateByNavigations { get; set; } = new List<CheckupSchedule>();
 
     public virtual ICollection<CheckupSchedule> CheckupScheduleCustomers { get; set; } = new List<CheckupSchedule>();
 
     public virtual ICollection<CheckupSchedule> CheckupScheduleDentists { get; set; } = new List<CheckupSchedule>();
+
+    public virtual ICollection<CheckupSchedule> CheckupScheduleModifiedByNavigations { get; set; } = new List<CheckupSchedule>();
 
     public virtual Clinic? Clinic { get; set; }
 

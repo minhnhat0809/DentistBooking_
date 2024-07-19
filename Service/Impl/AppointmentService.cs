@@ -320,77 +320,77 @@ namespace Service.Impl
             try
             {
                 if (serviceId <= 0)
-            {
-                return "Service ID is empty!";
-            }
+                {
+                    return "Service ID is empty!";
+                }
 
-            BusinessObject.Service serviceModel = await serviceRepo.GetServiceByID(serviceId);
-            if (serviceModel == null)
-            {
-                return "This service is not existed!";
-            }
+                BusinessObject.Service serviceModel = await serviceRepo.GetServiceByID(serviceId);
+                if (serviceModel == null)
+                {
+                    return "This service is not existed!";
+                }
 
-            if (appointmentId <= 0)
-            {
-                return "Appointment ID is empty!";
-            }
-            Appointment appointment = await appointmentRepo.GetAppointmentById(appointmentId);
-            if (appointment == null)
-            {
-                return "This appointment is not existed!";
-            }
+                if (appointmentId <= 0)
+                {
+                    return "Appointment ID is empty!";
+                }
+                Appointment appointment = await appointmentRepo.GetAppointmentById(appointmentId);
+                if (appointment == null)
+                {
+                    return "This appointment is not existed!";
+                }
 
-            if (dentistSlotId <= 0)
-            {
-                return "Dentist slot ID is empty!";
-            }
-            DentistSlot dentistSlot = await dentistSlotRepo.GetDentistSlotByID(dentistSlotId);
-            if (dentistSlot == null)
-            {
-                return "This dentist slot is not existed!";
-            }
+                if (dentistSlotId <= 0)
+                {
+                    return "Dentist slot ID is empty!";
+                }
+                DentistSlot dentistSlot = await dentistSlotRepo.GetDentistSlotByID(dentistSlotId);
+                if (dentistSlot == null)
+                {
+                    return "This dentist slot is not existed!";
+                }
 
-            if (TimeStart < dentistSlot.TimeStart || TimeEnd > dentistSlot.TimeEnd)
-            {
-                return "The time of this appointment is out of range for this dentist slot!";
-            }
+                if (TimeStart < dentistSlot.TimeStart || TimeEnd > dentistSlot.TimeEnd)
+                {
+                    return "The time of this appointment is out of range for this dentist slot!";
+                }
             
 
-            if (TimeStart > TimeEnd)
-            {
-                return "Time Start is bigger than Time End!";
-            }
-
-            if (!CheckTimeStart(TimeStart))
-            {
-                return "Time Start must be in range [08:00-11:30] & [13:00-19:00]";
-            }
-
-            var appoinmentList = dentistSlot.Appointments.ToList();
-            if (appoinmentList != null)
-            {
-                foreach (var ap in appoinmentList)
+                if (TimeStart > TimeEnd)
                 {
-                    TimeSpan apStartTime = ap.TimeStart.TimeOfDay;
-                    TimeSpan apEndTime = ap.TimeEnd.TimeOfDay;
+                    return "Time Start is bigger than Time End!";
+                }
 
-                    TimeSpan timeStart = TimeStart.TimeOfDay;
-                    TimeSpan timeEnd = TimeStart.AddMinutes(30).TimeOfDay;
+                if (!CheckTimeStart(TimeStart))
+                {
+                    return "Time Start must be in range [08:00-11:30] & [13:00-19:00]";
+                }
 
-                    if ((timeStart >= apStartTime && timeStart < apEndTime) || (timeStart < apStartTime && timeEnd > apStartTime))
+                var appoinmentList = dentistSlot.Appointments.ToList();
+                if (appoinmentList != null)
+                {
+                    foreach (var ap in appoinmentList)
                     {
-                        return $"There is an appointment overlapping at {ap.TimeStart} - {ap.TimeEnd.TimeOfDay}'";
+                        TimeSpan apStartTime = ap.TimeStart.TimeOfDay;
+                        TimeSpan apEndTime = ap.TimeEnd.TimeOfDay;
+
+                        TimeSpan timeStart = TimeStart.TimeOfDay;
+                        TimeSpan timeEnd = TimeEnd.TimeOfDay;
+
+                        if ((timeStart >= apStartTime && timeStart < apEndTime) || (timeStart < apStartTime && timeEnd > apStartTime))
+                        {
+                            return $"There is an appointment overlapping at {ap.TimeStart} - {ap.TimeEnd.TimeOfDay}'";
+                        }
                     }
                 }
-            }
-            appointment.ServiceId = serviceId;
-            appointment.Status = "Done";
-            appointment.DentistSlotId = dentistSlotId;
-            appointment.TimeStart = TimeStart;
-            appointment.TimeEnd = TimeEnd;
+                appointment.ServiceId = serviceId;
+                appointment.Status = "Done";
+                appointment.DentistSlotId = dentistSlotId;
+                appointment.TimeStart = TimeStart;
+                appointment.TimeEnd = TimeEnd;
 
-            appointmentRepo.UpdateAppointment(appointment);
-            return "Success";
+                appointmentRepo.UpdateAppointment(appointment);
+                return "Success";
             }
             catch (Exception e)
             {

@@ -47,10 +47,7 @@ namespace Service.Impl
             try
             {
                 var models = await dentistSlotRepo.GetAllDentistSlotsByDentistAndDate(id, selectedDate);
-                if (models != null)
-                {
-                    throw new Exception("dentist slot not found");
-                }
+                
                 var viewModels = mapper.Map<List<DentistSlotDto>>(models);
                 return viewModels;
             }
@@ -94,7 +91,10 @@ namespace Service.Impl
                 return "Dentist is not exist!";
             }
 
-            if (timeStart > timeEnd)
+            if (!timeStart.Date.Equals(timeEnd.Date))
+            {
+                return "Date of time start and time end is different!";
+            } else if (timeStart.TimeOfDay > timeEnd.TimeOfDay)
             {
                 return "Time start is bigger than time end!";
             }

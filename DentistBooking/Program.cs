@@ -36,10 +36,6 @@ builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
 });
 
 builder.Services.AddSignalR();
-builder.Services.AddDbContext<BookingDentistDbContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
-
-
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(60);
@@ -101,3 +97,4 @@ app.MapHub<SignalRHub>("/SignalRHub");
 app.UseSession();
 
 app.Run();
+//dotnet ef dbcontext scaffold "Server=(local);Initial Catalog=Booking_Dentist_DB;Persist Security Info=False;User ID=sa;Password=12345;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;" "Microsoft.EntityFrameworkCore.SqlServer"--force

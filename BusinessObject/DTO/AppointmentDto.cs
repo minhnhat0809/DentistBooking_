@@ -28,7 +28,7 @@ namespace BusinessObject.DTO
         public int? MedicalRecordId { get; set; }
 
         public virtual UserDto? Customer { get; set; }
-        [JsonIgnore]
+        //[JsonIgnore]
         public virtual DentistSlotDto? DentistSlot { get; set; }
 
         public virtual MedicalRecordDto? MedicalRecord { get; set; }

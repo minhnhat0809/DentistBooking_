@@ -60,7 +60,7 @@ namespace DentistBooking.Pages.StaffPages
                 Dentists = await userService.GetAllDentistsByService(Appointment.ServiceId.Value);
                 return RedirectToPage(new { id = Appointment.AppointmentId });
             }
-             string result = await appointmentService.UpdateAppointmentForStaff((int)Appointment.ServiceId,
+            string result = await appointmentService.UpdateAppointmentForStaff((int)Appointment.ServiceId,
                 Appointment.AppointmentId, Appointment.TimeStart, Appointment.TimeEnd, (int)Appointment.DentistSlotId);
             if (!result.Equals("Success"))
             {

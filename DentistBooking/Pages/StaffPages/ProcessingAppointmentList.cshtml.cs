@@ -19,7 +19,7 @@ namespace DentistBooking.Pages.StaffPages
         public IList<AppointmentDto> Appointments { get; set; } = default!;
         public async void OnGet()
         {
-            Appointments = await appointmentService.GetAllProcessingAppointment();
+            Appointments =  appointmentService.GetAllProcessingAppointment().Result;
         }
 
         public async Task<IActionResult> OnPostDelete(int appointmentId)

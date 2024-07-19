@@ -217,14 +217,21 @@
                 data: { dentistId: dentistId, timeStart: timeStart },
                 type: 'GET',
                 success: function (data) {
-                    console.log(data);
                     var scheduleBody = $('#scheduleBody');
                     scheduleBody.empty();
-                    var slots = data.$values; 
+                    var slots = data.$values;
+                    console.log(slots);
+                    if (!slots || slots.length === 0) {
+                        var row = '<tr>' +
+                            '<td colspan="3">This dentist does not have slots for this date.</td>' +
+                            '</tr>';
+                        scheduleBody.append(row);
+                        return;
+                    }
 
                     $.each(slots, function (index, slot) {
                         var appointmentsHtml = '';
-
+                        
                         if (slot.Appointments && slot.Appointments.$values.length > 0) {
                             $.each(slot.Appointments.$values, function (idx, appointment) {
                                 var formattedStart = formatDate(new Date(appointment.TimeStart));
@@ -234,13 +241,14 @@
                                     '<strong>' + formattedStart + ' - ' + formattedEnd + '</strong><br>' +
                                     '</div>';
                             });
-                        } else {
+                        } 
+                        else {
                             appointmentsHtml = '<div>No appointments</div>';
                         }
 
                         var formattedSlotStart = formatDate(new Date(slot.TimeStart));
                         var formattedSlotEnd = formatDate(new Date(slot.TimeEnd));
-
+                        
                         var row = '<tr>' +
                             '<td>' + formattedSlotStart + ' - ' + formattedSlotEnd + '</td>' +
                             '<td>' + appointmentsHtml + '</td>' +
@@ -248,8 +256,6 @@
                             '</tr>'
                         scheduleBody.append(row);
                     });
-
-                    //$('#scheduleModal').modal('show');
                 },
                 error: function () {
                     alert('Error retrieving schedule.');
@@ -281,9 +287,7 @@
                         }
                     });
                 });
-       
-
-
+        
         $(document).on('click', '.book-slot-button', function () {
             var slotId = $(this).attr('data-slot-id');
             console.log(slotId);  

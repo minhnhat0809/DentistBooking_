@@ -13,9 +13,13 @@ public partial class DentistSlot
 
     public bool? Status { get; set; }
 
+    public int? RoomId { get; set; }
+
     public int? DentistId { get; set; }
 
     public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 
     public virtual User? Dentist { get; set; }
+
+    public virtual Room? Room { get; set; }
 }

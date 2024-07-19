@@ -50,7 +50,7 @@ namespace DataAccess
         {
             var context = new BookingDentistDbContext();
             var dentistSlotList = await context.DentistSlots.Include(ds => ds.Appointments)
-                .Where(ds => ds.DentistId == id && EF.Functions.DateDiffDay(ds.TimeStart, selectedDate.ToDateTime(default)) == 0)
+                .Where(ds => ds.DentistId == id && DateOnly.FromDateTime(ds.TimeStart.Date).Equals(selectedDate))
                 .OrderBy(ds => ds.TimeStart).ToListAsync();
             return dentistSlotList;
         }
