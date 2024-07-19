@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Service;
 using Service.Impl;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.StaffPages
 {
@@ -12,65 +15,110 @@ namespace DentistBooking.Pages.StaffPages
         private readonly IDentistService dentistService;
         private readonly IService service;
         private readonly IUserService userService;
-        public ProcessingAppointmentModel(IAppointmentService appointmentService, IDentistService dentistService, IService service, IUserService userService)
+        private readonly IDentistSlotService dentistSlotService;
+        public ProcessingAppointmentModel(IAppointmentService appointmentService, IDentistService dentistService
+            , IService service, IUserService userService, IDentistSlotService dentistSlotService)
         {
             this.appointmentService = appointmentService;
             this.dentistService = dentistService;
             this.service = service;
             this.userService = userService;
+            this.dentistSlotService = dentistSlotService;
         }
 
-        [BindProperty]
-        public Appointment Appointment { get; set; } = default!;
+        [BindProperty(SupportsGet = true)]
+        public AppointmentDto Appointment { get; set; } = default!;
 
         [BindProperty]
-        public IList<User> Dentists { get; set; } = default!;
+        public IList<UserDto> Dentists { get; set; } = default!;
+        [BindProperty(SupportsGet = true)]
+        public TimeOnly DentistSlotTimeStart { get; set; } = default!;
+        [BindProperty(SupportsGet = true)]
+        public TimeOnly DentistSlotTimeEnd { get; set; } = default!;
+        
 
-        public IList<BusinessObject.Service> Services { get; set; } = default!;
-        public IActionResult OnGet(int id)
+        public ServiceDto Service { get; set; } = default!;
+        public async Task<IActionResult> OnGet(int id)
         {
-            Appointment = appointmentService.GetAppointmentByID(id);
-            if (Appointment.DentistSlot != null)
-            {
-                Services = dentistService.GetAllServiceByDentist((int)Appointment.DentistSlot.DentistId, (int)Appointment.ServiceId);
-            }
-            else
-            {
-                Services = service.GetAllServicesForCustomer((int)Appointment.ServiceId);
-            }
-            Dentists = userService.GetAllDentistsByService((int)Appointment.ServiceId).Result;
+            Appointment = await appointmentService.GetAppointmentByID(id);
 
+            Service = await service.GetServiceByID(Appointment.ServiceId.Value);
+
+            Dentists = await userService.GetAllDentistsByService((int)Appointment.ServiceId);
+            
+            HttpContext.Session.SetInt32("AppointmentId",Appointment.AppointmentId);
             return Page();
         }
 
-        public IActionResult OnPostUpdate()
+        public async Task<IActionResult> OnPostUpdate()
         {
-            Dictionary<string, string> result = appointmentService.UpdateAppointmentForStaff((int)Appointment.ServiceId,
-                Appointment.AppointmentId, Appointment.TimeStart, Appointment.TimeEnd, Appointment.DentistSlotId);
-            if (!result.ContainsKey("Success"))
+            if (!Appointment.DentistSlotId.HasValue)
             {
-                foreach (var item in result)
-                {
-                    TempData["AppointmentDetail"] = item.Value;
-                }
-                Appointment = appointmentService.GetAppointmentByID(Appointment.AppointmentId);
-                
-                Services = service.GetAllServicesForCustomer((int)Appointment.ServiceId);
-                return Page();
+                TempData["ProcessingAppointmentError"] = "Please choose dentist slot!";
+                Appointment = await appointmentService.GetAppointmentByID(Appointment.AppointmentId);
+                Service = await service.GetServiceByID(Appointment.ServiceId.Value);
+                Dentists = await userService.GetAllDentistsByService(Appointment.ServiceId.Value);
+                return RedirectToPage(new { id = Appointment.AppointmentId });
+            }
+             string result = await appointmentService.UpdateAppointmentForStaff((int)Appointment.ServiceId,
+                Appointment.AppointmentId, Appointment.TimeStart, Appointment.TimeEnd, (int)Appointment.DentistSlotId);
+            if (!result.Equals("Success"))
+            {
+                TempData["ProcessingAppointmentError"] = result;
+                Appointment = await appointmentService.GetAppointmentByID(Appointment.AppointmentId);
+                Service = await service.GetServiceByID(Appointment.ServiceId.Value);
+                Dentists = await userService.GetAllDentistsByService(Appointment.ServiceId.Value);
+                RedirectToPage(new { id = Appointment.AppointmentId });
             }
 
             TempData["ProcessingAppointment"] = "Appointment updated successfully!";
-            Appointment = appointmentService.GetAppointmentByID(Appointment.AppointmentId);
-            Services = service.GetAllServicesForCustomer((int)Appointment.ServiceId);
-            Dentists = userService.GetAllDentistsByService((int)Appointment.ServiceId).Result;
-            return Page();
+            Appointment = await appointmentService.GetAppointmentByID(Appointment.AppointmentId);
+            Service = await service.GetServiceByID(Appointment.ServiceId.Value);
+            Dentists = await userService.GetAllDentistsByService(Appointment.ServiceId.Value);
+            return RedirectToPage(new { id = Appointment.AppointmentId });
         }
 
-        public IActionResult OnGetDentistByService(int id, int serviceId)
+        public IActionResult OnGetDentistSchedule(int dentistId, DateTime timeStart)
         {
-            Dentists = userService.GetAllDentistsByService(serviceId).Result;
-            var dentistList = Dentists.Select(d => new { userId = d.UserId, userName = d.UserName }).ToList();
-            return new JsonResult(dentistList);
+            HttpContext.Session.SetInt32("DentistId",dentistId);
+            var dentistSlot = dentistSlotService.GetAllDentistSlotsByDentistAndDate(dentistId, DateOnly.FromDateTime(timeStart)).Result;
+            var schedule = dentistSlot.Select(d => new { 
+                Id = d.DentistSlotId,
+                TimeStart = d.TimeStart,
+                TimeEnd = d.TimeEnd,
+                Appointments = d.Appointments
+                }
+            ).ToList();
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve,
+                WriteIndented = true
+            };
+            
+            return new JsonResult(schedule, options);
+        }
+
+        public async Task<IActionResult> OnPostCreateDentistSlot()
+        {
+            var apppointmentId = (int)HttpContext.Session.GetInt32("AppointmentId");
+            Appointment = await appointmentService.GetAppointmentByID(apppointmentId);
+            var date = Appointment.TimeStart;
+            DateTime slotTimeStart = new DateTime(date.Year, date.Month, date.Day,
+                DentistSlotTimeStart.Hour, DentistSlotTimeStart.Minute, DentistSlotTimeStart.Second);
+            
+            DateTime slotTimeEnd = new DateTime(date.Year, date.Month, date.Day,
+                DentistSlotTimeEnd.Hour, DentistSlotTimeEnd.Minute, DentistSlotTimeEnd.Second);
+            
+            string result = await dentistSlotService.CreateDentistSlot((int)HttpContext.Session.GetInt32("DentistId")
+                , slotTimeStart, slotTimeEnd);
+            if (!result.Equals("Success"))
+            {
+                TempData["ProcessingAppointment_DentistSlot"] = result;
+                return RedirectToPage(new { id = Appointment.AppointmentId });
+            }
+
+            TempData["ProcessingAppointment_DentistSlot"] = "Create dentist slot successfully!";
+            return RedirectToPage(new { id = Appointment.AppointmentId });
         }
 
 

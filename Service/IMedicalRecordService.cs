@@ -10,12 +10,11 @@ namespace Service
 {
     public interface IMedicalRecordService
     {
-        public Task<List<MedicalRecordDto>> GetAllMedicalRecords();
-        public Task<MedicalRecord> GetById(int? id);
-        public void CreateMedicalRecord(MedicalRecord medical);
-        public void UpdateMedicalRecord(MedicalRecord medical);
-        public void DeleteMedicalRecord(int id);
-        public Task<MedicalRecordDto> GetDtoById(int? id);
-        Task<IEnumerable<MedicalRecord>> GetMedicalRecordsByCustomerIdAsync(int customerId);
+        Task<List<MedicalRecordDto>> GetAllMedicalRecords();
+        Task CreateMedicalRecord(MedicalRecordDto medical);
+        Task UpdateMedicalRecord(MedicalRecordDto medical);
+        Task DeleteMedicalRecord(int id);
+        Task<MedicalRecordDto> GetById(int? id);
+        Task<List<MedicalRecordDto>> GetMedicalRecordsByCustomerIdAsync(int customerId);
     }
 }

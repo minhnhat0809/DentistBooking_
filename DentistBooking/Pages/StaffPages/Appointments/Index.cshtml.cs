@@ -9,6 +9,7 @@ using BusinessObject;
 using DataAccess;
 using Service;
 using X.PagedList;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.StaffPages.Appointments
 {
@@ -21,7 +22,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             _appointmentService = appointmentService;
         }
 
-        public IPagedList<Appointment> Appointment { get;set; } = default!;
+        public IPagedList<AppointmentDto> Appointment { get;set; } = default!;
 
         [BindProperty(SupportsGet = true)]
         public int PageNumber { get; set; } = 1;

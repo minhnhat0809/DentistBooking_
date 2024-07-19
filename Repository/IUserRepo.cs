@@ -4,11 +4,11 @@ namespace Repository
 {
     public interface IUserRepo
     {
-        public Task<List<User>> GetAllUsers();
-        public Task<User> GetById(int? id);
-        public void CreateUser(User user);
-        public void UpdateUser(User user);
-        public void DeleteUser(User id);
+        Task<List<User>> GetAllUsers();
+        Task<User> GetById(int? id);
+        Task CreateUser(User user);
+        Task UpdateUser(User user);
+        Task DeleteUser(User id);
 
         Task<User?> GetUserByUserName(string email);
 

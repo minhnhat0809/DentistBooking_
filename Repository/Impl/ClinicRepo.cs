@@ -16,16 +16,16 @@ namespace Repository.Impl
         public async Task<Clinic> GetById(int? id)
             => await ClinicDAO.Instance.getClinicByID(id);
 
-        public void CreateClinic(Clinic clinic)
-            => ClinicDAO.Instance.createClinic(clinic);
+        public async Task CreateClinic(Clinic clinic)
+            => await ClinicDAO.Instance.createClinic(clinic);
 
-        public void UpdateClinic(Clinic clinic)
-            => ClinicDAO.Instance.updateClinic(clinic);
+        public async Task UpdateClinic(Clinic clinic)
+            => await ClinicDAO.Instance.updateClinic(clinic);
 
-        public async void DeleteClinic(int id)
+        public async Task DeleteClinic(int id)
         {
             var model = await ClinicDAO.Instance.getClinicByID(id);
-            ClinicDAO.Instance.deleteClinic(model);
+            await ClinicDAO.Instance.deleteClinic(model);
         }
     }
 }

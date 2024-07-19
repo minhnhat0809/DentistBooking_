@@ -9,6 +9,7 @@ using BusinessObject;
 using DataAccess;
 using Service;
 using Microsoft.AspNetCore.SignalR;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.StaffPages.MedicalRecords
 {
@@ -24,7 +25,7 @@ namespace DentistBooking.Pages.StaffPages.MedicalRecords
         }
 
         [BindProperty]
-        public MedicalRecord MedicalRecord { get; set; } = default!;
+        public MedicalRecordDto MedicalRecord { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -57,7 +58,7 @@ namespace DentistBooking.Pages.StaffPages.MedicalRecords
             if (medicalrecord != null)
             {
                 MedicalRecord = medicalrecord;
-                _medicalRecordService.DeleteMedicalRecord(MedicalRecord.MediaRecordId);
+                await _medicalRecordService.DeleteMedicalRecord(MedicalRecord.MediaRecordId);
                 await _hubContext.Clients.All.SendAsync("ReloadMedicalRecords");
             }
 

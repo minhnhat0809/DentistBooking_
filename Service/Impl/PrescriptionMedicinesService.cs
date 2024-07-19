@@ -1,4 +1,6 @@
-﻿using BusinessObject;
+﻿using AutoMapper;
+using BusinessObject;
+using BusinessObject.DTO;
 using Repository.Impl;
 using Service.Exeption;
 using System;
@@ -11,21 +13,23 @@ namespace Service.Impl
 {
     public interface IPrescriptionMedicinesService
     {
-        public Task<List<PrescriptionMedicine>> GetAllPrescriptionMedicines();
-        public Task<List<PrescriptionMedicine>> GetAllPrescriptionMedicinesByPrescriptionId( int preId);
-        public Task<PrescriptionMedicine> GetById(int? id);
-        public void AddPrescriptionMedicine(PrescriptionMedicine prescriptionMedicine);
-        public void DeletePrescriptionMedicine(PrescriptionMedicine prescriptionMedicine);
-        public void UpdatePrescriptionMedicine(PrescriptionMedicine prescriptionMedicine);
+        Task<List<PrescriptionMedicineDto>> GetAllPrescriptionMedicines();
+        Task<List<PrescriptionMedicineDto>> GetAllPrescriptionMedicinesByPrescriptionId( int preId);
+        Task<PrescriptionMedicineDto> GetById(int? id);
+        Task AddPrescriptionMedicine(PrescriptionMedicineDto prescriptionMedicine);
+        Task DeletePrescriptionMedicine(PrescriptionMedicineDto prescriptionMedicine);
+        Task UpdatePrescriptionMedicine(PrescriptionMedicineDto prescriptionMedicine);
     }
     public class PrescriptionMedicinesService : IPrescriptionMedicinesService
     {
         private readonly IPrescriptionMedicineRepo _prescriptionMedicineRepo;
-        public PrescriptionMedicinesService(IPrescriptionMedicineRepo prescriptionMedicineRepo)
+        private readonly IMapper _mapper;
+        public PrescriptionMedicinesService(IPrescriptionMedicineRepo prescriptionMedicineRepo, IMapper mapper)
         {
             _prescriptionMedicineRepo = prescriptionMedicineRepo;
+            _mapper = mapper;
         }
-        public void UpdatePrescriptionMedicine(PrescriptionMedicine prescriptionMedicine)
+        public async Task UpdatePrescriptionMedicine(PrescriptionMedicineDto prescriptionMedicine)
         {
             if (prescriptionMedicine == null)
             {
@@ -34,7 +38,13 @@ namespace Service.Impl
 
             try
             {
-                _prescriptionMedicineRepo.UpdatePrescriptionMedicine(prescriptionMedicine);
+                var model = await _prescriptionMedicineRepo.GetById(prescriptionMedicine.PrescriptionMedicineId);
+                if (model == null)
+                {
+                    throw new ArgumentException("PrescriptionMedicine not found");
+                }
+                model = _mapper.Map<PrescriptionMedicine>(prescriptionMedicine);
+                await _prescriptionMedicineRepo.UpdatePrescriptionMedicine(model);
 
 
             }
@@ -45,7 +55,7 @@ namespace Service.Impl
             }
 
         }
-        public void AddPrescriptionMedicine(PrescriptionMedicine prescriptionMedicine)
+        public async Task AddPrescriptionMedicine(PrescriptionMedicineDto prescriptionMedicine)
         {
             if (prescriptionMedicine == null)
             {
@@ -54,7 +64,13 @@ namespace Service.Impl
 
             try
             {
-                _prescriptionMedicineRepo.AddPrescriptionMedicine(prescriptionMedicine);
+                var model = await _prescriptionMedicineRepo.GetById(prescriptionMedicine.PrescriptionMedicineId);
+                if (model != null)
+                {
+                    throw new ArgumentException("PrescriptionMedicine exist yet");
+                }
+                model = _mapper.Map<PrescriptionMedicine>(prescriptionMedicine);
+                await _prescriptionMedicineRepo.AddPrescriptionMedicine(model);
 
             }
             catch (Exception ex)
@@ -64,13 +80,14 @@ namespace Service.Impl
             }
         }
 
-        public async Task<List<PrescriptionMedicine>> GetAllPrescriptionMedicinesByPrescriptionId(int preId)
+        public async Task<List<PrescriptionMedicineDto>> GetAllPrescriptionMedicinesByPrescriptionId(int preId)
         {
             
             try
             {
                 var models = await _prescriptionMedicineRepo.GetAllPrescriptionMedicinesByPrescriptionId(preId);
-                return models;
+                var viewModels = _mapper.Map<List<PrescriptionMedicineDto>>(models);
+                return viewModels;
             }
             catch (Exception ex)
             {
@@ -79,13 +96,14 @@ namespace Service.Impl
             }
         }
 
-        public async Task<PrescriptionMedicine> GetById(int? id)
+        public async Task<PrescriptionMedicineDto> GetById(int? id)
         {
 
             try
             {
                 var model = await _prescriptionMedicineRepo.GetById(id);
-                return model;
+                var viewModel = _mapper.Map<PrescriptionMedicineDto>(model);
+                return viewModel;
             }
             catch (Exception ex)
             {
@@ -94,7 +112,7 @@ namespace Service.Impl
             }
         }
 
-        public void DeletePrescriptionMedicine(PrescriptionMedicine prescriptionMedicine)
+        public async Task DeletePrescriptionMedicine(PrescriptionMedicineDto prescriptionMedicine)
         {
             if (prescriptionMedicine == null)
             {
@@ -103,7 +121,13 @@ namespace Service.Impl
 
             try
             {
-                _prescriptionMedicineRepo.DeletePrescriptionMedicine(prescriptionMedicine);
+                var model = await _prescriptionMedicineRepo.GetById(prescriptionMedicine.PrescriptionMedicineId);
+                if (model == null)
+                {
+                    throw new ArgumentException("PrescriptionMedicine not found");
+                }
+                model = _mapper.Map<PrescriptionMedicine>(prescriptionMedicine);
+                await _prescriptionMedicineRepo.DeletePrescriptionMedicine(model);
 
             }
             catch (Exception ex)
@@ -113,12 +137,13 @@ namespace Service.Impl
             }
         }
 
-        public async Task<List<PrescriptionMedicine>> GetAllPrescriptionMedicines()
+        public async Task<List<PrescriptionMedicineDto>> GetAllPrescriptionMedicines()
         {
             try
             {
                 var models = await _prescriptionMedicineRepo.GetAllPrescriptionMedicines();
-                return models;
+                var viewModels = _mapper.Map<List<PrescriptionMedicineDto>>(models);
+                return viewModels;
             }
             catch (Exception ex)
             {

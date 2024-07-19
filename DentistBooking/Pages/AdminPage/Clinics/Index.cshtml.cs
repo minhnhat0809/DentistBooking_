@@ -10,6 +10,7 @@ using DataAccess;
 using Service;
 using X.PagedList;
 using Service.Impl;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.AdminPage.Clinics
 {
@@ -22,7 +23,7 @@ namespace DentistBooking.Pages.AdminPage.Clinics
             _clinicService = clinicService;
         }
 
-        public IPagedList<Clinic> Clinic { get;set; } = default!;
+        public IPagedList<ClinicDto> Clinic { get;set; } = default!;
         [BindProperty(SupportsGet = true)]
         public int PageNumber { get; set; } = 1;
 

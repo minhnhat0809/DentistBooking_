@@ -32,8 +32,12 @@ namespace DentistBooking.Pages.StaffPages.Check_upSchedules
 
         public IActionResult OnGet()
         {
-        ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers().Result, "UserId", "Name");
-        ViewData["DentistId"] = new SelectList(_userService.GetAllDentists().Result, "UserId", "Name");
+            CheckupSchedule = new CheckupSchedule()
+            {
+                TimeStart = DateTime.Now,
+            };
+            ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers().Result, "UserId", "Name");
+            ViewData["DentistId"] = new SelectList(_userService.GetAllDentists().Result, "UserId", "Name");
             return Page();
         }
 
@@ -45,9 +49,12 @@ namespace DentistBooking.Pages.StaffPages.Check_upSchedules
         {
             if (!ModelState.IsValid)
             {
+                ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers().Result, "UserId", "Name");
+                ViewData["DentistId"] = new SelectList(_userService.GetAllDentists().Result, "UserId", "Name");
                 return Page();
             }
-            _checkupScheduleService.CreateCheckupSchedule(CheckupSchedule);
+            CheckupSchedule.Status = true;
+            await _checkupScheduleService.CreateCheckupSchedule(CheckupSchedule);
             await _hubContext.Clients.All.SendAsync("ReloadCheckupSchedules");
 
             return RedirectToPage("./Index");

@@ -39,7 +39,6 @@ public partial class BookingDentistDbContext : DbContext
     public virtual DbSet<Service> Services { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
-
     private string? GetConnectionString()
     {
         IConfiguration configuration = new ConfigurationBuilder()

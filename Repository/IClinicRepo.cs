@@ -9,11 +9,11 @@ namespace Repository
 {
     public interface IClinicRepo
     {
-        public Task<List<Clinic>> GetAllClinics();
-        public Task<Clinic> GetById(int? id);
-        public void CreateClinic(Clinic clinic);
-        public void UpdateClinic(Clinic clinic);
-        public void DeleteClinic(int id);
+        Task<List<Clinic>> GetAllClinics();
+        Task<Clinic> GetById(int? id);
+        Task CreateClinic(Clinic clinic);
+        Task UpdateClinic(Clinic clinic);
+        Task DeleteClinic(int id);
 
     }
 }

@@ -16,16 +16,16 @@ namespace Repository.Impl
         public async Task<MedicalRecord> GetById(int? id)
             => await MedicalRecordDAO.Instance.getMedicalRecordByID(id);
 
-        public void CreateMedicalRecord(MedicalRecord medical)
-            => MedicalRecordDAO.Instance.createMedicalRecord(medical);
+        public async Task CreateMedicalRecord(MedicalRecord medical)
+            => await MedicalRecordDAO.Instance.createMedicalRecord(medical);
 
-        public void UpdateMedicalRecord(MedicalRecord medical)
-            => MedicalRecordDAO.Instance.updateMedicalRecord(medical);
+        public async Task UpdateMedicalRecord(MedicalRecord medical)
+            => await MedicalRecordDAO.Instance.updateMedicalRecord(medical);
 
-        public async void DeleteMedicalRecord(int id)
+        public async Task DeleteMedicalRecord(int id)
         {
             var model = await MedicalRecordDAO.Instance.getMedicalRecordByID(id);
-            MedicalRecordDAO.Instance.deleteMedicalRecord(model);
+            await MedicalRecordDAO.Instance.deleteMedicalRecord(model);
         }
 
         public async Task<IEnumerable<MedicalRecord>> GetMedicalRecordsByCustomerIdAsync(int customerId)

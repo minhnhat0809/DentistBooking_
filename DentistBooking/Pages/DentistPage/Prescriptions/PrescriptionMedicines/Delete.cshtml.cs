@@ -9,6 +9,7 @@ using BusinessObject;
 using DataAccess;
 using Service.Impl;
 using Microsoft.AspNetCore.SignalR;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.DentistPage.Prescriptions.PrescriptionMedicines
 {
@@ -24,7 +25,7 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions.PrescriptionMedicines
         }
 
         [BindProperty]
-        public PrescriptionMedicine PrescriptionMedicine { get; set; } = default!;
+        public PrescriptionMedicineDto PrescriptionMedicine { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -57,7 +58,7 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions.PrescriptionMedicines
             if (prescriptionmedicine != null)
             {
                 PrescriptionMedicine = prescriptionmedicine;
-                _prescriptionMedicinesService.DeletePrescriptionMedicine(prescriptionmedicine);
+                await _prescriptionMedicinesService.DeletePrescriptionMedicine(prescriptionmedicine);
                 await _hubContext.Clients.All.SendAsync("ReloadPrescriptionMedicines");
             }
 

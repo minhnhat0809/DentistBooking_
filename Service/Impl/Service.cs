@@ -1,6 +1,8 @@
 ﻿
 using AutoMapper;
+using BusinessObject;
 using BusinessObject.DTO;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Repository;
 
 namespace Service.Impl
@@ -14,27 +16,86 @@ namespace Service.Impl
             _servicerRepo = repo;
             _mapper = mapper;
         }
-        public void CreateService(BusinessObject.Service service)
-        => _servicerRepo.CreateService(service);
+        public async Task CreateService(ServiceDto service)
+        {
+            try
+            {
+                var model = await _servicerRepo.GetServiceByID(service.ServiceId);
+                if (model != null)
+                {
+                    throw new InvalidOperationException("Service exist yet!");
+                }
+                model = _mapper.Map<BusinessObject.Service>(service);   
+                await _servicerRepo.CreateService(model);
+            }
+            catch (Exception ex)
+            {
 
-        public void DeleteService(BusinessObject.Service service)
-        =>_servicerRepo.DeleteService(service);
+                throw new Exception("error at create service", ex);
+            }
+        }
+
+        public async Task DeleteService(ServiceDto service)
+        {
+            try
+            {
+                var model = await _servicerRepo.GetServiceByID(service.ServiceId);
+                if (model == null)
+                {
+                    throw new InvalidOperationException("Services not found!");
+                }
+                model = _mapper.Map<BusinessObject.Service>(service);
+                await _servicerRepo.DeleteService(model);
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("error at delete service", ex);
+            }
+        }
 
         public async Task<List<ServiceDto>> GetAllServices()
         {
-            List<BusinessObject.Service> models = await _servicerRepo.GetAllServices();
-            List<ServiceDto> viewModels = _mapper.Map<List<ServiceDto>>(models);
-            return viewModels;
+            
+            try
+            {
+                var model =  await _servicerRepo.GetAllServices();
+                if (model == null)
+                {
+                    throw new InvalidOperationException("Services not found!");
+                }
+                var viewModels = _mapper.Map<List<ServiceDto>>(model);
+                return viewModels;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("error at delete service", ex);
+            }
         }
 
-        public async Task<IEnumerable<BusinessObject.Service>> GetAllServicesAsync()
+        public async Task<IEnumerable<ServiceDto>> GetAllServicesAsync()
         {
-            return await _servicerRepo.GetAllServicesAsync();
+            try
+            {
+                var models = await _servicerRepo.GetAllServicesAsync();
+                if (models == null)
+                {
+                    throw new InvalidOperationException("Services not found!");
+                }
+                var viewModels = _mapper.Map<ServiceDto[]>(models);
+                return viewModels;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("error at get services", ex);
+            }
         }
 
-        public List<BusinessObject.Service> GetAllServicesForCustomer(int serviceId)
+        public async Task< List<ServiceDto> >GetAllServicesForCustomer(int serviceId)
         {
-            List<BusinessObject.Service> services = _servicerRepo.GetAllServices().Result;
+            List<BusinessObject.Service> services = await _servicerRepo.GetAllServices();
 
             BusinessObject.Service service = services.FirstOrDefault(s => s.ServiceId == serviceId);
             if (service != null)
@@ -42,28 +103,68 @@ namespace Service.Impl
                 services.Remove(service);
                 services.Insert(0, service);
             }
-            return services;
+            var viewModels = _mapper.Map<List<ServiceDto>>(services);
+            return viewModels;
         }
 
-        public async Task<ServiceDto> GetDtoById(int id)
+        public async Task<ServiceDto> GetServiceByID(int id)
         {
-            BusinessObject.Service model = await _servicerRepo.GetServiceByID(id);
-            return _mapper.Map<ServiceDto>(model);
+            try
+            {
+                var model = await _servicerRepo.GetServiceByID(id);
+                if (model == null)
+                {
+                    throw new InvalidOperationException("Service not found!");
+                }
+                var viewModel = _mapper.Map<ServiceDto>(model);
+                return viewModel;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("error at get service", ex);
+            }
         }
 
-        
+       
 
-        public BusinessObject.Service GetServiceByID(int id)
+        public async Task<IEnumerable<ServiceDto>> GetServicesByDentistSlotAsync(int dentistSlotId)
         {
-            return _servicerRepo.GetServiceByID(id).Result;
+           
+            try
+            {
+                var model = await _servicerRepo.GetServicesByDentistSlotAsync(dentistSlotId);
+                if (model == null)
+                {
+                    throw new InvalidOperationException("Service not found!");
+                }
+                var viewModel = _mapper.Map<ServiceDto[]>(model);
+                return viewModel;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("error at get service", ex);
+            }
         }
 
-        public async Task<IEnumerable<BusinessObject.Service>> GetServicesByDentistSlotAsync(int dentistSlotId)
+        public async Task UpdateService(ServiceDto service)
         {
-           return await _servicerRepo.GetServicesByDentistSlotAsync(dentistSlotId);
-        }
+            try
+            {
+                var model = await _servicerRepo.GetServiceByID(service.ServiceId);   
+                if (model == null)
+                {
+                    throw new InvalidOperationException("Service not found!");
+                }
+                model = _mapper.Map<BusinessObject.Service>(service); 
+                await _servicerRepo.UpdateService(model); 
+            }
+            catch (Exception ex)
+            {
 
-        public void UpdateService(BusinessObject.Service service)
-        => _servicerRepo.UpdateService(service);
+                throw new Exception("error at get service", ex);
+            }
+        }
     }
 }

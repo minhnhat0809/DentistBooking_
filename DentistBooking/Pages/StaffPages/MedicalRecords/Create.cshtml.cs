@@ -9,6 +9,7 @@ using BusinessObject;
 using DataAccess;
 using Service;
 using Microsoft.AspNetCore.SignalR;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.StaffPages.MedicalRecords
 {
@@ -32,7 +33,7 @@ namespace DentistBooking.Pages.StaffPages.MedicalRecords
         }
 
         [BindProperty]
-        public MedicalRecord MedicalRecord { get; set; } = default!;
+        public MedicalRecordDto MedicalRecord { get; set; } = default!;
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
@@ -41,7 +42,10 @@ namespace DentistBooking.Pages.StaffPages.MedicalRecords
             {
                 return Page();
             }
-            _medicalRecordService.CreateMedicalRecord(MedicalRecord);
+            MedicalRecord.TimeStart = DateTime.Now;
+            MedicalRecord.Duration = TimeOnly.FromDateTime(MedicalRecord.TimeStart);
+            MedicalRecord.Status = true;
+            await _medicalRecordService.CreateMedicalRecord(MedicalRecord);
             await _hubContext.Clients.All.SendAsync("ReloadMedicalRecords");
 
             return RedirectToPage("./Index");

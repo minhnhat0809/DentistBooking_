@@ -6,12 +6,12 @@
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Clinics</h1>
 
 <p>
     <a asp-page="Create">Create New</a>
 </p>
-<table class="table">
+<table class="table table-striped table-bordered  bg-light">
     <thead>
         <tr>
             <th>
@@ -33,30 +33,40 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Clinic) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClinicName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.ClinicId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.ClinicId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.ClinicId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Clinic)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClinicName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                @if (item.Status == true)
+                {
+                    <td>Active</td>
+                }
+                else
+                {
+                    <td>Inactive</td>
+                }
+
+                @* <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td> *@
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.ClinicId">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.ClinicId">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.ClinicId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 <div>
@@ -78,3 +88,7 @@
         <span>Next</span>
     }
 </div>
+
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+
+<script src="~/js/site.js"></script>

@@ -10,6 +10,7 @@ using BusinessObject;
 using DataAccess;
 using Service;
 using Microsoft.AspNetCore.SignalR;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.DentistPage.Prescriptions
 {
@@ -27,7 +28,7 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions
         }
 
         [BindProperty]
-        public Prescription Prescription { get; set; } = default!;
+        public PrescriptionDto Prescription { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -37,6 +38,7 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions
             }
 
             var prescription = await _prescriptionService.GetByIdWithMedicinesAsync(id.Value);
+            prescription.PrescriptionMedicines = prescription.PrescriptionMedicines.Where(x=>x.Status == true).ToList();
             if (prescription == null)
             {
                 return NotFound();
@@ -52,12 +54,14 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions
         {
             if (!ModelState.IsValid)
             {
+
+                ViewData["AppointmentId"] = new SelectList(_appointmentService.GetAllAppointments().Result, "AppointmentId", "AppointmentId");
                 return Page();
             }
 
             try
             {
-                _prescriptionService.UpdatePrescription(Prescription);
+                await _prescriptionService.UpdatePrescription(Prescription);
                 await _hubContext.Clients.All.SendAsync("ReloadPrescriptions");
             }
             catch (DbUpdateConcurrencyException)
@@ -77,7 +81,7 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions
 
         private bool PrescriptionExists(int id)
         {
-            return _prescriptionService.GetPrescriptions().Any(e => e.PrescriptionId == id);
+            return _prescriptionService.GetPrescriptions().Result.Any(e => e.PrescriptionId == id);
         }
     }
 }

@@ -10,13 +10,13 @@ namespace Service
 {
     public interface ICheckupScheduleService
     {
-        public Task<List<CheckupScheduleDto>> GetAllCheckupSchedules();
-        public void CreateCheckupSchedule(CheckupSchedule schedule);
-        public void UpdateCheckupSchedule(CheckupSchedule schedule);
-        public void DeleteCheckupSchedule(int id);
+        Task<List<CheckupScheduleDto>> GetAllCheckupSchedules();
+        Task CreateCheckupSchedule(CheckupSchedule schedule);
+        Task UpdateCheckupSchedule(CheckupSchedule schedule);
+        Task DeleteCheckupSchedule(int id);
 
-        public Task<CheckupScheduleDto> GetDtoById(int? id);
+        Task<CheckupScheduleDto> GetDtoById(int? id);
 
-        public Task<CheckupSchedule> GetById(int? id);
+        Task<CheckupSchedule> GetById(int? id);
     }
 }

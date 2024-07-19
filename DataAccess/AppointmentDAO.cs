@@ -28,15 +28,16 @@ namespace DataAccess
             }
         }
 
-        public Appointment getAppointmnentByID(int id)
+        public async Task<Appointment> getAppointmnentByID(int id)
         {
             var context = new BookingDentistDbContext();
-            var appointment = context.Appointments
+            var appointment = await context.Appointments
                 .Include(x => x.Customer)
                 .Include(x => x.DentistSlot)
+                .ThenInclude(d => d.Dentist)
                 .Include(x => x.MedicalRecord)
                 .Include(x => x.Service)
-                .FirstOrDefault(c => c.AppointmentId == id);
+                .FirstOrDefaultAsync(c => c.AppointmentId == id);
             return appointment;
         }
 
@@ -64,7 +65,7 @@ namespace DataAccess
         public void deleteAppointment(Appointment appointment)
         {
             var context = new BookingDentistDbContext();
-            appointment.Status = "Deleted";
+            appointment.Status = "Delete";
             context.Entry<Appointment>(appointment).State = EntityState.Modified;
             context.SaveChanges();
         }
@@ -83,12 +84,13 @@ namespace DataAccess
             context.SaveChanges();
         }
 
-        public List<Appointment> getAllProcessingAppointment()
+        public async Task<List<Appointment>> getAllProcessingAppointment()
         {
             var context = new BookingDentistDbContext();
-            return context.Appointments.Include(ap => ap.DentistSlot)
+            var appointments = await  context.Appointments.Include(ap => ap.DentistSlot)
                 .ThenInclude(dl => dl.Dentist)
-                .Where(ap => ap.Status.Equals("Processing")).ToList();
+                .Where(ap => ap.Status.Equals("Processing")).ToListAsync();
+            return appointments;
         }
     }
 }

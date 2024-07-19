@@ -6,11 +6,11 @@ namespace Repository.Impl
 {
     public class ServiceRepo : IServiceRepo
     {
-        public void CreateService(Service service)
-        => ServiceDAO.Instance.createService(service);
+        public async Task CreateService(Service service)
+        => await ServiceDAO.Instance.createService(service);
 
-        public void DeleteService(Service service)
-        => ServiceDAO.Instance.deleteService(service);
+        public async Task DeleteService(Service service)
+        => await ServiceDAO.Instance.deleteService(service);
 
 
         public async Task<List<Service>> GetAllServices()
@@ -25,7 +25,7 @@ namespace Repository.Impl
         public async Task<IEnumerable<Service>> GetServicesByDentistSlotAsync(int dentistSlotId)
         => await ServiceDAO.Instance.GetServicesByDentistSlotAsync(dentistSlotId);
 
-        public void UpdateService(Service service)
-        =>ServiceDAO.Instance.updateService(service);
+        public async Task UpdateService(Service service)
+        => await ServiceDAO.Instance.updateService(service);
     }
 }

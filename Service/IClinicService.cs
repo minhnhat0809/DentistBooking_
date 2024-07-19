@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObject;
+using BusinessObject.DTO;
 
 namespace Service
 {
     public interface IClinicService
     {
-        public Task<List<Clinic>> GetAllClinics();
-        public Task<Clinic> GetById(int? id);
-        public void CreateClinic(Clinic clinic);
-        public void UpdateClinic(Clinic clinic);
-        public void DeleteClinic(int id);
+        Task<List<ClinicDto>> GetAllClinics();
+        Task<ClinicDto> GetById(int? id);
+        Task CreateClinic(ClinicDto clinic);
+        Task UpdateClinic(ClinicDto clinic);
+        Task DeleteClinic(int id);
     }
 }

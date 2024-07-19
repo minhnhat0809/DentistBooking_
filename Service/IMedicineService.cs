@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObject;
+using BusinessObject.DTO;
 
 namespace Service
 {
     public interface IMedicineService
     {
-        public List<Medicine> GetAllMedicines();
-        public Medicine GetById(int? id);
-        public void  CreateMedicine(Medicine medicine);
-        public void UpdateMedicine(Medicine medicine);
-        public void DeleteMedicine(int id);
+        Task<List<MedicineDto>> GetAllMedicines();
+        Task<MedicineDto> GetById(int? id);
+        Task CreateMedicine(MedicineDto medicine);
+        Task UpdateMedicine(MedicineDto medicine);
+        Task DeleteMedicine(int id);
     }
 }
