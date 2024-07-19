@@ -1,4 +1,5 @@
 using BusinessObject;
+using BusinessObject.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Service;
@@ -14,8 +15,8 @@ namespace DentistBooking.Pages.CustomerPage
         }
 
         [BindProperty]
-        public Clinic Clinic { get; set; } = default!;
-        public async void OnGet()
+        public ClinicDto Clinic { get; set; } = default!;
+        public void OnGet()
         {
             Clinic = clinicService.GetById(1).Result;
         }

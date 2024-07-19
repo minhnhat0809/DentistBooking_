@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObject;
 using DataAccess;
 using Service;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.StaffPages.Appointments
 {
@@ -20,7 +21,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             _appointmentService = appointmentService;   
         }
 
-        public Appointment Appointment { get; set; } = default!;
+        public AppointmentDto Appointment { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -29,7 +30,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
                 return NotFound();
             }
 
-            var appointment = _appointmentService.GetAppointmentByID(id);
+            var appointment = await _appointmentService.GetAppointmentByID(id);
             if (appointment == null)
             {
                 return NotFound();

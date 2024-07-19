@@ -9,6 +9,7 @@ using BusinessObject;
 using DataAccess;
 using Service;
 using X.PagedList;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.DentistPage.Prescriptions
 {
@@ -21,7 +22,7 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions
             _prescriptionService = prescriptionService;
         }
 
-        public IPagedList<Prescription> Prescription { get;set; } = default!;
+        public IPagedList<PrescriptionDto> Prescription { get;set; } = default!;
         [BindProperty(SupportsGet = true)]
         public int PageNumber { get; set; } = 1;
 
@@ -31,7 +32,7 @@ namespace DentistBooking.Pages.DentistPage.Prescriptions
         public async Task<IActionResult> OnGetAsync()
         {
             
-            var prescriptions = _prescriptionService.GetPrescriptions();
+            var prescriptions = await _prescriptionService.GetPrescriptions();
             Prescription = prescriptions.ToPagedList(PageNumber, PageSize);
 
             return Page();

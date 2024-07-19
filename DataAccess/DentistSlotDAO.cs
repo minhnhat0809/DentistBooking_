@@ -31,7 +31,10 @@ namespace DataAccess
         public async Task<DentistSlot> getDentistSlotByID(int id)
         {
             var context = new BookingDentistDbContext();
-            var dentistSlot = await context.DentistSlots.Include(ds => ds.Appointments).FirstOrDefaultAsync(c => c.DentistSlotId == id);
+            var dentistSlot = await context.DentistSlots
+                .Include(x=> x.Dentist)
+                .Include(ds => ds.Appointments)
+                .FirstOrDefaultAsync(c => c.DentistSlotId == id);
             return dentistSlot;
         }
 
@@ -52,26 +55,26 @@ namespace DataAccess
             return dentistSlotList;
         }
 
-        public void deleteDentistSlot(DentistSlot dentistSlot)
+        public async Task deleteDentistSlot(DentistSlot dentistSlot)
         {
             var context = new BookingDentistDbContext();
             dentistSlot.Status = false;
             context.Entry<DentistSlot>(dentistSlot).State = EntityState.Modified;
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public void createDentistSlot(DentistSlot dentistSlot)
+        public async Task createDentistSlot(DentistSlot dentistSlot)
         {
             var context = new BookingDentistDbContext();
             context.DentistSlots.Add(dentistSlot);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public void updateDentistSlot(DentistSlot dentistSlot)
+        public async Task updateDentistSlot(DentistSlot dentistSlot)
         {
             var context = new BookingDentistDbContext();
             context.Entry<DentistSlot>(dentistSlot).State = EntityState.Modified;
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
     }
 }

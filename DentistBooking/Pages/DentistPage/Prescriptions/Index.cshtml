@@ -6,7 +6,7 @@
     Layout = "~/Pages/Shared/_DentistLayout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Prescriptions</h1>
 
 <p>
     <a asp-page="Create">Create New</a>
@@ -44,9 +44,13 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Total)
             </td>
-            <td>
+                @if(item.Status == true)
+                {
+                    <td>Active</td>
+                } else {<td>Inactive</td>}
+            @* <td>
                 @Html.DisplayFor(modelItem => item.Status)
-            </td>
+            </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.Appointment.AppointmentId)
             </td>

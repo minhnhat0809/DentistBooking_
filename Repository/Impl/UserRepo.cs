@@ -5,11 +5,11 @@ namespace Repository.Impl
 {
     public class UserRepo : IUserRepo
     {
-        public void CreateUser(User user)
-        => UserDAO.Instance.createUser(user);
+        public async Task CreateUser(User user)
+        => await UserDAO.Instance.createUser(user);
 
-        public void DeleteUser(User id)
-        => UserDAO.Instance.deleteUser(id);
+        public async Task DeleteUser(User id)
+        => await UserDAO.Instance.deleteUser(id);
 
         public async Task<List<User>> GetAllCustomer()
         => await UserDAO.Instance.GetAllCustomer();
@@ -27,7 +27,7 @@ namespace Repository.Impl
 
         public async Task<User?> GetUserByUserName(string email) => await UserDAO.Instance.GetUserByUserName(email);
 
-        public void UpdateUser(User user)
-        => UserDAO.Instance.updateUser(user);
+        public async Task UpdateUser(User user)
+        => await UserDAO.Instance.updateUser(user);
     }
 }

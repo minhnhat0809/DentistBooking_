@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Service;
 using System.Runtime.CompilerServices;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.CustomerPage
 {
@@ -27,13 +28,13 @@ namespace DentistBooking.Pages.CustomerPage
         [BindProperty]
         public int serviceId { get; set; }
 
-        public IList<BusinessObject.Service> Services { get; set; } = default!;
+        public IList<ServiceDto> Services { get; set; } = default!;
 
 
-        public void OnGet(int id)
+        public async void OnGet(int id)
         {
             serviceId = id;
-            Services = service.GetAllServicesForCustomer(serviceId);
+            Services = await service.GetAllServicesForCustomer(serviceId);
         }
 
         public async Task<IActionResult> OnPostBookAsync()

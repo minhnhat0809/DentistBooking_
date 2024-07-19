@@ -23,21 +23,21 @@ namespace DataAccess
             }
         }
 
-        public Prescription getPrescriptionByID(int id)
+        public async Task<Prescription> getPrescriptionByID(int id)
         {
             var context = new BookingDentistDbContext();
-            var prescription = context.Prescriptions
+            var prescription = await context.Prescriptions
                 .Include(x=>x.Appointment) 
-                .FirstOrDefault(c => c.PrescriptionId == id);
+                .FirstOrDefaultAsync(c => c.PrescriptionId == id);
             return prescription;
         }
 
-        public List<Prescription> getAllPrescriptions()
+        public async Task<List<Prescription>> getAllPrescriptions()
         {
             var context = new BookingDentistDbContext();
-            var prescriptionList = context.Prescriptions
+            var prescriptionList = await context.Prescriptions
                 .Include (x=>x.Appointment)
-                .ToList();
+                .ToListAsync();
             return prescriptionList;
         }
         public async Task<Prescription> GetByIdWithMedicinesAsync(int id)
@@ -51,26 +51,26 @@ namespace DataAccess
             return prescriptionList;
         }
 
-        public void deletePrescription(Prescription prescription)
+        public async Task deletePrescription(Prescription prescription)
         {
             var context = new BookingDentistDbContext();
             prescription.Status = false;
             context.Entry<Prescription>(prescription).State = EntityState.Modified;
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public void createPrescription(Prescription prescription)
+        public async Task createPrescription(Prescription prescription)
         {
             var context = new BookingDentistDbContext();
             context.Prescriptions.Add(prescription);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public void updatePrescription(Prescription prescription)
+        public async Task updatePrescription(Prescription prescription)
         {
             var context = new BookingDentistDbContext();
             context.Entry<Prescription>(prescription).State = EntityState.Modified;
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
     }
 }

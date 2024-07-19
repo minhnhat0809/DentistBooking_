@@ -10,6 +10,7 @@ using BusinessObject;
 using DataAccess;
 using Service;
 using Microsoft.AspNetCore.SignalR;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.StaffPages.Medicines
 {
@@ -25,7 +26,7 @@ namespace DentistBooking.Pages.StaffPages.Medicines
         }
 
         [BindProperty]
-        public Medicine Medicine { get; set; } = default!;
+        public MedicineDto Medicine { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -34,7 +35,7 @@ namespace DentistBooking.Pages.StaffPages.Medicines
                 return NotFound();
             }
 
-            var medicine =  _medicineService.GetById(id);
+            var medicine = await _medicineService.GetById(id);
             if (medicine == null)
             {
                 return NotFound();
@@ -56,7 +57,7 @@ namespace DentistBooking.Pages.StaffPages.Medicines
 
             try
             {
-                _medicineService.UpdateMedicine(Medicine);
+                await _medicineService.UpdateMedicine(Medicine);
                 await _hubContext.Clients.All.SendAsync("ReloadMedicines");
             }
             catch (DbUpdateConcurrencyException)
@@ -76,7 +77,7 @@ namespace DentistBooking.Pages.StaffPages.Medicines
 
         private bool MedicineExists(int id)
         {
-            return _medicineService.GetAllMedicines().Any(e => e.MedicineId == id);
+            return _medicineService.GetAllMedicines().Result.Any(e => e.MedicineId == id);
         }
     }
 }

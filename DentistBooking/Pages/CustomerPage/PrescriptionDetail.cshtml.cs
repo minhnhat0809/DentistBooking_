@@ -1,4 +1,5 @@
 using BusinessObject;
+using BusinessObject.DTO;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Service.Impl;
 
@@ -13,10 +14,10 @@ public class PrescriptionDetail : PageModel
         this.prescriptionMedicinesService = prescriptionMedicinesService;
     }
 
-    public IList<PrescriptionMedicine> PrescriptionMedicines { get; set; } = default!;
-    public void OnGet(int prescriptionId)
+    public IList<PrescriptionMedicineDto> PrescriptionMedicines { get; set; } = default!;
+    public async void OnGet(int prescriptionId)
     {
-        PrescriptionMedicines = prescriptionMedicinesService
-            .GetAllPrescriptionMedicinesByPrescriptionId(prescriptionId).Result;
+        PrescriptionMedicines = await prescriptionMedicinesService
+            .GetAllPrescriptionMedicinesByPrescriptionId(prescriptionId);
     }
 }

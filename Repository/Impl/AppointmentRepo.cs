@@ -12,9 +12,9 @@ namespace Repository.Impl
     {
         public async Task CreateAppointment(Appointment appointment) => await AppointmentDAO.Instance.createAppointment(appointment);
 
-        public void DeleteAppointment(int appointmentId)
+        public async Task DeleteAppointment(int appointmentId)
         {
-            var model = AppointmentDAO.Instance.getAppointmnentByID(appointmentId);
+            var model = await AppointmentDAO.Instance.getAppointmnentByID(appointmentId);
             AppointmentDAO.Instance.deleteAppointment(model);
         }
 
@@ -22,10 +22,10 @@ namespace Repository.Impl
 
         public async Task<List<Appointment>> GetAllAppointmentsOfCustomer(int customerId) => await AppointmentDAO.Instance.getAllAppointmentsOfCustomer(customerId);
 
-        public List<Appointment> GetAllProcessingAppointment() => AppointmentDAO.Instance.getAllProcessingAppointment();
+        public async Task<List<Appointment>> GetAllProcessingAppointment() => await AppointmentDAO.Instance.getAllProcessingAppointment();
 
-        public Appointment GetAppointmentById(int id) => AppointmentDAO.Instance.getAppointmnentByID(id);
+        public async Task<Appointment> GetAppointmentById(int id) => await AppointmentDAO.Instance.getAppointmnentByID(id);
 
-        public void UpdateAppointment(Appointment appointment) => AppointmentDAO.Instance.updateAppointment(appointment);
+        public async Task UpdateAppointment(Appointment appointment) => AppointmentDAO.Instance.updateAppointment(appointment);
     }
 }

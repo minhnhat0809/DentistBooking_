@@ -9,6 +9,7 @@ using BusinessObject;
 using DataAccess;
 using Service;
 using Microsoft.AspNetCore.SignalR;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.AdminPage.Services
 {
@@ -28,7 +29,7 @@ namespace DentistBooking.Pages.AdminPage.Services
         }
 
         [BindProperty]
-        public BusinessObject.Service Service { get; set; } = default!;
+        public ServiceDto Service { get; set; } = default!;
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
@@ -37,7 +38,8 @@ namespace DentistBooking.Pages.AdminPage.Services
             {
                 return Page();
             }
-            _service.CreateService(Service);
+            Service.Status = true; 
+            await _service.CreateService(Service);
             await _hubContext.Clients.All.SendAsync("ReloadServices");
             return RedirectToPage("./Index");
         }

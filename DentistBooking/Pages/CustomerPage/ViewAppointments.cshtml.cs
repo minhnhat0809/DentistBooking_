@@ -1,4 +1,5 @@
 using BusinessObject;
+using BusinessObject.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Service;
@@ -14,7 +15,7 @@ namespace DentistBooking.Pages.CustomerPage
             this.appointmentService = appointmentService;
         }
 
-        public IList<Appointment> Appointments { get; set; } = default!;
+        public IList<AppointmentDto> Appointments { get; set; } = default!;
 
 
         public async Task OnGet()

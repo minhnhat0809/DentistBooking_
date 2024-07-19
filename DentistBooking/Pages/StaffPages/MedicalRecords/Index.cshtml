@@ -6,7 +6,7 @@
     Layout = "~/Pages/Shared/_StaffLayout.cshtml";
 }
 
-<h1>Index</h1>
+<h1>Medical Records</h1>
 
 <p>
     <a asp-page="Create">Create New</a>
@@ -27,7 +27,7 @@
                 @Html.DisplayNameFor(model => model.MedicalRecord[0].Status)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MedicalRecord[0].CustomerName)
+                @Html.DisplayNameFor(model => model.MedicalRecord[0].CustomerId)
             </th>
             <th></th>
         </tr>
@@ -44,11 +44,15 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Diagnosis)
             </td>
-            <td>
+                @if(item.Status == true)
+                {
+                    <td>Active</td>
+                }else {<td>Inactive</td>}
+                @* <td>
                 @Html.DisplayFor(modelItem => item.Status)
-            </td>
+            </td> *@
             <td>
-                @Html.DisplayFor(modelItem => item.CustomerName)
+                    @Html.DisplayFor(modelItem => item.Customer.Name)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.MediaRecordId">Edit</a> |

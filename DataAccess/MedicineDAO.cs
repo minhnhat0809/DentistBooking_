@@ -28,40 +28,40 @@ namespace DataAccess
             }
         }
 
-        public Medicine getMedicineByID(int? id)
+        public async Task<Medicine> getMedicineByID(int? id)
         {
             var context = new BookingDentistDbContext();
-            var medicine = context.Medicines.FirstOrDefault(c => c.MedicineId == id);
+            var medicine = await context.Medicines.FirstOrDefaultAsync(c => c.MedicineId == id);
             return medicine;
         }
 
-        public List<Medicine> getAllMedicines()
+        public async Task<List<Medicine>> getAllMedicines()
         {
             var context = new BookingDentistDbContext();
-            var medicineList = context.Medicines.ToList();
+            var medicineList = await context.Medicines.ToListAsync();
             return medicineList;
         }
 
-        public void deleteMedicine(Medicine medicine)
+        public async Task deleteMedicine(Medicine medicine)
         {
             var context = new BookingDentistDbContext();
             medicine.Status = false;
             context.Entry<Medicine>(medicine).State = EntityState.Modified;
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public void createMedicine(Medicine medicine)
+        public async Task createMedicine(Medicine medicine)
         {
             var context = new BookingDentistDbContext();
             context.Medicines.Add(medicine);
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
 
-        public void updateMedicine(Medicine medicine)
+        public async Task updateMedicine(Medicine medicine)
         {
             var context = new BookingDentistDbContext();
             context.Entry<Medicine>(medicine).State = EntityState.Modified;
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
     }
 }

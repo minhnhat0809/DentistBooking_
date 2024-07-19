@@ -10,6 +10,7 @@ using BusinessObject;
 using DataAccess;
 using Service;
 using Microsoft.AspNetCore.SignalR;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.AdminPage.Users
 {
@@ -26,7 +27,7 @@ namespace DentistBooking.Pages.AdminPage.Users
         }
 
         [BindProperty]
-        public User User { get; set; } = default!;
+        public UserDto User { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -52,6 +53,8 @@ namespace DentistBooking.Pages.AdminPage.Users
         {
             if (!ModelState.IsValid)
             {
+                ViewData["ClinicId"] = new SelectList(_clinicService.GetAllClinics().Result, "ClinicId", "ClinicName");
+                ViewData["RoleId"] = new SelectList(_userService.GetAllRoles().Result, "RoleId", "RoleName");
                 return Page();
             }
 
@@ -59,7 +62,7 @@ namespace DentistBooking.Pages.AdminPage.Users
 
             try
             {
-                _userService.UpdateUser(User);
+                await _userService.UpdateUser(User);
                 await _hubContext.Clients.All.SendAsync("ReloadUsers");
             }
             catch (DbUpdateConcurrencyException)

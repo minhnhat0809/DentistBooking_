@@ -9,6 +9,7 @@ using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Service;
 using Microsoft.AspNetCore.SignalR;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.StaffPages.Appointments
 {
@@ -41,14 +42,14 @@ namespace DentistBooking.Pages.StaffPages.Appointments
         */
         public IList<string> Status { get; set; } = default!;
 
-        public IList<MedicalRecord> MedicalRecords { get; set; } = default!;
+        public IList<MedicalRecordDto> MedicalRecords { get; set; } = default!;
 
-        public IList<BusinessObject.Service> Services { get; set; } = default!;
-        public IActionResult OnGet()
+        public IList<ServiceDto> Services { get; set; } = default!;
+        public async Task<IActionResult> OnGet()
         {
-            ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers().Result, "UserId", "Name");
-            Status = _appointmentService.GetAllStatusOfAppointment(0);
-            var dentistSlots =  _dentistSlotService.GetAllDentistSlots().Result;
+            ViewData["CustomerId"] = new SelectList( await _userService.GetAllUsers(), "UserId", "Name");
+            Status = await _appointmentService.GetAllStatusOfAppointment(0);
+            var dentistSlots = await  _dentistSlotService.GetAllDentistSlots();
             var dentistSlotSelectList = dentistSlots.Select(slot => new
             {
                 slot.DentistSlotId,
@@ -63,7 +64,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
         }
 
         [BindProperty]
-        public Appointment Appointment { get; set; } = default!;
+        public AppointmentDto Appointment { get; set; } = default!;
 
         public async Task<JsonResult> OnGetServicesByDentistSlotAsync(int dentistSlotId)
         {
@@ -95,7 +96,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
                 return RedirectToPage();
             }
 
-            string result = _appointmentService.AddAppointment(Appointment);
+            string result = await _appointmentService.AddAppointment(Appointment);
             if (result.Equals("Success"))
             {
                 TempData["CreateAppointment"] = result;

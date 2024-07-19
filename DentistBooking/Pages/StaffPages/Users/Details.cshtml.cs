@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObject;
 using DataAccess;
 using Service;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.StaffPages.Users
 {
@@ -20,7 +21,7 @@ namespace DentistBooking.Pages.StaffPages.Users
             _userService = userService;
         }
 
-        public User User { get; set; } = default!;
+        public UserDto User { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {

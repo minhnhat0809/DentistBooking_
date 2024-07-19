@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessObject.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace Service
 {
     public interface IDentistService
     {
-        List<BusinessObject.Service> GetAllServiceByDentist(int dentistId, int serviceId);
+        Task<List<ServiceDto>> GetAllServiceByDentist(int dentistId, int serviceId);
     }
 }

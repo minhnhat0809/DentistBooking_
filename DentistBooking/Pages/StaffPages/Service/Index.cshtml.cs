@@ -21,7 +21,7 @@ namespace DentistBooking.Pages.StaffPages.Service
             _service = service;
         }
 
-        public IPagedList<ServiceDto> Service { get; set; } = default!;
+        public IPagedList<BusinessObject.DTO.ServiceDto> Service { get; set; } = default!;
         [BindProperty(SupportsGet = true)]
         public int PageNumber { get; set; } = 1;
 

@@ -9,6 +9,7 @@ using BusinessObject;
 using DataAccess;
 using Service;
 using Microsoft.AspNetCore.SignalR;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.AdminPage.Users
 {
@@ -26,26 +27,32 @@ namespace DentistBooking.Pages.AdminPage.Users
 
         public IActionResult OnGet()
         {
-            ViewData["ClinicId"] = new SelectList( _clinicService.GetAllClinics().Result, "ClinicId", "ClinicName");
-            ViewData["RoleId"] = new SelectList( _userService.GetAllRoles().Result, "RoleId", "RoleName");
+            PopulateSelectLists();
             return Page();
         }
 
         [BindProperty]
-        public User User { get; set; } = default!;
+        public UserDto User { get; set; } = default!;
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
+                PopulateSelectLists();
                 return Page();
             }
             User.CreatedDate = DateTime.Now;
+            
             User.Status = true;
-            _userService.CreateUser(User);
+            await _userService.CreateUser(User);
             await _hubContext.Clients.All.SendAsync("ReloadUsers");
             return RedirectToPage("./Index");
+        }
+        private void PopulateSelectLists()
+        {
+            ViewData["ClinicId"] = new SelectList(_clinicService.GetAllClinics().Result, "ClinicId", "ClinicName");
+            ViewData["RoleId"] = new SelectList(_userService.GetAllRoles().Result, "RoleId", "RoleName");
         }
     }
 }

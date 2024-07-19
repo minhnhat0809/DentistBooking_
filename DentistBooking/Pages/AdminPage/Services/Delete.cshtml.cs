@@ -9,6 +9,7 @@ using BusinessObject;
 using DataAccess;
 using Service;
 using Microsoft.AspNetCore.SignalR;
+using BusinessObject.DTO;
 
 namespace DentistBooking.Pages.AdminPage.Services
 {
@@ -24,7 +25,7 @@ namespace DentistBooking.Pages.AdminPage.Services
         }
 
         [BindProperty]
-        public BusinessObject.Service Service { get; set; } = default!;
+        public ServiceDto Service { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -33,7 +34,7 @@ namespace DentistBooking.Pages.AdminPage.Services
                 return NotFound();
             }
 
-            var service = _service.GetServiceByID(id);
+            var service = await _service.GetServiceByID(id);
 
             if (service == null)
             {
@@ -53,11 +54,11 @@ namespace DentistBooking.Pages.AdminPage.Services
                 return NotFound();
             }
 
-            var service = _service.GetServiceByID(id);
+            var service = await _service.GetServiceByID(id);
             if (service != null)
             {
                 Service = service;
-                _service.DeleteService(service);
+                await _service.DeleteService(service);
                 await _hubContext.Clients.All.SendAsync("ReloadServices");
             }
 

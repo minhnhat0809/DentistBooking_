@@ -46,7 +46,7 @@ namespace Service.Impl
         }
 
 
-        public async void CreateCheckupSchedule(CheckupSchedule schedule)
+        public async Task CreateCheckupSchedule(CheckupSchedule schedule)
         {
             if (schedule == null)
             {
@@ -61,7 +61,7 @@ namespace Service.Impl
                     throw new InvalidOperationException($"Checkup schedule with ID {schedule.ScheduleId} already exists.");
                 }
 
-                _scheduleRepo.CreateCheckupSchedule(schedule);
+                await _scheduleRepo.CreateCheckupSchedule(schedule);
             }
             catch (Exception ex)
             {
@@ -70,7 +70,7 @@ namespace Service.Impl
             }
         }
 
-        public async void UpdateCheckupSchedule(CheckupSchedule schedule)
+        public async Task UpdateCheckupSchedule(CheckupSchedule schedule)
         {
             if (schedule == null)
             {
@@ -85,7 +85,7 @@ namespace Service.Impl
                     throw new ExceptionHandler.NotFoundException($"Checkup schedule with ID {schedule.ScheduleId} not found.");
                 }
 
-                _scheduleRepo.UpdateCheckupSchedule(schedule);
+                await _scheduleRepo.UpdateCheckupSchedule(schedule);
             }
             catch (Exception ex)
             {
@@ -94,7 +94,7 @@ namespace Service.Impl
             }
         }
 
-        public async void DeleteCheckupSchedule(int id)
+        public async Task DeleteCheckupSchedule(int id)
         {
             if (id <= 0)
             {
@@ -109,7 +109,7 @@ namespace Service.Impl
                     throw new ExceptionHandler.NotFoundException($"Checkup schedule with ID {id} not found.");
                 }
 
-                _scheduleRepo.DeleteCheckupSchedule(id);
+                await _scheduleRepo.DeleteCheckupSchedule(id);
             }
             catch (Exception ex)
             {
