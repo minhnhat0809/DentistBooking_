@@ -13,8 +13,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
 {
+    options.Conventions.AddPageRoute("/Index", "/");
+    options.Conventions.AddPageRoute("/GuestPage/BookingAppointment", "/clinic-booking");
+    options.Conventions.AddPageRoute("/GuestPage/ClinicInfo", "/clinic-info");
+    options.Conventions.AddPageRoute("/GuestPage/ServiceInfo", "/clinic-services");
+
     options.Conventions.AddPageRoute("/ForgetPassword", "/forget-password");
-    options.Conventions.AddPageRoute("/Index", "/login");
+    options.Conventions.AddPageRoute("/LoginPage", "/login");
     options.Conventions.AddPageRoute("/AdminPage/Users/Index", "/users-management");
     options.Conventions.AddPageRoute("/AdminPage/Services/Index", "/services");
     options.Conventions.AddPageRoute("/AdminPage/Clinics/Index", "/clinics");
