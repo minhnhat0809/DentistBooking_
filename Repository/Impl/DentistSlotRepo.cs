@@ -23,6 +23,9 @@ namespace Repository.Impl
         public List<DentistSlot> GetAllDentistSlotByServiceAndTimeStart(int serviceId, DateTime timeStart) =>
             DentistSlotDAO.Instance.getAllDentistSlotsByServiceAndDate(serviceId, timeStart);
 
+        public List<DentistSlot> GetAllDentistSlotByServiceAndDate(int serviceId, DateTime timeStart) =>
+            DentistSlotDAO.Instance.getAllDentistSlotsByServiceAnddate(serviceId, timeStart);
+
         public async Task DeleteDentistSlot(DentistSlot dentistSlot) => await DentistSlotDAO.Instance.deleteDentistSlot(dentistSlot);
         public async Task UpdateDentistSlot(DentistSlot dentistSlot) => await DentistSlotDAO.Instance.updateDentistSlot(dentistSlot);
 

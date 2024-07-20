@@ -91,8 +91,17 @@ namespace DataAccess
         {
             var context = new BookingDentistDbContext();
             return context.DentistSlots.Include(dl => dl.Dentist).ThenInclude(d => d.DentistServices)
-                .Where(dl => dl.Dentist.DentistServices.Any(ds => ds.ServiceId == serviceId && ds.Status == true) && 
+                .Where(dl => dl.Dentist.DentistServices.Any(ds => ds.ServiceId == serviceId && ds.Status == true && dl.DentistId.Equals(ds.DentistId)) && 
                              dl.TimeStart<= timeStart && dl.TimeEnd > timeStart)
+                .ToList();
+        }
+
+        public List<DentistSlot> getAllDentistSlotsByServiceAnddate(int serviceId, DateTime timeStart)
+        {
+            var context = new BookingDentistDbContext();
+            return context.DentistSlots.Include(dl => dl.Dentist).ThenInclude(d => d.DentistServices)
+                .Where(dl => dl.Dentist.DentistServices.Any(ds => ds.ServiceId == serviceId && ds.Status == true) && 
+                             dl.TimeStart.Date.Equals(timeStart.Date))
                 .ToList();
         }
     }

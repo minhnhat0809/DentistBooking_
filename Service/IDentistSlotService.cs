@@ -19,6 +19,8 @@ namespace Service
 
         Task<string> CreateDentistSlot(int dentistId, DateTime timeStart, DateTime timeEnd, int RoomId);
 
+        ListDentistSlotResult GetDentistSlotByServiceAndDateTime(int serviceId, DateTime timeStart);
+        
         ListDentistSlotResult GetDentistSlotByServiceAndDate(int serviceId, DateTime timeStart);
     }
 }

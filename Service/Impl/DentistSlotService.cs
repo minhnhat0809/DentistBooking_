@@ -165,7 +165,7 @@ namespace Service.Impl
             }
         }
 
-        public ListDentistSlotResult GetDentistSlotByServiceAndDate(int serviceId, DateTime timeStart)
+        public ListDentistSlotResult GetDentistSlotByServiceAndDateTime(int serviceId, DateTime timeStart)
         {
             ListDentistSlotResult listDentistSlotResult = new ListDentistSlotResult();
             try
@@ -198,6 +198,43 @@ namespace Service.Impl
             catch (Exception e)
             {
                 return null;
+            }
+        }
+
+        public ListDentistSlotResult GetDentistSlotByServiceAndDate(int serviceId, DateTime timeStart)
+        {
+            ListDentistSlotResult listDentistSlotResult = new ListDentistSlotResult();
+            try
+            {
+                if (serviceId <= 0)
+                {
+                    listDentistSlotResult.Message = "Service Id is null!";
+                    return listDentistSlotResult;
+                }
+
+                BusinessObject.Service service = _serviceRepo.GetServiceByID(serviceId).Result;
+                if (service == null)
+                {
+                    listDentistSlotResult.Message = "This service is not exist!";
+                    return listDentistSlotResult;
+                }
+                
+                DateTime now = DateTime.Now;
+                if (timeStart.Date < now.Date)
+                {
+                    listDentistSlotResult.Message = "Selected date is smaller than today!";
+                    return listDentistSlotResult;
+                }
+                
+                List<DentistSlot> dentistSlots =  dentistSlotRepo.GetAllDentistSlotByServiceAndDate(serviceId, timeStart);
+                listDentistSlotResult.DentistSlots = dentistSlots;
+                listDentistSlotResult.Message = "Success";
+                return listDentistSlotResult;
+            }
+            catch (Exception e)
+            {
+                listDentistSlotResult.Message = e.Message;
+                return listDentistSlotResult;
             }
         }
     }

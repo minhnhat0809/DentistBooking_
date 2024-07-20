@@ -85,7 +85,7 @@ namespace DataAccess
         public async Task<User?> GetUserByUserName(string email)
         {
             var context = new BookingDentistDbContext();
-            User? user = await context.Users.Include(u => u.Role).FirstOrDefaultAsync(c => c.Email == email);
+            User? user = await context.Users.Include(u => u.Role).FirstOrDefaultAsync(c => c.Email.Equals(email));
             return user;
         }
 

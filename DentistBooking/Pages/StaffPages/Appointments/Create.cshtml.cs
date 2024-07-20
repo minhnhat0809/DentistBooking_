@@ -57,6 +57,8 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             ViewData["CustomerId"] = new SelectList( await _userService.GetAllCustomers(), "UserId", "Name");
             Status = await _appointmentService.GetAllStatusOfAppointment(0);
             Services = await _service.GetAllServices();
+            DateTime now = DateTime.Now;
+            DentistSlots =  _dentistSlotService.GetDentistSlotByServiceAndDate(Services.FirstOrDefault().ServiceId, now).DentistSlots;
             return Page();
         }
 
@@ -67,7 +69,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
         {
             DateTime timeStart = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, 
                 timeStartt.Hour, timeStartt.Minute, timeStartt.Second);
-            var dentistSlots =  _dentistSlotService.GetDentistSlotByServiceAndDate(serviceId, timeStart).DentistSlots;
+            var dentistSlots =  _dentistSlotService.GetDentistSlotByServiceAndDateTime(serviceId, timeStart).DentistSlots;
             if (dentistSlots.IsNullOrEmpty())
             {
                 return new JsonResult("");
@@ -111,8 +113,8 @@ namespace DentistBooking.Pages.StaffPages.Appointments
 
             Appointment.TimeStart = timeStart;
             Appointment.TimeEnd = timeEnd;
-
-            string result = await _appointmentService.AddAppointment(Appointment);
+            string email = HttpContext.Session.GetString("Email");
+            string result = await _appointmentService.AddAppointment(Appointment, email);
             if (result.Equals("Success"))
             {
                 TempData["CreateAppointment"] = result;
