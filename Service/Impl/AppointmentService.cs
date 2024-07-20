@@ -29,7 +29,7 @@ namespace Service.Impl
             this.userRepo = userRepo;
             this.mapper = mapper;   
         }
-        public async Task<string> AddAppointment(AppointmentDto appointment)
+        public async Task<string> AddAppointment(AppointmentDto appointment, string email)
         {
             try
             {
@@ -80,6 +80,12 @@ namespace Service.Impl
                     return "Time Start must be in range [08:00-11:30] & [13:00-19:00]";
                 }
 
+                User? user = userRepo.GetUserByUserName(email).Result;
+                if (user != null)
+                {
+                    appointment.CreateBy = user.UserId;
+                }
+
                 var appoinmentList = dentistSlot.Appointments.ToList();
                 if (appoinmentList != null)
                 {
@@ -100,7 +106,10 @@ namespace Service.Impl
                         }
                     }
                 }
-                var viewModel = mapper.Map<Appointment>(appointment);   
+
+                
+                var viewModel = mapper.Map<Appointment>(appointment);  
+                
                 appointmentRepo.CreateAppointment(viewModel);
                 return "Success";
             }
@@ -215,74 +224,74 @@ namespace Service.Impl
             }
             try
             { 
-            if (serviceId <= 0)
-            {
-                AddError("Service", "Service Id is empty!");
-                return errors;
-            }
-
-            BusinessObject.Service serviceDto = await serviceRepo.GetServiceByID(serviceId);
-            if (serviceDto == null)
-            {
-                AddError("Service", "Service is not existed!");
-                return errors;
-            }
-
-            if (customerId <= 0)
-            {
-                AddError("Customer", "Cusotmer Id is empty!");
-                return errors;
-            }
-
-            User cusomter = userRepo.GetById(customerId).Result;
-            if (cusomter == null)
-            {
-                AddError("Customer", "Customer is not existed!");
-                return errors;
-            }
-
-            if (!CheckTimeStart(TimeStart))
-            {
-                AddError("TimeStart", "Time must be in range [8:00-11:30] & [13:00-19:00]");
-                return errors;
-            }
-
-            Appointment appointment = await appointmentRepo.GetAppointmentById(appointmentId);
-            if (appointment == null)
-            {
-                AddError("Appointment", "Appointment is not existed!");
-                return errors;
-            }
-
-            switch (appointment.Status)
-            {
-                case "Deleted":
-                    AddError("Status", "Cannot update! This appointment is deleted!");
+                if (serviceId <= 0)
+                {
+                    AddError("Service", "Service Id is empty!");
                     return errors;
-                case "Happening":
-                    AddError("Status", "Cannot update! This appointment is happening!");
+                }
+
+                BusinessObject.Service serviceDto = await serviceRepo.GetServiceByID(serviceId);
+                if (serviceDto == null)
+                {
+                    AddError("Service", "Service is not existed!");
                     return errors;
-                case "Expired":
-                    AddError("Status", "Cannot update! This appointment is expired!");
+                }
+
+                if (customerId <= 0)
+                {
+                    AddError("Customer", "Cusotmer Id is empty!");
                     return errors;
-                case "Finished":
-                    AddError("Status", "Cannot update! This appointment is finished!");
+                }
+
+                User cusomter = userRepo.GetById(customerId).Result;
+                if (cusomter == null)
+                {
+                    AddError("Customer", "Customer is not existed!");
                     return errors;
+                }
+
+                if (!CheckTimeStart(TimeStart))
+                {
+                    AddError("TimeStart", "Time must be in range [8:00-11:30] & [13:00-19:00]");
+                    return errors;
+                }
+
+                Appointment appointment = await appointmentRepo.GetAppointmentById(appointmentId);
+                if (appointment == null)
+                {
+                    AddError("Appointment", "Appointment is not existed!");
+                    return errors;
+                }
+
+                switch (appointment.Status)
+                {
+                    case "Deleted":
+                        AddError("Status", "Cannot update! This appointment is deleted!");
+                        return errors;
+                    case "Happening":
+                        AddError("Status", "Cannot update! This appointment is happening!");
+                        return errors;
+                    case "Expired":
+                        AddError("Status", "Cannot update! This appointment is expired!");
+                        return errors;
+                    case "Finished":
+                        AddError("Status", "Cannot update! This appointment is finished!");
+                        return errors;
                     case "Done":
-                    AddError("Status", "Cannot update! This appointment is done!");
-                    return errors;
-                default:
-                    break;
-            }
+                        AddError("Status", "Cannot update! This appointment is done!");
+                        return errors;
+                    default:
+                        break;
+                }
 
-            appointment.ServiceId = serviceId;
-            appointment.TimeStart = TimeStart;
-            appointment.TimeEnd = TimeStart.AddMinutes(30);
-            appointment.Status = "Processing";
+                appointment.ServiceId = serviceId;
+                appointment.TimeStart = TimeStart;
+                appointment.TimeEnd = TimeStart.AddMinutes(30);
+                appointment.Status = "Processing";
 
-            appointmentRepo.UpdateAppointment(appointment);
-            AddError("Success", "Update successfully!");
-            return errors;
+                appointmentRepo.UpdateAppointment(appointment);
+                AddError("Success", "Update successfully!");
+                return errors;
             }
             catch (Exception e)
             {

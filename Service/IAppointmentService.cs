@@ -23,7 +23,7 @@ namespace Service
         Task<List<AppointmentDto>> GetAllProcessingAppointment();
 
         Task<string> UpdateAppointmentForStaff(int serviceId, int appointmentId, DateTime TimeStart, DateTime TimeEnd, int dentistSlotId);
-        Task<string> AddAppointment(AppointmentDto appointment);
+        Task<string> AddAppointment(AppointmentDto appointment, string email);
         void PutAppointment(AppointmentDto appointment);   
 
         Task<string> DeleteAppointment(int appointmentId);
