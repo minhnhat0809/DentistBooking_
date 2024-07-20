@@ -52,18 +52,21 @@ namespace DentistBooking.Pages.StaffPages.Appointments
         public DateOnly SelectedDate { get; set; } = default!;
 
         public IList<DentistSlot> DentistSlots { get; set; } = default!;
-        public async Task<IActionResult> OnGet()
-        {
-            ViewData["CustomerId"] = new SelectList( await _userService.GetAllCustomers(), "UserId", "Name");
-            Status = await _appointmentService.GetAllStatusOfAppointment(0);
-            Services = await _service.GetAllServices();
-            DateTime now = DateTime.Now;
-            DentistSlots =  _dentistSlotService.GetDentistSlotByServiceAndDate(Services.FirstOrDefault().ServiceId, now).DentistSlots;
-            return Page();
-        }
-
+        
         [BindProperty]
         public AppointmentDto Appointment { get; set; } = default!;
+        
+        public async Task<IActionResult> OnGet()
+        {
+            List<UserDto> customers = (await _userService.GetAllActiveCustomers()).Users;
+            ViewData["CustomerId"] = new SelectList( customers, "UserId", "Name");
+            Status = await _appointmentService.GetAllStatusOfAppointment(0);
+            Services = (await _service.GetAllActiveServices()).Services;
+            DateTime now = DateTime.Now;
+            DentistSlots =  _dentistSlotService.GetDentistSlotByServiceAndDate(Services.FirstOrDefault().ServiceId, now).DentistSlots;
+            MedicalRecords = await _medicalRecordService.GetMedicalRecordsByCustomerIdAsync(customers.FirstOrDefault().UserId);
+            return Page();
+        }
 
         public async Task<JsonResult> OnGetDentistSlotByServiceAsync(int serviceId, DateOnly selectedDate, TimeOnly timeStartt)
         {
@@ -72,7 +75,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             var dentistSlots =  _dentistSlotService.GetDentistSlotByServiceAndDateTime(serviceId, timeStart).DentistSlots;
             if (dentistSlots.IsNullOrEmpty())
             {
-                return new JsonResult("");
+                return new JsonResult(new { success = false, message = "No dentist slots available at the selected time." });
             }
             var dentistSlotSelectList = dentistSlots.Select(slot => new SelectListItem
             {
@@ -81,7 +84,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
                     $"{slot.Dentist.Name} ({slot.TimeStart.ToString("HH:mm")} - {slot.TimeEnd.ToString("HH:mm")})"
             }).ToList();
 
-            return new JsonResult(dentistSlotSelectList);
+            return new JsonResult(new { success = true, dentistSlotSelectList });
         }
         public async Task<JsonResult> OnGetMedicalRecordByCustomerIdAsync(int customerId)
         {
@@ -115,7 +118,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             Appointment.TimeEnd = timeEnd;
             string email = HttpContext.Session.GetString("Email");
             string result = await _appointmentService.AddAppointment(Appointment, email);
-            if (result.Equals("Success"))
+            if (!result.Equals("Success"))
             {
                 TempData["CreateAppointment"] = result;
             }

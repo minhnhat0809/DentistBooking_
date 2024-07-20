@@ -21,13 +21,13 @@
             <div class="form-group ">
                 <label class="col-sm-3 col-form-label">Time Start : </label>
                 <div class="col-sm-9">
-                    <input type="time" id="slotTimeStart" name="DentistSlotTimeStart" asp-for="DentistSlotTimeStart" class="form-control" required/>
+                    <input type="time" id="slotTimeStart" name="DentistSlotTimeStart" asp-for="DentistSlotTimeStart" class="form-control" required min="08:00" max="19:00"/>
                 </div>
             </div>
             <div class="form-group ">
                 <label class="col-sm-3 col-form-label">Time End : </label>
                 <div class="col-sm-9">
-                    <input type="time" id="slotTimeEnd" name="DentistSlotTimeEnd" asp-for="DentistSlotTimeEnd" class="form-control" required/>
+                    <input type="time" id="slotTimeEnd" name="DentistSlotTimeEnd" asp-for="DentistSlotTimeEnd" class="form-control" required min="08:15" max="19:30"/>
                 </div>
             </div>
             <div class="form-group">
@@ -114,32 +114,59 @@
                 var serviceId = $(this).val();
                 var selectedDate = $('#datepicker').val();
                 var timeStart = $('#slotTimeStart').val();
-                $.getJSON('@Url.Page("/StaffPages/Appointments/Create", "DentistSlotByService")', { serviceId: serviceId, selectedDate: selectedDate, timeStartt: timeStart }, function (data) {
-                    var dentistSlotSelectList = $('#DentistSlotId');
-                    dentistSlotSelectList.empty();
-                    $.each(data, function (index, item) {
-                        dentistSlotSelectList.append($('<option>', {
-                            value: item.value,
-                            text: item.text
-                        }));
-                    });
-                    console.log(dentistSlotSelectList);
-                });
-            });
 
-            $('#CustomerId').change(function () {
-                var customerId = $(this).val();
-                $.getJSON('@Url.Page("/StaffPages/Appointments/Create", "MedicalRecordByCustomerId")', { customerId: customerId }, function (data) {
-                    var medicalRecordSelect = $('#MedicalRecordId');
-                    medicalRecordSelect.empty();
-                    $.each(data, function (index, item) {
-                        medicalRecordSelect.append($('<option>', {
-                            value: item.value,
-                            text: item.text
-                        }));
+                $.getJSON('@Url.Page("/StaffPages/Appointments/Create", "DentistSlotByService")', {
+                    serviceId: serviceId,
+                    selectedDate: selectedDate,
+                    timeStartt: timeStart
+                })
+                    .done(function (response) {
+                        var dentistSlotSelectList = $('#DentistSlotId');
+                        dentistSlotSelectList.empty();
+
+                        if (response.success === false) {
+                            dentistSlotSelectList.append($('<option>', {
+                                value: '',
+                                text: response.message
+                            }));
+                        } else {
+                            $.each(response.dentistSlotSelectList, function (index, item) {
+                                dentistSlotSelectList.append($('<option>', {
+                                    value: item.value,
+                                    text: item.text
+                                }));
+                            });
+                        }
+                    })
+                    .fail(function (jqXHR, textStatus, errorThrown) {
+                        console.error('AJAX request failed:', textStatus, errorThrown);
                     });
-                });
             });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const slotTimeStart = document.getElementById('slotTimeStart');
+            const slotTimeEnd = document.getElementById('slotTimeEnd');
+
+            function validateTime(time) {
+                const hour = parseInt(time.split(':')[0]);
+                const minute = parseInt(time.split(':')[1]);
+                if ((hour >= 8 && hour < 11) || (hour === 11 && minute <= 30) || (hour >= 13 && hour <= 19) || (hour === 19 && minute <= 30)) {
+                    return true;
+                }
+                return false;
+            }
+
+            function onTimeChange(event) {
+                const time = event.target.value;
+                if (!validateTime(time)) {
+                    alert('Please select a time start within the allowed range: 08:00-11:30 and time end within the allowed range 13:00-19:30.');
+                    event.target.value = '';
+                }
+            }
+
+            slotTimeStart.addEventListener('change', onTimeChange);
+            slotTimeEnd.addEventListener('change', onTimeChange);
         });
     
     </script>

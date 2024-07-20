@@ -1,5 +1,6 @@
 ﻿using BusinessObject;
 using BusinessObject.DTO;
+using BusinessObject.Result;
 
 namespace Service
 {
@@ -14,5 +15,7 @@ namespace Service
         Task<List<ServiceDto>> GetAllServicesForCustomer(int serviceId);
         Task<IEnumerable<ServiceDto>> GetAllServicesAsync();
         Task<IEnumerable<ServiceDto>> GetServicesByDentistSlotAsync(int dentistSlotId);
+
+        Task<ListServiceResult> GetAllActiveServices();
     }
 }

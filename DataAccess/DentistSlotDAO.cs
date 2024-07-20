@@ -92,7 +92,8 @@ namespace DataAccess
             var context = new BookingDentistDbContext();
             return context.DentistSlots.Include(dl => dl.Dentist).ThenInclude(d => d.DentistServices)
                 .Where(dl => dl.Dentist.DentistServices.Any(ds => ds.ServiceId == serviceId && ds.Status == true && dl.DentistId.Equals(ds.DentistId)) && 
-                             dl.TimeStart<= timeStart && dl.TimeEnd > timeStart)
+                             dl.TimeStart<= timeStart && dl.TimeEnd > timeStart &&
+                             dl.Status == true)
                 .ToList();
         }
 
@@ -101,7 +102,8 @@ namespace DataAccess
             var context = new BookingDentistDbContext();
             return context.DentistSlots.Include(dl => dl.Dentist).ThenInclude(d => d.DentistServices)
                 .Where(dl => dl.Dentist.DentistServices.Any(ds => ds.ServiceId == serviceId && ds.Status == true) && 
-                             dl.TimeStart.Date.Equals(timeStart.Date))
+                             dl.TimeStart.Date.Equals(timeStart.Date) &&
+                             dl.Status == true)
                 .ToList();
         }
     }
