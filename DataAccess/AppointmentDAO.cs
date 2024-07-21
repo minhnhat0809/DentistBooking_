@@ -34,8 +34,8 @@ namespace DataAccess
             var appointment = await context.Appointments
                 .Include(x => x.Customer)
                 .Include(x => x.DentistSlot)
-                    .ThenInclude(d => d.Dentist)
-                .Include(x => x.MedicalRecord)
+                .ThenInclude(d => d.Dentist)
+                .Include(x => x.MedicalRecord).ThenInclude(m => m.Customer)
                 .Include(x => x.Service)
                 .Include(x => x.CreateByNavigation)
                 .Include(x => x.ModifiedByNavigation)
@@ -49,7 +49,7 @@ namespace DataAccess
             var context = new BookingDentistDbContext();
             var appointments = await context.Appointments
                 .Include(x=>x.Customer)
-                .Include(x => x.DentistSlot).ThenInclude(x=>x.Dentist)
+                .Include(x => x.DentistSlot)
                 .Include(x => x.MedicalRecord)
                 .Include(x => x.Service)
                 .OrderBy(ap => ap.TimeStart).ToListAsync();
@@ -69,7 +69,8 @@ namespace DataAccess
         {
             var context = new BookingDentistDbContext();
             appointment.Status = "Delete";
-            context.Entry<Appointment>(appointment).State = EntityState.Modified;
+            context.Appointments.Update(appointment);
+            //context.Entry<Appointment>(appointment).State = EntityState.Modified;
             context.SaveChanges();
         }
 
@@ -90,8 +91,12 @@ namespace DataAccess
         public async Task<List<Appointment>> getAllProcessingAppointment()
         {
             var context = new BookingDentistDbContext();
-            var appointments = await  context.Appointments.Include(ap => ap.DentistSlot)
+            var appointments = await  context.Appointments
+                .Include(ap => ap.DentistSlot)
                 .ThenInclude(dl => dl.Dentist)
+                .Include(ap => ap.Customer)
+                .Include(ap => ap.MedicalRecord)
+                .Include(ap => ap.Service)
                 .Where(ap => ap.Status.Equals("Processing")).ToListAsync();
             return appointments;
         }

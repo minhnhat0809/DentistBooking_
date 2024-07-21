@@ -3,7 +3,8 @@
 @{
     ViewData["Title"] = "Appointments";
     Layout = "~/Pages/Shared/_StaffLayout.cshtml";
-    var result = TempData["ProcessingAppointment_DentistSlot"] as string;
+    var error = TempData["ErrorDeleteAppointment"] as string;
+    var success = TempData["SuccessDeleteAppointment"] as string;
 }
 
 <h1 class="mb-4">Processing Appointments</h1>
@@ -21,31 +22,53 @@
                     <th scope="col">Appointment Date</th>
                     <th scope="col">Time Start</th>
                     <th scope="col">Dentist</th>
+                    <th scope="col">Customer</th>
+                    <th scope="col">Service</th>
                     <th scope="col">Status</th>
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var appointment in Model.Appointments)
+                @foreach (var appointment in @Model.Appointments)
                 {
                     <tr>
                         <td>@appointment.TimeStart.ToString("MM/dd/yyyy")</td>
                         <td>@appointment.TimeStart.ToString("hh\\:mm tt")</td>
-                        @if (@appointment.DentistSlot == null)
+                        @if (appointment != null)
                         {
-                            <td></td>
+                            @if (@appointment.DentistSlot == null)
+                            {
+                                <td></td>
+                            }
+                            else
+                            {
+                                <td>@appointment.DentistSlot.Dentist.Name</td>
+                            }
+
+                            @if (@appointment.Customer == null)
+                            {
+                                <td></td>
+                            }
+                            else
+                            {
+                                <td>@appointment.Customer.Name</td>
+                            }
+                            
+                            @if (@appointment.Service == null)
+                            {
+                                <td></td>
+                            }
+                            else
+                            {
+                                <td>@appointment.Service.ServiceName</td>
+                            }
+                            
+                            <td>@appointment.Status</td>
+                            <td>
+                                <a asp-page="./ProcessingAppointment" asp-route-id="@appointment.AppointmentId" class="btn btn-primary btn-sm">Assign</a>
+                                <button type="button" class="btn btn-danger btn-sm" onclick="openDeleteModal('@appointment.AppointmentId', '@appointment.Customer.Name')">Delete</button>
+                            </td>
                         }
-                        else
-                        {
-                            <td>@appointment.DentistSlot.Dentist.Name</td>
-                        }
-                        <td>@appointment.Status</td>
-                        <td>
-                            <a asp-page="./ProcessingAppointment" asp-route-id="@appointment.AppointmentId" class="btn btn-primary btn-sm">Assign</a>
-                            <form method="post" asp-page-handler="Delete" asp-route-id="@appointment.AppointmentId" class="d-inline">
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                            </form>
-                        </td>
                     </tr>
                 }
             </tbody>
@@ -59,13 +82,63 @@ else
     </div>
 }
 
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirm Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="deleteForm" method="post" asp-page-handler="Delete">
+                    <input type="hidden" id="appointmentId" name="AppointmentId" />
+                    <div class="form-group">
+                        <label for="reason">Reason for deletion</label>
+                        <input type="text" asp-for="@Model.Reason" class="form-control" id="reason" name="Reason" />
+                    </div>
+                    <div class="form-group">
+                        <label for="customerName">Customer Name</label>
+                        <input type="text" asp-for="@Model.CustomerName" class="form-control" id="customerName" name="CustomerName" placeholder="" />
+                    </div>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
+    function openDeleteModal(appointmentId, customerName) {
+        $('#appointmentId').val(appointmentId);
+        $('#customerName').attr('placeholder', customerName);
+        $('#deleteConfirmationModal').modal('show');
+    }
+    
     $(document).ready(function () {
-        var result = '@result';
-        if (result.trim() !== '') {
+        var error = '@error';
+        if (error.trim() !== '') {
             var alertPlaceholder = $('#customAlertPlaceholder');
             var alertHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'
-                + result
+                + error
+                + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
+                + '<span aria-hidden="true">&times;</span>'
+                + '</button></div>';
+            alertPlaceholder.html(alertHtml);
+
+            setTimeout(function () {
+                alertPlaceholder.children('.alert').alert('close');
+            }, 3000);
+        }
+
+        var success = '@success';
+        if (success.trim() !== '') {
+            var alertPlaceholder = $('#customAlertPlaceholder');
+            var alertHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'
+                + success
                 + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
                 + '<span aria-hidden="true">&times;</span>'
                 + '</button></div>';
@@ -76,5 +149,6 @@ else
             }, 3000);
         }
     });
+
 </script>
 

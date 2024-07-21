@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BusinessObject.Result;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Service.Impl
 {
@@ -195,12 +196,12 @@ namespace Service.Impl
                     return listDentistSlotResult;
                 }
                 
-                DateTime now = DateTime.Now;
+                /*DateTime now = DateTime.Now;
                 if (timeStart.Date < now.Date)
                 {
                     listDentistSlotResult.Message = "Selected date is smaller than today!";
                     return listDentistSlotResult;
-                }
+                }*/
                 
                 List<DentistSlot> dentistSlots =  dentistSlotRepo.GetAllDentistSlotByServiceAndTimeStart(serviceId, timeStart);
                 listDentistSlotResult.DentistSlots = dentistSlots;
@@ -231,12 +232,12 @@ namespace Service.Impl
                     return listDentistSlotResult;
                 }
                 
-                DateTime now = DateTime.Now;
+                /*DateTime now = DateTime.Now;
                 if (timeStart.Date < now.Date)
                 {
                     listDentistSlotResult.Message = "Selected date is smaller than today!";
                     return listDentistSlotResult;
-                }
+                }*/
                 
                 List<DentistSlot> dentistSlots =  dentistSlotRepo.GetAllDentistSlotByServiceAndDate(serviceId, timeStart);
                 listDentistSlotResult.DentistSlots = dentistSlots;
@@ -248,6 +249,34 @@ namespace Service.Impl
                 listDentistSlotResult.Message = e.Message;
                 return listDentistSlotResult;
             }
+        }
+
+        public ListDentistSlotResult GetDentistSlotForAppointment(List<DentistSlot> dentistSlots, int dentistSlotId)
+        {
+            ListDentistSlotResult listDentistSlotResult = new ListDentistSlotResult();
+            try
+            {
+                if (!dentistSlots.IsNullOrEmpty())
+                {
+                    var s = dentistSlots.FirstOrDefault(dl => dl.DentistSlotId == dentistSlotId);
+                    if (s != null)
+                    {
+                        dentistSlots.Remove(s);
+                        dentistSlots.Insert(0, s);
+                    }
+
+                    listDentistSlotResult.DentistSlots = dentistSlots;
+                }
+                
+
+                listDentistSlotResult.Message = "Success";
+            }
+            catch (Exception e)
+            {
+                listDentistSlotResult.Message = e.Message;
+            }
+
+            return listDentistSlotResult;
         }
     }
 }
