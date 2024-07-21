@@ -13,6 +13,6 @@ namespace Service
         Task<PrescriptionDto> GetByIdWithMedicinesAsync(int id);
 
         Task<List<PrescriptionDto>> GetAllPrescriptionByCustomer(int customerId);
-
+        Task<PrescriptionDto> GetByAppointmentId(int appointmentId);
     }
 }

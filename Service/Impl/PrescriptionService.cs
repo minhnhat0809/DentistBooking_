@@ -11,12 +11,14 @@ namespace Service.Impl
     {
         private readonly IPrescriptionrepo _preScription;
         private readonly IPrescriptionMedicineRepo _prescriptionMedicineRepo;
+        private readonly IAppointmentRepo _appointmentRepo;
         private readonly IMapper _mapper;
 
-        public PrescriptionService(IPrescriptionrepo prescription, IMapper mapper)
+        public PrescriptionService(IPrescriptionrepo prescription, IMapper mapper, IAppointmentRepo appointmentRepo)
         {
             _preScription = prescription ?? throw new ArgumentNullException(nameof(prescription));
             _mapper = mapper;
+            _appointmentRepo = appointmentRepo ?? throw new ArgumentNullException();
         }
 
         
@@ -173,6 +175,30 @@ namespace Service.Impl
             }
         }
 
-        
+        public async Task<PrescriptionDto> GetByAppointmentId(int appointmentId)
+        {
+            if (appointmentId <= 0)
+            {
+                throw new ArgumentException("Invalid prescription ID.", nameof(appointmentId));
+            }
+
+            try
+            {
+                var appointment = await _appointmentRepo.GetAppointmentById(appointmentId);
+                if (appointment == null)
+                {
+                    throw new ExceptionHandler.NotFoundException($"Appointment with ID {appointment} not found.");
+                }
+                var models = await _preScription.GetPrescriptions();
+                var prescription = models.FirstOrDefault(x=>x.AppointmentId == appointment.AppointmentId);
+                var viewModel = _mapper.Map<PrescriptionDto>(prescription);
+                return viewModel;
+            }
+            catch (Exception ex)
+            {
+                // Log exception
+                throw new ExceptionHandler.ServiceException("An error occurred while retrieving the Prescription.", ex);
+            }
+        }
     }
 }

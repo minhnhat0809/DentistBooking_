@@ -457,7 +457,7 @@ namespace Service.Impl
                     throw new ExceptionHandler.NotFoundException($"Appointment with ID {appointment.AppointmentId} not found.");
                 }
                 model = mapper.Map<Appointment>(appointment);  
-                appointmentRepo.UpdateAppointment(model);
+                await appointmentRepo.UpdateAppointment(model);
             }
             catch (Exception ex)
             {
@@ -480,7 +480,7 @@ namespace Service.Impl
                 {
                     return $"Appointment with ID {appointmentId} not found.";
                 }
-                appointmentRepo.DeleteAppointment(appointmentId);
+                await appointmentRepo.DeleteAppointment(appointmentId);
                 return "Success";
             }
             catch (Exception ex)
@@ -584,7 +584,7 @@ namespace Service.Impl
                     return appointmentResult; 
                 }
 
-                User user = userRepo.GetUserByUserName(email).Result;
+                User? user = await userRepo.GetUserByUserName(email);
                 if (user == null)
                 {
                     appointmentResult.Message = "Modified user is not exist!";
@@ -633,7 +633,7 @@ namespace Service.Impl
         {
             
             var models = await appointmentRepo.GetAllProcessingAppointment();
-            models = models.Where(x => x.DentistSlot.Dentist.UserId == dentistId).ToList();
+            models = models.Where(x => x.DentistSlot.DentistId == dentistId).ToList();
             var viewModels = mapper.Map<List<AppointmentDto>>(models);  
             return viewModels;
         }
