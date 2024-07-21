@@ -9,17 +9,6 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/responsive.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/DentistBooking.styles.css" asp-append-version="true" />
-
-    <!-- Bootstrap Datepicker CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-    <!-- Additional scripts -->
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
 </head>
 <body>
     <header>
@@ -55,49 +44,42 @@
         <div class="navcontainer">
             <nav class="nav">
                 <div class="nav-upper-options">
-                    <a href="/StaffPages/Users/ViewUsers" class="nav-option option3">
+                    <div class="nav-option option1">
                         <i class="fa-solid fa-user"></i>
-                        Users
-                    </a>
-
-                    <a href="/StaffPages/Service/Index" class="nav-option option3">
+                        <a class="nav-link" href="/StaffPages/Users/ViewUsers"> Users</a>
+                    </div>
+                    
+                    <div class="option2 nav-option">
                         <i class="fa-solid fa-list"></i>
-                        Services
-                    </a>
-
-                    <a href="/StaffPages/Clinics/Details" class="nav-option option3">
+                        <a class="nav-link" href="/StaffPages/Service/Index"> Services</a>
+                    </div>
+                    <div class="nav-option option3">
                         <i class="fa-solid fa-house-chimney-medical"></i>
-                        Clinic
-                    </a>
-
-                    <a href="/StaffPages/DentistSlots/ViewDentistSlot" class="nav-option option3">
+                        <a class="nav-link" href="/StaffPages/Clinics/Details"> Clinics</a>
+                    </div>
+                    <div class="nav-option option3">
                         <i class="fa-solid fa-check-to-slot"></i>
-                        Dentist Slot
-                    </a>
-
-                    <a href="/StaffPages/Appointments/Index" class="nav-option option3">
+                        <a class="nav-link" href="/StaffPages/DentistSlots/ViewDentistSlot"> Dentist Slot</a>
+                    </div>
+                    <div class="nav-option option3">
                         <i class="fa-solid fa-calendar-days"></i>
-                        Appointment
-                    </a>
-
-                    <a href="/StaffPages/Medicines/Index" class="nav-option option3">
+                        <a class="nav-link" href="/StaffPages/Appointments/Index"> Appointment</a>
+                    </div>
+                    <div class="nav-option option3">
                         <i class="fa-solid fa-pills"></i>
-                        Medicine
-                    </a>
-
-                    <a href="/StaffPages/MedicalRecords/Index" class="nav-option option3">
+                        <a class="nav-link" href="/StaffPages/Medicines/Index"> Medicine</a>
+                    </div>
+                    <div class="nav-option option3">
                         <i class="fa-solid fa-clipboard-user"></i>
-                        Medical Records
-                    </a>
-
-                    <a href="/StaffPages/Check-upSchedules/Index" class="nav-option option3">
+                        <a class="nav-link" href="/StaffPages/MedicalRecords/Index"> Medical Records</a>
+                    </div>
+                    <div class="nav-option option3">
                         <i class="fa-regular fa-calendar-check"></i>
-                        Check-up Schedule
-                    </a>
-
+                        <a class="nav-link" href="/StaffPages/Check-upSchedules/Index"> Check-up Schedule</a>
+                    </div>
                     <div class="nav-option logout">
                         <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                        <a class="nav-link">Logout</a>
+                        <a class="nav-link" href="/login">Logout</a>
                     </div>
                 </div>
             </nav>
@@ -111,12 +93,10 @@
             </div>
         </div>
     </div>
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/nav-option.js" asp-append-version="true"></script>
-
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
