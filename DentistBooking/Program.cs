@@ -31,10 +31,8 @@ builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
     options.Conventions.AddPageRoute("/DentistPage/Customers/Index", "/customers");
     options.Conventions.AddPageRoute("/DentistPage/Customers/MedicalRecords/Index", "/customers/medical-records");
     options.Conventions.AddPageRoute("/DentistPage/Appointments/Index", "/appointments");
-
-
-    /*options.Conventions.AddPageRoute("/DentistPage/Prescriptions/Index", "/prescriptions");
-    options.Conventions.AddPageRoute("/DentistPage/Precriptions/PrecriptionMedicones/Index", "/prescriptions/medicine");*/
+    options.Conventions.AddPageRoute("/DentistPage/Appointments/Prescriptions/Index", "/appointments/prescriptions");
+    options.Conventions.AddPageRoute("/DentistPage/Appointments/Prescriptions/PrescriptionMedicines/Index", "/appointments/prescriptions/medicines");
 
     options.Conventions.AddPageRoute("/CustomerPage/ViewServices", "/services/view");
     options.Conventions.AddPageRoute("/CustomerPage/ViewPrescriptions", "/prescriptions/view");

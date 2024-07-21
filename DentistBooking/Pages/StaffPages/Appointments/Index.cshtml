@@ -181,7 +181,7 @@
                 <th>@Html.DisplayNameFor(model => model.Appointment[0].Diagnosis)</th>
                 <th>@Html.DisplayNameFor(model => model.Appointment[0].Status)</th>
                 <th>@Html.DisplayNameFor(model => model.Appointment[0].Customer)</th>
-                <th>@Html.DisplayNameFor(model => model.Appointment[0].DentistSlot)</th>
+                <th>@Html.DisplayNameFor(model => model.Appointment[0].DentistSlot.Dentist)</th>
                 <th>@Html.DisplayNameFor(model => model.Appointment[0].MedicalRecord)</th>
                 <th>@Html.DisplayNameFor(model => model.Appointment[0].Service)</th>
                 <th></th>
@@ -210,7 +210,7 @@
                         <span class="badge @statusClass">@Html.DisplayFor(modelItem => item.Status)</span>
                     </td>
                     <td>@Html.DisplayFor(modelItem => item.Customer.Name)</td>
-                    <td>@Html.DisplayFor(modelItem => item.DentistSlot.DentistSlotId)</td>
+                    <td>@Html.DisplayFor(modelItem => item.DentistSlot.Dentist.Name)</td>
                     <td>@Html.DisplayFor(modelItem => item.MedicalRecord.Diagnosis)</td>
                     <td>@Html.DisplayFor(modelItem => item.Service.ServiceName)</td>
                     <td>
