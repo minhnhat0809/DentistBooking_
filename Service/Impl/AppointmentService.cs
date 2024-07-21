@@ -628,5 +628,28 @@ namespace Service.Impl
             
             return statusList;
         }
+
+        public AppointmentResult DeleteAppointmentForStaff(int appointmentId, string customerName, string reason)
+        {
+            AppointmentResult appointmentResult = new AppointmentResult();
+            try
+            {
+                Appointment? appointment = appointmentRepo.GetAppointmentById(appointmentId).Result;
+                if (!appointment.Customer.Name.Equals(customerName))
+                {
+                    appointmentResult.Message = "Wrong customer name!";
+                    return appointmentResult;
+                }
+
+                appointmentRepo.DeleteAppointment(appointmentId);
+                appointmentResult.Message = "Success";
+                return appointmentResult;
+            }
+            catch (Exception e)
+            {
+                appointmentResult.Message = e.Message;
+                return appointmentResult;
+            }
+        }
     }
 }
