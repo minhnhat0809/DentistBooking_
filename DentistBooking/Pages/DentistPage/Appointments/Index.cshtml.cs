@@ -15,10 +15,12 @@ namespace DentistBooking.Pages.DentistPage.Appointments
     public class IndexModel : PageModel
     {
         private readonly IAppointmentService _appointmentService;
+        private readonly IUserService _userService;
 
-        public IndexModel(IAppointmentService appointmentService)
+        public IndexModel(IAppointmentService appointmentService, IUserService userService)
         {
             _appointmentService = appointmentService;
+            _userService = userService;
         }
 
         public IPagedList<AppointmentDto> Appointment { get;set; } = default!;
@@ -27,9 +29,12 @@ namespace DentistBooking.Pages.DentistPage.Appointments
 
         [BindProperty(SupportsGet = true)]
         public int PageSize { get; set; } = 5;
-        public async Task OnGetAsync(int dentistId)
+        public async Task OnGetAsync()
         {
-            List<AppointmentDto> viewModels = await _appointmentService.GetAllAppointmentByDentistId(2);
+            string? email = HttpContext.Session.GetString("Email");
+            var dentists = await _userService.GetAllDentists();
+            var dentist = dentists.FirstOrDefault(x => x.Email == email);
+            List<AppointmentDto> viewModels = await _appointmentService.GetAllAppointmentByDentistId(dentist.UserId);
             Appointment = viewModels.ToPagedList(PageNumber, PageSize); 
         }
     }

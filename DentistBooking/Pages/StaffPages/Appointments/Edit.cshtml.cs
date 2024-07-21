@@ -7,6 +7,7 @@ using Service;
 using BusinessObject.DTO;
 using BusinessObject.Result;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.SignalR;
 
 namespace DentistBooking.Pages.StaffPages.Appointments
 {
@@ -17,16 +18,19 @@ namespace DentistBooking.Pages.StaffPages.Appointments
         private readonly IDentistSlotService _dentistSlotService;
         private readonly IMedicalRecordService _medicalRecordService;
         private readonly IService _service;
+        private readonly IHubContext<SignalRHub> _hubContext;
 
         public EditModel(IAppointmentService appointmentService,
             IUserService userService, IDentistSlotService dentistSlotService,
-            IMedicalRecordService medicalRecordService, IService service)
+            IMedicalRecordService medicalRecordService, IService service,
+            IHubContext<SignalRHub> hubContext)
         {
             _appointmentService = appointmentService;
             _userService = userService;
             _dentistSlotService = dentistSlotService;
             _medicalRecordService = medicalRecordService;
             _service = service;
+            _hubContext = hubContext;   
         }
 
         [BindProperty] 
@@ -101,6 +105,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             else
             {
                 TempData["SuccessEditAppointment"] = "Update successfully!";
+                await _hubContext.Clients.All.SendAsync("ReloadAppointments");
             }
 
             return RedirectToPage(new { id = Appointment.AppointmentId });
