@@ -4,6 +4,7 @@ using BusinessObject.DTO;
 using BusinessObject.Result;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.IdentityModel.Tokens;
 using Service;
 
 namespace DentistBooking.Pages.StaffPages.DentistSlots;
@@ -42,6 +43,18 @@ public class ViewDentistSlot : PageModel
     public int RoomId { get; set; }
     public async Task<IActionResult> OnGet()
     {
+        string role = HttpContext.Session.GetString("Role");
+        if (!role.IsNullOrEmpty())
+        {
+            if (!role.Equals("Staff"))
+            {
+                return RedirectToPage("/Index");
+            }
+        }
+        else
+        {
+            return RedirectToPage("/Index");
+        }
         Dentists =  userService.GetAllUserByType("Dentist").Result;
         Rooms =  _roomService.GetAllActiveRooms().Result.Rooms;
         return Page();
@@ -49,6 +62,18 @@ public class ViewDentistSlot : PageModel
 
     public async Task<IActionResult> OnPostViewDentistSlot()
     {
+        string role = HttpContext.Session.GetString("Role");
+        if (!role.IsNullOrEmpty())
+        {
+            if (!role.Equals("Staff"))
+            {
+                return RedirectToPage("/Index");
+            }
+        }
+        else
+        {
+            return RedirectToPage("/Index");
+        }
         DentistSlots = dentistSlotService.GetAllDentistSlotsByDentistAndDate(SelectedDentistId, 
             SelectedDate).Result;
 
@@ -59,6 +84,18 @@ public class ViewDentistSlot : PageModel
 
     public async Task<IActionResult> OnPostCreateDentistSlot()
     {
+        string role = HttpContext.Session.GetString("Role");
+        if (!role.IsNullOrEmpty())
+        {
+            if (!role.Equals("Staff"))
+            {
+                return RedirectToPage("/Index");
+            }
+        }
+        else
+        {
+            return RedirectToPage("/Index");
+        }
         var date = SelectedDateForDentist;
         var timeRange = SlotTimeRange.Split('-');
         TimeOnly DentistSlotTimeStart = TimeOnly.Parse(timeRange[0]);

@@ -59,6 +59,18 @@ namespace DentistBooking.Pages.StaffPages.Appointments
         
         public async Task<IActionResult> OnGet()
         {
+            string role = HttpContext.Session.GetString("Role");
+            if (!role.IsNullOrEmpty())
+            {
+                if (!role.Equals("Staff"))
+                {
+                    return RedirectToPage("/Index");
+                }
+            }
+            else
+            {
+                return RedirectToPage("/Index");
+            }
             List<UserDto> customers = (await _userService.GetAllActiveCustomers()).Users;
             ViewData["CustomerId"] = new SelectList( customers, "UserId", "Name");
             Status = await _appointmentService.GetAllStatusOfAppointment(0);
@@ -103,6 +115,18 @@ namespace DentistBooking.Pages.StaffPages.Appointments
         }
         public async Task<IActionResult> OnPostAsync()
         {
+            string role = HttpContext.Session.GetString("Role");
+            if (!role.IsNullOrEmpty())
+            {
+                if (!role.Equals("Staff"))
+                {
+                    return RedirectToPage("/Index");
+                }
+            }
+            else
+            {
+                return RedirectToPage("/Index");
+            }
             if (!ModelState.IsValid)
             {
                 return RedirectToPage();
