@@ -31,7 +31,8 @@ namespace DataAccess
         public async Task<PrescriptionMedicine> GetByID(int id)
         {
             var context = new BookingDentistDbContext();
-            var prescriptionMedicine = await context.PrescriptionMedicines.Include(x => x.Prescription)
+            var prescriptionMedicine = await context.PrescriptionMedicines
+                .Include(x => x.Prescription)
                 .Include(x => x.Medicine)
                 .FirstOrDefaultAsync(c => c.PrescriptionMedicineId == id);
             return prescriptionMedicine;
