@@ -1,0 +1,138 @@
+﻿@page
+@model DentistBooking.Pages.DentistPage.Appointments.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Pages/Shared/_DentistLayout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Appointment</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            <span>Time Start</span>
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Appointment.TimeStart)
+        </dd>
+        <dt class="col-sm-2">
+            <span>Time End</span>
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Appointment.TimeEnd)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Appointment.Diagnosis)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Appointment.Diagnosis)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Appointment.Note)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Appointment.Note)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Appointment.Status)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Appointment.Status)
+        </dd>
+        <dt class="col-sm-2">
+            <span>Create By</span>
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.Appointment.CreateByNavigation != null)
+            {
+                @Html.DisplayFor(model => model.Appointment.CreateByNavigation.Name)
+            }
+            else
+            {
+                <span>N/A</span>
+            }
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Appointment.Customer)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Appointment.Customer.Name)
+        </dd>
+        <dt class="col-sm-2">
+            <span>Dentist Slot</span>
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.Appointment.DentistSlot != null)
+            {
+                @if (Model.Appointment.DentistSlot.Dentist != null)
+                {
+                    <span>
+                        @Model.Appointment.DentistSlot.Dentist.Name
+                        (
+                        @Model.Appointment.DentistSlot.TimeStart.ToString("hh:mm tt")
+                        -
+                        @Model.Appointment.DentistSlot.TimeEnd.ToString("hh:mm tt")
+                        )
+                    </span>
+                }
+                else
+                {
+                    <span>N/A</span>
+                }
+            }
+            else
+            {
+                <span>N/A</span>
+            }
+        </dd>
+        <dt class="col-sm-2">
+            <span>Medical Record</span>
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.Appointment.MedicalRecord != null)
+            {
+                if (Model.Appointment.MedicalRecord.Customer != null)
+                {
+                    <span>
+                        @Model.Appointment.MedicalRecord.Diagnosis -
+                        @Model.Appointment.MedicalRecord.Customer.Name
+                    </span>
+                }
+                else
+                {
+                    <span>N/A</span>
+                }
+            }
+            else
+            {
+                <span>N/A</span>
+            }
+        </dd>
+        <dt class="col-sm-2">
+            <span>Modify By</span>
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.Appointment.ModifiedByNavigation != null)
+            {
+                @Html.DisplayFor(model => model.Appointment.ModifiedByNavigation.Name)
+            }
+            else
+            {
+                <span>N/A</span>
+            }
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Appointment.Service)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Appointment.Service.ServiceName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Appointment.AppointmentId">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>
