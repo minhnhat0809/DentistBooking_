@@ -8,6 +8,7 @@ using Repository;
 using Repository.Impl;
 using Service.Exeption;
 using Service.Lib;
+using System.Text.RegularExpressions;
 
 namespace Service.Impl
 {
@@ -22,14 +23,14 @@ namespace Service.Impl
             _roleRepo = roleRepo;
             _mapper = mapper;
         }
-        
+
         public async Task CreateUser(UserDto user)
-        { 
+        {
             try
             {
                 if (user == null) { throw new ArgumentNullException(nameof(user)); }
-                User? model = _mapper.Map<User>(user);  
-                await _userRepo.CreateUser(model);  
+                User? model = _mapper.Map<User>(user);
+                await _userRepo.CreateUser(model);
             }
             catch (Exception ex)
             {
@@ -43,11 +44,11 @@ namespace Service.Impl
             try
             {
                 var model = await _userRepo.GetById(user.UserId);
-                if(model == null)
+                if (model == null)
                 {
                     throw new ArgumentException("Not found user");
                 }
-                 await _userRepo.DeleteUser(model);
+                await _userRepo.DeleteUser(model);
             }
             catch (Exception ex)
             {
@@ -65,7 +66,7 @@ namespace Service.Impl
                 {
                     throw new ArgumentException("Not found users");
                 }
-                var viewModels  = _mapper.Map<List<UserDto>>(models);
+                var viewModels = _mapper.Map<List<UserDto>>(models);
                 return viewModels;
             }
             catch (Exception ex)
@@ -73,7 +74,7 @@ namespace Service.Impl
 
                 throw new ArgumentException("Error while delete user", ex);
             }
-            
+
         }
 
         public async Task<List<UserDto>?> GetAllDentistsByService(int serviceId)
@@ -115,10 +116,10 @@ namespace Service.Impl
             }
         }
 
-        public  async Task<List<UserDto>> GetAllUserByType(string type)
+        public async Task<List<UserDto>> GetAllUserByType(string type)
         {
             List<User> models = new List<User>();
-            
+
             try
             {
                 switch (type)
@@ -136,7 +137,7 @@ namespace Service.Impl
                         models = await _userRepo.GetAllUsers();
                         break;
                 }
-                if(models == null)
+                if (models == null)
                 {
                     throw new ArgumentException("not found users");
                 }
@@ -176,7 +177,7 @@ namespace Service.Impl
 
         public async Task<UserDto> GetById(int id)
         {
-            if(id == null)
+            if (id == null)
             {
                 throw new ExceptionHandler.ServiceException("id not found");
             }
@@ -199,7 +200,7 @@ namespace Service.Impl
             try
             {
                 User? user = await _userRepo.GetUserByUserName(email);
-               
+
                 if (user == null)
                 {
                     responseDTO.IsSuccess = false;
@@ -212,7 +213,7 @@ namespace Service.Impl
                     {
                         responseDTO.IsSuccess = true;
                         responseDTO.Message = user.UserId.ToString();
-                        responseDTO.Result = user.Role.RoleName;                        
+                        responseDTO.Result = user.Role.RoleName;
                         return responseDTO;
                     }
                     else
@@ -228,7 +229,7 @@ namespace Service.Impl
                 responseDTO.IsSuccess = false;
                 responseDTO.Message = ex.Message;
                 return responseDTO;
-            }            
+            }
         }
 
         public async Task UpdateUser(UserDto user)
@@ -237,7 +238,7 @@ namespace Service.Impl
             {
                 if (user == null) { throw new ArgumentNullException(nameof(user)); }
                 User? model = await _userRepo.GetById(user.UserId);
-                if(model!=null)
+                if (model != null)
                 {
                     model = _mapper.Map<User>(user);
                     await _userRepo.UpdateUser(model);
@@ -255,7 +256,7 @@ namespace Service.Impl
             try
             {
                 var models = await _userRepo.GetAllCustomer();
-                var viewModels = _mapper.Map<List<UserDto>>(models);  
+                var viewModels = _mapper.Map<List<UserDto>>(models);
                 return viewModels;
             }
             catch (Exception ex)
@@ -271,6 +272,33 @@ namespace Service.Impl
             {
                 var models = await _roleRepo.GetAll();
                 var viewModels = _mapper.Map<List<RoleDto>>(models);
+                return viewModels;
+            }
+            catch (Exception ex)
+            {
+                // Log exception
+                throw new ExceptionHandler.ServiceException("An error occurred while retrieving", ex);
+            }
+        }
+
+
+        public async Task<UserDto> GetCustomerByPhoneNumber(string phoneNumber)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(phoneNumber))
+                {
+                    throw new ArgumentException("Phone number cannot be null or empty.", nameof(phoneNumber));
+                }
+
+                // Ensure the phone number is exactly 10 digits
+                if (!Regex.IsMatch(phoneNumber, @"^\d{10}$"))
+                {
+                    throw new ArgumentException("Phone number must be exactly 10 digits.", nameof(phoneNumber));
+                }
+
+                var models = await _userRepo.GetCustomerByPhoneNumber(phoneNumber);
+                var viewModels = _mapper.Map<UserDto>(models);
                 return viewModels;
             }
             catch (Exception ex)

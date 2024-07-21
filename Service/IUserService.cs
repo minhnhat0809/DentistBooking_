@@ -18,6 +18,8 @@ namespace Service
         Task<List<UserDto>?> GetAllDentistsByService(int serviceId);
         Task<List<RoleDto>> GetAllRoles();
         Task<List<UserDto>> GetAllUserByType(string type);
+        Task<UserDto> GetCustomerByPhoneNumber(string phoneNumber);
+
         
         Task<ListUserResult> GetAllActiveCustomers();
 
