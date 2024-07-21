@@ -2,6 +2,8 @@
 @model DentistBooking.Pages.HomePageModel
 @{
     Layout = null;
+    var currentTime = DateTime.Now.ToString("yyyy-MM-ddTHH:mm");
+    var resultMessage = TempData["Book"] as string;
 }
 
 <!DOCTYPE html>
@@ -67,7 +69,7 @@
                         <div class="p-3" style="max-width: 900px;">
                             <h5 class="text-white text-uppercase mb-3 animated slideInDown">Keep Your Teeth Healthy</h5>
                             <h1 class="display-1 text-white mb-md-4 animated zoomIn">Take The Best Quality Dental Treatment</h1>
-                            <a href="appointment.html" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Appointment</a>
+                            <a href="/clinic-booking" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Appointment</a>
                             <a href="/clinic-info" class="btn btn-secondary py-md-3 px-md-5 animated slideInRight">Contact Us</a>
                         </div>
                     </div>
@@ -101,41 +103,25 @@
     <div class="container-fluid banner mb-5">
         <div class="container">
             <div class="row gx-0">
-                <div class="col-lg-4 wow zoomIn" data-wow-delay="0.1s">
+                <div class="col-lg-6 wow zoomIn" data-wow-delay="0.1s">
                     <div class="bg-primary d-flex flex-column p-5" style="height: 300px;">
                         <h3 class="text-white mb-3">Opening Hours</h3>
                         <div class="d-flex justify-content-between text-white mb-3">
-                            <h6 class="text-white mb-0">Mon - Fri</h6>
-                            <p class="mb-0"> 8:00am - 9:00pm</p>
+                            <h6 class="text-white mb-0">Morning</h6>
+                            <p class="mb-0"> 8:00am - 12:00pm</p>
                         </div>
                         <div class="d-flex justify-content-between text-white mb-3">
-                            <h6 class="text-white mb-0">Saturday</h6>
-                            <p class="mb-0"> 8:00am - 7:00pm</p>
+                            <h6 class="text-white mb-0">Afternoon</h6>
+                            <p class="mb-0"> 13:00pm - 17:00pm</p>
                         </div>
                         <div class="d-flex justify-content-between text-white mb-3">
-                            <h6 class="text-white mb-0">Sunday</h6>
-                            <p class="mb-0"> 8:00am - 5:00pm</p>
+                            <h6 class="text-white mb-0">Night</h6>
+                            <p class="mb-0"> 17:00pm - 19:30pm</p>
                         </div>
                         <a class="btn btn-light" href="/clinic-booking">Appointment</a>
                     </div>
                 </div>
-                <div class="col-lg-4 wow zoomIn" data-wow-delay="0.3s">
-                    <div class="bg-dark d-flex flex-column p-5" style="height: 300px;">
-                        <h3 class="text-white mb-3">Search A Doctor</h3>
-                        <div class="date mb-3" id="date" data-target-input="nearest">
-                            <input type="text" class="form-control bg-light border-0 datetimepicker-input"
-                                   placeholder="Appointment Date" data-target="#date" data-toggle="datetimepicker" style="height: 40px;">
-                        </div>
-                        <select class="form-select bg-light border-0 mb-3" style="height: 40px;">
-                            <option selected>Select A Service</option>
-                            <option value="1">Service 1</option>
-                            <option value="2">Service 2</option>
-                            <option value="3">Service 3</option>
-                        </select>
-                        <a class="btn btn-light" href="">Search Doctor</a>
-                    </div>
-                </div>
-                <div class="col-lg-4 wow zoomIn" data-wow-delay="0.6s">
+                <div class="col-lg-6 wow zoomIn" data-wow-delay="0.6s">
                     <div class="bg-secondary d-flex flex-column p-5" style="height: 300px;">
                         <h3 class="text-white mb-3">Make Appointment</h3>
                         <p class="text-white">Ipsum erat ipsum dolor clita rebum no rebum dolores labore, ipsum magna at eos et eos amet.</p>
@@ -189,51 +175,74 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="appointment-form h-100 d-flex flex-column justify-content-center text-center p-5 wow zoomIn" data-wow-delay="0.6s">
+                    <div class="appointment-form h-100 d-flex flex-column justify-content-center text-center p-5 wow zoomIn" data-wow-delay="0.6s" id="appointment-form">
                         <h1 class="text-white mb-4">Make Appointment</h1>
-                        <form>
+                        <form method="post">
                             <div class="row g-3">
-                                <div class="col-12 col-sm-6">
-                                    <select class="form-select bg-light border-0" style="height: 55px;">
-                                        <option selected>Select A Service</option>
-                                        <option value="1">Service 1</option>
-                                        <option value="2">Service 2</option>
-                                        <option value="3">Service 3</option>
+                                <div class="col-12 col-sm-12">
+                                    <label for="Name" class="text-start w-100">Your Name</label>
+                                    <input type="text" asp-for="Name" class="form-control bg-light border-0" placeholder="Your Name" style="height: 55px;">
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                                <div class="col-12 col-sm-12">
+                                    <label for="Email" class="text-start w-100">Your Email</label>
+                                    <input type="email" asp-for="Email" class="form-control bg-light border-0" placeholder="Your Email" style="height: 55px;">
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                                <div class="col-12 col-sm-12">
+                                    <label for="PhoneNumber" class="text-start w-100">Your Phone Number</label>
+                                    <input type="text" asp-for="PhoneNumber" class="form-control bg-light border-0" placeholder="Your Phone Number" style="height: 55px;">
+                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                </div>
+                                <div class="col-6 col-sm-6">
+                                    <label for="Gender" class="text-start w-100">Select Gender</label>
+                                    <select asp-for="Gender" class="form-select bg-light border-0" style="height: 55px;">
+                                        <option selected disabled>Select Gender</option>
+                                        <option>Male</option>
+                                        <option>Female</option>
                                     </select>
+                                    <span asp-validation-for="Gender" class="text-danger"></span>
+                                </div>
+                                <div class="col-6 col-sm-6">
+                                    <label for="Dob" class="text-start w-100">Date of Birth</label>
+                                    <input type="date" asp-for="Dob" class="form-control bg-light border-0" style="height: 55px;" min="1900-01-01" max="@DateTime.Now.ToString("yyyy-MM-dd")">
+                                    <span asp-validation-for="Dob" class="text-danger"></span>
                                 </div>
                                 <div class="col-12 col-sm-6">
-                                    <select class="form-select bg-light border-0" style="height: 55px;">
-                                        <option selected>Select Doctor</option>
-                                        <option value="1">Doctor 1</option>
-                                        <option value="2">Doctor 2</option>
-                                        <option value="3">Doctor 3</option>
+                                    <label for="SelectedServiceId" class="text-start w-100">Select A Service</label>
+                                    <select asp-for="SelectedServiceId" class="form-select bg-light border-0" style="height: 55px;">
+                                        <option selected disabled>Select A Service</option>
+
+                                        @if (Model.Services != null)
+                                        {
+                                            @foreach (var service in Model.Services)
+                                            {
+                                                <option value="@service.ServiceId">@service.ServiceName</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option disabled>No services</option>
+                                        }
                                     </select>
+                                    <span asp-validation-for="SelectedServiceId" class="text-danger"></span>
                                 </div>
                                 <div class="col-12 col-sm-6">
-                                    <input type="text" class="form-control bg-light border-0" placeholder="Your Name" style="height: 55px;">
-                                </div>
-                                <div class="col-12 col-sm-6">
-                                    <input type="email" class="form-control bg-light border-0" placeholder="Your Email" style="height: 55px;">
-                                </div>
-                                <div class="col-12 col-sm-6">
-                                    <div class="date" id="date1" data-target-input="nearest">
-                                        <input type="text"
-                                               class="form-control bg-light border-0 datetimepicker-input"
-                                               placeholder="Appointment Date" data-target="#date1" data-toggle="datetimepicker" style="height: 55px;">
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6">
-                                    <div class="time" id="time1" data-target-input="nearest">
-                                        <input type="text"
-                                               class="form-control bg-light border-0 datetimepicker-input"
-                                               placeholder="Appointment Time" data-target="#time1" data-toggle="datetimepicker" style="height: 55px;">
-                                    </div>
+                                    <label for="AppointmentTime" class="text-start w-100">Appointment Time</label>
+                                    <input type="datetime-local" asp-for="AppointmentTime" class="form-control bg-light border-0" min="@DateTime.Now.ToString("yyyy-MM-dd HH:mm")" style="height: 55px;">
+                                    <span asp-validation-for="AppointmentTime" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
                                     <button class="btn btn-dark w-100 py-3" type="submit">Make Appointment</button>
                                 </div>
                             </div>
                         </form>
+                        @if (TempData["Book"] != null)
+                        {
+                            <div class="alert @((TempData["Book"].ToString().StartsWith("Appointment created successfully") ? "alert-success" : "alert-danger"))">
+                                @TempData["Book"]
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -247,7 +256,7 @@
                 <div class="col-lg-5 wow zoomIn" data-wow-delay="0.3s" style="min-height: 400px;">
                     <div class="twentytwenty-container position-relative h-100 rounded overflow-hidden">
                         <img class="position-absolute w-100 h-100" src="https://plus.unsplash.com/premium_photo-1679865370855-5a367b828f9a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzN8fERlbnRpc3R8ZW58MHx8MHx8fDA%3D" style="object-fit: cover;">
-                      </div>
+                    </div>
                 </div>
                 <div class="col-lg-7">
                     <div class="section-title mb-5">
@@ -420,7 +429,26 @@
         </div>
     </div>
     <!-- Newsletter End -->
-   
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
+    <script>
+        window.addEventListener('load', function () {
+            // Check if there are errors or messages in TempData
+
+            if (@Model.ModelState.ErrorCount> 0 || TempData["Book"] !== '') {
+                document.getElementById('appointment-form').scrollIntoView();
+            }
+
+            // Set the min value for datetime-local input
+            var dateInput = document.querySelector('input[type="datetime-local"]');
+            if (dateInput) {
+                var now = new Date();
+                var formattedDate = now.toISOString().slice(0, 16); // Format: YYYY-MM-DDTHH:MM
+                dateInput.min = formattedDate;
+            }
+        });
+    </script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/main.js"></script>

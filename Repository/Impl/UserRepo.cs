@@ -29,5 +29,8 @@ namespace Repository.Impl
 
         public async Task UpdateUser(User user)
         => await UserDAO.Instance.updateUser(user);
+
+        public async Task<User> GetCustomerByPhoneNumber(string phoneNumber)
+            => await UserDAO.Instance.GetCustomerByPhoneNumber(phoneNumber);
     }
 }
