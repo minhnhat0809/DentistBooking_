@@ -76,7 +76,7 @@ namespace DentistBooking.Pages.StaffPages
             if (!result.Message.Equals("Success"))
             {
                 TempData["ErrorProcessingAppointment"] = result.Message;
-                RedirectToPage(new { id = Appointment.AppointmentId });
+                return RedirectToPage(new { id = Appointment.AppointmentId });
             }
 
             TempData["SuccessProcessingAppointmentError"] = "Appointment updated successfully!";
@@ -91,7 +91,7 @@ namespace DentistBooking.Pages.StaffPages
                 Id = d.DentistSlotId,
                 TimeStart = d.TimeStart,
                 TimeEnd = d.TimeEnd,
-                Appointments = d.Appointments.Where(ap => !(ap.Status.Equals("Processing"))).ToList()
+                Appointments = d.Appointments.Where(ap => !(ap.Status.Equals("Delete"))).ToList()
                 }
             ).ToList();
             var options = new JsonSerializerOptions
