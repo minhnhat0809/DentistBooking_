@@ -12,10 +12,12 @@ public class ViewDentistSlot : PageModel
 {
     private readonly IDentistSlotService dentistSlotService;
     private readonly IUserService userService;
-    public ViewDentistSlot(IDentistSlotService dentistSlotService, IUserService userService)
+    private readonly IRoomService _roomService;
+    public ViewDentistSlot(IDentistSlotService dentistSlotService, IUserService userService, IRoomService roomService)
     {
         this.dentistSlotService = dentistSlotService;
         this.userService = userService;
+        this._roomService = roomService;
     }
     
     [BindProperty(SupportsGet = true)]
@@ -35,13 +37,16 @@ public class ViewDentistSlot : PageModel
     public TimeOnly DentistSlotTimeEnd { get; set; } = default!;
 
     public IList<DentistSlotDto> DentistSlots = default!;
-    
-    public IList<Room> Rooms { get; set; }
+
+    public IList<Room> Rooms { get; set; } = default!;
     
     public int RoomId { get; set; }
-    public async void OnGet()
+    public async Task<IActionResult> OnGet()
     {
         Dentists = await userService.GetAllUserByType("Dentist");
+        Rooms =  (await _roomService.GetAllActiveRooms()) .Rooms;
+
+        return Page();
     }
 
     public async Task<IActionResult> OnPostViewDentistSlot()
@@ -65,7 +70,9 @@ public class ViewDentistSlot : PageModel
         DentistSlotResult result = await dentistSlotService.CreateDentistSlot(SelectedDentistId.Value, slotTimeStart, slotTimeEnd, RoomId);
         if (!result.Message.Equals("Success"))
         {
-            TempData["ErrorDentistSlot"] = result;
+            TempData["ErrorDentistSlot"] = result.Message;
+            Dentists = await userService.GetAllUserByType("Dentist");
+            return Page();
         }
 
         TempData["SuccessDentistSlot"] = "Dentist slot create successfully!";
