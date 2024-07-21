@@ -1,6 +1,7 @@
 using System.Collections;
 using BusinessObject;
 using BusinessObject.DTO;
+using BusinessObject.Result;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Service;
@@ -61,13 +62,13 @@ public class ViewDentistSlot : PageModel
         DateTime slotTimeEnd = new DateTime(date.Year, date.Month, date.Day,
             DentistSlotTimeEnd.Hour, DentistSlotTimeEnd.Minute, DentistSlotTimeEnd.Second);
         
-        string result = await dentistSlotService.CreateDentistSlot(SelectedDentistId.Value, slotTimeStart, slotTimeEnd, RoomId);
-        if (!result.Equals("Success"))
+        DentistSlotResult result = await dentistSlotService.CreateDentistSlot(SelectedDentistId.Value, slotTimeStart, slotTimeEnd, RoomId);
+        if (!result.Message.Equals("Success"))
         {
-            TempData["DentistSlot"] = result;
+            TempData["ErrorDentistSlot"] = result;
         }
 
-        TempData["DentistSlot"] = "Dentist slot create successfully!";
+        TempData["SuccessDentistSlot"] = "Dentist slot create successfully!";
         Dentists = await userService.GetAllUserByType("Dentist");
         return Page();
     }

@@ -17,7 +17,7 @@ namespace Service
 
         Task<DentistSlotDto> GetDentistSlotById(int dentistSlotId);
 
-        Task<string> CreateDentistSlot(int dentistId, DateTime timeStart, DateTime timeEnd, int RoomId);
+        Task<DentistSlotResult> CreateDentistSlot(int dentistId, DateTime timeStart, DateTime timeEnd, int RoomId);
 
         ListDentistSlotResult GetDentistSlotByServiceAndDateTime(int serviceId, DateTime timeStart);
         

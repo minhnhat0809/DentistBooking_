@@ -83,38 +83,45 @@ namespace Service.Impl
             }
         }
 
-        public async Task<string> CreateDentistSlot(int dentistId, DateTime timeStart, DateTime timeEnd, int RoomId)
+        public async Task<DentistSlotResult> CreateDentistSlot(int dentistId, DateTime timeStart, DateTime timeEnd, int RoomId)
         {
+            DentistSlotResult dentistSlotResult = new DentistSlotResult();
             try
             {
                 if (dentistId <= 0)
                 {
-                    return "Dentist Id is null!";
+                    dentistSlotResult.Message = "Dentist Id is null!";
+                    return dentistSlotResult;
                 }
 
                 User dentist = await userRepo.GetById(dentistId);
                 if (dentist == null)
                 {
-                    return "Dentist is not exist!";
+                    dentistSlotResult.Message = "Dentist is not exist!";
+                    return dentistSlotResult;
                 }
 
                 if (RoomId <= 0)
                 {
-                    return "Room Id is null!";
+                    dentistSlotResult.Message = "Room Id is null!";
+                    return dentistSlotResult;
                 }
 
                 Room? room = _roomRepo.GetRoomById(RoomId);
                 if (room == null)
                 {
-                    return "Room is not exist!";
+                    dentistSlotResult.Message = "Room is not exist!";
+                    return dentistSlotResult;
                 }
 
                 if (!timeStart.Date.Equals(timeEnd.Date))
                 {
-                    return "Date of time start and time end is different!";
+                    dentistSlotResult.Message = "Date of time start and time end is different!";
+                    return dentistSlotResult;
                 } else if (timeStart.TimeOfDay > timeEnd.TimeOfDay)
                 {
-                    return "Time start is bigger than time end!";
+                    dentistSlotResult.Message = "Time start is bigger than time end!";
+                    return dentistSlotResult;
                 }
             
                 TimeSpan startTime = timeStart.TimeOfDay;
@@ -132,13 +139,15 @@ namespace Service.Impl
 
                 if (!isValidRange)
                 {
-                    return "Time must be in range [8:00-12:00] , [13:00-17:00], [17:00-19:30]!";
+                    dentistSlotResult.Message = "Time must be in range [8:00-12:00] , [13:00-17:00], [17:00-19:30]!";
+                    return dentistSlotResult;
                 }
 
                 List<DentistSlot> dentistSLots = await dentistSlotRepo.GetAllDentistSlotsByRoomAndDate(RoomId, timeStart);
                 if (dentistSLots != null)
                 {
-                    return "There is a dentist using this room in this range time";
+                    dentistSlotResult.Message = "There is a dentist using this room in this range time";
+                    return dentistSlotResult;
                 }
 
                 List<DentistSlot> dentistSlots = await dentistSlotRepo.GetAllDentistSlotsByDentistAndDate(dentistId, DateOnly.FromDateTime(timeStart));
@@ -146,7 +155,8 @@ namespace Service.Impl
                 {
                     if (dentistSlots.Any(dl => dl.TimeStart == timeStart))
                     {
-                        return "There is a slot with this time range!";
+                        dentistSlotResult.Message = "There is a slot with this time range!";
+                        return dentistSlotResult;
                     }
                 }
 
@@ -157,11 +167,13 @@ namespace Service.Impl
                 dentistSlot.Status = true;
             
                 await dentistSlotRepo.CreateDentistSlot(dentistSlot);
-                return "Success";
+                dentistSlotResult.Message = "Success";
+                return dentistSlotResult;
             }
             catch (Exception e)
             {
-                return e.Message;
+                dentistSlotResult.Message = e.Message;
+                return dentistSlotResult;
             }
         }
 

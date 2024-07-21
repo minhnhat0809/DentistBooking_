@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BusinessObject.Result;
 
 namespace Service
 {
@@ -22,16 +23,16 @@ namespace Service
 
         Task<List<AppointmentDto>> GetAllProcessingAppointment();
 
-        Task<string> UpdateAppointmentForStaff(int serviceId, int appointmentId, DateTime TimeStart, DateTime TimeEnd, int dentistSlotId);
-        Task<string> AddAppointment(AppointmentDto appointment, string email);
-        Task PutAppointment(AppointmentDto appointment);   
+        Task<AppointmentResult> UpdateAppointmentForStaff(int serviceId, int appointmentId, DateTime TimeStart, DateTime TimeEnd, int dentistSlotId);
+        Task<AppointmentResult> AddAppointment(AppointmentDto appointment, string email);
+        void PutAppointment(AppointmentDto appointment);   
 
         Task<string> DeleteAppointment(int appointmentId);
         
-        Task<string> UpdateAppointments(int serviceId, int appointmentId, DateTime TimeStart, DateTime TimeEnd, int dentistSlotId, string status);
+        Task<AppointmentResult> UpdateAppointments(AppointmentDto appointMent, string email);
 
         Task<List<string>> GetAllStatusOfAppointment(int appointmentId);
 
-        Task<List<AppointmentDto>> GetAllAppointmentByDentistId(int dentistId);
+
     }
 }

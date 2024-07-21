@@ -31,4 +31,24 @@ public class RoomService : IRoomService
             return listRoomResult;
         }
     }
+
+    public async Task<ListRoomResult> GetAllActiveRooms()
+    {
+        ListRoomResult listRoomResult = new ListRoomResult();
+        try
+        {
+            List<Room> rooms = await _roomRepo.GetAllRooms();
+            rooms = rooms.Where(r => r.Status == true).ToList();
+            listRoomResult.Rooms = rooms;
+            listRoomResult.Message = "Success";
+            
+            return listRoomResult;
+        }
+        catch (Exception e)
+        {
+            listRoomResult.Rooms = null;
+            listRoomResult.Message = e.Message;
+            return listRoomResult;
+        }
+    }
 }
