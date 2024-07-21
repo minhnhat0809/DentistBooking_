@@ -60,7 +60,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             {
                 TempData["ErrorDeleteAppointment"] = "Reason and Customer Name are required.";
                 Appointment = await _appointmentService.GetAppointmentByID(appointmentId);
-                return RedirectToPage("/StaffPages/ProcessingAppointmentList");
+                return Page();
             }
 
             AppointmentResult result = _appointmentService.DeleteAppointmentForStaff(appointmentId, CustomerName, Reason);
