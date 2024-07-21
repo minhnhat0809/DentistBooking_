@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using BusinessObject;
 using BusinessObject.DTO;
+using BusinessObject.Result;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.IdentityModel.Tokens;
 using Repository;
 using Repository.Impl;
 using Service.Exeption;
@@ -145,6 +147,30 @@ namespace Service.Impl
             {
 
                 throw new ArgumentException("Error while delete user", ex);
+            }
+        }
+
+        public async Task<ListUserResult> GetAllActiveCustomers()
+        {
+            ListUserResult listUserResult = new ListUserResult();
+            try
+            {
+                var models = await _userRepo.GetAllCustomer();
+                models = models.Where(m => m.Status == true).ToList();
+                if (models.IsNullOrEmpty())
+                {
+                    listUserResult.Message = "There are no active customers!";
+                    return listUserResult;
+                }
+                var viewModels = _mapper.Map<List<UserDto>>(models);
+                listUserResult.Users = viewModels;
+                listUserResult.Message = "Success";
+                return listUserResult;
+            }
+            catch (Exception ex)
+            {
+                listUserResult.Message = ex.Message;
+                return listUserResult;
             }
         }
 

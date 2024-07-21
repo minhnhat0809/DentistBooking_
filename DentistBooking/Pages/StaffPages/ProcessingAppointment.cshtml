@@ -4,9 +4,10 @@
 @{
     ViewData["Title"] = "Appointment Detail";
     Layout = "~/Pages/Shared/_StaffLayout.cshtml";
-    var resultMessage = TempData["ProcessingAppointment"] as string;
-    var resultMessageError = TempData["ProcessingAppointmentError"] as string;
-    var result = TempData["ProcessingAppointment_DentistSlot"] as string;
+    var appointmentError = TempData["ErrorProcessingAppointment"] as string;
+    var appointmentSuccess = TempData["SuccessProcessingAppointmentError"] as string;
+    var dentistSlotError = TempData["ErrorProcessingAppointment_DentistSlot"] as string;
+    var dentistSlotSuccess = TempData["SuccessProcessingAppointment_DentistSlot"] as string;
 }
 
     <div class="card shadow-sm">
@@ -64,7 +65,7 @@
                         <div class="col-sm-3">
                         <button type="button" class="btn btn-info btn-block" id="viewScheduleButton" data-toggle="modal" data-target="#exampleModal">View Schedule</button>
                         </div>
-                    </div>
+                </div>
 
                 <div class="form-group row m-2">
                     <label class="col-sm-3 col-form-label">Dentist slot</label>
@@ -146,6 +147,18 @@
                             <input type="time" id="slotTimeEnd" name="DentistSlotTimeEnd" asp-for="DentistSlotTimeEnd" class="form-control" required/>
                         </div>
                     </div>
+                    <label class="col-sm-3 col-form-label">Room</label>
+                    <div class="col-sm-6">
+                        <select id="roomId" asp-for="RoomId" class="form-control">
+                            @if (Model.Rooms != null)
+                            {
+                            @foreach (var s in Model.Rooms)
+                            {
+                            <option value="@s.RoomId">@s.RoomNumber</option>
+                            }
+                            }
+                        </select>
+                    </div>
                     <div class="form-group row text-center">
                         <div class="col-sm-9 offset-sm-3">
                             <button type="submit" class="btn btn-success btn-block">Create Dentist Slot</button>
@@ -164,11 +177,11 @@
 
 <script>
     $(document).ready(function () {
-        var resultMessage = '@resultMessage';
-        if (resultMessage.trim() !== '') {
+        var appointmentError = '@appointmentError';
+        if (appointmentError.trim() !== '') {
             var alertPlaceholder = $('#customAlertPlaceholder');
             var alertHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'
-                + resultMessage
+                + appointmentError
                 + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
                 + '<span aria-hidden="true">&times;</span>'
                 + '</button></div>';
@@ -179,11 +192,11 @@
             }, 5000);
         }
         
-        var resultMessageError = '@resultMessageError';
-                if (resultMessageError.trim() !== '') {
+        var appointmentSuccess = '@appointmentSuccess';
+                if (appointmentSuccess.trim() !== '') {
                     var alertPlaceholder = $('#customAlertPlaceholder');
                     var alertHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'
-                        + resultMessageError
+                        + appointmentSuccess
                         + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
                         + '<span aria-hidden="true">&times;</span>'
                         + '</button></div>';
@@ -194,11 +207,11 @@
                     }, 5000);
                 }
         
-        var result = '@result';
-                if (result.trim() !== '') {
+        var dentistSlotError = '@dentistSlotError';
+                if (dentistSlotError.trim() !== '') {
                     var alertPlaceholder = $('#customAlertPlaceholder');
                     var alertHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'
-                        + result
+                        + dentistSlotError
                         + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
                         + '<span aria-hidden="true">&times;</span>'
                         + '</button></div>';
@@ -208,6 +221,21 @@
                         alertPlaceholder.children('.alert').alert('close');
                     }, 5000);
                 }
+
+        var dentistSlotSuccess = '@dentistSlotSuccess';
+                if (dentistSlotSuccess.trim() !== '') {
+            var alertPlaceholder = $('#customAlertPlaceholder');
+            var alertHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'
+                + dentistSlotSuccess
+                + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
+                + '<span aria-hidden="true">&times;</span>'
+                + '</button></div>';
+            alertPlaceholder.html(alertHtml);
+
+            setTimeout(function () {
+                alertPlaceholder.children('.alert').alert('close');
+            }, 5000);
+        }
 
         $('#viewScheduleButton').click(function () {
             var dentistId = $('#dentistId').val();

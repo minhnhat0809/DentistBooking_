@@ -62,6 +62,7 @@ builder.Services.AddScoped<IClinicService, ClinicService>();
 builder.Services.AddScoped<IMedicineService, MedicineService>();
 builder.Services.AddScoped<IDentistService, DentistService>();
 builder.Services.AddScoped<IPrescriptionMedicinesService,  PrescriptionMedicinesService>();
+builder.Services.AddScoped<IRoomService,  RoomService>();
 
 
 
@@ -78,6 +79,7 @@ builder.Services.AddScoped<IDentistServiceRepo, DentistServiceRepo>();
 builder.Services.AddScoped<IMedicineRepo, MedicineRepo>();
 builder.Services.AddScoped<IPrescriptionMedicineRepo, PrescriptionMedicineRepo>();
 builder.Services.AddScoped<IRoleRepo, RoleRepo>();
+builder.Services.AddScoped<IRoomRepo, RoomRepo>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

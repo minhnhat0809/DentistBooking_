@@ -2,122 +2,343 @@
 @model DentistBooking.Pages.StaffPages.Appointments.CreateModel
 
 @{
-    ViewData["Title"] = "Create";
-    Layout = "~/Pages/Shared/_StaffLayout.cshtml";
+ViewData["Title"] = "Create Appointment";
+Layout = "~/Pages/Shared/_StaffLayout.cshtml";
+var error = TempData["ErrorCreateAppointment"] as string;
+var success = TempData["SuccessCreateAppointment"] as string;
 }
+<style>
+    .container {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-<h1>Create</h1>
+    /* Form heading */
+    h4.text-muted {
+        font-weight: 600;
+        color: #495057;
+    }
 
-<h4>Appointment</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Appointment.TimeStart" class="control-label"></label>
-                <input asp-for="Appointment.TimeStart" class="form-control" />
-                <span asp-validation-for="Appointment.TimeStart" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Appointment.TimeEnd" class="control-label"></label>
-                <input asp-for="Appointment.TimeEnd" class="form-control" />
-                <span asp-validation-for="Appointment.TimeEnd" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Appointment.Diagnosis" class="control-label"></label>
-                <input asp-for="Appointment.Diagnosis" class="form-control" />
-                <span asp-validation-for="Appointment.Diagnosis" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                            <label asp-for="Appointment.Status" class="control-label"></label>
-                            <select name="Appointment.Status" class="form-control">
-                                @if (Model.Status != null)
-                                {
-                                     @foreach (var s in Model.Status)
-                                        { <option value="@s">@s</option> }
-                                }
-                            </select>
-                            <span asp-validation-for="Appointment.Status" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Appointment.DentistSlotId" class="control-label">Dentist</label>
-                            <select asp-for="Appointment.DentistSlotId" class="form-control" asp-items="ViewBag.DentistSlotId" id="DentistSlotId"></select>
-                            <span asp-validation-for="Appointment.DentistSlotId" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                                        <label asp-for="Appointment.CustomerId" class="control-label"></label>
-                                        <select asp-for="Appointment.CustomerId" class="form-control" asp-items="ViewBag.CustomerId" id="CustomerId"></select>
-                                        <span asp-validation-for="Appointment.CustomerId" class="text-danger"></span>
-                                    </div>
-                        <div class="form-group">
-                            <label asp-for="Appointment.ServiceId" class="control-label">Service</label>
-                            <select name="Appointment.ServiceId" id="ServiceId" class="form-control">
-                                @if (Model.Services != null)
-                                                {
-                                                     @foreach (var s in Model.Services)
-                                                        { <option value="@s.ServiceId">@s.ServiceName</option> }
-                                                }
-                            </select>
-                            <span asp-validation-for="Appointment.ServiceId" class="text-danger"></span>
-                        </div>
-                        <div class="form-group">
-                            <label asp-for="Appointment.MedicalRecordId" class="control-label">Medical Record</label>
-                            <select name="Appointment.MedicalRecordId" id="MedicalRecordId" class="form-control">
-                                                @if (Model.MedicalRecords != null)
-                                                                {
-                                                                     @foreach (var s in Model.MedicalRecords)
-                                                                        { <option value="@s.MediaRecordId"> @s.Customer.Name - @s.Diagnosis</option> }
-                                                                }
-                                            </select>
-                                            <span asp-validation-for="Appointment.ServiceId" class="text-danger"></span>
-                            <span asp-validation-for="Appointment.MedicalRecordId" class="text-danger"></span>
-                        </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+    /* Form row styling */
+    .form-row {
+        margin-bottom: 15px;
+    }
+
+    /* Form control styling */
+    .form-control {
+        border-radius: 4px;
+        border: 1px solid #ced4da;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+        overflow: hidden; /* Ensures the text doesn't overflow */
+    }
+
+    /* Label styling */
+    .control-label {
+        font-weight: 500;
+        color: #343a40;
+    }
+
+    /* Select styling */
+    select.form-control {
+        height: calc(1.5em + .75rem + 2px);
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        width: 100%; /* Makes the select full width */
+        min-width: 150px; /* Sets a minimum width to avoid being too narrow */
+    }
+
+    /* Button styling */
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        font-size: 1rem;
+        padding: .5rem 1rem;
+        border-radius: 4px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+
+    /* Alert styling */
+    .alert {
+        padding: .75rem 1.25rem;
+        margin-bottom: 1rem;
+        border: 1px solid transparent;
+        border-radius: .375rem;
+    }
+
+    .alert-success {
+        color: #155724;
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+    }
+
+    .alert-dismissible .close {
+        padding: .5rem .75rem;
+        margin: -.5rem -.75rem -.5rem auto;
+    }
+
+    /* Back to List button styling */
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        font-size: 1rem;
+        padding: .5rem 1rem;
+        border-radius: 4px;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+    }
+</style>
+
+<div class="container">
+    <h4 class="text-muted">Appointment Details</h4>
+    <div id="customAlertPlaceholder"></div>
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <!-- Single Row for all fields -->
+                <div class="form-row mb-3">
+                    <div class="col-md-2">
+                        <label asp-for="SelectedDate" class="control-label">Select Date:</label>
+                        <input asp-for="SelectedDate" type="date" id="datepicker" name="SelectedDate" class="form-control" autocomplete="off" min="@DateTime.Now.ToString("yyyy-MM-dd")">
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="slotTimeStart" class="control-label">Time Start:</label>
+                        <input type="time" id="slotTimeStart" name="DentistSlotTimeStart" asp-for="DentistSlotTimeStart" class="form-control" required min="08:00" max="19:00"/>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="slotTimeEnd" class="control-label">Time End:</label>
+                        <input type="time" id="slotTimeEnd" name="DentistSlotTimeEnd" asp-for="DentistSlotTimeEnd" class="form-control" required min="08:15" max="19:30"/>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label asp-for="Appointment.CustomerId" class="control-label">Customer</label>
+                        <select asp-for="Appointment.CustomerId" class="form-control" asp-items="ViewBag.CustomerId" id="CustomerId"></select>
+                        <span asp-validation-for="Appointment.CustomerId" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label asp-for="Appointment.MedicalRecordId" class="control-label">Medical Record</label>
+                        <select name="Appointment.MedicalRecordId" id="MedicalRecordId" class="form-control">
+                            @if (Model.MedicalRecords != null)
+                            {
+                            @foreach (var s in Model.MedicalRecords)
+                            {
+                            <option value="@s.MediaRecordId" title="@s.Customer.Name - @s.Diagnosis"> @s.Customer.Name - @s.Diagnosis</option>
+                            }
+                            }
+                        </select>
+                        <span asp-validation-for="Appointment.MedicalRecordId" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label asp-for="Appointment.Diagnosis" class="control-label">Diagnosis</label>
+                        <input asp-for="Appointment.Diagnosis" class="form-control" />
+                        <span asp-validation-for="Appointment.Diagnosis" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-row mb-3">
+                    <div class="col-md-2">
+                        <label asp-for="Appointment.Status" class="control-label">Status</label>
+                        <select name="Appointment.Status" class="form-control">
+                            @if (Model.Status != null)
+                            {
+                            @foreach (var s in Model.Status)
+                            {
+                            <option value="@s">@s</option>
+                            }
+                            }
+                        </select>
+                        <span asp-validation-for="Appointment.Status" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label asp-for="Appointment.ServiceId" class="control-label">Service</label>
+                        <select name="Appointment.ServiceId" id="ServiceId" class="form-control">
+                            @if (Model.Services != null)
+                            {
+                            @foreach (var s in Model.Services)
+                            {
+                            <option value="@s.ServiceId" title="@s.ServiceName"> @s.ServiceName</option>
+                            }
+                            }
+                        </select>
+                        <span asp-validation-for="Appointment.ServiceId" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="Appointment.DentistSlotId" class="control-label">Dentist</label>
+                        <select id="DentistSlotId" asp-for="Appointment.DentistSlotId" class="form-control">
+                            @if (Model.DentistSlots.Count > 0)
+                            {
+                            @foreach (var s in Model.DentistSlots)
+                            {
+                            <option value="@s.DentistSlotId" title="@s.Dentist.Name [@s.TimeStart.TimeOfDay - @s.TimeEnd.TimeOfDay]">
+                                @s.Dentist.Name [@s.TimeStart.TimeOfDay - @s.TimeEnd.TimeOfDay]
+                            </option>
+                            }
+                            }
+                            else
+                            {
+                            <option value="0">No dentist slots available for selected service and the selected time.</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Appointment.DentistSlotId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group text-center">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-page="Index">Back to List</a>
+<div class="text-center mt-4">
+    <a asp-page="Index" class="btn btn-secondary">Back to List</a>
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+@{
+await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        const dateControl = document.querySelector('input[type="date"]');
+        const today = new Date().toISOString().split('T')[0];
+        dateControl.value = today;
+    });
+
+    var error = '@error';
+    if (error.trim() !== '') {
+        var alertPlaceholder = $('#customAlertPlaceholder');
+        var alertHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'
+            + error
+            + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
+            + '<span aria-hidden="true">&times;</span>'
+            + '</button></div>';
+        alertPlaceholder.html(alertHtml);
+
+        setTimeout(function () {
+            alertPlaceholder.children('.alert').alert('close');
+        }, 5000);
     }
 
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#DentistSlotId').change(function () {
-                var dentistSlotId = $(this).val();
-                $.getJSON('@Url.Page("/StaffPages/Appointments/Create", "ServicesByDentistSlot")', { dentistSlotId: dentistSlotId }, function (data) {
-                    var serviceSelect = $('#ServiceId');
-                    serviceSelect.empty();
-                    $.each(data, function (index, item) {
-                        serviceSelect.append($('<option>', {
-                            value: item.value,
-                            text: item.text
-                        }));
-                    });
-                });
-            });
+    var success = '@success'; // Corrected variable name
+    if (success.trim() !== '') {
+        var alertPlaceholder = $('#customAlertPlaceholder');
+        var alertHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'
+            + success
+            + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
+            + '<span aria-hidden="true">&times;</span>'
+            + '</button></div>';
+        alertPlaceholder.html(alertHtml);
 
-            $('#CustomerId').change(function () {
-                var customerId = $(this).val();
-                $.getJSON('@Url.Page("/StaffPages/Appointments/Create", "MedicalRecordByCustomerId")', { customerId: customerId }, function (data) {
-                    var medicalRecordSelect = $('#MedicalRecordId');
-                    medicalRecordSelect.empty();
-                    $.each(data, function (index, item) {
-                        medicalRecordSelect.append($('<option>', {
-                            value: item.value,
-                            text: item.text
+        setTimeout(function () {
+            alertPlaceholder.children('.alert').alert('close');
+        }, 5000);
+    }
+
+    $(document).ready(function () {
+        $('#ServiceId').change(function () {
+            var serviceId = $(this).val();
+            var selectedDate = $('#datepicker').val();
+            var timeStart = $('#slotTimeStart').val();
+
+            $.getJSON('@Url.Page("/StaffPages/Appointments/Create", "DentistSlotByService")', {
+                serviceId: serviceId,
+                selectedDate: selectedDate,
+                timeStartt: timeStart
+            })
+                .done(function (response) {
+                    var dentistSlotSelectList = $('#DentistSlotId');
+                    dentistSlotSelectList.empty();
+
+                    if (response.success === false) {
+                        dentistSlotSelectList.append($('<option>', {
+                            value: '',
+                            text: response.message
                         }));
-                    });
+                    } else {
+                        $.each(response.dentistSlotSelectList, function (index, item) {
+                            dentistSlotSelectList.append($('<option>', {
+                                value: item.value,
+                                text: item.text
+                            }));
+                        });
+                    }
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    console.error('AJAX request failed:', textStatus, errorThrown);
                 });
-            });
         });
-    </script>
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const slotTimeStart = document.getElementById('slotTimeStart');
+        const slotTimeEnd = document.getElementById('slotTimeEnd');
+
+        function validateTimeStart(time) {
+            const hour = parseInt(time.split(':')[0]);
+            const minute = parseInt(time.split(':')[1]);
+
+            // Check if the time is within allowed start times
+            if ((hour >= 8 && hour < 11) ||
+                (hour === 11 && minute <= 30) ||
+                (hour >= 13 && hour < 19) ||
+                (hour === 19 && minute === 0)) {
+                return true;
+            }
+            return false;
+        }
+
+        function validateTimeEnd(time) {
+            const hour = parseInt(time.split(':')[0]);
+            const minute = parseInt(time.split(':')[1]);
+
+            // Check if the time is within allowed end times
+            if ((hour === 8 && minute >= 15) || (hour > 8 && hour < 12) ||
+                (hour === 12 && minute === 0) ||
+                (hour === 13 && minute >= 15) ||
+                (hour > 13 && hour < 19) ||
+                (hour === 19 && minute <= 30)) {
+                return true;
+            }
+            return false;
+        }
+
+        function onTimeChange(event) {
+            const time = event.target.value;
+            const isStart = event.target === slotTimeStart;
+            const isEnd = event.target === slotTimeEnd;
+
+            if (isStart && !validateTimeStart(time)) {
+                alert('Please select a start time within the allowed range: [08:00-11:30] and [13:00-19:00]');
+                event.target.value = '';
+            } else if (isEnd && !validateTimeEnd(time)) {
+                alert('Please select an end time within the allowed range: [08:15-12:00] and [13:15-19:30]');
+                event.target.value = '';
+            }
+        }
+
+        slotTimeStart.addEventListener('change', onTimeChange);
+        slotTimeEnd.addEventListener('change', onTimeChange);
+    });
+</script>
 }
