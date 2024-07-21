@@ -40,17 +40,20 @@
                 {
                     <div class="col-md-2">
                         <label asp-for="SelectedDate" class="control-label">Select Date:</label>
-                        <input asp-for="SelectedDate" type="date" id="datepicker" name="SelectedDate" class="form-control" autocomplete="off" min="@DateTime.Now.ToString("yyyy-MM-dd")" value="@DateOnly.FromDateTime(Model.Appointment.TimeStart.Date).ToString("yyyy-MM-dd")" readonly/>
+                        <input asp-for="SelectedDate" type="date" id="datepicker" class="form-control" autocomplete="off" min="@DateTime.Now.ToString("yyyy-MM-dd")" value="@DateOnly.FromDateTime(Model.Appointment.TimeStart.Date).ToString("yyyy-MM-dd")" disabled/>
+                        <input type="hidden" id="datepicker" asp-for="SelectedDate" name="SelectedDate" value="@DateOnly.FromDateTime(Model.Appointment.TimeStart.Date).ToString("yyyy-MM-dd")"/>
                     </div>
 
                     <div class="col-md-2">
                         <label for="slotTimeStart" class="control-label">Time Start:</label>
-                        <input type="time" id="slotTimeStart" name="DentistSlotTimeStart" asp-for="DentistSlotTimeStart" class="form-control" required min="08:00" max="19:00" value="@TimeOnly.FromDateTime(Model.Appointment.TimeStart).ToString(@"hh\:mm")" readonly/>
+                        <input type="time"  class="form-control" required min="08:00" max="19:00" value="@TimeOnly.FromDateTime(Model.Appointment.TimeStart).ToString(@"hh\:mm")" disabled/>
+                        <input type="hidden" id="slotTimeStart" asp-for="DentistSlotTimeStart" name="DentistSlotTimeStart" value="@TimeOnly.FromDateTime(Model.Appointment.TimeStart).ToString(@"hh\:mm")"/>
                     </div>
 
                     <div class="col-md-2">
                         <label for="slotTimeEnd" class="control-label">Time End:</label>
-                        <input type="time" id="slotTimeEnd" name="DentistSlotTimeEnd" asp-for="DentistSlotTimeEnd" class="form-control" required min="08:15" max="19:30" value="@TimeOnly.FromDateTime(Model.Appointment.TimeEnd).ToString(@"hh\:mm")" readonly/>
+                        <input type="time" class="form-control" required min="08:15" max="19:30" value="@TimeOnly.FromDateTime(Model.Appointment.TimeEnd).ToString(@"hh\:mm")" disabled/>
+                        <input type="hidden" id="slotTimeEnd" asp-for="DentistSlotTimeEnd" name="DentistSlotTimeEnd" value="@TimeOnly.FromDateTime(Model.Appointment.TimeEnd).ToString(@"hh\:mm")"/>
                     </div>
                 }
 
@@ -113,7 +116,7 @@
                     else
                     {
                         <label asp-for="Appointment.ServiceId" class="control-label">Service</label>
-                        <select name="Appointment.ServiceId" id="ServiceId" class="form-control" readonly="true">
+                        <select name="Appointment.ServiceId" id="ServiceId" class="form-control" disabled="disabled">
                             @if (Model.Services != null)
                             {
                                 @foreach (var s in Model.Services)
@@ -130,7 +133,7 @@
                     @if (Model.Appointment.Status.Equals("Happening") || Model.Appointment.Status.Equals("Finished"))
                     {
                         <label asp-for="Appointment.DentistSlotId" class="control-label">Dentist</label>
-                        <select id="DentistSlotId" asp-for="Appointment.DentistSlotId" class="form-control" readonly="true">
+                        <select id="DentistSlotId" asp-for="Appointment.DentistSlotId" class="form-control" disabled="disabled">
                             @if (Model.DentistSlots.Count > 0)
                             {
                                 @foreach (var s in Model.DentistSlots)
@@ -170,7 +173,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" id="saveButton" value="Save" class="btn btn-primary" />
             </div>
             
         </form>
@@ -224,11 +227,13 @@
                 var selectedDate = $('#datepicker').val();
                 var timeStart = $('#slotTimeStart').val();
                 console.log(serviceId);
+                console.log(selectedDate);
+                console.log(timeStart);
 
-                $.getJSON('@Url.Page("/StaffPages/Appointments/Create", "DentistSlotByService")', {
+                $.getJSON('@Url.Page("/StaffPages/Appointments/Edit", "DentistSlotByService")', {
                     serviceId: serviceId,
                     selectedDate: selectedDate,
-                    timeStartt: timeStart
+                    timeStart: timeStart
                 })
                     .done(function (response) {
                         console.log(response);
@@ -253,6 +258,87 @@
                         console.error('AJAX request failed:', textStatus, errorThrown);
                     });
             });
+
+            $('#saveButton').click(function () {
+                // Enable all disabled fields
+                $('#ServiceId').prop('disabled', false);
+                $('#DentistSlotId').prop('disabled', false);
+            });
+            
+            $('#datepicker').change(function () {
+                    var serviceId = $('#ServiceId').val();
+                    var selectedDate = $(this).val();
+                    var timeStart = $('#slotTimeStart').val();
+                    console.log(serviceId);
+                    console.log(selectedDate);
+                    console.log(timeStart);
+
+                    $.getJSON('@Url.Page("/StaffPages/Appointments/Edit", "DentistSlotByService")', {
+                        serviceId: serviceId,
+                        selectedDate: selectedDate,
+                        timeStart: timeStart
+                    })
+                        .done(function (response) {
+                            console.log(response);
+                            var dentistSlotSelectList = $('#DentistSlotId');
+                            dentistSlotSelectList.empty();
+
+                            if (response.success === false) {
+                                dentistSlotSelectList.append($('<option>', {
+                                    value: '',
+                                    text: response.message
+                                }));
+                            } else {
+                                $.each(response.dentistSlotSelectList, function (index, item) {
+                                    dentistSlotSelectList.append($('<option>', {
+                                        value: item.value,
+                                        text: item.text
+                                    }));
+                                });
+                            }
+                        })
+                        .fail(function (jqXHR, textStatus, errorThrown) {
+                            console.error('AJAX request failed:', textStatus, errorThrown);
+                        });
+                });
+
+            $('#slotTimeStart').change(function () {
+                    var serviceId = $('#ServiceId').val();
+                    var selectedDate = $('#datepicker').val();
+                    var timeStart = $(this).val();
+                    console.log(serviceId);
+                    console.log(selectedDate);
+                    console.log(timeStart);
+
+                    $.getJSON('@Url.Page("/StaffPages/Appointments/Edit", "DentistSlotByService")', {
+                        serviceId: serviceId,
+                        selectedDate: selectedDate,
+                        timeStart: timeStart
+                    })
+                        .done(function (response) {
+                            console.log(response);
+                            var dentistSlotSelectList = $('#DentistSlotId');
+                            dentistSlotSelectList.empty();
+
+                            if (response.success === false) {
+                                dentistSlotSelectList.append($('<option>', {
+                                    value: '',
+                                    text: response.message
+                                }));
+                            } else {
+                                $.each(response.dentistSlotSelectList, function (index, item) {
+                                    dentistSlotSelectList.append($('<option>', {
+                                        value: item.value,
+                                        text: item.text
+                                    }));
+                                });
+                            }
+                        })
+                        .fail(function (jqXHR, textStatus, errorThrown) {
+                            console.error('AJAX request failed:', textStatus, errorThrown);
+                        });
+                });
+            
         });
 
         document.addEventListener('DOMContentLoaded', function() {

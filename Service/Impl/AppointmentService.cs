@@ -19,17 +19,19 @@ namespace Service.Impl
         private readonly IDentistSlotRepo dentistSlotRepo;
         private readonly IServiceRepo serviceRepo;
         private readonly IUserRepo userRepo;
+        private readonly IMedicalRecordRepo medicalRecordRepo;
         private readonly IMapper mapper;
 
         public AppointmentService(IAppointmentRepo appointmentRepo, IDentistSlotRepo dentistSlotRepo, 
-            IServiceRepo serviceRepo, IUserRepo userRepo,
+            IServiceRepo serviceRepo, IUserRepo userRepo, IMedicalRecordRepo medicalRecordRepo,
             IMapper mapper)
         {
             this.appointmentRepo = appointmentRepo;
             this.dentistSlotRepo = dentistSlotRepo;
             this.serviceRepo = serviceRepo;
             this.userRepo = userRepo;
-            this.mapper = mapper;   
+            this.mapper = mapper;
+            this.medicalRecordRepo = medicalRecordRepo;
         }
         public async Task<AppointmentResult> AddAppointment(AppointmentDto appointment, string email)
         {
@@ -74,7 +76,7 @@ namespace Service.Impl
                     return appointmentResult;
                 }
 
-                var validStatuses = new[] { "Success", "Done", "Finished", "Processing", "Delete" };
+                var validStatuses = new[] {  "Not yet arrived", "Arrived", "Happening", "Finished", "Processing" };
                 if (!validStatuses.Contains(appointment.Status))
                 {
                     appointmentResult.Message = "Status is not valid!";
@@ -282,23 +284,18 @@ namespace Service.Impl
 
                 switch (appointment.Status)
                 {
-                    case "Deleted":
-                        AddError("Status", "Cannot update! This appointment is deleted!");
+                    case "Arrived":
+                        AddError("Status", "Cannot update! This appointment is about to happening!");
                         return errors;
                     case "Happening":
                         AddError("Status", "Cannot update! This appointment is happening!");
                         return errors;
-                    case "Expired":
-                        AddError("Status", "Cannot update! This appointment is expired!");
-                        return errors;
                     case "Finished":
                         AddError("Status", "Cannot update! This appointment is finished!");
                         return errors;
-                    case "Done":
-                        AddError("Status", "Cannot update! This appointment is done!");
+                    case "Deleted":
+                        AddError("Status", "Cannot update! This appointment is deleted!");
                         return errors;
-                    default:
-                        break;
                 }
 
                 appointment.ServiceId = serviceId;
@@ -591,12 +588,28 @@ namespace Service.Impl
                     return appointmentResult; 
                 }
 
+                if (appointMent.MedicalRecordId > 0 )
+                {
+                    MedicalRecord medicalRecord = medicalRecordRepo.GetById(appointMent.MedicalRecordId).Result;
+                    if (medicalRecord == null)
+                    {
+                        appointmentResult.Message = "Medical record is not found!";
+                        return appointmentResult;
+                    }
+                    else
+                    {
+                        appointment.MedicalRecordId = appointMent.MedicalRecordId;
+                    }
+                }
+
                 appointment.ServiceId = appointMent.ServiceId;
                 appointment.Status = appointMent.Status;
                 appointment.DentistSlotId = appointMent.DentistSlotId;
                 appointment.TimeStart = appointMent.TimeStart;
                 appointment.TimeEnd = appointMent.TimeEnd;
+                appointment.MedicalRecordId = appointment.MedicalRecordId;
                 appointment.ModifiedBy = user.UserId;
+                appointment.Diagnosis = appointMent.Diagnosis;
 
                 await appointmentRepo.UpdateAppointment(appointment);
                 AppointmentDto appointmentDto = mapper.Map<AppointmentDto>(appointment);
@@ -636,6 +649,29 @@ namespace Service.Impl
             models = models.Where(x => x.DentistSlot.DentistId == dentistId).ToList();
             var viewModels = mapper.Map<List<AppointmentDto>>(models);  
             return viewModels;
+        }
+
+        public AppointmentResult DeleteAppointmentForStaff(int appointmentId, string customerName, string reason)
+        {
+            AppointmentResult appointmentResult = new AppointmentResult();
+            try
+            {
+                Appointment? appointment = appointmentRepo.GetAppointmentById(appointmentId).Result;
+                if (!appointment.Customer.Name.Equals(customerName))
+                {
+                    appointmentResult.Message = "Wrong customer name!";
+                    return appointmentResult;
+                }
+
+                appointmentRepo.DeleteAppointment(appointmentId);
+                appointmentResult.Message = "Success";
+                return appointmentResult;
+            }
+            catch (Exception e)
+            {
+                appointmentResult.Message = e.Message;
+                return appointmentResult;
+            }
         }
     }
 }

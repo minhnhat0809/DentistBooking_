@@ -13,7 +13,8 @@ namespace Repository
         Task<User?> GetUserByUserName(string email);
 
         Task<List<User>> GetAllDentists();
-        Task<List<User>> GetAllCustomer(); 
+        Task<List<User>> GetAllCustomer();
         Task<List<User>> GetAllDentistsByService(int serviceId);
+        Task<User> GetCustomerByPhoneNumber(string phoneNumber);
     }
 }

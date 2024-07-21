@@ -10,6 +10,7 @@ using DataAccess;
 using Service;
 using Microsoft.AspNetCore.SignalR;
 using BusinessObject.DTO;
+using BusinessObject.Result;
 
 namespace DentistBooking.Pages.StaffPages.Appointments
 {
@@ -26,6 +27,11 @@ namespace DentistBooking.Pages.StaffPages.Appointments
 
         [BindProperty]
         public AppointmentDto Appointment { get; set; } = default!;
+        
+        [BindProperty(SupportsGet = true)]
+        public string Reason { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string CustomerName { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -47,19 +53,24 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public async Task<IActionResult> OnPostAsync(int appointmentId)
         {
-            if (id == null)
+
+            if (string.IsNullOrWhiteSpace(Reason) || string.IsNullOrWhiteSpace(CustomerName))
             {
-                return NotFound();
+                TempData["ErrorDeleteAppointment"] = "Reason and Customer Name are required.";
+                Appointment = await _appointmentService.GetAppointmentByID(appointmentId);
+                return Page();
             }
 
-            var appointment = await _appointmentService.GetAppointmentByID(id.Value);
-            if (appointment != null)
+            AppointmentResult result = _appointmentService.DeleteAppointmentForStaff(appointmentId, CustomerName, Reason);
+            if (!result.Message.Equals("Success"))
             {
-                Appointment = appointment;
+                TempData["ErrorDeleteAppointment"] = result.Message;
+                Appointment =  await _appointmentService.GetAppointmentByID(appointmentId);
+                return Page();
             }
-            await _appointmentService.DeleteAppointment(id.Value);
+            TempData["SuccessDeleteAppointment"] = "Delete successfully!";
             await _hubContext.Clients.All.SendAsync("ReloadAppointments");
             return RedirectToPage("./Index");
         }

@@ -7,13 +7,14 @@ using AutoMapper;
 using DentistBooking.AppStart;
 using Microsoft.EntityFrameworkCore;
 using DataAccess;
+using Service.Lib;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
 {
-    options.Conventions.AddPageRoute("/Index", "/Index");
+    options.Conventions.AddPageRoute("/Index", "/home");
     options.Conventions.AddPageRoute("/GuestPage/BookingAppointment", "/clinic-booking");
     options.Conventions.AddPageRoute("/GuestPage/ClinicInfo", "/clinic-info");
     options.Conventions.AddPageRoute("/GuestPage/ServiceInfo", "/clinic-services");
@@ -83,6 +84,10 @@ builder.Services.AddScoped<IMedicineRepo, MedicineRepo>();
 builder.Services.AddScoped<IPrescriptionMedicineRepo, PrescriptionMedicineRepo>();
 builder.Services.AddScoped<IRoleRepo, RoleRepo>();
 builder.Services.AddScoped<IRoomRepo, RoomRepo>();
+
+//Configure Email sender
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

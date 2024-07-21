@@ -33,6 +33,9 @@ namespace Service
 
         Task<List<string>> GetAllStatusOfAppointment(int appointmentId);
 
+        AppointmentResult DeleteAppointmentForStaff(int appointmentId, string customerName, string reason);
+
+
         Task<List<AppointmentDto>> GetAllAppointmentByDentistId(int dentistId);
     }
 }
