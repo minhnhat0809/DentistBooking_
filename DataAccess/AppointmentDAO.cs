@@ -96,6 +96,7 @@ namespace DataAccess
                 .ThenInclude(dl => dl.Dentist)
                 .Include(c => c.Customer) 
                 .Include(c => c.CreateByNavigation)
+                .Include(x=>x.MedicalRecord)
                 .Include(m => m.ModifiedByNavigation)
                 .Include(s => s.Service)
                 .Where(ap => ap.Status.Equals("Processing")).ToListAsync();
