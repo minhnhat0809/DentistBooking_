@@ -399,6 +399,7 @@ namespace Service.Impl
             }
 
             var appointmentList = dentistSlot.Appointments.ToList();
+            appointmentList = appointmentList.Where(ap => !(ap.Status.Equals("Processing"))).ToList();
             if (appointmentList != null)
             {
                 foreach (var ap in appointmentList)

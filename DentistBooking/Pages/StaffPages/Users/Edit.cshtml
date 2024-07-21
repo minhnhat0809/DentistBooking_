@@ -59,11 +59,6 @@
                 <input asp-for="User.CreatedDate" class="form-control" readonly />
                 @* <span asp-validation-for="User.CreatedDate" class="text-danger"></span> *@
             </div>
-            @* <div class="form-group">
-            <label asp-for="User.Status" class="control-label"></label>
-            <input asp-for="User.Status" class="form-control" />
-            <span asp-validation-for="User.Status" class="text-danger"></span>
-            </div> *@
             <div class="form-group">
                 <label asp-for="User.Status" class="control-label"></label>
                 <select asp-for="User.Status" class="form-control">
@@ -73,15 +68,9 @@
                 <span asp-validation-for="User.Status" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="User.Clinic" class="control-label"></label>
-                @*<select asp-for="User.ClinicId" class="form-control" asp-items="ViewBag.ClinicId"></select>*@
-                <input asp-for="User.Clinic.ClinicName" class="form-control" readonly/>
-            </div>
-            <div class="form-group">
                 <label asp-for="User.Role" class="control-label"></label>
-                @* <select asp-for="User.RoleId" class="form-control" asp-items="ViewBag.RoleId"></select>
-                <span asp-validation-for="User.RoleId" class="text-danger"></span> *@
-                <input asp-for="User.Role.RoleName" class="form-control" readonly/>
+                <input value="@Model.User.Role.RoleName" class="form-control" readonly/>
+                <input type="hidden" asp-for="User.Role.RoleName" class="form-control" readonly/>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

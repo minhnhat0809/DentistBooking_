@@ -59,6 +59,7 @@ namespace DataAccess
         {
             var context = new BookingDentistDbContext();
             var dentistSlotList = await context.DentistSlots
+                .Include(dl => dl.Dentist)
                 .Where(ds => ds.RoomId == roomId && ds.TimeStart.Equals(selectedDate))
                 .OrderBy(ds => ds.TimeStart).ToListAsync();
             return dentistSlotList;
