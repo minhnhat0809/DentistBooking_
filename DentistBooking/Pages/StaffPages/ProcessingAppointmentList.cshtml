@@ -100,7 +100,7 @@ else
                         <input type="text" asp-for="@Model.Reason" class="form-control" id="reason" name="Reason" />
                     </div>
                     <div class="form-group">
-                        <label for="customerName">Customer Name</label>
+                        <label for="customerName">Customer Name</label><span class="text-danger" style="font-size:12px"> (You must type customer name correctly!)</span>
                         <input type="text" asp-for="@Model.CustomerName" class="form-control" id="customerName" name="CustomerName" placeholder="" />
                     </div>
                     <button type="submit" class="btn btn-danger">Delete</button>

@@ -14,7 +14,7 @@
         }
 
         .email-header {
-            background-color: #4CAF50;
+            background-color: #d9534f;
             color: white;
             padding: 10px;
             text-align: center;
@@ -36,7 +36,7 @@
             padding: 10px 20px;
             font-size: 16px;
             color: white;
-            background-color: #4CAF50;
+            background-color: #d9534f;
             text-decoration: none;
             border-radius: 5px;
         }
@@ -45,20 +45,16 @@
 <body>
     <div class='email-container'>
         <div class='email-header'>
-            <h1>Thank You for Your Booking!</h1>
+            <h1>We're Sorry for Your Booking Denial</h1>
         </div>
         <div class='email-body'>
             <p>Dear Customer,</p>
-            <p>We are on the way to arrange your appointment. Please wait for our response. Here are the details of your booking:</p>
-            <p><strong>Service:</strong> [Service Details]</p>
-            <p><strong>Date:</strong> [Date]</p>
-            <p><strong>Time:</strong> [Time]</p>
-            <p>If you have any questions, feel free to contact us at any time.</p>
-            <p>Thank you for choosing our service!</p>
-            <p>You can login with this account to see your appointment's detail. Please do not share!!</p>
-            <p><strong>Email:</strong> [Email]</p>
-            <p><strong>Password:</strong> [Password]</p>
-            <a href='http://localhost:5006/' class='btn text-black'>View Your Booking</a>
+            <p>We regret to inform you that your recent booking request for <strong>[Service Details]</strong> on [Date] at [Time] has been denied due to <strong>[Reason for Denial]</strong>.</p>
+            <p>We understand that this may be disappointing news and we sincerely apologize for any inconvenience this may cause. Our team is dedicated to providing you with the best possible service, and we hope to have the opportunity to assist you with another booking in the future.</p>
+            <p>If you have any questions or need further assistance, please do not hesitate to contact our support team at [Contact Information].</p>
+            <p>Thank you for your understanding.</p>
+            <p>Sincerely,<br>Good Dentist Team</p>
+            <a href='http://localhost:5006/' class='btn'>Contact Support</a>
         </div>
         <div class='email-footer'>
             <p>&copy; 2024 Good Dentist. All rights reserved.</p>

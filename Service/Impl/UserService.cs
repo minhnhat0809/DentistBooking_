@@ -307,5 +307,24 @@ namespace Service.Impl
                 throw new ExceptionHandler.ServiceException("An error occurred while retrieving", ex);
             }
         }
+
+        public async Task<UserDto> GetCustomerByEmail(string email)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(email))
+                {
+                    throw new ArgumentException("Email cannot be null or empty.", nameof(email));
+                }
+                var models = await _userRepo.GetUserByUserName(email);
+                var viewModels = _mapper.Map<UserDto>(models);
+                return viewModels;
+            }
+            catch (Exception ex)
+            {
+                // Log exception
+                throw new ExceptionHandler.ServiceException("An error occurred while retrieving", ex);
+            }
+        }
     }
 }
