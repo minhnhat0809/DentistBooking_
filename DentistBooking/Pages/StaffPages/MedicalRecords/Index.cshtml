@@ -2,86 +2,206 @@
 @model DentistBooking.Pages.StaffPages.MedicalRecords.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
-    Layout = "~/Pages/Shared/_StaffLayout.cshtml";
+ViewData["Title"] = "Index";
+Layout = "~/Pages/Shared/_StaffLayout.cshtml";
 }
 
-<h1>Medical Records</h1>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* General page styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
+        h1 {
+            color: #343a40;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        /* Table styling */
+        .table {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 100%;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .table th, .table td {
+            border: 1px solid #dee2e6;
+            padding: 12px 15px;
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .table thead th {
+            background-color: #343a40;
+            color: #ffffff;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+        }
+
+        .table tbody tr {
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .table a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .table a:hover {
+            text-decoration: underline;
+        }
+
+        /* Badge styling */
+        .badge {
+            padding: 8px 12px;
+            font-size: 0.875rem;
+            font-weight: bold;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .badge-active {
+            background-color: #28a745;
+            color: #ffffff;
+        }
+
+        .badge-inactive {
+            background-color: #dc3545;
+            color: #ffffff;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 0.875rem;
+            border-radius: 4px;
+            text-decoration: none;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+        }
+
+        .btn-details {
+            background-color: #ffc107; /* Yellow background */
+        }
+        
+
+        /* Pagination styling */
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .pagination a, .pagination span {
+            padding: 10px 15px;
+            margin: 0 5px;
+            font-size: 0.875rem;
+            border-radius: 4px;
+            color: #007bff;
+            text-decoration: none;
+            border: 1px solid #dee2e6;
+        }
+
+        .pagination span {
+            color: #6c757d;
+        }
+
+        .pagination a:hover {
+            background-color: #e9ecef;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Medical Records</h1>
+
+    <p>
+        <a asp-page="Create" class="btn btn-primary">Create New</a>
+    </p>
+
+    <table class="table">
+        <thead>
         <tr>
-           @*  <th>
-                @Html.DisplayNameFor(model => model.MedicalRecord[0].TimeStart)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MedicalRecord[0].Duration)
-            </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.MedicalRecord[0].Diagnosis)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MedicalRecord[0].Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MedicalRecord[0].CustomerId)
-            </th>
+            <th>@Html.DisplayNameFor(model => model.MedicalRecord[0].Diagnosis)</th>
+            <th>Status</th>
+            <th>@Html.DisplayNameFor(model => model.MedicalRecord[0].CustomerId)</th>
             <th></th>
         </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.MedicalRecord) {
+        </thead>
+        <tbody>
+        @foreach (var item in Model.MedicalRecord) {
         <tr>
-            @* <td>
-                @Html.DisplayFor(modelItem => item.TimeStart)
-            </td>
+            <td>@Html.DisplayFor(modelItem => item.Diagnosis)</td>
             <td>
-                @Html.DisplayFor(modelItem => item.Duration)
-            </td> *@
-            <td>
-                @Html.DisplayFor(modelItem => item.Diagnosis)
-            </td>
-                @if(item.Status == true)
+                @if (item.Status.Value)
                 {
-                    <td>Active</td>
-                }else {<td>Inactive</td>}
-                @* <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td> *@
-            <td>
-                    @Html.DisplayFor(modelItem => item.Customer.Name)
+                <span class="badge badge-active">Active</span>
+                }
+                else
+                {
+                <span class="badge badge-inactive">Inactive</span>
+                }
             </td>
+            <td>@Html.DisplayFor(modelItem => item.Customer.Name)</td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.MediaRecordId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.MediaRecordId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.MediaRecordId">Delete</a>
+                <a asp-page="./Edit" asp-route-id="@item.MediaRecordId" class="btn btn-primary">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.MediaRecordId" class="btn btn-details">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.MediaRecordId" class="btn btn-danger">Delete</a>
             </td>
         </tr>
-}
-    </tbody>
-</table>
-<div>
-    @if (Model.MedicalRecord.HasPreviousPage)
-    {
+        }
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        @if (Model.MedicalRecord.HasPreviousPage)
+        {
         <a asp-page="./Index" asp-route-pageNumber="@(Model.MedicalRecord.PageNumber - 1)" asp-route-pageSize="@Model.PageSize">Previous</a>
-    }
-    else
-    {
+        }
+        else
+        {
         <span>Previous</span>
-    }
+        }
 
-    @if (Model.MedicalRecord.HasNextPage)
-    {
+        @if (Model.MedicalRecord.HasNextPage)
+        {
         <a asp-page="./Index" asp-route-pageNumber="@(Model.MedicalRecord.PageNumber + 1)" asp-route-pageSize="@Model.PageSize">Next</a>
-    }
-    else
-    {
+        }
+        else
+        {
         <span>Next</span>
-    }
+        }
+    </div>
 </div>
-<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/site.js"></script>
+</body>

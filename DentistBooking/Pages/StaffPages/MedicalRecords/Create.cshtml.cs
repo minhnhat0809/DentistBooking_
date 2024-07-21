@@ -28,14 +28,13 @@ namespace DentistBooking.Pages.StaffPages.MedicalRecords
 
         public IActionResult OnGet()
         {
-            ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers().Result, "UserId", "Name");
+            ViewData["CustomerId"] = new SelectList(_userService.GetAllCustomers().Result, "UserId", "Name");
             return Page();
         }
 
         [BindProperty]
         public MedicalRecordDto MedicalRecord { get; set; } = default!;
-
-        // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+        
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
