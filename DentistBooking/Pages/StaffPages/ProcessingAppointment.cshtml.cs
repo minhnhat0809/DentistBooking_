@@ -1,3 +1,4 @@
+using System.Collections;
 using BusinessObject;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -6,6 +7,7 @@ using Service.Impl;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using BusinessObject.DTO;
+using BusinessObject.Result;
 
 namespace DentistBooking.Pages.StaffPages
 {
@@ -16,14 +18,17 @@ namespace DentistBooking.Pages.StaffPages
         private readonly IService service;
         private readonly IUserService userService;
         private readonly IDentistSlotService dentistSlotService;
+
+        private readonly IRoomService roomService;
         public ProcessingAppointmentModel(IAppointmentService appointmentService, IDentistService dentistService
-            , IService service, IUserService userService, IDentistSlotService dentistSlotService)
+            , IService service, IUserService userService, IDentistSlotService dentistSlotService, IRoomService roomService)
         {
             this.appointmentService = appointmentService;
             this.dentistService = dentistService;
             this.service = service;
             this.userService = userService;
             this.dentistSlotService = dentistSlotService;
+            this.roomService = roomService;
         }
 
         [BindProperty(SupportsGet = true)]
@@ -35,7 +40,11 @@ namespace DentistBooking.Pages.StaffPages
         public TimeOnly DentistSlotTimeStart { get; set; } = default!;
         [BindProperty(SupportsGet = true)]
         public TimeOnly DentistSlotTimeEnd { get; set; } = default!;
+
+        public IList<Room> Rooms { get; set; } = default!;
         
+        [BindProperty(SupportsGet = true)]
+        public int RoomId { get; set; }
 
         public ServiceDto Service { get; set; } = default!;
         public async Task<IActionResult> OnGet(int id)
@@ -44,7 +53,11 @@ namespace DentistBooking.Pages.StaffPages
 
             Service = await service.GetServiceByID(Appointment.ServiceId.Value);
 
+            Rooms =  roomService.GetAllActiveRooms().Result.Rooms;
+
             Dentists = await userService.GetAllDentistsByService((int)Appointment.ServiceId);
+            
+            
             
             HttpContext.Session.SetInt32("AppointmentId",Appointment.AppointmentId);
             return Page();
@@ -54,27 +67,19 @@ namespace DentistBooking.Pages.StaffPages
         {
             if (!Appointment.DentistSlotId.HasValue)
             {
-                TempData["ProcessingAppointmentError"] = "Please choose dentist slot!";
-                Appointment = await appointmentService.GetAppointmentByID(Appointment.AppointmentId);
-                Service = await service.GetServiceByID(Appointment.ServiceId.Value);
-                Dentists = await userService.GetAllDentistsByService(Appointment.ServiceId.Value);
+                TempData["ErrorProcessingAppointment"] = "Please choose dentist slot!";
                 return RedirectToPage(new { id = Appointment.AppointmentId });
             }
-             string result = await appointmentService.UpdateAppointmentForStaff((int)Appointment.ServiceId,
+            AppointmentResult result = await appointmentService.UpdateAppointmentForStaff((int)Appointment.ServiceId,
                 Appointment.AppointmentId, Appointment.TimeStart, Appointment.TimeEnd, (int)Appointment.DentistSlotId);
-            if (!result.Equals("Success"))
+            
+            if (!result.Message.Equals("Success"))
             {
-                TempData["ProcessingAppointmentError"] = result;
-                Appointment = await appointmentService.GetAppointmentByID(Appointment.AppointmentId);
-                Service = await service.GetServiceByID(Appointment.ServiceId.Value);
-                Dentists = await userService.GetAllDentistsByService(Appointment.ServiceId.Value);
+                TempData["ErrorProcessingAppointment"] = result;
                 RedirectToPage(new { id = Appointment.AppointmentId });
             }
 
-            TempData["ProcessingAppointment"] = "Appointment updated successfully!";
-            Appointment = await appointmentService.GetAppointmentByID(Appointment.AppointmentId);
-            Service = await service.GetServiceByID(Appointment.ServiceId.Value);
-            Dentists = await userService.GetAllDentistsByService(Appointment.ServiceId.Value);
+            TempData["SuccessProcessingAppointmentError"] = "Appointment updated successfully!";
             return RedirectToPage(new { id = Appointment.AppointmentId });
         }
 
@@ -109,15 +114,15 @@ namespace DentistBooking.Pages.StaffPages
             DateTime slotTimeEnd = new DateTime(date.Year, date.Month, date.Day,
                 DentistSlotTimeEnd.Hour, DentistSlotTimeEnd.Minute, DentistSlotTimeEnd.Second);
             
-            string result = await dentistSlotService.CreateDentistSlot((int)HttpContext.Session.GetInt32("DentistId")
-                , slotTimeStart, slotTimeEnd);
-            if (!result.Equals("Success"))
+            DentistSlotResult result = await dentistSlotService.CreateDentistSlot((int)HttpContext.Session.GetInt32("DentistId")
+                , slotTimeStart, slotTimeEnd, RoomId);
+            if (!result.Message.Equals("Success"))
             {
-                TempData["ProcessingAppointment_DentistSlot"] = result;
+                TempData["ErrorProcessingAppointment_DentistSlot"] = result;
                 return RedirectToPage(new { id = Appointment.AppointmentId });
             }
 
-            TempData["ProcessingAppointment_DentistSlot"] = "Create dentist slot successfully!";
+            TempData["SuccessProcessingAppointment_DentistSlot"] = "Create dentist slot successfully!";
             return RedirectToPage(new { id = Appointment.AppointmentId });
         }
 

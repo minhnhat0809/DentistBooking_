@@ -9,7 +9,7 @@
     <WebStackScaffolding_IsLayoutPageSelected>True</WebStackScaffolding_IsLayoutPageSelected>
     <WebStackScaffolding_IsPartialViewSelected>False</WebStackScaffolding_IsPartialViewSelected>
     <WebStackScaffolding_IsReferencingScriptLibrariesSelected>True</WebStackScaffolding_IsReferencingScriptLibrariesSelected>
-    <WebStackScaffolding_DbContextTypeFullName>DataAccess.BookingDentistDbContext</WebStackScaffolding_DbContextTypeFullName>
+    <WebStackScaffolding_DbContextTypeFullName>BusinessObject.BookingDentistDbContext</WebStackScaffolding_DbContextTypeFullName>
     <_SelectedScaffolderID>ModelBasedRazorPageScaffolder</_SelectedScaffolderID>
     <_SelectedScaffolderCategoryPath>root/Common/RazorPage</_SelectedScaffolderCategoryPath>
     <NameOfLastUsedPublishProfile>D:\FPT\Semes 7\PRN221_VanVTT10\team-project\DentistBooking\DentistBooking\Properties\PublishProfiles\dentistbooking - Web Deploy.pubxml</NameOfLastUsedPublishProfile>

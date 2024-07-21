@@ -1,5 +1,6 @@
 ﻿using BusinessObject;
 using BusinessObject.DTO;
+using BusinessObject.Result;
 
 namespace Service
 {
@@ -17,6 +18,8 @@ namespace Service
         Task<List<UserDto>?> GetAllDentistsByService(int serviceId);
         Task<List<RoleDto>> GetAllRoles();
         Task<List<UserDto>> GetAllUserByType(string type);
+        
+        Task<ListUserResult> GetAllActiveCustomers();
 
     }
 }

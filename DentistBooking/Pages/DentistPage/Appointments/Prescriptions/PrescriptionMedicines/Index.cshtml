@@ -1,0 +1,94 @@
+﻿@page "{id:int}"
+@model DentistBooking.Pages.DentistPage.Appointments.Prescriptions.PrescriptionMedicines.IndexModel
+
+@{
+    ViewData["Title"] = "Prescription Medicines";
+    Layout = "~/Pages/Shared/_DentistLayout.cshtml";
+}
+
+<h1>Prescription Medicines</h1>
+<p>
+    <a asp-page="./Create" asp-route-id="@Model.PrescriptionId" class="btn btn-success">Add Medicine</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PrescriptionMedicine[0].Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrescriptionMedicine[0].Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrescriptionMedicine[0].Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrescriptionMedicine[0].Medicine)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrescriptionMedicine[0].Prescription)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.PrescriptionMedicine)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                @if (item.Status == true)
+                {
+                    <td>Active</td>
+                } else { <td>Inactive</td>}
+                @* <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td> *@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Medicine.MedicineName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Prescription.PrescriptionId)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.PrescriptionMedicineId">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.PrescriptionMedicineId">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.PrescriptionMedicineId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    @if (Model.PrescriptionMedicine.HasPreviousPage)
+    {
+        <a asp-page="./Index" asp-route-pageNumber="@(Model.PrescriptionMedicine.PageNumber - 1)" asp-route-pageSize="@Model.PageSize">Previous</a>
+    }
+    else
+    {
+        <span>Previous</span>
+    }
+
+    @if (Model.PrescriptionMedicine.HasNextPage)
+    {
+        <a asp-page="./Index" asp-route-pageNumber="@(Model.PrescriptionMedicine.PageNumber + 1)" asp-route-pageSize="@Model.PageSize">Next</a>
+    }
+    else
+    {
+        <span>Next</span>
+    }
+</div>
+
+
+<div>
+    <a asp-page="./../Edit" asp-route-id="@Model.PrescriptionId">Back to Prescription Edit</a>
+</div>
+
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+
+<script src="~/js/site.js"></script>
