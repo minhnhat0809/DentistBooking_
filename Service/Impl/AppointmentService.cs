@@ -19,17 +19,19 @@ namespace Service.Impl
         private readonly IDentistSlotRepo dentistSlotRepo;
         private readonly IServiceRepo serviceRepo;
         private readonly IUserRepo userRepo;
+        private readonly IMedicalRecordRepo medicalRecordRepo;
         private readonly IMapper mapper;
 
         public AppointmentService(IAppointmentRepo appointmentRepo, IDentistSlotRepo dentistSlotRepo, 
-            IServiceRepo serviceRepo, IUserRepo userRepo,
+            IServiceRepo serviceRepo, IUserRepo userRepo, IMedicalRecordRepo medicalRecordRepo,
             IMapper mapper)
         {
             this.appointmentRepo = appointmentRepo;
             this.dentistSlotRepo = dentistSlotRepo;
             this.serviceRepo = serviceRepo;
             this.userRepo = userRepo;
-            this.mapper = mapper;   
+            this.mapper = mapper;
+            this.medicalRecordRepo = medicalRecordRepo;
         }
         public async Task<AppointmentResult> AddAppointment(AppointmentDto appointment, string email)
         {
@@ -591,12 +593,28 @@ namespace Service.Impl
                     return appointmentResult; 
                 }
 
+                if (appointMent.MedicalRecordId > 0 )
+                {
+                    MedicalRecord medicalRecord = medicalRecordRepo.GetById(appointMent.MedicalRecordId).Result;
+                    if (medicalRecord == null)
+                    {
+                        appointmentResult.Message = "Medical record is not found!";
+                        return appointmentResult;
+                    }
+                    else
+                    {
+                        appointment.MedicalRecordId = appointMent.MedicalRecordId;
+                    }
+                }
+
                 appointment.ServiceId = appointMent.ServiceId;
                 appointment.Status = appointMent.Status;
                 appointment.DentistSlotId = appointMent.DentistSlotId;
                 appointment.TimeStart = appointMent.TimeStart;
                 appointment.TimeEnd = appointMent.TimeEnd;
+                appointment.MedicalRecordId = appointment.MedicalRecordId;
                 appointment.ModifiedBy = user.UserId;
+                appointment.Diagnosis = appointMent.Diagnosis;
 
                 await appointmentRepo.UpdateAppointment(appointment);
                 AppointmentDto appointmentDto = mapper.Map<AppointmentDto>(appointment);
