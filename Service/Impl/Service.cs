@@ -102,6 +102,7 @@ namespace Service.Impl
             if (service != null)
             {
                 services.Remove(service);
+                services = services.Where(s => s.Status == true).ToList();
                 services.Insert(0, service);
             }
             var viewModels = _mapper.Map<List<ServiceDto>>(services);

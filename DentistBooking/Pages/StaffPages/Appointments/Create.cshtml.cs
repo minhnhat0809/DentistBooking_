@@ -6,6 +6,7 @@ using BusinessObject;
 using Service;
 using Microsoft.AspNetCore.SignalR;
 using BusinessObject.DTO;
+using BusinessObject.Result;
 using Microsoft.IdentityModel.Tokens;
 
 namespace DentistBooking.Pages.StaffPages.Appointments
@@ -67,7 +68,6 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             MedicalRecords = await _medicalRecordService.GetMedicalRecordsByCustomerIdAsync(customers.FirstOrDefault().UserId);
             return Page();
         }
-
         public async Task<JsonResult> OnGetDentistSlotByServiceAsync(int serviceId, DateOnly selectedDate, TimeOnly timeStartt)
         {
             DateTime timeStart = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, 
@@ -75,7 +75,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             var dentistSlots =  _dentistSlotService.GetDentistSlotByServiceAndDateTime(serviceId, timeStart).DentistSlots;
             if (dentistSlots.IsNullOrEmpty())
             {
-                return new JsonResult(new { success = false, message = "No dentist slots available at the selected time." });
+                return new JsonResult(new { success = false, message = "No dentist slots available for selected service and the selected time." });
             }
             var dentistSlotSelectList = dentistSlots.Select(slot => new SelectListItem
             {
@@ -117,13 +117,17 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             Appointment.TimeStart = timeStart;
             Appointment.TimeEnd = timeEnd;
             string email = HttpContext.Session.GetString("Email");
-            string result = await _appointmentService.AddAppointment(Appointment, email);
-            if (!result.Equals("Success"))
+            
+            AppointmentResult appointmentResult = await _appointmentService.AddAppointment(Appointment, email);
+            if (!appointmentResult.Message.Equals("Success"))
             {
-                TempData["CreateAppointment"] = result;
+                TempData["ErrorCreateAppointment"] = appointmentResult.Message;
+                return RedirectToPage("./Create");
             }
-
-            TempData["CreateAppointment"] = "Create successfully!";
+            else
+            {
+                TempData["SuccessCreateAppointment"] = "Create successfully!";
+            }
             await _hubContext.Clients.All.SendAsync("ReloadAppointments");
 
             return RedirectToPage("./Create");

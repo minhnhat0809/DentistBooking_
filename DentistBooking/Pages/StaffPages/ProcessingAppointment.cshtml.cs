@@ -7,6 +7,7 @@ using Service.Impl;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using BusinessObject.DTO;
+using BusinessObject.Result;
 
 namespace DentistBooking.Pages.StaffPages
 {
@@ -52,7 +53,7 @@ namespace DentistBooking.Pages.StaffPages
 
             Service = await service.GetServiceByID(Appointment.ServiceId.Value);
 
-            Rooms =  roomService.GetAllRooms().Result.Rooms;
+            Rooms =  roomService.GetAllActiveRooms().Result.Rooms;
 
             Dentists = await userService.GetAllDentistsByService((int)Appointment.ServiceId);
             
@@ -66,30 +67,19 @@ namespace DentistBooking.Pages.StaffPages
         {
             if (!Appointment.DentistSlotId.HasValue)
             {
-                TempData["ProcessingAppointmentError"] = "Please choose dentist slot!";
-                Appointment = await appointmentService.GetAppointmentByID(Appointment.AppointmentId);
-                Service = await service.GetServiceByID(Appointment.ServiceId.Value);
-                Dentists = await userService.GetAllDentistsByService(Appointment.ServiceId.Value);
-                Rooms =  roomService.GetAllRooms().Result.Rooms;
+                TempData["ErrorProcessingAppointment"] = "Please choose dentist slot!";
                 return RedirectToPage(new { id = Appointment.AppointmentId });
             }
-            string result = await appointmentService.UpdateAppointmentForStaff((int)Appointment.ServiceId,
+            AppointmentResult result = await appointmentService.UpdateAppointmentForStaff((int)Appointment.ServiceId,
                 Appointment.AppointmentId, Appointment.TimeStart, Appointment.TimeEnd, (int)Appointment.DentistSlotId);
-            if (!result.Equals("Success"))
+            
+            if (!result.Message.Equals("Success"))
             {
-                TempData["ProcessingAppointmentError"] = result;
-                Appointment = await appointmentService.GetAppointmentByID(Appointment.AppointmentId);
-                Service = await service.GetServiceByID(Appointment.ServiceId.Value);
-                Dentists = await userService.GetAllDentistsByService(Appointment.ServiceId.Value);
-                Rooms =  roomService.GetAllRooms().Result.Rooms;
+                TempData["ErrorProcessingAppointment"] = result;
                 RedirectToPage(new { id = Appointment.AppointmentId });
             }
 
-            TempData["ProcessingAppointment"] = "Appointment updated successfully!";
-            Appointment = await appointmentService.GetAppointmentByID(Appointment.AppointmentId);
-            Service = await service.GetServiceByID(Appointment.ServiceId.Value);
-            Dentists = await userService.GetAllDentistsByService(Appointment.ServiceId.Value);
-            Rooms =  roomService.GetAllRooms().Result.Rooms;
+            TempData["SuccessProcessingAppointmentError"] = "Appointment updated successfully!";
             return RedirectToPage(new { id = Appointment.AppointmentId });
         }
 
@@ -124,15 +114,15 @@ namespace DentistBooking.Pages.StaffPages
             DateTime slotTimeEnd = new DateTime(date.Year, date.Month, date.Day,
                 DentistSlotTimeEnd.Hour, DentistSlotTimeEnd.Minute, DentistSlotTimeEnd.Second);
             
-            string result = await dentistSlotService.CreateDentistSlot((int)HttpContext.Session.GetInt32("DentistId")
+            DentistSlotResult result = await dentistSlotService.CreateDentistSlot((int)HttpContext.Session.GetInt32("DentistId")
                 , slotTimeStart, slotTimeEnd, RoomId);
-            if (!result.Equals("Success"))
+            if (!result.Message.Equals("Success"))
             {
-                TempData["ProcessingAppointment_DentistSlot"] = result;
+                TempData["ErrorProcessingAppointment_DentistSlot"] = result;
                 return RedirectToPage(new { id = Appointment.AppointmentId });
             }
 
-            TempData["ProcessingAppointment_DentistSlot"] = "Create dentist slot successfully!";
+            TempData["SuccessProcessingAppointment_DentistSlot"] = "Create dentist slot successfully!";
             return RedirectToPage(new { id = Appointment.AppointmentId });
         }
 
