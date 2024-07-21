@@ -76,7 +76,7 @@ namespace Service.Impl
                     return appointmentResult;
                 }
 
-                var validStatuses = new[] { "Success", "Done", "Finished", "Processing", "Delete" };
+                var validStatuses = new[] {  "Not yet arrived", "Arrived", "Happening", "Finished", "Processing" };
                 if (!validStatuses.Contains(appointment.Status))
                 {
                     appointmentResult.Message = "Status is not valid!";
@@ -284,23 +284,18 @@ namespace Service.Impl
 
                 switch (appointment.Status)
                 {
-                    case "Deleted":
-                        AddError("Status", "Cannot update! This appointment is deleted!");
+                    case "Arrived":
+                        AddError("Status", "Cannot update! This appointment is about to happening!");
                         return errors;
                     case "Happening":
                         AddError("Status", "Cannot update! This appointment is happening!");
                         return errors;
-                    case "Expired":
-                        AddError("Status", "Cannot update! This appointment is expired!");
-                        return errors;
                     case "Finished":
                         AddError("Status", "Cannot update! This appointment is finished!");
                         return errors;
-                    case "Done":
-                        AddError("Status", "Cannot update! This appointment is done!");
+                    case "Deleted":
+                        AddError("Status", "Cannot update! This appointment is deleted!");
                         return errors;
-                    default:
-                        break;
                 }
 
                 appointment.ServiceId = serviceId;

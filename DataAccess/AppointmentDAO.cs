@@ -35,7 +35,7 @@ namespace DataAccess
                 .Include(x => x.Customer)
                 .Include(x => x.DentistSlot)
                 .ThenInclude(d => d.Dentist)
-                .Include(x => x.MedicalRecord)
+                .Include(x => x.MedicalRecord).ThenInclude(m => m.Customer)
                 .Include(x => x.Service)
                 .FirstOrDefaultAsync(c => c.AppointmentId == id);
             return appointment;
