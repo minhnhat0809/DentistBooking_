@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BusinessObject;
 using BusinessObject.DTO;
+using Repository;
 using Repository.Impl;
 using Service.Exeption;
 using System;
@@ -23,11 +24,15 @@ namespace Service.Impl
     public class PrescriptionMedicinesService : IPrescriptionMedicinesService
     {
         private readonly IPrescriptionMedicineRepo _prescriptionMedicineRepo;
+        private readonly IPrescriptionrepo _prescriptionRepo;
         private readonly IMapper _mapper;
-        public PrescriptionMedicinesService(IPrescriptionMedicineRepo prescriptionMedicineRepo, IMapper mapper)
+        private readonly IMedicineRepo _medicineRepo;
+        public PrescriptionMedicinesService(IPrescriptionMedicineRepo prescriptionMedicineRepo, IMapper mapper, IPrescriptionrepo prescriptionRepo, IMedicineRepo medicineRepo)
         {
             _prescriptionMedicineRepo = prescriptionMedicineRepo;
             _mapper = mapper;
+            _prescriptionRepo = prescriptionRepo;
+            _medicineRepo = medicineRepo;
         }
         public async Task UpdatePrescriptionMedicine(PrescriptionMedicineDto prescriptionMedicine)
         {
@@ -38,23 +43,40 @@ namespace Service.Impl
 
             try
             {
-                var model = await _prescriptionMedicineRepo.GetById(prescriptionMedicine.PrescriptionMedicineId);
-                if (model == null)
+                var existingPrescriptionMedicine = await _prescriptionMedicineRepo.GetById(prescriptionMedicine.PrescriptionMedicineId);
+                if (existingPrescriptionMedicine != null)
                 {
-                    throw new ArgumentException("PrescriptionMedicine not found");
-                }
-                model = _mapper.Map<PrescriptionMedicine>(prescriptionMedicine);
-                await _prescriptionMedicineRepo.UpdatePrescriptionMedicine(model);
+                    // Revert the old medicine quantity back to stock
+                    var oldMedicine = await _medicineRepo.GetById(existingPrescriptionMedicine.MedicineId);
+                    if (oldMedicine != null)
+                    {
+                        oldMedicine.Quantity += existingPrescriptionMedicine.Quantity;
+                        await _medicineRepo.UpdateMedicine(oldMedicine);
+                    }
 
+                    // Deduct new medicine quantity from stock
+                    var newMedicine = await _medicineRepo.GetById(prescriptionMedicine.MedicineId);
+                    if (newMedicine == null || newMedicine.Quantity < prescriptionMedicine.Quantity)
+                    {
+                        throw new InvalidOperationException("Not enough medicine in stock.");
+                    }
+                    newMedicine.Quantity -= prescriptionMedicine.Quantity;
+                    await _medicineRepo.UpdateMedicine(newMedicine);
+
+                    // Update the PrescriptionMedicine record
+                    var model = _mapper.Map<PrescriptionMedicine>(prescriptionMedicine);
+                    await _prescriptionMedicineRepo.UpdatePrescriptionMedicine(model);
+
+
+                } else throw new ArgumentException("PrescriptionMedicine does not exist.");
 
             }
             catch (Exception ex)
             {
-                // Log exception
-                throw new ExceptionHandler.ServiceException("An error occurred while updating.", ex);
+                throw new ExceptionHandler.ServiceException("An error occurred while updating the prescription medicine.", ex);
             }
-
         }
+
         public async Task AddPrescriptionMedicine(PrescriptionMedicineDto prescriptionMedicine)
         {
             if (prescriptionMedicine == null)
@@ -64,21 +86,45 @@ namespace Service.Impl
 
             try
             {
-                var model = await _prescriptionMedicineRepo.GetById(prescriptionMedicine.PrescriptionMedicineId);
-                if (model != null)
+                var existingPrescriptionMedicine = await _prescriptionMedicineRepo.GetById(prescriptionMedicine.PrescriptionMedicineId);
+                if (existingPrescriptionMedicine == null)
                 {
-                    throw new ArgumentException("PrescriptionMedicine exist yet");
-                }
-                model = _mapper.Map<PrescriptionMedicine>(prescriptionMedicine);
-                await _prescriptionMedicineRepo.AddPrescriptionMedicine(model);
+                    var medicine = await _medicineRepo.GetById(prescriptionMedicine.MedicineId);
+                    if (medicine != null && medicine.Quantity > prescriptionMedicine.Quantity)
+                    {
+                        var prescription = await _prescriptionRepo.GetById(prescriptionMedicine.PrescriptionId.Value);
+                        if (prescription != null)
+                        {
+                            foreach (var medicinePrescription in prescription.PrescriptionMedicines)
+                            {
+                                if(medicinePrescription.MedicineId == prescriptionMedicine.MedicineId)
+                                {
+                                    throw new ArgumentException("This medicine have in Prescription already!");
+                                }
+                            }
+                            // Deduct quantity from stock
+                            medicine.Quantity -= prescriptionMedicine.Quantity;
+                            await _medicineRepo.UpdateMedicine(medicine);
 
+                            // if there no any exit name then add new medicine
+                            var model = _mapper.Map<PrescriptionMedicine>(prescriptionMedicine);
+                            await _prescriptionMedicineRepo.AddPrescriptionMedicine(model);
+
+                        }
+
+                    } else throw new ArgumentNullException("Not enough medicine in stock.");
+
+                } else throw new ArgumentException("PrescriptionMedicine already exists.");
+
+                
             }
             catch (Exception ex)
             {
                 // Log exception
-                throw new ExceptionHandler.ServiceException("An error occurred while creating the prescription.", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
+
 
         public async Task<List<PrescriptionMedicineDto>> GetAllPrescriptionMedicinesByPrescriptionId(int preId)
         {
@@ -91,7 +137,6 @@ namespace Service.Impl
             }
             catch (Exception ex)
             {
-                // Log exception
                 throw new ExceptionHandler.ServiceException("An error occurred while retrieving.", ex);
             }
         }
@@ -126,13 +171,21 @@ namespace Service.Impl
                 {
                     throw new ArgumentException("PrescriptionMedicine not found");
                 }
+                // update medicines storage
+                var medicine = await _medicineRepo.GetById(prescriptionMedicine.MedicineId);
+                if (medicine != null)
+                {
+                    medicine.Quantity += prescriptionMedicine.Quantity;
+                    await _medicineRepo.UpdateMedicine(medicine);
+                }
                 model = _mapper.Map<PrescriptionMedicine>(prescriptionMedicine);
                 await _prescriptionMedicineRepo.DeletePrescriptionMedicine(model);
 
+                // Update the prescription total price
+                await _prescriptionRepo.UpdatePrescription(model.Prescription);
             }
             catch (Exception ex)
             {
-                // Log exception
                 throw new ExceptionHandler.ServiceException("An error occurred while creating the prescription.", ex);
             }
         }

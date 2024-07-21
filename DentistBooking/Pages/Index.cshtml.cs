@@ -1,70 +1,124 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Service;
+using BusinessObject.DTO;
+using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
-using System.Configuration;
+using BusinessObject;
+using Service.Impl;
+using Service.Lib;
 
 namespace DentistBooking.Pages
 {
-    public class IndexModel : PageModel
+    public class HomePageModel : PageModel
     {
+
+        private readonly IAppointmentService appointmentService;
+        private readonly IService service;
         private readonly IUserService userService;
-
-        public IndexModel(IUserService userService)
+        private readonly IEmailSender emailSender;
+        private readonly IConfiguration configuration;
+        public HomePageModel(IUserService userService, IAppointmentService appointmentService, IService service, IEmailSender emailSender, IConfiguration configuration)
         {
+            this.appointmentService = appointmentService;
+            this.service = service;
             this.userService = userService;
+            this.emailSender = emailSender;
+            this.configuration = configuration;
         }
 
-        [BindProperty]
-        [EmailAddress(ErrorMessage = "Invalid Email Address")]
-        [Required]
-        public string Email { get; set; } = "";
+        public List<ServiceDto> Services { get; set; } = new List<ServiceDto>();
 
         [BindProperty]
         [Required]
-        public string Password { get; set; } = "";
-        public void OnGet()
+        public string Name { get; set; }
+
+        [BindProperty]
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [BindProperty]
+        [Required]
+        [Phone]
+        public string PhoneNumber { get; set; }
+
+        [BindProperty]
+        [Required]
+        public int SelectedServiceId { get; set; }
+
+        [BindProperty]
+        [Required]
+        [DataType(DataType.DateTime)]
+        public DateTime AppointmentTime { get; set; }
+
+        [BindProperty]
+        [Required]
+        public string Gender { get; set; }
+
+        [BindProperty]
+        [Required]
+        [DataType(DataType.Date)]
+        public DateOnly Dob { get; set; }
+        public async Task OnGetAsync()
         {
+            Services = await service.GetAllServices();
         }
 
-        public async Task<IActionResult> OnPostLogin()
+        public async Task<IActionResult> OnPostAsync()
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var result = await userService.Login(Email, Password);
-
-                if (result.IsSuccess)
-                {
-                    HttpContext.Session.SetString("Email", Email);
-                    HttpContext.Session.SetString("Role", result.Result.ToString());
-                    HttpContext.Session.SetString("ID", result.Message);
-                    if (result.Result.Equals("Customer"))
-                    {
-                        return RedirectToPage("/CustomerPage/ViewServices");
-                    }else if (result.Result.Equals("Admin"))
-                    {
-                        return RedirectToPage("/AdminPage/Users/Index");
-                    }else if (result.Result.Equals("Staff"))
-                    {
-                        return RedirectToPage("/StaffPages/ProcessingAppointmentList");
-                    }
-                    else if (result.Result.Equals("Dentist"))
-                    {
-                        return RedirectToPage("/DentistPage/Customers/Index");
-                    }
-
-                }
-                else
-                {                   
-                    ModelState.AddModelError(string.Empty, "Email or Password is incorrect");
-                }
+                Services = await service.GetAllServices();
+                return Page();
             }
-            return Page();
-        }
+
+            var customer = await userService.GetCustomerByPhoneNumber(PhoneNumber);
+            //create user
+            if (customer == null)
+            {
+                UserDto newCustomer = new UserDto
+                {
+                    PhoneNumber = PhoneNumber,
+                    Email = Email,
+                    UserName = new Guid().ToString(),
+                    Gender = Gender,
+                    RoleId = 3,
+                    Dob = Dob,
+                    Name = Name,
+                    Password = "cuZXynTq"
+                };
+                await userService.CreateUser(newCustomer);
+                customer = await userService.GetCustomerByPhoneNumber(PhoneNumber);
+            }
 
 
-        public IActionResult OnPost()
-        {
+            var appointmentDate = DateOnly.FromDateTime(AppointmentTime.Date);
+
+            Dictionary<string, string> result = await appointmentService.CreateAppointment(AppointmentTime, customer.UserId, appointmentDate, SelectedServiceId);
+            if (!result.ContainsKey("Success"))
+            {
+                foreach (var item in result)
+                {
+                    TempData["Book"] = item.Value;
+                }
+
+                Services = await service.GetAllServices();
+                return Page();
+            }
+            TempData["Book"] = "Appointment created successfully!";
+            var receiver = Email;
+            var subject = "Thank you for your booking!";
+            string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "ThanksGuestBooking.html");
+            string body = await System.IO.File.ReadAllTextAsync(templatePath);
+            var selectedService = await service.GetServiceByID(SelectedServiceId);
+            body = body.Replace("[Service Details]", selectedService.ServiceName)
+                       .Replace("[Date]", DateOnly.FromDateTime(AppointmentTime).ToString())
+                       .Replace("[Time]", TimeOnly.FromDateTime(AppointmentTime).ToString());
+
+            await emailSender.SendEmailAsync(receiver, subject, body);
+
+            Services = await service.GetAllServices();
             return Page();
         }
     }

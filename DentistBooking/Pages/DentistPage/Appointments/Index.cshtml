@@ -1,0 +1,125 @@
+﻿@page
+@model DentistBooking.Pages.DentistPage.Appointments.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_DentistLayout.cshtml";
+}
+
+<h1>Appointments</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Appointment[0].TimeStart)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Appointment[0].TimeEnd)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Appointment[0].Diagnosis)
+            </th>
+            @* <th>
+                @Html.DisplayNameFor(model => model.Appointment[0].Note)
+            </th> *@
+            <th>
+                @Html.DisplayNameFor(model => model.Appointment[0].Status)
+            </th>
+            @* <th>
+                @Html.DisplayNameFor(model => model.Appointment[0].CreateByNavigation)
+            </th> *@
+            <th>
+                @Html.DisplayNameFor(model => model.Appointment[0].Customer)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Appointment[0].DentistSlot)
+            </th>
+            @* <th>
+                @Html.DisplayNameFor(model => model.Appointment[0].MedicalRecord)
+            </th> *@
+            @* <th>
+                @Html.DisplayNameFor(model => model.Appointment[0].ModifiedByNavigation)
+            </th> *@
+            <th>
+                @Html.DisplayNameFor(model => model.Appointment[0].Service)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Appointment) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TimeStart)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TimeEnd)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Diagnosis)
+            </td>
+            @* <td>
+                @Html.DisplayFor(modelItem => item.Note)
+            </td> *@
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            @* <td>
+                @Html.DisplayFor(modelItem => item.CreateByNavigation.Name)
+            </td> *@
+            <td>
+                @Html.DisplayFor(modelItem => item.Customer.Name)
+            </td>
+            @if (item.DentistSlot != null && item.DentistSlot.Dentist != null)
+            {
+                <td>@item.DentistSlot.Dentist.Name (@item.DentistSlot.TimeStart.ToString("hh:mm tt") - @item.DentistSlot.TimeEnd.ToString("hh:mm tt"))</td>
+            }
+            else
+            {
+                <td>N/A</td>    
+            }
+            @* <td>
+                @Html.DisplayFor(modelItem => item.DentistSlot.DentistSlotId)
+            </td> *@
+            @* <td>
+                @Html.DisplayFor(modelItem => item.MedicalRecord.MediaRecordId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModifiedByNavigation.Name)
+            </td> *@
+            <td>
+                @Html.DisplayFor(modelItem => item.Service.ServiceName)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.AppointmentId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.AppointmentId">Details</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<div>
+    @if (Model.Appointment.HasPreviousPage)
+    {
+        <a asp-page="./Index" asp-route-pageNumber="@(Model.Appointment.PageNumber - 1)" asp-route-pageSize="@Model.PageSize">Previous</a>
+    }
+    else
+    {
+        <span>Previous</span>
+    }
+
+    @if (Model.Appointment.HasNextPage)
+    {
+        <a asp-page="./Index" asp-route-pageNumber="@(Model.Appointment.PageNumber + 1)" asp-route-pageSize="@Model.PageSize">Next</a>
+    }
+    else
+    {
+        <span>Next</span>
+    }
+</div>
+
+
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+
+<script src="~/js/site.js"></script>

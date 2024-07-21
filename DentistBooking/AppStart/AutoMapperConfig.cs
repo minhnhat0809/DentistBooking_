@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using BusinessObject;
 using BusinessObject.DTO;
-using Microsoft.AspNetCore.Identity;
-using Service.Impl;
 
 namespace DentistBooking.AppStart
 {
@@ -20,7 +18,18 @@ namespace DentistBooking.AppStart
                     .ForMember(dest => dest.Customer, opt => opt.Ignore())
                     .ForMember(dest => dest.Dentist, opt => opt.Ignore());
                 mc.CreateMap<BusinessObject.Service, ServiceDto>().ReverseMap();
-                mc.CreateMap<Appointment, AppointmentDto>().ReverseMap();
+                
+                mc.CreateMap<Appointment, AppointmentDto>()
+                    .ForMember(dest => dest.MedicalRecord, opt => opt.MapFrom(src => src.MedicalRecord))
+                    .ForMember(dest => dest.Service, opt => opt.MapFrom(src => src.Service))
+                    .ForMember(dest => dest.Prescriptions, opt => opt.Ignore());
+               
+                mc.CreateMap<AppointmentDto, Appointment>()
+                    .ForMember(dest => dest.MedicalRecord, opt => opt.Ignore())
+                    .ForMember(dest => dest.Service, opt => opt.Ignore())
+                    .ForMember(dest => dest.Prescriptions, opt => opt.Ignore())
+                    .ForMember(dest => dest.Customer, opt => opt.Ignore());
+                
                 mc.CreateMap<CheckupSchedule, CheckupScheduleDto>().ReverseMap();
                 mc.CreateMap<Clinic, ClinicDto>().ReverseMap();
                 mc.CreateMap<BusinessObject.DentistService, DentistServiceDto>().ReverseMap();

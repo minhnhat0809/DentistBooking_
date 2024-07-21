@@ -7,14 +7,20 @@ using AutoMapper;
 using DentistBooking.AppStart;
 using Microsoft.EntityFrameworkCore;
 using DataAccess;
+using Service.Lib;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
 {
+    options.Conventions.AddPageRoute("/Index", "/home");
+    options.Conventions.AddPageRoute("/GuestPage/BookingAppointment", "/clinic-booking");
+    options.Conventions.AddPageRoute("/GuestPage/ClinicInfo", "/clinic-info");
+    options.Conventions.AddPageRoute("/GuestPage/ServiceInfo", "/clinic-services");
+
     options.Conventions.AddPageRoute("/ForgetPassword", "/forget-password");
-    options.Conventions.AddPageRoute("/Index", "/login");
+    options.Conventions.AddPageRoute("/LoginPage", "/login");
     options.Conventions.AddPageRoute("/AdminPage/Users/Index", "/users-management");
     options.Conventions.AddPageRoute("/AdminPage/Services/Index", "/services");
     options.Conventions.AddPageRoute("/AdminPage/Clinics/Index", "/clinics");
@@ -24,8 +30,11 @@ builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
 
     options.Conventions.AddPageRoute("/DentistPage/Customers/Index", "/customers");
     options.Conventions.AddPageRoute("/DentistPage/Customers/MedicalRecords/Index", "/customers/medical-records");
-    options.Conventions.AddPageRoute("/DentistPage/Prescriptions/Index", "/prescriptions");
-    options.Conventions.AddPageRoute("/DentistPage/Precriptions/PrecriptionMedicones/Index", "/prescriptions/medicine");
+    options.Conventions.AddPageRoute("/DentistPage/Appointments/Index", "/appointments");
+
+
+    /*options.Conventions.AddPageRoute("/DentistPage/Prescriptions/Index", "/prescriptions");
+    options.Conventions.AddPageRoute("/DentistPage/Precriptions/PrecriptionMedicones/Index", "/prescriptions/medicine");*/
 
     options.Conventions.AddPageRoute("/CustomerPage/ViewServices", "/services/view");
     options.Conventions.AddPageRoute("/CustomerPage/ViewPrescriptions", "/prescriptions/view");
@@ -36,10 +45,6 @@ builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
 });
 
 builder.Services.AddSignalR();
-builder.Services.AddDbContext<BookingDentistDbContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
-
-
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(60);
@@ -61,6 +66,7 @@ builder.Services.AddScoped<IClinicService, ClinicService>();
 builder.Services.AddScoped<IMedicineService, MedicineService>();
 builder.Services.AddScoped<IDentistService, DentistService>();
 builder.Services.AddScoped<IPrescriptionMedicinesService,  PrescriptionMedicinesService>();
+builder.Services.AddScoped<IRoomService,  RoomService>();
 
 
 
@@ -77,6 +83,11 @@ builder.Services.AddScoped<IDentistServiceRepo, DentistServiceRepo>();
 builder.Services.AddScoped<IMedicineRepo, MedicineRepo>();
 builder.Services.AddScoped<IPrescriptionMedicineRepo, PrescriptionMedicineRepo>();
 builder.Services.AddScoped<IRoleRepo, RoleRepo>();
+builder.Services.AddScoped<IRoomRepo, RoomRepo>();
+
+//Configure Email sender
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -101,3 +112,4 @@ app.MapHub<SignalRHub>("/SignalRHub");
 app.UseSession();
 
 app.Run();
+//dotnet ef dbcontext scaffold "Server=(local);Initial Catalog=Booking_Dentist_DB;Persist Security Info=False;User ID=sa;Password=12345;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;" "Microsoft.EntityFrameworkCore.SqlServer"--force

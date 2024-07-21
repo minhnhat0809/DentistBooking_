@@ -6,85 +6,241 @@
     Layout = "~/Pages/Shared/_StaffLayout.cshtml";
 }
 
-<h1>Appointment</h1>
+<head>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: #343a40;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .form-inline {
+            margin-bottom: 20px;
+        }
+
+        .table-container {
+            overflow: auto;
+            margin-top: 20px;
+        }
+
+        .table {
+            border-collapse: collapse;
+            width: 100%;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+            .table th,
+            .table td {
+                border: 1px solid #dee2e6;
+                padding: 12px 15px;
+                text-align: center;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .table thead th {
+                background-color: #343a40;
+                color: #ffffff;
+                font-size: 0.875rem;
+                text-transform: uppercase;
+            }
+
+            .table tbody tr {
+                transition: background-color 0.3s ease-in-out;
+            }
+
+                .table tbody tr:hover {
+                    background-color: #f1f1f1;
+                }
+
+        .badge {
+            padding: 8px 12px;
+            font-size: 0.875rem;
+            font-weight: bold;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .badge-not-arrived {
+            background-color: #6c757d;
+            color: #ffffff;
+        }
+
+        .badge-arrived {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        .badge-happening {
+            background-color: #fd7e14;
+            color: #ffffff;
+        }
+
+        .badge-finished {
+            background-color: #28a745;
+            color: #ffffff;
+        }
+
+        .badge-processing {
+            background-color: #6f42c1;
+            color: #ffffff;
+        }
+
+        .badge-delete {
+            background-color: #dc3545;
+            color: #ffffff;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 0.875rem;
+            border-radius: 4px;
+            text-decoration: none;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+
+        .btn-disabled {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+            .pagination a, .pagination span {
+                padding: 10px 15px;
+                margin: 0 5px;
+                font-size: 0.875rem;
+                border-radius: 4px;
+                color: #007bff;
+                text-decoration: none;
+                border: 1px solid #dee2e6;
+            }
+
+            .pagination span {
+                color: #6c757d;
+            }
+
+            .pagination a:hover {
+                background-color: #e9ecef;
+            }
+    </style>
+</head>
+<h1>Appointment Management</h1>
 
 <p>
-    <a asp-page="Create">Create New</a>
+    <a asp-page="Create" class="btn btn-primary">Create New</a>
 </p>
-<br/>
-<p>
-    <a asp-page="/StaffPages/ProcessingAppointmentList" class="btn-secondary p-2 ms-2"> Processing appointments</a>
-</p>
-<br/>
-<br/>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Appointment[0].TimeStart)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Appointment[0].TimeEnd)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Appointment[0].Diagnosis)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Appointment[0].Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Appointment[0].Customer)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Appointment[0].DentistSlot)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Appointment[0].MedicalRecord)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Appointment[0].Service)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Appointment) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.TimeStart)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TimeEnd)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Diagnosis)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Customer.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DentistSlot.DentistSlotId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MedicalRecord.MediaRecordId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Service.ServiceName)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.AppointmentId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.AppointmentId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.AppointmentId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
 
-<div>
+<p>
+    <a asp-page="/StaffPages/ProcessingAppointmentList" class="btn btn-secondary">Processing Appointments</a>
+</p>
+<div class="table-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Appointment[0].TimeStart)</th>
+                <th>@Html.DisplayNameFor(model => model.Appointment[0].TimeEnd)</th>
+                <th>@Html.DisplayNameFor(model => model.Appointment[0].Diagnosis)</th>
+                <th>@Html.DisplayNameFor(model => model.Appointment[0].Status)</th>
+                <th>@Html.DisplayNameFor(model => model.Appointment[0].Customer)</th>
+                <th>@Html.DisplayNameFor(model => model.Appointment[0].DentistSlot)</th>
+                <th>@Html.DisplayNameFor(model => model.Appointment[0].MedicalRecord)</th>
+                <th>@Html.DisplayNameFor(model => model.Appointment[0].Service)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Appointment)
+            {
+                var isFinished = item.Status == "Finished";
+                var isDeleted = item.Status == "Delete";
+                var statusClass = item.Status switch
+                {
+                    "Not yet arrived" => "badge-not-arrived",
+                    "Arrived" => "badge-arrived",
+                    "Happening" => "badge-happening",
+                    "Finished" => "badge-finished",
+                    "Processing" => "badge-processing",
+                    "Delete" => "badge-delete",
+                    _ => ""
+                };
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.TimeStart)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TimeEnd)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Diagnosis)</td>
+                    <td>
+                        <span class="badge @statusClass">@Html.DisplayFor(modelItem => item.Status)</span>
+                    </td>
+                    <td>@Html.DisplayFor(modelItem => item.Customer.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.DentistSlot.DentistSlotId)</td>
+                    <td>@Html.DisplayFor(modelItem => item.MedicalRecord.Diagnosis)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Service.ServiceName)</td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            @if (isDeleted)
+                            {
+                                <span class="btn btn-primary btn-disabled btn-disabled-edit">Edit</span>
+                                <span class="btn btn-danger btn-disabled btn-disabled-delete">Delete</span>
+                            }
+                            else
+                            {
+                                <a asp-page="./Edit" asp-route-id="@item.AppointmentId" class="btn btn-primary">Edit</a>
+                                @if (!isFinished)
+                                {
+                                    <a asp-page="./Delete" asp-route-id="@item.AppointmentId" class="btn btn-danger">Delete</a>
+                                }
+                                else
+                                {
+                                    <span class="btn btn-danger btn-disabled btn-disabled-delete">Delete</span>
+                                }
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="pagination">
     @if (Model.Appointment.HasPreviousPage)
     {
         <a asp-page="./Index" asp-route-pageNumber="@(Model.Appointment.PageNumber - 1)" asp-route-pageSize="@Model.PageSize">Previous</a>
@@ -105,6 +261,4 @@
 </div>
 
 <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
-
 <script src="~/js/site.js"></script>
-
