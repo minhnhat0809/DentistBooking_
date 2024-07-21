@@ -81,6 +81,26 @@
             background-color: #6f42c1;
             color: #ffffff;
         }
+
+        .badge-delete {
+            background-color: #dc3545;
+            color: #ffffff;
+        }
+
+        .btn-disabled {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .btn-disabled-edit {
+            background-color: #007bff; /* Bootstrap primary color */
+            color: #ffffff;
+        }
+
+        .btn-disabled-delete {
+            background-color: #dc3545; /* Bootstrap danger color */
+            color: #ffffff;
+        }
     </style>
 </head>
 
@@ -129,6 +149,7 @@
         @foreach (var item in Model.Appointment)
         {
             var isFinished = item.Status == "Finished";
+            var isDeleted = item.Status == "Delete";
             var statusClass = item.Status switch
             {
                 "Not yet arrived" => "badge-not-arrived",
@@ -136,6 +157,7 @@
                 "Happening" => "badge-happening",
                 "Finished" => "badge-finished",
                 "Processing" => "badge-processing",
+                "Delete" => "badge-delete",
                 _ => ""
             };
             <tr>
@@ -167,14 +189,22 @@
                 </td>
                 <td>
                     <div class="btn-group" role="group">
-                        <a asp-page="./Edit" asp-route-id="@item.AppointmentId" class="btn btn-primary">Edit</a>
-                        @if (!isFinished)
+                        @if (isDeleted)
                         {
-                            <a asp-page="./Delete" asp-route-id="@item.AppointmentId" class="btn btn-danger">Delete</a>
+                            <span class="btn btn-primary btn-disabled btn-disabled-edit">Edit</span>
+                            <span class="btn btn-danger btn-disabled btn-disabled-delete">Delete</span>
                         }
                         else
                         {
-                            <span class="btn btn-danger disabled" style="pointer-events: none; opacity: 0.5;">Delete</span>
+                            <a asp-page="./Edit" asp-route-id="@item.AppointmentId" class="btn btn-primary">Edit</a>
+                            @if (!isFinished)
+                            {
+                                <a asp-page="./Delete" asp-route-id="@item.AppointmentId" class="btn btn-danger">Delete</a>
+                            }
+                            else
+                            {
+                                <span class="btn btn-danger btn-disabled btn-disabled-delete">Delete</span>
+                            }
                         }
                     </div>
                 </td>

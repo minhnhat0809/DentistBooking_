@@ -65,7 +65,9 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             
             Status = await _appointmentService.GetAllStatusOfAppointment(appointment.AppointmentId);
 
-            DentistSlots = _dentistSlotService.GetDentistSlotByServiceAndDate(appointment.ServiceId.Value, appointment.TimeStart).DentistSlots;
+            var dentistSlots = _dentistSlotService.GetDentistSlotByServiceAndDate(appointment.ServiceId.Value, appointment.TimeStart).DentistSlots;
+
+            DentistSlots = _dentistSlotService.GetDentistSlotForAppointment(dentistSlots, appointment.AppointmentId).DentistSlots;
             
             Services = await _service.GetAllServicesForCustomer(appointment.ServiceId.Value);
             
@@ -78,7 +80,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
         {
             if (!ModelState.IsValid)
             {
-                return Page();
+                return RedirectToPage(new {id = Appointment.AppointmentId});
             }
             DateTime timeStart = new DateTime(SelectedDate.Year, SelectedDate.Month, SelectedDate.Day,
                 DentistSlotTimeStart.Hour, DentistSlotTimeStart.Minute, DentistSlotTimeStart.Second);
@@ -104,11 +106,11 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             return RedirectToPage(new { id = Appointment.AppointmentId });
         }
 
-        public JsonResult OnGetDentistSlotByServiceAsync(int serviceId, DateOnly selectedDate, TimeOnly timeStartt)
+        public JsonResult OnGetDentistSlotByServiceAsync(int serviceId, DateOnly selectedDate, TimeOnly timeStart)
         {
-            DateTime timeStart = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, 
-                timeStartt.Hour, timeStartt.Minute, timeStartt.Second);
-            var dentistSlots =  _dentistSlotService.GetDentistSlotByServiceAndDateTime(serviceId, timeStart).DentistSlots;
+            DateTime timeStartt = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, 
+                timeStart.Hour, timeStart.Minute, timeStart.Second);
+            var dentistSlots =  _dentistSlotService.GetDentistSlotByServiceAndDateTime(serviceId, timeStartt).DentistSlots;
             if (dentistSlots.IsNullOrEmpty())
             {
                 return new JsonResult(new { success = false, message = "No dentist slots available for selected service and the selected time." });
