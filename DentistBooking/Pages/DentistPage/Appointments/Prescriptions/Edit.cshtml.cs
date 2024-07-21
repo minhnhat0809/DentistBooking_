@@ -54,8 +54,7 @@ namespace DentistBooking.Pages.DentistPage.Appointments.Prescriptions
         {
             if (!ModelState.IsValid)
             {
-
-                ViewData["AppointmentId"] = new SelectList(_appointmentService.GetAllAppointments().Result, "AppointmentId", "AppointmentId");
+                ViewData["AppointmentId"] = new SelectList(await _appointmentService.GetAllAppointments(), "AppointmentId", "AppointmentId");
                 return Page();
             }
 
@@ -64,7 +63,7 @@ namespace DentistBooking.Pages.DentistPage.Appointments.Prescriptions
                 await _prescriptionService.UpdatePrescription(Prescription);
                 await _hubContext.Clients.All.SendAsync("ReloadPrescriptions");
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!PrescriptionExists(Prescription.PrescriptionId))
                 {
@@ -72,16 +71,24 @@ namespace DentistBooking.Pages.DentistPage.Appointments.Prescriptions
                 }
                 else
                 {
-                    throw;
+                    ModelState.AddModelError(string.Empty, ex.Message );
+                    ViewData["AppointmentId"] = new SelectList(await _appointmentService.GetAllAppointments(), "AppointmentId", "AppointmentId");
+                    return Page();
                 }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                ViewData["AppointmentId"] = new SelectList(await _appointmentService.GetAllAppointments(), "AppointmentId", "AppointmentId");
+                return Page();
             }
 
             return RedirectToPage("./Index");
         }
-
         private bool PrescriptionExists(int id)
         {
             return _prescriptionService.GetPrescriptions().Result.Any(e => e.PrescriptionId == id);
         }
+
     }
 }

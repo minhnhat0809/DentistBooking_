@@ -22,8 +22,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="PrescriptionMedicine.MedicineId" class="control-label"></label>
-                <select asp-for="PrescriptionMedicine.MedicineId" class="form-control" asp-items="ViewBag.MedicineId"></select>
-                <span asp-validation-for="PrescriptionMedicine.MedicineId" class="text-danger"></span>
+                <input type="hidden" asp-for="PrescriptionMedicine.MedicineId" />
+                <p class="form-control">@Model.PrescriptionMedicine.Medicine.MedicineName</p>
             </div>
             <div class="form-group">
                 <label asp-for="PrescriptionMedicine.Quantity" class="control-label"></label>
@@ -32,7 +32,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="PrescriptionMedicine.Price" class="control-label"></label>
-                <input asp-for="PrescriptionMedicine.Price" class="form-control" />
+                <input asp-for="PrescriptionMedicine.Price" class="form-control" readonly id="medicinePrice" />
                 <span asp-validation-for="PrescriptionMedicine.Price" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -54,7 +54,20 @@
     <a asp-page="./Index" asp-route-id="@Model.PrescriptionMedicine.PrescriptionId">Back to List</a>
 </div>
 
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var medicineSelect = document.getElementById('medicineSelect');
+            var medicinePriceInput = document.getElementById('medicinePrice');
+
+            medicineSelect.addEventListener('change', function () {
+                var selectedOption = medicineSelect.options[medicineSelect.selectedIndex];
+                var price = selectedOption.getAttribute('data-price');
+                medicinePriceInput.value = price || '';
+            });
+        });
+    </script>
 }

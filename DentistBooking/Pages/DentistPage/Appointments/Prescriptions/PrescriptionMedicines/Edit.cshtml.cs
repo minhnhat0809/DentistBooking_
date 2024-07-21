@@ -35,6 +35,7 @@ namespace DentistBooking.Pages.DentistPage.Appointments.Prescriptions.Prescripti
 
         [BindProperty]
         public PrescriptionMedicineDto PrescriptionMedicine { get; set; } = default!;
+        public SelectList MedicineSelectList { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -69,8 +70,10 @@ namespace DentistBooking.Pages.DentistPage.Appointments.Prescriptions.Prescripti
             {
                 await _prescriptionMedicinesService.UpdatePrescriptionMedicine(PrescriptionMedicine);
                 await _hubContext.Clients.All.SendAsync("ReloadPrescriptionMedicines");
+                await _prescriptionService.UpdatePrescriptionPrice(PrescriptionMedicine.PrescriptionId.Value);
+                await _hubContext.Clients.All.SendAsync("ReloadPrescriptionMedicines");
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!PrescriptionMedicineExists(PrescriptionMedicine.PrescriptionMedicineId))
                 {
@@ -78,9 +81,17 @@ namespace DentistBooking.Pages.DentistPage.Appointments.Prescriptions.Prescripti
                 }
                 else
                 {
-                    throw;
+                    ModelState.AddModelError(string.Empty, ex.Message);
                 }
             }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+            }
+
+            ViewData["MedicineId"] = new SelectList(await _medicineService.GetAllMedicines(), "MedicineId", "MedicineName");
+            ViewData["PrescriptionId"] = new SelectList(await _prescriptionService.GetPrescriptions(), "PrescriptionId", "PrescriptionId");
+
             return RedirectToPage("./Index", new { id = PrescriptionMedicine.PrescriptionId });
         }
 
@@ -88,5 +99,6 @@ namespace DentistBooking.Pages.DentistPage.Appointments.Prescriptions.Prescripti
         {
             return _prescriptionMedicinesService.GetAllPrescriptionMedicines().Result.Any(e => e.PrescriptionMedicineId == id);
         }
+
     }
 }

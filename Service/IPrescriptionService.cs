@@ -14,5 +14,6 @@ namespace Service
 
         Task<List<PrescriptionDto>> GetAllPrescriptionByCustomer(int customerId);
         Task<PrescriptionDto> GetByAppointmentId(int appointmentId);
+        Task UpdatePrescriptionPrice(int prescriptionId);
     }
 }
