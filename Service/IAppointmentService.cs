@@ -25,7 +25,7 @@ namespace Service
 
         Task<AppointmentResult> UpdateAppointmentForStaff(int serviceId, int appointmentId, DateTime TimeStart, DateTime TimeEnd, int dentistSlotId);
         Task<AppointmentResult> AddAppointment(AppointmentDto appointment, string email);
-        void PutAppointment(AppointmentDto appointment);   
+        Task PutAppointment(AppointmentDto appointment);   
 
         Task<string> DeleteAppointment(int appointmentId);
         
@@ -33,6 +33,6 @@ namespace Service
 
         Task<List<string>> GetAllStatusOfAppointment(int appointmentId);
 
-
+        Task<List<AppointmentDto>> GetAllAppointmentByDentistId(int dentistId);
     }
 }

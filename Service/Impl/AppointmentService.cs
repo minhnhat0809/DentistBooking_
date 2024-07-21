@@ -442,7 +442,7 @@ namespace Service.Impl
         }
 
 
-        public async void PutAppointment(AppointmentDto appointment)
+        public async Task PutAppointment(AppointmentDto appointment)
         {
             if (appointment == null)
             {
@@ -627,6 +627,15 @@ namespace Service.Impl
             statusList.Insert(0, s);
             
             return statusList;
+        }
+
+        public async Task<List<AppointmentDto>> GetAllAppointmentByDentistId(int dentistId)
+        {
+            
+            var models = await appointmentRepo.GetAllProcessingAppointment();
+            models = models.Where(x => x.DentistSlot.Dentist.UserId == dentistId).ToList();
+            var viewModels = mapper.Map<List<AppointmentDto>>(models);  
+            return viewModels;
         }
     }
 }
