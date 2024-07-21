@@ -111,17 +111,17 @@ var success = TempData["SuccessCreateAppointment"] as string;
                 <div class="form-row mb-3">
                     <div class="col-md-2">
                         <label asp-for="SelectedDate" class="control-label">Select Date:</label>
-                        <input asp-for="SelectedDate" type="date" id="datepicker" name="SelectedDate" class="form-control" autocomplete="off" min="@DateTime.Now.ToString("yyyy-MM-dd")">
+                        <input asp-for="SelectedDate" type="date" id="datepicker" name="SelectedDate" class="form-control" autocomplete="off" value="@DateOnly.FromDateTime(DateTime.Now.Date).ToString("yyyy-MM-dd")" min="@DateTime.Now.ToString("yyyy-MM-dd")">
                     </div>
 
                     <div class="col-md-2">
                         <label for="slotTimeStart" class="control-label">Time Start:</label>
-                        <input type="time" id="slotTimeStart" name="DentistSlotTimeStart" asp-for="DentistSlotTimeStart" class="form-control" required min="08:00" max="19:00"/>
+                        <input type="time" id="slotTimeStart" name="DentistSlotTimeStart" asp-for="DentistSlotTimeStart" class="form-control" required min="08:00" max="19:00" value="08:00"/>
                     </div>
 
                     <div class="col-md-2">
                         <label for="slotTimeEnd" class="control-label">Time End:</label>
-                        <input type="time" id="slotTimeEnd" name="DentistSlotTimeEnd" asp-for="DentistSlotTimeEnd" class="form-control" required min="08:15" max="19:30"/>
+                        <input type="time" id="slotTimeEnd" name="DentistSlotTimeEnd" asp-for="DentistSlotTimeEnd" class="form-control" required min="08:15" max="19:30" value="09:00"/>
                     </div>
 
                     <div class="col-md-2">

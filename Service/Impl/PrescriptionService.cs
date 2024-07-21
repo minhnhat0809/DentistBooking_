@@ -11,12 +11,16 @@ namespace Service.Impl
     {
         private readonly IPrescriptionrepo _preScription;
         private readonly IPrescriptionMedicineRepo _prescriptionMedicineRepo;
+        private readonly IAppointmentRepo _appointmentRepo;
+        private readonly IMedicineRepo _medicineRepo;
         private readonly IMapper _mapper;
 
-        public PrescriptionService(IPrescriptionrepo prescription, IMapper mapper)
+        public PrescriptionService(IPrescriptionrepo prescription, IMapper mapper, IAppointmentRepo appointmentRepo, IMedicineRepo medicineRepo)
         {
             _preScription = prescription ?? throw new ArgumentNullException(nameof(prescription));
             _mapper = mapper;
+            _appointmentRepo = appointmentRepo ?? throw new ArgumentNullException();
+            _medicineRepo = medicineRepo;
         }
 
         
@@ -45,22 +49,31 @@ namespace Service.Impl
             }
         }
 
-        public async Task DeletePrescription(int id)
+        public async Task DeletePrescription(int prescriptionId)
         {
-            if (id <= 0)
-            {
-                throw new ArgumentException("Invalid prescription ID.", nameof(id));
-            }
-
+            // when delete set status = inactive and roll back all medicines to storage !
             try
             {
-                var model = await _preScription.GetById(id);
-                if (model == null)
+                var prescription = await _preScription.GetById(prescriptionId);
+                if (prescription == null)
                 {
-                    throw new ExceptionHandler.NotFoundException($"Prescription with ID {id} not found.");
+                    throw new ArgumentException("Prescription not found.");
                 }
 
-                await _preScription.DeletePrescription(model.PrescriptionId);
+                // Revert all associated medicines back to stock
+                var prescriptionMedicines = await _prescriptionMedicineRepo.GetAllPrescriptionMedicinesByPrescriptionId(prescriptionId);
+                foreach (var pm in prescriptionMedicines)
+                {
+                    var medicine = await _medicineRepo.GetById(pm.MedicineId);
+                    if (medicine != null)
+                    {
+                        medicine.Quantity += pm.Quantity;
+                        await _medicineRepo.UpdateMedicine(medicine);
+                    }
+                }
+                prescription.PrescriptionMedicines.Clear();
+                // Delete the prescription
+                await _preScription.DeletePrescription(prescription.PrescriptionId);
             }
             catch (Exception ex)
             {
@@ -68,6 +81,7 @@ namespace Service.Impl
                 throw new ExceptionHandler.ServiceException("An error occurred while deleting the prescription.", ex);
             }
         }
+
 
         public async Task<PrescriptionDto> GetById(int id)
         {
@@ -173,6 +187,51 @@ namespace Service.Impl
             }
         }
 
-        
+        public async Task<PrescriptionDto> GetByAppointmentId(int appointmentId)
+        {
+            if (appointmentId <= 0)
+            {
+                throw new ArgumentException("Invalid prescription ID.", nameof(appointmentId));
+            }
+
+            try
+            {
+                var appointment = await _appointmentRepo.GetAppointmentById(appointmentId);
+                if (appointment == null)
+                {
+                    throw new ExceptionHandler.NotFoundException($"Appointment with ID {appointment} not found.");
+                }
+                var models = await _preScription.GetPrescriptions();
+                var prescription = models.FirstOrDefault(x=>x.AppointmentId == appointment.AppointmentId);
+                var viewModel = _mapper.Map<PrescriptionDto>(prescription);
+                return viewModel;
+            }
+            catch (Exception ex)
+            {
+                // Log exception
+                throw new ExceptionHandler.ServiceException("An error occurred while retrieving the Prescription.", ex);
+            }
+        }
+
+        public async Task UpdatePrescriptionPrice(int prescriptionId)
+        {
+            var prescription = await _preScription.GetById(prescriptionId);
+            if (prescription != null)
+            {
+                List<PrescriptionMedicine> prescriptionMedicines = prescription.PrescriptionMedicines.ToList();
+                if (prescriptionMedicines != null)
+                {
+                    prescription.Total = 0;
+                    foreach (var medicine in prescriptionMedicines)
+                    {
+                        prescription.Total += medicine.Quantity * medicine.Price;
+                    }
+                }
+
+                await _preScription.UpdatePrescription(prescription);
+            } else throw new ArgumentException("Prescription not found.");
+
+            
+        }
     }
 }

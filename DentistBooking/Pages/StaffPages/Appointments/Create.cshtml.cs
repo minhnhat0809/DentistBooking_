@@ -122,7 +122,14 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             if (!appointmentResult.Message.Equals("Success"))
             {
                 TempData["ErrorCreateAppointment"] = appointmentResult.Message;
-                return RedirectToPage("./Create");
+                List<UserDto> customers = (await _userService.GetAllActiveCustomers()).Users;
+                ViewData["CustomerId"] = new SelectList( customers, "UserId", "Name");
+                Status = await _appointmentService.GetAllStatusOfAppointment(0);
+                Services = (await _service.GetAllActiveServices()).Services;
+                DateTime now = DateTime.Now;
+                DentistSlots =  _dentistSlotService.GetDentistSlotByServiceAndDate(Services.FirstOrDefault().ServiceId, now).DentistSlots;
+                MedicalRecords = await _medicalRecordService.GetMedicalRecordsByCustomerIdAsync(customers.FirstOrDefault().UserId);
+                return Page();
             }
             else
             {

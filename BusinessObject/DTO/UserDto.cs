@@ -25,7 +25,7 @@ namespace BusinessObject.DTO
         public string Password { get; set; } = null!;
 
         [Required]
-        [DateRange("1950-01-01", "now", ErrorMessage = "The date must be in an acceptable range.")]
+        //[DateRange("1950-01-01", "now", ErrorMessage = "The date must be in an acceptable range.")]
         public DateOnly? Dob { get; set; }
 
         [StringLength(10, ErrorMessage = "Gender must be up to 10 characters long.")]

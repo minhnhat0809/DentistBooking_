@@ -21,7 +21,7 @@ namespace DentistBooking.Pages.DentistPage.Appointments
         private readonly IDentistSlotService _dentistSlotService;
         private readonly IMedicalRecordService _medicalRecordService;
         private readonly IService _serviceService;
-
+        private readonly IPrescriptionService _prescriptionService1;
         private readonly IHubContext<SignalRHub> _hubContext;
 
         public EditModel(
@@ -30,6 +30,7 @@ namespace DentistBooking.Pages.DentistPage.Appointments
             IDentistSlotService dentistSlotService,
             IMedicalRecordService medicalRecordService,
             IService serviceService,
+            IPrescriptionService prescriptionService,
             IHubContext<SignalRHub> hubContext)
         {
             _appointmentService = appointmentService;
@@ -38,10 +39,12 @@ namespace DentistBooking.Pages.DentistPage.Appointments
             _medicalRecordService = medicalRecordService;
             _serviceService = serviceService;
             _hubContext = hubContext;
+            _prescriptionService1 = prescriptionService;
         }
 
         [BindProperty]
         public AppointmentDto Appointment { get; set; } = default!;
+        public PrescriptionDto Prescription { get; set; } = default!;
         public SelectList StatusOptions { get; set; }
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -60,8 +63,9 @@ namespace DentistBooking.Pages.DentistPage.Appointments
             {
                 return NotFound();
             }
-            StatusOptions = new SelectList(status);
+            StatusOptions = new SelectList(new List<string> { "Happening", "Finished" , appointment.Status});
             Appointment = appointment;
+            Prescription = await _prescriptionService1.GetByAppointmentId(appointment.AppointmentId);
             await LoadSelectLists();
 
             return Page();
@@ -72,6 +76,7 @@ namespace DentistBooking.Pages.DentistPage.Appointments
             if (!ModelState.IsValid)
             {
                 await LoadSelectLists();
+                StatusOptions = new SelectList(new List<string> { "Happening", "Finished" , Appointment.Status});
                 return Page();
             }
 
@@ -80,20 +85,32 @@ namespace DentistBooking.Pages.DentistPage.Appointments
                 await _appointmentService.PutAppointment(Appointment);
                 await _hubContext.Clients.All.SendAsync("ReloadAppointments");
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
+                // Handle concurrency issues
                 if (!AppointmentExists(Appointment.AppointmentId))
                 {
                     return NotFound();
                 }
                 else
                 {
-                    throw;
+                    ModelState.AddModelError(string.Empty, "An error occurred while updating the appointment: " + ex.Message);
+                    await LoadSelectLists();
+                    StatusOptions = new SelectList(new List<string> { "Happening", "Finished", Appointment.Status});
+                    return Page();
                 }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "An unexpected error occurred: " + ex.Message);
+                await LoadSelectLists();
+                StatusOptions = new SelectList(new List<string> { "Happening", "Finished", Appointment.Status});
+                return Page();
             }
 
             return RedirectToPage("./Index");
         }
+
 
         private bool AppointmentExists(int id)
         {

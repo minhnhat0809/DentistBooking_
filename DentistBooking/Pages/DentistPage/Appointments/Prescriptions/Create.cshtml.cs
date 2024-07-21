@@ -40,15 +40,27 @@ namespace DentistBooking.Pages.DentistPage.Appointments.Prescriptions
         {
             if (!ModelState.IsValid)
             {
-                ViewData["AppointmentId"] = new SelectList(_appointmentService.GetAllAppointments().Result, "AppointmentId", "AppointmentId");
+                ViewData["AppointmentId"] = new SelectList(await _appointmentService.GetAllAppointments(), "AppointmentId", "AppointmentId");
                 return Page();
             }
-            Prescription.Date = DateOnly.FromDateTime(DateTime.Now);
-            Prescription.Status = true;
-            await _prescriptionService.CreatePrescription(Prescription);
-            await _hubContext.Clients.All.SendAsync("ReloadPrescriptions");
+
+            try
+            {
+                Prescription.Date = DateOnly.FromDateTime(DateTime.Now);
+                Prescription.Status = true;
+                await _prescriptionService.CreatePrescription(Prescription);
+                await _hubContext.Clients.All.SendAsync("ReloadPrescriptions");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                ViewData["AppointmentId"] = new SelectList(await _appointmentService.GetAllAppointments(), "AppointmentId", "AppointmentId");
+
+                return Page();
+            }
 
             return RedirectToPage("./Index");
         }
+
     }
 }

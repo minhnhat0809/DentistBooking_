@@ -13,7 +13,7 @@
 <div class="row">
     <div class="col-md-6">
         <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="All" class="text-danger"></div>
             <input type="hidden" asp-for="Appointment.AppointmentId" />
 
             <!-- Read-Only Fields -->
@@ -28,53 +28,92 @@
             <div class="form-group">
                 <label asp-for="Appointment.Status" class="control-label">Status</label>
                 <select asp-for="Appointment.Status" class="form-control" asp-items="Model.StatusOptions">
-                    <option value="">Select Status</option>
                 </select>
                 <span asp-validation-for="Appointment.Status" class="text-danger"></span>
             </div>
 
             <!-- Editable Fields -->
             <div class="form-group">
-                <label asp-for="Appointment.Diagnosis" class="control-label"></label>
+                <label asp-for="Appointment.Diagnosis" class="control-label">Diagnosis</label>
                 <input asp-for="Appointment.Diagnosis" class="form-control" />
                 <span asp-validation-for="Appointment.Diagnosis" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Appointment.Note" class="control-label"></label>
+                <label asp-for="Appointment.Note" class="control-label">Note</label>
                 <input asp-for="Appointment.Note" class="form-control" />
                 <span asp-validation-for="Appointment.Note" class="text-danger"></span>
             </div>
 
-            <!-- Read-Only Fields -->
             <div class="form-group">
-                <label asp-for="Appointment.CustomerId" class="control-label">Customer</label>
-                <input asp-for="Appointment.CustomerId" class="form-control" readonly />
+                <label class="control-label">Customer</label>
+                <input type="text" class="form-control" readonly value="@Model.Appointment.Customer.Name" />
+                <input type="hidden" asp-for="Appointment.CustomerId" />
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Dentist Slot</label>
+                <input type="text" class="form-control" readonly value="@($"{Model.Appointment.DentistSlot.Dentist.Name} ({Model.Appointment.DentistSlot.TimeStart:hh:mm tt} - {Model.Appointment.DentistSlot.TimeEnd:hh:mm tt})")" />
+                <input type="hidden" asp-for="Appointment.DentistSlotId" />
             </div>
             <div class="form-group">
-                <label asp-for="Appointment.DentistSlotId" class="control-label">Dentist</label>
-                <input asp-for="Appointment.DentistSlotId" class="form-control" readonly />
+                <label class="control-label">Medical Record</label>
+                <input type="text" class="form-control" readonly value="@($"{Model.Appointment.MedicalRecord.Customer.Name} - {Model.Appointment.MedicalRecord.Diagnosis}")" />
+                <input type="hidden" asp-for="Appointment.MedicalRecordId" />
             </div>
             <div class="form-group">
-                <label asp-for="Appointment.MedicalRecordId" class="control-label">Medical Record</label>
-                <input asp-for="Appointment.MedicalRecordId" class="form-control" readonly />
+                <label class="control-label">Created By</label>
+                <input type="text" class="form-control" readonly value="@Model.Appointment.CreateByNavigation.Name" />
+                <input type="hidden" asp-for="Appointment.CreateBy" />
             </div>
             <div class="form-group">
-                <label asp-for="Appointment.CreateBy" class="control-label">Created By</label>
-                <input asp-for="Appointment.CreateBy" class="form-control" readonly />
+                <label class="control-label">Modified By</label>
+                <input type="text" class="form-control" readonly value="@Model.Appointment.ModifiedByNavigation.Name" />
+                <input type="hidden" asp-for="Appointment.ModifiedBy" />
             </div>
             <div class="form-group">
-                <label asp-for="Appointment.ModifiedBy" class="control-label">Modified By</label>
-                <input asp-for="Appointment.ModifiedBy" class="form-control" readonly />
-            </div>
-            <div class="form-group">
-                <label asp-for="Appointment.ServiceId" class="control-label"></label>
-                <input asp-for="Appointment.ServiceId" class="form-control" readonly />
+                <label asp-for="Appointment.ServiceId" class="control-label">Service</label>
+                <input type="text" class="form-control" readonly value="@Model.Appointment.Service.ServiceName" />
+                <input type="hidden" asp-for="Appointment.ServiceId" />
             </div>
 
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
+    </div>
+    <div>
+        <h4>Prescription</h4>
+        <hr />
+        @if (Model.Prescription != null)
+        {
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Diagnosis</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Model.Prescription.Date.ToString("d")</td>
+                        <td>@Model.Prescription.Diagnosis</td>
+                        <td>@Model.Prescription.Total</td>
+                        <td>@(Model.Prescription.Status == true ? "Active" : "Inactive")</td>
+                        <td>
+                            <a asp-page="./Prescriptions/Edit" asp-route-id="@Model.Prescription.PrescriptionId" class="btn btn-primary btn-sm">Edit</a>
+                            <a asp-page="./Prescriptions/Details" asp-route-id="@Model.Prescription.PrescriptionId" class="btn btn-info btn-sm">Details</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No prescription available</p>
+        }
     </div>
 </div>
 
