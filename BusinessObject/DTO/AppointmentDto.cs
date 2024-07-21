@@ -17,6 +17,8 @@ namespace BusinessObject.DTO
 
         public string? Diagnosis { get; set; }
 
+        public string? Note { get; set; }
+
         public string? Status { get; set; }
 
         public int? DentistSlotId { get; set; }
@@ -26,13 +28,20 @@ namespace BusinessObject.DTO
         public int? ServiceId { get; set; }
 
         public int? MedicalRecordId { get; set; }
-        
+
         public int? CreateBy { get; set; }
 
+        public int? ModifiedBy { get; set; }
+
+        public virtual UserDto? CreateByNavigation { get; set; }
+
         public virtual UserDto? Customer { get; set; }
+
         public virtual DentistSlotDto? DentistSlot { get; set; }
 
         public virtual MedicalRecordDto? MedicalRecord { get; set; }
+
+        public virtual UserDto? ModifiedByNavigation { get; set; }
 
         public virtual ICollection<PrescriptionDto> Prescriptions { get; set; } = new List<PrescriptionDto>();
 

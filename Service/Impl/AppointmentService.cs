@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BusinessObject;
 using BusinessObject.DTO;
+using Microsoft.IdentityModel.Tokens;
 using Repository;
 using Service.Exeption;
 using System;
@@ -110,7 +111,7 @@ namespace Service.Impl
                 
                 var viewModel = mapper.Map<Appointment>(appointment);  
                 
-                appointmentRepo.CreateAppointment(viewModel);
+                await appointmentRepo.CreateAppointment(viewModel);
                 return "Success";
             }
             catch (Exception e)
@@ -408,7 +409,7 @@ namespace Service.Impl
             
         }
 
-        public async void PutAppointment(AppointmentDto appointment)
+        public async Task PutAppointment(AppointmentDto appointment)
         {
             if (appointment == null)
             {
@@ -423,7 +424,10 @@ namespace Service.Impl
                     throw new ExceptionHandler.NotFoundException($"Appointment with ID {appointment.AppointmentId} not found.");
                 }
                 model = mapper.Map<Appointment>(appointment);  
-                appointmentRepo.UpdateAppointment(model);
+                /*model.CreateByNavigation = appointment.CreateByNavigation;
+                model.ModifiedByNavigation = appointment.ModifiedByNavigation;
+                model.Customer = appointment.Customer;  */
+                await appointmentRepo.UpdateAppointment(model);
             }
             catch (Exception ex)
             {
@@ -561,6 +565,25 @@ namespace Service.Impl
             statusList.Insert(0, s);
             
             return statusList;
+        }
+
+        public async Task<List<AppointmentDto>> GetAllAppointmentByDentistId(int dentistId)
+        {
+            try
+            {
+                List<Appointment> models = await appointmentRepo.GetAllAppointments();
+                if (!models.IsNullOrEmpty())
+                {
+                    List<AppointmentDto> viewModels = mapper.Map<List<AppointmentDto>>(models);
+                    return viewModels;
+                }
+                else throw new Exception(" no appointment");
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }
