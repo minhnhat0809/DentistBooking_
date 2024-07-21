@@ -32,38 +32,42 @@
             margin-bottom: 20px;
         }
 
-        .table {
+        .table-container {
+            overflow: auto;
             margin-top: 20px;
+        }
+
+        .table {
             border-collapse: collapse;
             width: 100%;
             background-color: #ffffff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .table th,
-        .table td {
-            border: 1px solid #dee2e6;
-            padding: 12px 15px;
-            text-align: center;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+            .table th,
+            .table td {
+                border: 1px solid #dee2e6;
+                padding: 12px 15px;
+                text-align: center;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
 
-        .table thead th {
-            background-color: #343a40;
-            color: #ffffff;
-            font-size: 0.875rem;
-            text-transform: uppercase;
-        }
+            .table thead th {
+                background-color: #343a40;
+                color: #ffffff;
+                font-size: 0.875rem;
+                text-transform: uppercase;
+            }
 
-        .table tbody tr {
-            transition: background-color 0.3s ease-in-out;
-        }
+            .table tbody tr {
+                transition: background-color 0.3s ease-in-out;
+            }
 
-        .table tbody tr:hover {
-            background-color: #f1f1f1;
-        }
+                .table tbody tr:hover {
+                    background-color: #f1f1f1;
+                }
 
         .badge {
             padding: 8px 12px;
@@ -140,37 +144,35 @@
             text-align: center;
         }
 
-        .pagination a, .pagination span {
-            padding: 10px 15px;
-            margin: 0 5px;
-            font-size: 0.875rem;
-            border-radius: 4px;
-            color: #007bff;
-            text-decoration: none;
-            border: 1px solid #dee2e6;
-        }
+            .pagination a, .pagination span {
+                padding: 10px 15px;
+                margin: 0 5px;
+                font-size: 0.875rem;
+                border-radius: 4px;
+                color: #007bff;
+                text-decoration: none;
+                border: 1px solid #dee2e6;
+            }
 
-        .pagination span {
-            color: #6c757d;
-        }
+            .pagination span {
+                color: #6c757d;
+            }
 
-        .pagination a:hover {
-            background-color: #e9ecef;
-        }
+            .pagination a:hover {
+                background-color: #e9ecef;
+            }
     </style>
 </head>
+<h1>Appointment Management</h1>
 
-<div class="container">
-    <h1>Appointment Management</h1>
+<p>
+    <a asp-page="Create" class="btn btn-primary">Create New</a>
+</p>
 
-    <p>
-        <a asp-page="Create" class="btn btn-primary">Create New</a>
-    </p>
-
-    <p>
-        <a asp-page="/StaffPages/ProcessingAppointmentList" class="btn btn-secondary">Processing Appointments</a>
-    </p>
-
+<p>
+    <a asp-page="/StaffPages/ProcessingAppointmentList" class="btn btn-secondary">Processing Appointments</a>
+</p>
+<div class="table-container">
     <table class="table">
         <thead>
             <tr>
@@ -236,26 +238,26 @@
             }
         </tbody>
     </table>
+</div>
 
-    <div class="pagination">
-        @if (Model.Appointment.HasPreviousPage)
-        {
-            <a asp-page="./Index" asp-route-pageNumber="@(Model.Appointment.PageNumber - 1)" asp-route-pageSize="@Model.PageSize">Previous</a>
-        }
-        else
-        {
-            <span>Previous</span>
-        }
+<div class="pagination">
+    @if (Model.Appointment.HasPreviousPage)
+    {
+        <a asp-page="./Index" asp-route-pageNumber="@(Model.Appointment.PageNumber - 1)" asp-route-pageSize="@Model.PageSize">Previous</a>
+    }
+    else
+    {
+        <span>Previous</span>
+    }
 
-        @if (Model.Appointment.HasNextPage)
-        {
-            <a asp-page="./Index" asp-route-pageNumber="@(Model.Appointment.PageNumber + 1)" asp-route-pageSize="@Model.PageSize">Next</a>
-        }
-        else
-        {
-            <span>Next</span>
-        }
-    </div>
+    @if (Model.Appointment.HasNextPage)
+    {
+        <a asp-page="./Index" asp-route-pageNumber="@(Model.Appointment.PageNumber + 1)" asp-route-pageSize="@Model.PageSize">Next</a>
+    }
+    else
+    {
+        <span>Next</span>
+    }
 </div>
 
 <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
