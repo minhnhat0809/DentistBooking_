@@ -50,11 +50,21 @@ namespace DataAccess
         {
             var context = new BookingDentistDbContext();
             var dentistSlotList = await context.DentistSlots.Include(ds => ds.Appointments)
-                .Where(ds => ds.DentistId == id && EF.Functions.DateDiffDay(ds.TimeStart, selectedDate.ToDateTime(default)) == 0)
+                .Where(ds => ds.DentistId == id && DateOnly.FromDateTime(ds.TimeStart.Date).Equals(selectedDate))
                 .OrderBy(ds => ds.TimeStart).ToListAsync();
             return dentistSlotList;
         }
 
+        public async Task<List<DentistSlot>> getAllDentistSlotsByRoomAndDate(int roomId, DateTime selectedDate)
+        {
+            var context = new BookingDentistDbContext();
+            var dentistSlotList = await context.DentistSlots
+                .Where(ds => ds.RoomId == roomId && ds.TimeStart.Equals(selectedDate))
+                .OrderBy(ds => ds.TimeStart).ToListAsync();
+            return dentistSlotList;
+        }
+
+        
         public async Task deleteDentistSlot(DentistSlot dentistSlot)
         {
             var context = new BookingDentistDbContext();
@@ -75,6 +85,26 @@ namespace DataAccess
             var context = new BookingDentistDbContext();
             context.Entry<DentistSlot>(dentistSlot).State = EntityState.Modified;
             await context.SaveChangesAsync();
+        }
+
+        public List<DentistSlot> getAllDentistSlotsByServiceAndDate(int serviceId, DateTime timeStart)
+        {
+             var context = new BookingDentistDbContext();
+            return context.DentistSlots.Include(dl => dl.Dentist).ThenInclude(d => d.DentistServices)
+                .Where(dl => dl.Dentist.DentistServices.Any(ds => ds.ServiceId == serviceId && ds.Status == true && dl.DentistId.Equals(ds.DentistId)) && 
+                             dl.TimeStart<= timeStart && dl.TimeEnd > timeStart &&
+                             dl.Status == true)
+                .ToList();
+        }
+
+        public List<DentistSlot> getAllDentistSlotsByServiceAnddate(int serviceId, DateTime timeStart)
+        {
+            var context = new BookingDentistDbContext();
+            return context.DentistSlots.Include(dl => dl.Dentist).ThenInclude(d => d.DentistServices)
+                .Where(dl => dl.Dentist.DentistServices.Any(ds => ds.ServiceId == serviceId && ds.Status == true) && 
+                             dl.TimeStart.Date.Equals(timeStart.Date) &&
+                             dl.Status == true)
+                .ToList();
         }
     }
 }

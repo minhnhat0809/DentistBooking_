@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BusinessObject.Result;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Service.Impl
 {
@@ -17,67 +19,87 @@ namespace Service.Impl
         private readonly IDentistSlotRepo dentistSlotRepo;
         private readonly IServiceRepo serviceRepo;
         private readonly IUserRepo userRepo;
+        private readonly IMedicalRecordRepo medicalRecordRepo;
         private readonly IMapper mapper;
 
         public AppointmentService(IAppointmentRepo appointmentRepo, IDentistSlotRepo dentistSlotRepo, 
-            IServiceRepo serviceRepo, IUserRepo userRepo,
+            IServiceRepo serviceRepo, IUserRepo userRepo, IMedicalRecordRepo medicalRecordRepo,
             IMapper mapper)
         {
             this.appointmentRepo = appointmentRepo;
             this.dentistSlotRepo = dentistSlotRepo;
             this.serviceRepo = serviceRepo;
             this.userRepo = userRepo;
-            this.mapper = mapper;   
+            this.mapper = mapper;
+            this.medicalRecordRepo = medicalRecordRepo;
         }
-        public async Task<string> AddAppointment(AppointmentDto appointment)
+        public async Task<AppointmentResult> AddAppointment(AppointmentDto appointment, string email)
         {
+            AppointmentResult appointmentResult = new AppointmentResult();
             try
             {
                 if (appointment == null)
                 {
-                 throw new ArgumentNullException(nameof(appointment), "Schedule cannot be null.");
+                    appointmentResult.Message = "Appointment is null!";
+                    return appointmentResult;
                 }
             
                 if (appointment.ServiceId <= 0)
                 {
-                    return "Service ID is empty!";
+                    appointmentResult.Message = "Service Id is null!";
+                    return appointmentResult;
                 }
 
                 BusinessObject.Service serviceDto = await serviceRepo.GetServiceByID(appointment.ServiceId.Value);
                 if (serviceDto == null)
                 {
-                    return "This service is not existed!";
+                    appointmentResult.Message = "Service is not exist!";
+                    return appointmentResult;
                 }
 
                 if (appointment.DentistSlotId <= 0)
                 {
-                    return "Dentist slot ID is empty!";
+                    appointmentResult.Message = "Dentist slot Id is null!";
+                    return appointmentResult;
                 }
+                
                 DentistSlot dentistSlot = await dentistSlotRepo.GetDentistSlotByID(appointment.DentistSlotId.Value);
                 if (dentistSlot == null)
                 {
-                    return "This dentist slot is not existed!";
+                    appointmentResult.Message = "Dentist slot is not exist!";
+                    return appointmentResult;
                 }
 
                 if (appointment.TimeStart < dentistSlot.TimeStart || appointment.TimeEnd > dentistSlot.TimeEnd)
                 {
-                    return "The time of this appointment is out of range for this dentist slot!";
+                    appointmentResult.Message = "The time of this appointment is out of range for this dentist slot!";
+                    return appointmentResult;
                 }
 
-                var validStatuses = new[] { "Success", "Done", "Finished", "Processing", "Delete" };
+                var validStatuses = new[] {  "Not yet arrived", "Arrived", "Happening", "Finished", "Processing" };
                 if (!validStatuses.Contains(appointment.Status))
                 {
-                    return "Status is not valid!";
+                    appointmentResult.Message = "Status is not valid!";
+                    return appointmentResult;
+                    
                 }
 
                 if (appointment.TimeStart > appointment.TimeEnd)
                 {
-                    return "Time Start is bigger than Time End!";
+                    appointmentResult.Message = "Time Start is bigger than Time End!";
+                    return appointmentResult;
                 }
 
                 if (!CheckTimeStart(appointment.TimeStart))
                 {
-                    return "Time Start must be in range [08:00-11:30] & [13:00-19:00]";
+                    appointmentResult.Message = "Time Start must be in range [08:00-11:30] & [13:00-19:00]";
+                    return appointmentResult;
+                }
+
+                User? user = userRepo.GetUserByUserName(email).Result;
+                if (user != null)
+                {
+                    appointment.CreateBy = user.UserId;
                 }
 
                 var appoinmentList = dentistSlot.Appointments.ToList();
@@ -95,18 +117,24 @@ namespace Service.Impl
 
                             if ((timeStart >= apStartTime && timeStart < apEndTime) || (timeStart < apStartTime && timeEnd > apStartTime))
                             {
-                                return $"There is an appointment overlapping at {ap.TimeStart} - {ap.TimeEnd.TimeOfDay}'";
+                                appointmentResult.Message = $"There is an appointment overlapping at {ap.TimeStart} - {ap.TimeEnd.TimeOfDay}'";
+                                return appointmentResult;
                             }
                         }
                     }
                 }
-                var viewModel = mapper.Map<Appointment>(appointment);   
-                appointmentRepo.CreateAppointment(viewModel);
-                return "Success";
+
+                
+                var viewModel = mapper.Map<Appointment>(appointment);  
+                
+                 await appointmentRepo.CreateAppointment(viewModel);
+                appointmentResult.Message = "Success";
+                return appointmentResult;
             }
             catch (Exception e)
             {
-                return e.Message;
+                appointmentResult.Message = e.Message;
+                return appointmentResult;
             }
         }
         public async Task<Dictionary<string, string>> CreateAppointment(DateTime TimeStart, int customerId, DateOnly selectedDate, int serviceId)
@@ -215,74 +243,69 @@ namespace Service.Impl
             }
             try
             { 
-            if (serviceId <= 0)
-            {
-                AddError("Service", "Service Id is empty!");
-                return errors;
-            }
-
-            BusinessObject.Service serviceDto = await serviceRepo.GetServiceByID(serviceId);
-            if (serviceDto == null)
-            {
-                AddError("Service", "Service is not existed!");
-                return errors;
-            }
-
-            if (customerId <= 0)
-            {
-                AddError("Customer", "Cusotmer Id is empty!");
-                return errors;
-            }
-
-            User cusomter = userRepo.GetById(customerId).Result;
-            if (cusomter == null)
-            {
-                AddError("Customer", "Customer is not existed!");
-                return errors;
-            }
-
-            if (!CheckTimeStart(TimeStart))
-            {
-                AddError("TimeStart", "Time must be in range [8:00-11:30] & [13:00-19:00]");
-                return errors;
-            }
-
-            Appointment appointment = await appointmentRepo.GetAppointmentById(appointmentId);
-            if (appointment == null)
-            {
-                AddError("Appointment", "Appointment is not existed!");
-                return errors;
-            }
-
-            switch (appointment.Status)
-            {
-                case "Deleted":
-                    AddError("Status", "Cannot update! This appointment is deleted!");
+                if (serviceId <= 0)
+                {
+                    AddError("Service", "Service Id is empty!");
                     return errors;
-                case "Happening":
-                    AddError("Status", "Cannot update! This appointment is happening!");
-                    return errors;
-                case "Expired":
-                    AddError("Status", "Cannot update! This appointment is expired!");
-                    return errors;
-                case "Finished":
-                    AddError("Status", "Cannot update! This appointment is finished!");
-                    return errors;
-                    case "Done":
-                    AddError("Status", "Cannot update! This appointment is done!");
-                    return errors;
-                default:
-                    break;
-            }
+                }
 
-            appointment.ServiceId = serviceId;
-            appointment.TimeStart = TimeStart;
-            appointment.TimeEnd = TimeStart.AddMinutes(30);
-            appointment.Status = "Processing";
+                BusinessObject.Service serviceDto = await serviceRepo.GetServiceByID(serviceId);
+                if (serviceDto == null)
+                {
+                    AddError("Service", "Service is not existed!");
+                    return errors;
+                }
 
-            appointmentRepo.UpdateAppointment(appointment);
-            AddError("Success", "Update successfully!");
-            return errors;
+                if (customerId <= 0)
+                {
+                    AddError("Customer", "Cusotmer Id is empty!");
+                    return errors;
+                }
+
+                User cusomter = userRepo.GetById(customerId).Result;
+                if (cusomter == null)
+                {
+                    AddError("Customer", "Customer is not existed!");
+                    return errors;
+                }
+
+                if (!CheckTimeStart(TimeStart))
+                {
+                    AddError("TimeStart", "Time must be in range [8:00-11:30] & [13:00-19:00]");
+                    return errors;
+                }
+
+                Appointment appointment = await appointmentRepo.GetAppointmentById(appointmentId);
+                if (appointment == null)
+                {
+                    AddError("Appointment", "Appointment is not existed!");
+                    return errors;
+                }
+
+                switch (appointment.Status)
+                {
+                    case "Arrived":
+                        AddError("Status", "Cannot update! This appointment is about to happening!");
+                        return errors;
+                    case "Happening":
+                        AddError("Status", "Cannot update! This appointment is happening!");
+                        return errors;
+                    case "Finished":
+                        AddError("Status", "Cannot update! This appointment is finished!");
+                        return errors;
+                    case "Deleted":
+                        AddError("Status", "Cannot update! This appointment is deleted!");
+                        return errors;
+                }
+
+                appointment.ServiceId = serviceId;
+                appointment.TimeStart = TimeStart;
+                appointment.TimeEnd = TimeStart.AddMinutes(30);
+                appointment.Status = "Processing";
+
+                appointmentRepo.UpdateAppointment(appointment);
+                AddError("Success", "Update successfully!");
+                return errors;
             }
             catch (Exception e)
             {
@@ -315,91 +338,108 @@ namespace Service.Impl
             return viewModels;
         }
 
-        public async Task<string> UpdateAppointmentForStaff(int serviceId, int appointmentId, DateTime TimeStart, DateTime TimeEnd, int dentistSlotId)
+       public async Task<AppointmentResult> UpdateAppointmentForStaff(int serviceId, int appointmentId, DateTime TimeStart, DateTime TimeEnd, int dentistSlotId)
         {
-            try
+            AppointmentResult appointmentResult = new AppointmentResult();
+        try
+        {
+            if (serviceId <= 0)
             {
-                if (serviceId <= 0)
-            {
-                return "Service ID is empty!";
+                appointmentResult.Message = "Service ID is empty!";
+                return appointmentResult;
             }
 
             BusinessObject.Service serviceModel = await serviceRepo.GetServiceByID(serviceId);
             if (serviceModel == null)
             {
-                return "This service is not existed!";
+                appointmentResult.Message = "This service does not exist!";
+                return appointmentResult;
             }
 
             if (appointmentId <= 0)
             {
-                return "Appointment ID is empty!";
+                appointmentResult.Message = "Appointment ID is empty!";
+                return appointmentResult;
             }
             Appointment appointment = await appointmentRepo.GetAppointmentById(appointmentId);
             if (appointment == null)
             {
-                return "This appointment is not existed!";
+                appointmentResult.Message = "This appointment does not exist!";
+                return appointmentResult;
             }
 
             if (dentistSlotId <= 0)
             {
-                return "Dentist slot ID is empty!";
+                appointmentResult.Message = "Dentist slot ID is empty!";
+                return appointmentResult;
             }
             DentistSlot dentistSlot = await dentistSlotRepo.GetDentistSlotByID(dentistSlotId);
             if (dentistSlot == null)
             {
-                return "This dentist slot is not existed!";
+                appointmentResult.Message = "This dentist slot does not exist!";
+                return appointmentResult;
             }
 
             if (TimeStart < dentistSlot.TimeStart || TimeEnd > dentistSlot.TimeEnd)
             {
-                return "The time of this appointment is out of range for this dentist slot!";
+                appointmentResult.Message = "The time of this appointment is out of range for this dentist slot!";
+                return appointmentResult;
             }
-            
 
             if (TimeStart > TimeEnd)
             {
-                return "Time Start is bigger than Time End!";
+                appointmentResult.Message = "Time Start is greater than Time End!";
+                return appointmentResult;
             }
 
             if (!CheckTimeStart(TimeStart))
             {
-                return "Time Start must be in range [08:00-11:30] & [13:00-19:00]";
+                appointmentResult.Message = "Time Start must be in range [08:00-11:30] & [13:00-19:00]";
+                return appointmentResult;
             }
 
-            var appoinmentList = dentistSlot.Appointments.ToList();
-            if (appoinmentList != null)
+            var appointmentList = dentistSlot.Appointments.ToList();
+            if (appointmentList != null)
             {
-                foreach (var ap in appoinmentList)
+                foreach (var ap in appointmentList)
                 {
                     TimeSpan apStartTime = ap.TimeStart.TimeOfDay;
                     TimeSpan apEndTime = ap.TimeEnd.TimeOfDay;
 
                     TimeSpan timeStart = TimeStart.TimeOfDay;
-                    TimeSpan timeEnd = TimeStart.AddMinutes(30).TimeOfDay;
+                    TimeSpan timeEnd = TimeEnd.TimeOfDay;
 
                     if ((timeStart >= apStartTime && timeStart < apEndTime) || (timeStart < apStartTime && timeEnd > apStartTime))
                     {
-                        return $"There is an appointment overlapping at {ap.TimeStart} - {ap.TimeEnd.TimeOfDay}'";
+                        appointmentResult.Message = $"There is an appointment overlapping at {ap.TimeStart} - {ap.TimeEnd.TimeOfDay}";
+                        return appointmentResult;
                     }
                 }
             }
+
             appointment.ServiceId = serviceId;
-            appointment.Status = "Done";
+            appointment.Status = "Not yet arrived";
             appointment.DentistSlotId = dentistSlotId;
             appointment.TimeStart = TimeStart;
             appointment.TimeEnd = TimeEnd;
 
-            appointmentRepo.UpdateAppointment(appointment);
-            return "Success";
-            }
-            catch (Exception e)
-            {
-                return "Error while updating appointment!";
-            }
+            await appointmentRepo.UpdateAppointment(appointment);
+
+            AppointmentDto appointmentDto = mapper.Map<AppointmentDto>(appointment);
             
+            appointmentResult.Message = "Success";
+            appointmentResult.Appointment = appointmentDto;
+            return appointmentResult;
+        }
+        catch (Exception e)
+        {
+            appointmentResult.Message = e.Message;
+            return appointmentResult;
+        }
         }
 
-        public async void PutAppointment(AppointmentDto appointment)
+
+        public async Task PutAppointment(AppointmentDto appointment)
         {
             if (appointment == null)
             {
@@ -414,7 +454,7 @@ namespace Service.Impl
                     throw new ExceptionHandler.NotFoundException($"Appointment with ID {appointment.AppointmentId} not found.");
                 }
                 model = mapper.Map<Appointment>(appointment);  
-                appointmentRepo.UpdateAppointment(model);
+                await appointmentRepo.UpdateAppointment(model);
             }
             catch (Exception ex)
             {
@@ -437,7 +477,7 @@ namespace Service.Impl
                 {
                     return $"Appointment with ID {appointmentId} not found.";
                 }
-                appointmentRepo.DeleteAppointment(appointmentId);
+                await appointmentRepo.DeleteAppointment(appointmentId);
                 return "Success";
             }
             catch (Exception ex)
@@ -446,101 +486,149 @@ namespace Service.Impl
                 return "An error occurred while deleting the checkup schedule.";
             }
         }
-        public async Task<string> UpdateAppointments(int serviceId, int appointmentId, DateTime TimeStart, DateTime TimeEnd, int dentistSlotId,
-            string status)
+        public async Task<AppointmentResult> UpdateAppointments(AppointmentDto appointMent, string email)
         {
+            AppointmentResult appointmentResult = new AppointmentResult();
             try
             {
-                if (serviceId <= 0)
-            {
-                return "Service ID is empty!";
-            }
-
-            BusinessObject.Service serviceDto = await serviceRepo.GetServiceByID(serviceId);
-            if (serviceDto == null)
-            {
-                return "This service is not existed!";
-            }
-
-            if (appointmentId <= 0)
-            {
-                return "Appointment ID is empty!";
-            }
-            Appointment appointment = await appointmentRepo.GetAppointmentById(appointmentId);
-            if (appointment == null)
-            {
-                return "This appointment is not existed!";
-            }
-
-            if (dentistSlotId <= 0)
-            {
-                return "Dentist slot ID is empty!";
-            }
-            DentistSlot dentistSlot = await dentistSlotRepo.GetDentistSlotByID(dentistSlotId);
-            if (dentistSlot == null)
-            {
-                return "This dentist slot is not existed!";
-            }
-
-            if (TimeStart < dentistSlot.TimeStart || TimeEnd > dentistSlot.TimeEnd)
-            {
-                return "The time of this appointment is out of range for this dentist slot!";
-            }
-
-            var validStatuses = new[] { "Success", "Done", "Finished", "Processing", "Delete" };
-            if (!validStatuses.Contains(status))
-            {
-                return "Status is not valid!";
-            }
-
-            if (TimeStart > TimeEnd)
-            {
-                return "Time Start is bigger than Time End!";
-            }
-
-            if (!CheckTimeStart(TimeStart))
-            {
-                return "Time Start must be in range [08:00-11:30] & [13:00-19:00]";
-            }
-
-            var appoinmentList = dentistSlot.Appointments.ToList();
-            if (appoinmentList != null)
-            {
-                foreach (var ap in appoinmentList)
+                if (appointMent.ServiceId <= 0)
                 {
-                    if (!TimeStart.Equals(appointment.TimeStart))
+                    appointmentResult.Message = "Service ID is empty!";
+                    return appointmentResult;
+                }
+
+                BusinessObject.Service serviceDto = await serviceRepo.GetServiceByID(appointMent.ServiceId);
+                if (serviceDto == null)
+                {
+                    appointmentResult.Message = "This service does not exist!";
+                    return appointmentResult;
+                }
+
+                if (appointMent.AppointmentId <= 0)
+                {
+                    appointmentResult.Message = "Appointment ID is empty!";
+                    return appointmentResult;
+                }
+                Appointment appointment = await appointmentRepo.GetAppointmentById(appointMent.AppointmentId);
+                if (appointment == null)
+                {
+                    appointmentResult.Message = "This appointment does not exist!";
+                    return appointmentResult;
+                }
+
+                if (appointMent.DentistSlotId <= 0)
+                {
+                    appointmentResult.Message = "Dentist slot ID is empty!";
+                    return appointmentResult;
+                }
+                DentistSlot dentistSlot = await dentistSlotRepo.GetDentistSlotByID(appointMent.DentistSlotId.Value);
+                if (dentistSlot == null)
+                {
+                    appointmentResult.Message = "This dentist slot does not exist!";
+                    return appointmentResult;
+                }
+
+                if (appointMent.TimeStart < dentistSlot.TimeStart || appointMent.TimeEnd > dentistSlot.TimeEnd)
+                {
+                    appointmentResult.Message = "The time of this appointment is out of range for this dentist slot!";
+                    return appointmentResult;
+                }
+
+                var validStatuses = new[] { "Not yet arrived", "Arrived", "Happening", "Finished", "Processing" };
+                if (!validStatuses.Contains(appointMent.Status))
+                {
+                    appointmentResult.Message = "Status is not valid!";
+                    return appointmentResult;
+                }
+
+                if (appointMent.TimeStart > appointMent.TimeEnd)
+                {
+                    appointmentResult.Message = "Time Start is greater than Time End!";
+                    return appointmentResult;
+                }
+
+                if (!CheckTimeStart(appointMent.TimeStart))
+                {
+                    appointmentResult.Message = "Time Start must be in range [08:00-11:30] & [13:00-19:00]";
+                    return appointmentResult;
+                }
+
+                var appointmentList = dentistSlot.Appointments.ToList();
+                if (appointmentList != null)
+                {
+                    foreach (var ap in appointmentList)
                     {
-                        TimeSpan apStartTime = ap.TimeStart.TimeOfDay;
-                        TimeSpan apEndTime = ap.TimeEnd.TimeOfDay;
-
-                        TimeSpan timeStart = TimeStart.TimeOfDay;
-                        TimeSpan timeEnd = TimeStart.AddMinutes(30).TimeOfDay;
-
-                        if ((timeStart >= apStartTime && timeStart < apEndTime) || (timeStart < apStartTime && timeEnd > apStartTime))
+                        if (!appointMent.TimeStart.Equals(appointment.TimeStart))
                         {
-                            return $"There is an appointment overlapping at {ap.TimeStart} - {ap.TimeEnd.TimeOfDay}'";
+                            TimeSpan apStartTime = ap.TimeStart.TimeOfDay;
+                            TimeSpan apEndTime = ap.TimeEnd.TimeOfDay;
+
+                            TimeSpan timeStart =appointMent.TimeStart.TimeOfDay;
+                            TimeSpan timeEnd = appointMent.TimeEnd.TimeOfDay;
+
+                            if ((timeStart >= apStartTime && timeStart < apEndTime) || (timeStart < apStartTime && timeEnd > apStartTime))
+                            {
+                                appointmentResult.Message = $"There is an appointment overlapping at {ap.TimeStart} - {ap.TimeEnd.TimeOfDay}";
+                                return appointmentResult;
+                            }
                         }
                     }
                 }
-            }
-            appointment.ServiceId = serviceId;
-            appointment.Status = status;
-            appointment.DentistSlotId = dentistSlotId;
-            appointment.TimeStart = TimeStart;
-            appointment.TimeEnd = TimeEnd;
 
-            appointmentRepo.UpdateAppointment(appointment);
-            return "Success";
+                if (email.IsNullOrEmpty())
+                {
+                    appointmentResult.Message = "Email of modified user is null!";
+                    return appointmentResult; 
+                }
+
+                User? user = await userRepo.GetUserByUserName(email);
+                if (user == null)
+                {
+                    appointmentResult.Message = "Modified user is not exist!";
+                    return appointmentResult; 
+                }
+
+                if (appointMent.MedicalRecordId > 0 )
+                {
+                    MedicalRecord medicalRecord = medicalRecordRepo.GetById(appointMent.MedicalRecordId).Result;
+                    if (medicalRecord == null)
+                    {
+                        appointmentResult.Message = "Medical record is not found!";
+                        return appointmentResult;
+                    }
+                    else
+                    {
+                        appointment.MedicalRecordId = appointMent.MedicalRecordId;
+                    }
+                }
+
+                appointment.ServiceId = appointMent.ServiceId;
+                appointment.Status = appointMent.Status;
+                appointment.DentistSlotId = appointMent.DentistSlotId;
+                appointment.TimeStart = appointMent.TimeStart;
+                appointment.TimeEnd = appointMent.TimeEnd;
+                appointment.MedicalRecordId = appointment.MedicalRecordId;
+                appointment.ModifiedBy = user.UserId;
+                appointment.Diagnosis = appointMent.Diagnosis;
+
+                await appointmentRepo.UpdateAppointment(appointment);
+                AppointmentDto appointmentDto = mapper.Map<AppointmentDto>(appointment);
+                
+                appointmentResult.Message = "Success";
+                appointmentResult.Appointment = appointmentDto;
+                return appointmentResult;
             }
             catch (Exception e)
             {
-                return "Error while update appointment!";
+                appointmentResult.Message = e.Message;
+                return appointmentResult;
             }
         }
 
+
         public async Task<List<string>> GetAllStatusOfAppointment(int appointmentId)
         {
-            List<string> statusList = new List<string> { "Success", "Done", "Finished", "Delete", "Processing"};
+            List<string> statusList = new List<string> { "Not yet arrived", "Arrived", "Happening", "Finished", "Processing"};
             if (appointmentId == 0)
             {
                 return statusList;
@@ -552,6 +640,38 @@ namespace Service.Impl
             statusList.Insert(0, s);
             
             return statusList;
+        }
+
+        public async Task<List<AppointmentDto>> GetAllAppointmentByDentistId(int dentistId)
+        {
+            
+            var models = await appointmentRepo.GetAllProcessingAppointment();
+            models = models.Where(x => x.DentistSlot.DentistId == dentistId).ToList();
+            var viewModels = mapper.Map<List<AppointmentDto>>(models);  
+            return viewModels;
+        }
+
+        public AppointmentResult DeleteAppointmentForStaff(int appointmentId, string customerName, string reason)
+        {
+            AppointmentResult appointmentResult = new AppointmentResult();
+            try
+            {
+                Appointment? appointment = appointmentRepo.GetAppointmentById(appointmentId).Result;
+                if (!appointment.Customer.Name.Equals(customerName))
+                {
+                    appointmentResult.Message = "Wrong customer name!";
+                    return appointmentResult;
+                }
+
+                appointmentRepo.DeleteAppointment(appointmentId);
+                appointmentResult.Message = "Success";
+                return appointmentResult;
+            }
+            catch (Exception e)
+            {
+                appointmentResult.Message = e.Message;
+                return appointmentResult;
+            }
         }
     }
 }

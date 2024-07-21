@@ -19,7 +19,15 @@ public partial class CheckupSchedule
 
     public int? DentistId { get; set; }
 
+    public int? CreateBy { get; set; }
+
+    public int? ModifiedBy { get; set; }
+
+    public virtual User? CreateByNavigation { get; set; }
+
     public virtual User? Customer { get; set; }
 
     public virtual User? Dentist { get; set; }
+
+    public virtual User? ModifiedByNavigation { get; set; }
 }

@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using BusinessObject;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using BusinessObject;
-using DataAccess;
 using Service;
 using BusinessObject.DTO;
+using BusinessObject.Result;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DentistBooking.Pages.StaffPages.Appointments
 {
@@ -33,13 +29,25 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             _service = service;
         }
 
-        [BindProperty] public AppointmentDto Appointment { get; set; } = default!;
+        [BindProperty] 
+        public AppointmentDto Appointment { get; set; } = default!;
 
         public IList<string> Status { get; set; } = default!;
 
         public IList<MedicalRecordDto> MedicalRecords { get; set; } = default!;
 
         public IList<ServiceDto> Services { get; set; } = default!;
+        
+        [BindProperty(SupportsGet = true)]
+        public TimeOnly DentistSlotTimeStart { get; set; } = default!;
+        [BindProperty(SupportsGet = true)]
+        public TimeOnly DentistSlotTimeEnd { get; set; } = default!;
+        
+        [BindProperty(SupportsGet = true)]
+        public DateOnly SelectedDate { get; set; } = default!;
+        
+        public IList<DentistSlot> DentistSlots { get; set; } = default!;
+        
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -54,15 +62,13 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             }
 
             Appointment = appointment;
+            
             Status = await _appointmentService.GetAllStatusOfAppointment(appointment.AppointmentId);
-            var dentistSlots = await _dentistSlotService.GetAllDentistSlots();
-            var dentistSlotSelectList = dentistSlots.Select(slot => new
-            {
-                slot.DentistSlotId,
-                DisplayText =
-                    $"{slot.Dentist.Name} ({slot.TimeStart.ToString("HH:mm")} - {slot.TimeEnd.ToString("HH:mm")})"
-            });
-            ViewData["DentistSlotId"] = new SelectList(dentistSlotSelectList, "DentistSlotId", "DisplayText");
+
+            var dentistSlots = _dentistSlotService.GetDentistSlotByServiceAndDate(appointment.ServiceId.Value, appointment.TimeStart).DentistSlots;
+
+            DentistSlots = _dentistSlotService.GetDentistSlotForAppointment(dentistSlots, appointment.AppointmentId).DentistSlots;
+            
             Services = await _service.GetAllServicesForCustomer(appointment.ServiceId.Value);
             
             MedicalRecords = _medicalRecordService.GetMedicalRecordsByCustomerIdAsync(appointment.CustomerId.Value).Result;
@@ -74,54 +80,49 @@ namespace DentistBooking.Pages.StaffPages.Appointments
         {
             if (!ModelState.IsValid)
             {
-                return Page();
+                return RedirectToPage(new {id = Appointment.AppointmentId});
             }
+            DateTime timeStart = new DateTime(SelectedDate.Year, SelectedDate.Month, SelectedDate.Day,
+                DentistSlotTimeStart.Hour, DentistSlotTimeStart.Minute, DentistSlotTimeStart.Second);
+            
+            DateTime timeEnd = new DateTime(SelectedDate.Year, SelectedDate.Month, SelectedDate.Day,
+                DentistSlotTimeEnd.Hour, DentistSlotTimeEnd.Minute, DentistSlotTimeEnd.Second);
 
-            try
+            Appointment.TimeStart = timeStart;
+            Appointment.TimeEnd = timeEnd;
+            
+            string email = HttpContext.Session.GetString("Email");
+
+            AppointmentResult result = await _appointmentService.UpdateAppointments(Appointment, email);
+            if (!result.Message.Equals("Success"))
             {
-                string result = await _appointmentService.UpdateAppointments(Appointment.ServiceId.Value,
-                    Appointment.AppointmentId,
-                    Appointment.TimeStart, Appointment.TimeEnd, Appointment.DentistSlotId.Value, Appointment.Status);
-                if (!result.Equals("Success"))
-                {
-                    TempData["EditAppointment"] = result;
-                }
-                else
-                {
-                    TempData["EditAppointment"] = "Update successfully!";
-                }
-
+                TempData["ErrorEditAppointment"] = result.Message;
             }
-            catch (DbUpdateConcurrencyException)
+            else
             {
-                if (!AppointmentExists(Appointment.AppointmentId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                TempData["SuccessEditAppointment"] = "Update successfully!";
             }
 
             return RedirectToPage(new { id = Appointment.AppointmentId });
         }
 
-        private bool AppointmentExists(int id)
+        public JsonResult OnGetDentistSlotByServiceAsync(int serviceId, DateOnly selectedDate, TimeOnly timeStart)
         {
-            return _appointmentService.GetAllAppointments().Result.Any(e => e.AppointmentId == id);
-        }
-
-        public async Task<JsonResult> OnGetServicesByDentistSlotAsync(int dentistSlotId)
-        {
-            var services = await _service.GetServicesByDentistSlotAsync(dentistSlotId);
-            var serviceList = services.Select(s => new SelectListItem
+            DateTime timeStartt = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, 
+                timeStart.Hour, timeStart.Minute, timeStart.Second);
+            var dentistSlots =  _dentistSlotService.GetDentistSlotByServiceAndDateTime(serviceId, timeStartt).DentistSlots;
+            if (dentistSlots.IsNullOrEmpty())
             {
-                Value = s.ServiceId.ToString(),
-                Text = s.ServiceName
+                return new JsonResult(new { success = false, message = "No dentist slots available for selected service and the selected time." });
+            }
+            var dentistSlotSelectList = dentistSlots.Select(slot => new SelectListItem
+            {
+                Value = slot.DentistSlotId.ToString(),
+                Text =
+                    $"{slot.Dentist.Name} ({slot.TimeStart.ToString("HH:mm")} - {slot.TimeEnd.ToString("HH:mm")})"
             }).ToList();
 
-            return new JsonResult(serviceList);
+            return new JsonResult(new { success = true, dentistSlotSelectList });
         }
         
     }

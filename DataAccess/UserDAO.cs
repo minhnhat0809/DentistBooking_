@@ -32,9 +32,9 @@ namespace DataAccess
         {
             var context = new BookingDentistDbContext();
             var user = await context.Users
-                .Include(x=>x.Clinic)
-                .Include(x=>x.Role)
-                .Include(x=>x.MedicalRecords)
+                .Include(x => x.Clinic)
+                .Include(x => x.Role)
+                .Include(x => x.MedicalRecords)
                 .FirstOrDefaultAsync(c => c.UserId == id);
             return user;
         }
@@ -43,12 +43,12 @@ namespace DataAccess
         {
             var context = new BookingDentistDbContext();
             var userList = await context.Users
-                .Include(x=>x.Role)
-                .Include(x=>x.Clinic)
+                .Include(x => x.Role)
+                .Include(x => x.Clinic)
                 .ToListAsync();
             return userList;
         }
-        
+
         public async Task<List<User>> GetAllCustomer()
         {
             var context = new BookingDentistDbContext();
@@ -58,6 +58,17 @@ namespace DataAccess
                 .Where(u => u.Role.RoleName.Equals("Customer"))
                 .ToListAsync();
             return userList;
+        }
+
+        public async Task<User> GetCustomerByPhoneNumber(string phoneNumber)
+        {
+            var context = new BookingDentistDbContext();
+            var customer = await context.Users
+                .Include(x => x.Role)
+                .Include(x => x.Clinic)
+                .Where(u => u.Role.RoleName.Equals("Customer") && u.PhoneNumber.Equals(phoneNumber))
+                .FirstOrDefaultAsync();
+            return customer;
         }
 
         public async Task deleteUser(User user)
@@ -85,7 +96,7 @@ namespace DataAccess
         public async Task<User?> GetUserByUserName(string email)
         {
             var context = new BookingDentistDbContext();
-            User? user = await context.Users.Include(u => u.Role).FirstOrDefaultAsync(c => c.Email == email);
+            User? user = await context.Users.Include(u => u.Role).FirstOrDefaultAsync(c => c.Email.Equals(email));
             return user;
         }
 

@@ -2,6 +2,7 @@
 using AutoMapper;
 using BusinessObject;
 using BusinessObject.DTO;
+using BusinessObject.Result;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Repository;
 
@@ -101,6 +102,7 @@ namespace Service.Impl
             if (service != null)
             {
                 services.Remove(service);
+                services = services.Where(s => s.Status == true).ToList();
                 services.Insert(0, service);
             }
             var viewModels = _mapper.Map<List<ServiceDto>>(services);
@@ -145,6 +147,30 @@ namespace Service.Impl
             {
 
                 throw new Exception("error at get service", ex);
+            }
+        }
+
+        public async Task<ListServiceResult> GetAllActiveServices()
+        {
+            ListServiceResult listServiceResult = new ListServiceResult();
+            try
+            {
+                var models =  await _servicerRepo.GetAllServicesAsync();
+                models = models.Where(m => m.Status == true).ToList();
+                if (models == null)
+                {
+                    listServiceResult.Message = "There are no active services!";
+                    return listServiceResult;
+                }
+                var viewModels = _mapper.Map<List<ServiceDto>>(models);
+                listServiceResult.Services = viewModels;
+                listServiceResult.Message = "Success";
+                return listServiceResult;
+            }
+            catch (Exception ex)
+            {
+                listServiceResult.Message = ex.Message;
+                return listServiceResult;
             }
         }
 

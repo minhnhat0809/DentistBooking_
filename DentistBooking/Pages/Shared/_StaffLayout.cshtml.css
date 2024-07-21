@@ -1,0 +1,98 @@
+﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+a.navbar-brand {
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+}
+
+a {
+    color: #000;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.border-top {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+    font-size: 1rem;
+    line-height: inherit;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+}
+
+.cus-container {
+    width: 100%;
+    padding-left: var(--bs-gutter-x, 0.75rem);
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* Extra small devices (phones, less than 576px) */
+@media (max-width: 575.98px) {
+    .cus-container {
+        max-width: 100%;
+    }
+}
+
+/* Small devices (tablets, 576px and up) */
+@media (min-width: 576px) {
+    .cus-container {
+        max-width: 720px;
+    }
+}
+
+/* Medium devices (desktops, 768px and up) */
+@media (min-width: 768px) {
+    .cus-container {
+        max-width: 960px;
+    }
+}
+
+/* Large devices (large desktops, 992px and up) */
+@media (min-width: 992px) {
+    .cus-container {
+        max-width: 1140px;
+    }
+}
+
+/* Extra large devices (extra large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .cus-container {
+        max-width: 1320px;
+    }
+}
+
+/* Extra extra large devices (XXL desktops, 1400px and up) */
+@media (min-width: 1400px) {
+    .cus-container {
+        max-width: 1300px;
+    }
+}

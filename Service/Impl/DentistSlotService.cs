@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BusinessObject.Result;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Service.Impl
 {
@@ -16,12 +18,16 @@ namespace Service.Impl
         private readonly IDentistSlotRepo dentistSlotRepo;
         private readonly IUserRepo userRepo;
         private readonly IMapper mapper;
+        private readonly IRoomRepo _roomRepo;
+        private readonly IServiceRepo _serviceRepo;
 
-        public DentistSlotService(IDentistSlotRepo dentistSlotRepo, IUserRepo userRepo, IMapper mapper)
+        public DentistSlotService(IDentistSlotRepo dentistSlotRepo, IUserRepo userRepo, IMapper mapper, IRoomRepo roomRepo, IServiceRepo serviceRepo)
         {
             this.dentistSlotRepo = dentistSlotRepo;
             this.userRepo = userRepo;
             this.mapper = mapper;
+            _roomRepo = roomRepo;
+            _serviceRepo = serviceRepo;
         }
         public async Task<List<DentistSlotDto>> GetAllDentistSlots()
         {
@@ -47,10 +53,7 @@ namespace Service.Impl
             try
             {
                 var models = await dentistSlotRepo.GetAllDentistSlotsByDentistAndDate(id, selectedDate);
-                if (models != null)
-                {
-                    throw new Exception("dentist slot not found");
-                }
+                
                 var viewModels = mapper.Map<List<DentistSlotDto>>(models);
                 return viewModels;
             }
@@ -81,59 +84,199 @@ namespace Service.Impl
             }
         }
 
-        public async Task<string> CreateDentistSlot(int dentistId, DateTime timeStart, DateTime timeEnd)
+        public async Task<DentistSlotResult> CreateDentistSlot(int dentistId, DateTime timeStart, DateTime timeEnd, int RoomId)
         {
-            if (dentistId <= 0)
+            DentistSlotResult dentistSlotResult = new DentistSlotResult();
+            try
             {
-                return "Dentist Id is null!";
-            }
-
-            User dentist = await userRepo.GetById(dentistId);
-            if (dentist == null)
-            {
-                return "Dentist is not exist!";
-            }
-
-            if (timeStart > timeEnd)
-            {
-                return "Time start is bigger than time end!";
-            }
-            
-            TimeSpan startTime = timeStart.TimeOfDay;
-            TimeSpan endTime = timeEnd.TimeOfDay;
-
-            // Define allowed time ranges
-            var allowedRanges = new List<(TimeSpan Start, TimeSpan End)>
-            {
-                (new TimeSpan(8, 0, 0), new TimeSpan(12, 0, 0)),   // 08:00 - 12:00
-                (new TimeSpan(13, 0, 0), new TimeSpan(17, 0, 0)),  // 13:00 - 17:00
-                (new TimeSpan(17, 0, 0), new TimeSpan(19, 30, 0))  // 17:00 - 19:30
-            };
-            
-            bool isValidRange = allowedRanges.Any(range => startTime == range.Start && endTime == range.End);
-
-            if (!isValidRange)
-            {
-                return "Time must be in range [8:00-12:00] , [13:00-17:00], [17:00-19:30]!";
-            }
-
-            List<DentistSlot> dentistSlots = await dentistSlotRepo.GetAllDentistSlotsByDentistAndDate(dentistId, DateOnly.FromDateTime(timeStart));
-            if (dentistSlots.Count > 0)
-            {
-                if (dentistSlots.Any(dl => dl.TimeStart == timeStart))
+                if (dentistId <= 0)
                 {
-                    return "There is a slot with this time range!";
+                    dentistSlotResult.Message = "Dentist Id is null!";
+                    return dentistSlotResult;
                 }
+
+                User dentist = await userRepo.GetById(dentistId);
+                if (dentist == null)
+                {
+                    dentistSlotResult.Message = "Dentist is not exist!";
+                    return dentistSlotResult;
+                }
+
+                if (RoomId <= 0)
+                {
+                    dentistSlotResult.Message = "Room Id is null!";
+                    return dentistSlotResult;
+                }
+
+                Room? room = _roomRepo.GetRoomById(RoomId);
+                if (room == null)
+                {
+                    dentistSlotResult.Message = "Room is not exist!";
+                    return dentistSlotResult;
+                }
+
+                if (!timeStart.Date.Equals(timeEnd.Date))
+                {
+                    dentistSlotResult.Message = "Date of time start and time end is different!";
+                    return dentistSlotResult;
+                } else if (timeStart.TimeOfDay > timeEnd.TimeOfDay)
+                {
+                    dentistSlotResult.Message = "Time start is bigger than time end!";
+                    return dentistSlotResult;
+                }
+            
+                TimeSpan startTime = timeStart.TimeOfDay;
+                TimeSpan endTime = timeEnd.TimeOfDay;
+
+                // Define allowed time ranges
+                var allowedRanges = new List<(TimeSpan Start, TimeSpan End)>
+                {
+                    (new TimeSpan(8, 0, 0), new TimeSpan(12, 0, 0)),   // 08:00 - 12:00
+                    (new TimeSpan(13, 0, 0), new TimeSpan(17, 0, 0)),  // 13:00 - 17:00
+                    (new TimeSpan(17, 0, 0), new TimeSpan(19, 30, 0))  // 17:00 - 19:30
+                };
+            
+                bool isValidRange = allowedRanges.Any(range => startTime == range.Start && endTime == range.End);
+
+                if (!isValidRange)
+                {
+                    dentistSlotResult.Message = "Time must be in range [8:00-12:00] , [13:00-17:00], [17:00-19:30]!";
+                    return dentistSlotResult;
+                }
+
+                List<DentistSlot> dentistSLots = await dentistSlotRepo.GetAllDentistSlotsByRoomAndDate(RoomId, timeStart);
+                if (dentistSLots != null)
+                {
+                    dentistSlotResult.Message = "There is a dentist using this room in this range time";
+                    return dentistSlotResult;
+                }
+
+                List<DentistSlot> dentistSlots = await dentistSlotRepo.GetAllDentistSlotsByDentistAndDate(dentistId, DateOnly.FromDateTime(timeStart));
+                if (dentistSlots.Count > 0)
+                {
+                    if (dentistSlots.Any(dl => dl.TimeStart == timeStart))
+                    {
+                        dentistSlotResult.Message = "There is a slot with this time range!";
+                        return dentistSlotResult;
+                    }
+                }
+
+                DentistSlot dentistSlot = new DentistSlot();
+                dentistSlot.DentistId = dentistId;
+                dentistSlot.TimeStart = timeStart;
+                dentistSlot.TimeEnd = timeEnd;
+                dentistSlot.Status = true;
+            
+                await dentistSlotRepo.CreateDentistSlot(dentistSlot);
+                dentistSlotResult.Message = "Success";
+                return dentistSlotResult;
+            }
+            catch (Exception e)
+            {
+                dentistSlotResult.Message = e.Message;
+                return dentistSlotResult;
+            }
+        }
+
+        public ListDentistSlotResult GetDentistSlotByServiceAndDateTime(int serviceId, DateTime timeStart)
+        {
+            ListDentistSlotResult listDentistSlotResult = new ListDentistSlotResult();
+            try
+            {
+                if (serviceId <= 0)
+                {
+                    listDentistSlotResult.Message = "Service Id is null!";
+                    return listDentistSlotResult;
+                }
+
+                BusinessObject.Service service = _serviceRepo.GetServiceByID(serviceId).Result;
+                if (service == null)
+                {
+                    listDentistSlotResult.Message = "This service is not exist!";
+                    return listDentistSlotResult;
+                }
+                
+                /*DateTime now = DateTime.Now;
+                if (timeStart.Date < now.Date)
+                {
+                    listDentistSlotResult.Message = "Selected date is smaller than today!";
+                    return listDentistSlotResult;
+                }*/
+                
+                List<DentistSlot> dentistSlots =  dentistSlotRepo.GetAllDentistSlotByServiceAndTimeStart(serviceId, timeStart);
+                listDentistSlotResult.DentistSlots = dentistSlots;
+                listDentistSlotResult.Message = "Success";
+                return listDentistSlotResult;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        public ListDentistSlotResult GetDentistSlotByServiceAndDate(int serviceId, DateTime timeStart)
+        {
+            ListDentistSlotResult listDentistSlotResult = new ListDentistSlotResult();
+            try
+            {
+                if (serviceId <= 0)
+                {
+                    listDentistSlotResult.Message = "Service Id is null!";
+                    return listDentistSlotResult;
+                }
+
+                BusinessObject.Service service = _serviceRepo.GetServiceByID(serviceId).Result;
+                if (service == null)
+                {
+                    listDentistSlotResult.Message = "This service is not exist!";
+                    return listDentistSlotResult;
+                }
+                
+                /*DateTime now = DateTime.Now;
+                if (timeStart.Date < now.Date)
+                {
+                    listDentistSlotResult.Message = "Selected date is smaller than today!";
+                    return listDentistSlotResult;
+                }*/
+                
+                List<DentistSlot> dentistSlots =  dentistSlotRepo.GetAllDentistSlotByServiceAndDate(serviceId, timeStart);
+                listDentistSlotResult.DentistSlots = dentistSlots;
+                listDentistSlotResult.Message = "Success";
+                return listDentistSlotResult;
+            }
+            catch (Exception e)
+            {
+                listDentistSlotResult.Message = e.Message;
+                return listDentistSlotResult;
+            }
+        }
+
+        public ListDentistSlotResult GetDentistSlotForAppointment(List<DentistSlot> dentistSlots, int dentistSlotId)
+        {
+            ListDentistSlotResult listDentistSlotResult = new ListDentistSlotResult();
+            try
+            {
+                if (!dentistSlots.IsNullOrEmpty())
+                {
+                    var s = dentistSlots.FirstOrDefault(dl => dl.DentistSlotId == dentistSlotId);
+                    if (s != null)
+                    {
+                        dentistSlots.Remove(s);
+                        dentistSlots.Insert(0, s);
+                    }
+
+                    listDentistSlotResult.DentistSlots = dentistSlots;
+                }
+                
+
+                listDentistSlotResult.Message = "Success";
+            }
+            catch (Exception e)
+            {
+                listDentistSlotResult.Message = e.Message;
             }
 
-            DentistSlot dentistSlot = new DentistSlot();
-            dentistSlot.DentistId = dentistId;
-            dentistSlot.TimeStart = timeStart;
-            dentistSlot.TimeEnd = timeEnd;
-            dentistSlot.Status = true;
-            
-            await dentistSlotRepo.CreateDentistSlot(dentistSlot);
-            return "Success";
+            return listDentistSlotResult;
         }
     }
 }

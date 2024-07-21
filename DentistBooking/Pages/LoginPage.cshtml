@@ -1,0 +1,60 @@
+﻿@page
+@model DentistBooking.Pages.IndexModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Good Dentist</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="DentistBooking.styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="wrapper">
+        <div class="img-wrapper">
+            <img class="main-img" src="/assets/img/13053.jpg" />
+            <h4>Dentist Booking System</h4>
+            <p>PRN221 - Group Project</p>
+        </div>
+        <div class="content-wrapper">
+            <div class="login-form" id="login-form">
+                <form method="post" asp-page-handler="login" class="needs-validation" novalidate>
+                    <h2>Login</h2>
+                    <div class="input-field">
+                        <input type="text" name="email" required>
+                        <label>Enter your email</label>
+                    </div>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                    <div class="input-field">
+                        <input type="password" name="password" required>
+                        <label>Enter your password</label>
+                    </div>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                    <div class="forget">
+                        <label for="remember">
+                            <input type="checkbox" id="remember">
+                            <p>Remember me</p>
+                        </label>
+                        <a id="forget-button" asp-page="/ForgetPassword">Forgot password?</a>
+                    </div>
+                    <button type="submit">Log In</button>
+                    <div class="register">
+                        <p>Don't have an account? <a asp-page="Register" id="register-button">Register</a></p>
+                    </div>
+
+                    @if (!ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger mt-3">Invalid login attempt.</div>
+                    }
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

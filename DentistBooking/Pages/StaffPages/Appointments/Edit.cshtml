@@ -4,85 +4,182 @@
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Pages/Shared/_StaffLayout.cshtml";
-    var result = TempData["EditAppointment"] as string;
+    var error = TempData["ErrorEditAppointment"] as string;
+    var success = TempData["SuccessEditAppointment"] as string;
 }
 
 <h1>Edit</h1>
 
-<h4>Appointment</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="container">
+    <h4 class="text-muted">Appointment Details</h4>
+    <div id="customAlertPlaceholder"></div>
+    <div class="row justify-content-center">
+    <div class="col-md-12">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Appointment.AppointmentId" />
-            <div class="form-group">
-                <label asp-for="Appointment.TimeStart" class="control-label"></label>
-                <input asp-for="Appointment.TimeStart" class="form-control" />
-                <span asp-validation-for="Appointment.TimeStart" class="text-danger"></span>
+            <div class="form-row mb-3">
+                @if (Model.Appointment.Status.Equals("Not yet arrived"))
+                {
+                    <div class="col-md-2">
+                        <label asp-for="SelectedDate" class="control-label">Select Date:</label>
+                        <input asp-for="SelectedDate" type="date" id="datepicker" name="SelectedDate" class="form-control" autocomplete="off" min="@DateTime.Now.ToString("yyyy-MM-dd")" value="@DateOnly.FromDateTime(Model.Appointment.TimeStart.Date).ToString("yyyy-MM-dd")"/>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="slotTimeStart" class="control-label">Time Start:</label>
+                        <input type="time" id="slotTimeStart" name="DentistSlotTimeStart" asp-for="DentistSlotTimeStart" class="form-control" required min="08:00" max="19:00" value="@TimeOnly.FromDateTime(Model.Appointment.TimeStart).ToString(@"hh\:mm")"/>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="slotTimeEnd" class="control-label">Time End:</label>
+                        <input type="time" id="slotTimeEnd" name="DentistSlotTimeEnd" asp-for="DentistSlotTimeEnd" class="form-control" required min="08:15" max="19:30" value="@TimeOnly.FromDateTime(Model.Appointment.TimeEnd).ToString(@"hh\:mm")"/>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-md-2">
+                        <label asp-for="SelectedDate" class="control-label">Select Date:</label>
+                        <input asp-for="SelectedDate" type="date" id="datepicker" class="form-control" autocomplete="off" min="@DateTime.Now.ToString("yyyy-MM-dd")" value="@DateOnly.FromDateTime(Model.Appointment.TimeStart.Date).ToString("yyyy-MM-dd")" disabled/>
+                        <input type="hidden" id="datepicker" asp-for="SelectedDate" name="SelectedDate" value="@DateOnly.FromDateTime(Model.Appointment.TimeStart.Date).ToString("yyyy-MM-dd")"/>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="slotTimeStart" class="control-label">Time Start:</label>
+                        <input type="time"  class="form-control" required min="08:00" max="19:00" value="@TimeOnly.FromDateTime(Model.Appointment.TimeStart).ToString(@"hh\:mm")" disabled/>
+                        <input type="hidden" id="slotTimeStart" asp-for="DentistSlotTimeStart" name="DentistSlotTimeStart" value="@TimeOnly.FromDateTime(Model.Appointment.TimeStart).ToString(@"hh\:mm")"/>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="slotTimeEnd" class="control-label">Time End:</label>
+                        <input type="time" class="form-control" required min="08:15" max="19:30" value="@TimeOnly.FromDateTime(Model.Appointment.TimeEnd).ToString(@"hh\:mm")" disabled/>
+                        <input type="hidden" id="slotTimeEnd" asp-for="DentistSlotTimeEnd" name="DentistSlotTimeEnd" value="@TimeOnly.FromDateTime(Model.Appointment.TimeEnd).ToString(@"hh\:mm")"/>
+                    </div>
+                }
+
+                <div class="col-md-2">
+                    <label class="control-label">Customer</label>
+                    <input type="text" class="form-control" value="@Model.Appointment.Customer?.Name" readonly/>
+                </div>
+
+                <div class="col-md-2">
+                    <label asp-for="Appointment.MedicalRecordId" class="control-label">Medical Record</label>
+                    <select name="Appointment.MedicalRecordId" id="MedicalRecordId" class="form-control">
+                        @if (Model.MedicalRecords != null)
+                        {
+                            @foreach (var s in Model.MedicalRecords)
+                            {
+                                <option value="@s.MediaRecordId" title="@s.Customer.Name - @s.Diagnosis"> @s.Customer.Name - @s.Diagnosis</option>
+                            }
+                        }
+                    </select>
+                    <span asp-validation-for="Appointment.MedicalRecordId" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-2">
+                    <label asp-for="Appointment.Diagnosis" class="control-label">Diagnosis</label>
+                    <input asp-for="Appointment.Diagnosis" class="form-control"/>
+                    <span asp-validation-for="Appointment.Diagnosis" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Appointment.TimeEnd" class="control-label"></label>
-                <input asp-for="Appointment.TimeEnd" class="form-control" />
-                <span asp-validation-for="Appointment.TimeEnd" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Appointment.Diagnosis" class="control-label"></label>
-                <input asp-for="Appointment.Diagnosis" class="form-control" />
-                <span asp-validation-for="Appointment.Diagnosis" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Appointment.Status" class="control-label"></label>
-                <select name="Appointment.Status" class="form-control">
-                    @if (Model.Status != null)
+
+            <div class="form-row mb-3">
+                <div class="col-md-2">
+                    <label asp-for="Appointment.Status" class="control-label">Status</label>
+                    <select name="Appointment.Status" class="form-control">
+                        @if (Model.Status != null)
+                        {
+                        @foreach (var s in Model.Status)
+                        {
+                        <option value="@s">@s</option>
+                        }
+                        }
+                    </select>
+                    <span asp-validation-for="Appointment.Status" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-3">
+                    @if (Model.Appointment.Status.Equals("Arrived"))
                     {
-                         @foreach (var s in Model.Status)
-                            { <option value="@s">@s</option> }
+                        <label asp-for="Appointment.ServiceId" class="control-label">Service</label>
+                        <select name="Appointment.ServiceId" id="ServiceId" class="form-control">
+                            @if (Model.Services != null)
+                            {
+                                @foreach (var s in Model.Services)
+                                {
+                                    <option value="@s.ServiceId" title="@s.ServiceName"> @s.ServiceName</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="Appointment.ServiceId" class="text-danger"></span>
                     }
-                </select>
-                <span asp-validation-for="Appointment.Status" class="text-danger"></span>
+                    else
+                    {
+                        <label asp-for="Appointment.ServiceId" class="control-label">Service</label>
+                        <select name="Appointment.ServiceId" id="ServiceId" class="form-control" disabled="disabled">
+                            @if (Model.Services != null)
+                            {
+                                @foreach (var s in Model.Services)
+                                {
+                                    <option value="@s.ServiceId" title="@s.ServiceName"> @s.ServiceName</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="Appointment.ServiceId" class="text-danger"></span>
+                    }
+                </div>
+
+                <div class="col-md-4">
+                    @if (Model.Appointment.Status.Equals("Happening") || Model.Appointment.Status.Equals("Finished"))
+                    {
+                        <label asp-for="Appointment.DentistSlotId" class="control-label">Dentist</label>
+                        <select id="DentistSlotId" asp-for="Appointment.DentistSlotId" class="form-control" disabled="disabled">
+                            @if (Model.DentistSlots.Count > 0)
+                            {
+                                @foreach (var s in Model.DentistSlots)
+                                {
+                                    <option value="@s.DentistSlotId" title="@s.Dentist.Name [@s.TimeStart.TimeOfDay - @s.TimeEnd.TimeOfDay]">
+                                        @s.Dentist.Name [@s.TimeStart.TimeOfDay - @s.TimeEnd.TimeOfDay]
+                                    </option>
+                                }
+                            }
+                            else
+                            {
+                                <option value="0">No dentist slots available for selected service and the selected time.</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Appointment.DentistSlotId" class="text-danger"></span>
+                    }
+                    else
+                    {
+                        <label asp-for="Appointment.DentistSlotId" class="control-label">Dentist</label>
+                        <select id="DentistSlotId" asp-for="Appointment.DentistSlotId" class="form-control">
+                            @if (Model.DentistSlots.Count > 0)
+                            {
+                                @foreach (var s in Model.DentistSlots)
+                                {
+                                    <option value="@s.DentistSlotId" title="@s.Dentist.Name [@s.TimeStart.TimeOfDay - @s.TimeEnd.TimeOfDay]">
+                                        @s.Dentist.Name [@s.TimeStart.TimeOfDay - @s.TimeEnd.TimeOfDay]
+                                    </option>
+                                }
+                            }
+                            else
+                            {
+                                <option value="0">No dentist slots available for selected service and the selected time.</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Appointment.DentistSlotId" class="text-danger"></span>
+                    }
+                </div>
             </div>
             <div class="form-group">
-                <label asp-for="Appointment.DentistSlotId" class="control-label">Dentist</label>
-                <select asp-for="Appointment.DentistSlotId" class="form-control" asp-items="ViewBag.DentistSlotId" id="DentistSlotId"></select>
-                <span asp-validation-for="Appointment.DentistSlotId" class="text-danger"></span>
+                <input type="submit" id="saveButton" value="Save" class="btn btn-primary" />
             </div>
-            <div class="form-group">
-                <label asp-for="Appointment.CustomerId" class="control-label">Customer</label>
-                <input asp-for="Appointment.CustomerId" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label asp-for="Appointment.ServiceId" class="control-label">Service</label>
-                <select name="Appointment.ServiceId" id="ServiceId" class="form-control">
-                    @if (Model.Services != null)
-                                    {
-                                         @foreach (var s in Model.Services)
-                                            { <option value="@s.ServiceId">@s.ServiceName</option> }
-                                    }
-                </select>
-                <span asp-validation-for="Appointment.ServiceId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Appointment.MedicalRecordId" class="control-label">Medical Record</label>
-                <select name="Appointment.MedicalRecordId" id="MedicalRecordId" class="form-control">
-                                    @if (Model.MedicalRecords != null)
-                                                    {
-                                                         @foreach (var s in Model.MedicalRecords)
-                                                            { <option value="@s.MediaRecordId"> @s.Customer.Name - @s.Diagnosis</option> }
-                                                    }
-                                </select>
-                                <span asp-validation-for="Appointment.ServiceId" class="text-danger"></span>
-                <span asp-validation-for="Appointment.MedicalRecordId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
+            
         </form>
     </div>
+    </div>
 </div>
-<br/>
-<br/>
-<div id="customAlertPlaceholder"></div>
 
 <div>
     <a asp-page="./Index">Back to List</a>
@@ -95,36 +192,204 @@
     }
     <script type="text/javascript">
         $(document).ready(function () {
-            var result = '@result';
-                            if (result.trim() !== '') {
-                                var alertPlaceholder = $('#customAlertPlaceholder');
-                                var alertHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'
-                                    + result
-                                    + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
-                                    + '<span aria-hidden="true">&times;</span>'
-                                    + '</button></div>';
-                                alertPlaceholder.html(alertHtml);
+            var error = '@error';
+            if (error.trim() !== '') {
+                var alertPlaceholder = $('#customAlertPlaceholder');
+                var alertHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'
+                    + error
+                    + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
+                    + '<span aria-hidden="true">&times;</span>'
+                    + '</button></div>';
+                alertPlaceholder.html(alertHtml);
                     
-                                setTimeout(function () {
-                                    alertPlaceholder.children('.alert').alert('close');
-                                }, 3000);
-                            }
-                            
-            $('#DentistSlotId').change(function () {
-                var dentistSlotId = $(this).val();
-                $.getJSON('@Url.Page("/StaffPages/Appointments/Create", "ServicesByDentistSlot")', { dentistSlotId: dentistSlotId }, function (data) {
-                    var serviceSelect = $('#ServiceId');
-                    serviceSelect.empty();
-                    $.each(data, function (index, item) {
-                        serviceSelect.append($('<option>', {
-                            value: item.value,
-                            text: item.text
-                        }));
+                setTimeout(function () {
+                    alertPlaceholder.children('.alert').alert('close');
+                }, 3000);
+            }
+
+            var success = '@success';
+            if (success.trim() !== '') {
+                var alertPlaceholder = $('#customAlertPlaceholder');
+                var alertHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'
+                    + success
+                    + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
+                    + '<span aria-hidden="true">&times;</span>'
+                    + '</button></div>';
+                alertPlaceholder.html(alertHtml);
+
+                setTimeout(function () {
+                    alertPlaceholder.children('.alert').alert('close');
+                }, 3000);
+            }
+
+            $('#ServiceId').change(function () {
+                var serviceId = $(this).val();
+                var selectedDate = $('#datepicker').val();
+                var timeStart = $('#slotTimeStart').val();
+                console.log(serviceId);
+                console.log(selectedDate);
+                console.log(timeStart);
+
+                $.getJSON('@Url.Page("/StaffPages/Appointments/Edit", "DentistSlotByService")', {
+                    serviceId: serviceId,
+                    selectedDate: selectedDate,
+                    timeStart: timeStart
+                })
+                    .done(function (response) {
+                        console.log(response);
+                        var dentistSlotSelectList = $('#DentistSlotId');
+                        dentistSlotSelectList.empty();
+
+                        if (response.success === false) {
+                            dentistSlotSelectList.append($('<option>', {
+                                value: '',
+                                text: response.message
+                            }));
+                        } else {
+                            $.each(response.dentistSlotSelectList, function (index, item) {
+                                dentistSlotSelectList.append($('<option>', {
+                                    value: item.value,
+                                    text: item.text
+                                }));
+                            });
+                        }
+                    })
+                    .fail(function (jqXHR, textStatus, errorThrown) {
+                        console.error('AJAX request failed:', textStatus, errorThrown);
                     });
-                });
             });
 
+            $('#saveButton').click(function () {
+                // Enable all disabled fields
+                $('#ServiceId').prop('disabled', false);
+                $('#DentistSlotId').prop('disabled', false);
+            });
             
+            $('#datepicker').change(function () {
+                    var serviceId = $('#ServiceId').val();
+                    var selectedDate = $(this).val();
+                    var timeStart = $('#slotTimeStart').val();
+                    console.log(serviceId);
+                    console.log(selectedDate);
+                    console.log(timeStart);
+
+                    $.getJSON('@Url.Page("/StaffPages/Appointments/Edit", "DentistSlotByService")', {
+                        serviceId: serviceId,
+                        selectedDate: selectedDate,
+                        timeStart: timeStart
+                    })
+                        .done(function (response) {
+                            console.log(response);
+                            var dentistSlotSelectList = $('#DentistSlotId');
+                            dentistSlotSelectList.empty();
+
+                            if (response.success === false) {
+                                dentistSlotSelectList.append($('<option>', {
+                                    value: '',
+                                    text: response.message
+                                }));
+                            } else {
+                                $.each(response.dentistSlotSelectList, function (index, item) {
+                                    dentistSlotSelectList.append($('<option>', {
+                                        value: item.value,
+                                        text: item.text
+                                    }));
+                                });
+                            }
+                        })
+                        .fail(function (jqXHR, textStatus, errorThrown) {
+                            console.error('AJAX request failed:', textStatus, errorThrown);
+                        });
+                });
+
+            $('#slotTimeStart').change(function () {
+                    var serviceId = $('#ServiceId').val();
+                    var selectedDate = $('#datepicker').val();
+                    var timeStart = $(this).val();
+                    console.log(serviceId);
+                    console.log(selectedDate);
+                    console.log(timeStart);
+
+                    $.getJSON('@Url.Page("/StaffPages/Appointments/Edit", "DentistSlotByService")', {
+                        serviceId: serviceId,
+                        selectedDate: selectedDate,
+                        timeStart: timeStart
+                    })
+                        .done(function (response) {
+                            console.log(response);
+                            var dentistSlotSelectList = $('#DentistSlotId');
+                            dentistSlotSelectList.empty();
+
+                            if (response.success === false) {
+                                dentistSlotSelectList.append($('<option>', {
+                                    value: '',
+                                    text: response.message
+                                }));
+                            } else {
+                                $.each(response.dentistSlotSelectList, function (index, item) {
+                                    dentistSlotSelectList.append($('<option>', {
+                                        value: item.value,
+                                        text: item.text
+                                    }));
+                                });
+                            }
+                        })
+                        .fail(function (jqXHR, textStatus, errorThrown) {
+                            console.error('AJAX request failed:', textStatus, errorThrown);
+                        });
+                });
+            
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const slotTimeStart = document.getElementById('slotTimeStart');
+            const slotTimeEnd = document.getElementById('slotTimeEnd');
+
+            function validateTimeStart(time) {
+                const hour = parseInt(time.split(':')[0]);
+                const minute = parseInt(time.split(':')[1]);
+
+                // Check if the time is within allowed start times
+                if ((hour >= 8 && hour < 11) ||
+                    (hour === 11 && minute <= 30) ||
+                    (hour >= 13 && hour < 19) ||
+                    (hour === 19 && minute === 0)) {
+                    return true;
+                }
+                return false;
+            }
+
+            function validateTimeEnd(time) {
+                const hour = parseInt(time.split(':')[0]);
+                const minute = parseInt(time.split(':')[1]);
+
+                // Check if the time is within allowed end times
+                if ((hour === 8 && minute >= 15) || (hour > 8 && hour < 12) ||
+                    (hour === 12 && minute === 0) ||
+                    (hour === 13 && minute >= 15) ||
+                    (hour > 13 && hour < 19) ||
+                    (hour === 19 && minute <= 30)) {
+                    return true;
+                }
+                return false;
+            }
+
+            function onTimeChange(event) {
+                const time = event.target.value;
+                const isStart = event.target === slotTimeStart;
+                const isEnd = event.target === slotTimeEnd;
+
+                if (isStart && !validateTimeStart(time)) {
+                    alert('Please select a start time within the allowed range: [08:00-11:30] and [13:00-19:00]');
+                    event.target.value = '';
+                } else if (isEnd && !validateTimeEnd(time)) {
+                    alert('Please select an end time within the allowed range: [08:15-12:00] and [13:15-19:30]');
+                    event.target.value = '';
+                }
+            }
+
+            slotTimeStart.addEventListener('change', onTimeChange);
+            slotTimeEnd.addEventListener('change', onTimeChange);
         });
     </script>
 }
