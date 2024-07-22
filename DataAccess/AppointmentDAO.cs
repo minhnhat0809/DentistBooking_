@@ -56,7 +56,20 @@ namespace DataAccess
             return appointments;
         }
 
-        
+        public async Task<List<Appointment>> getAppointmentsByDentist(int dentistId)
+        {
+            var context = new BookingDentistDbContext();
+            var appointments = await context.Appointments
+                .Include(x => x.Customer)
+                .Include(x => x.DentistSlot).ThenInclude(dl => dl.Dentist)
+                .Include(x => x.MedicalRecord)
+                .Include(s => s.Service)
+                .Where(ap => ap.DentistSlot.DentistId == dentistId)
+                .OrderBy(ap => ap.TimeStart).ToListAsync();
+            return appointments;
+        }
+
+
         public async Task<List<Appointment>> getAllAppointmentsOfCustomer(int customerId)
         {
             var context = new BookingDentistDbContext();

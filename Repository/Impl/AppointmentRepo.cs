@@ -20,6 +20,8 @@ namespace Repository.Impl
 
         public async Task<List<Appointment>> GetAllAppointments() => await AppointmentDAO.Instance.getAllAppointments();
 
+        public async Task<List<Appointment>> GetAllAppointmentsByDentist(int dentistId) => await AppointmentDAO.Instance.getAppointmentsByDentist(dentistId);
+
         public async Task<List<Appointment>> GetAllAppointmentsOfCustomer(int customerId) => await AppointmentDAO.Instance.getAllAppointmentsOfCustomer(customerId);
 
         public async Task<List<Appointment>> GetAllProcessingAppointment() => await AppointmentDAO.Instance.getAllProcessingAppointment();

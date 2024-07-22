@@ -8,6 +8,8 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using BusinessObject.DTO;
 using BusinessObject.Result;
+using Microsoft.AspNetCore.SignalR;
+using Service.Lib;
 
 namespace DentistBooking.Pages.StaffPages
 {
@@ -18,11 +20,15 @@ namespace DentistBooking.Pages.StaffPages
         private readonly IService service;
         private readonly IUserService userService;
         private readonly IDentistSlotService dentistSlotService;
+        private readonly IEmailSender emailSender;
+        private readonly IConfiguration configuration;
+        private readonly IHubContext<SignalRHub> hubContext;
 
 
         private readonly IRoomService roomService;
         public ProcessingAppointmentModel(IAppointmentService appointmentService, IDentistService dentistService
-            , IService service, IUserService userService, IDentistSlotService dentistSlotService, IRoomService roomService)
+            , IService service, IUserService userService, IDentistSlotService dentistSlotService, IRoomService roomService
+            , IEmailSender emailSender, IConfiguration configuration, IHubContext<SignalRHub> hubContext)
         {
             this.appointmentService = appointmentService;
             this.dentistService = dentistService;
@@ -30,6 +36,9 @@ namespace DentistBooking.Pages.StaffPages
             this.userService = userService;
             this.dentistSlotService = dentistSlotService;
             this.roomService = roomService;
+            this.emailSender = emailSender;
+            this.configuration = configuration;
+            this.hubContext = hubContext;
         }
 
         [BindProperty(SupportsGet = true)]
@@ -79,7 +88,20 @@ namespace DentistBooking.Pages.StaffPages
                 TempData["ErrorProcessingAppointment"] = result.Message;
                 return RedirectToPage(new { id = Appointment.AppointmentId });
             }
+            hubContext.Clients.All.SendAsync("ReloadAppointments");
+            var email = HttpContext.Session.GetString("Email");
+            if (email != null)
+            {
+                var receiver = email;
+                var subject = "Thank you for your booking!";
+                string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Templates", "AcceptBooking.html");
+                string body = await System.IO.File.ReadAllTextAsync(templatePath);
+                body = body
+                           .Replace("[Date]", DateOnly.FromDateTime(Appointment.TimeStart).ToString())
+                           .Replace("[Time]", TimeOnly.FromDateTime(Appointment.TimeStart).ToString());
 
+                await emailSender.SendEmailAsync(receiver, subject, body);
+            }
             TempData["SuccessProcessingAppointmentError"] = "Appointment updated successfully!";
             return RedirectToPage(new { id = Appointment.AppointmentId });
         }

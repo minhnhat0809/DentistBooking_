@@ -44,6 +44,7 @@ namespace DentistBooking.Pages.DentistPage.Appointments
 
         [BindProperty]
         public AppointmentDto Appointment { get; set; } = default!;
+
         public PrescriptionDto Prescription { get; set; } = default!;
         public SelectList StatusOptions { get; set; }
         public async Task<IActionResult> OnGetAsync(int? id)
@@ -60,12 +61,12 @@ namespace DentistBooking.Pages.DentistPage.Appointments
             }
             List<string> status = await _appointmentService.GetAllStatusOfAppointment(appointment.AppointmentId);
             if (status == null)
-            {
+            {   
                 return NotFound();
             }
             StatusOptions = new SelectList(new List<string> { "Happening", "Finished" , appointment.Status});
             Appointment = appointment;
-            Prescription = await _prescriptionService1.GetByAppointmentId(appointment.AppointmentId);
+            Prescription = _prescriptionService1.GetByAppointmentId(appointment.AppointmentId).Result;
             await LoadSelectLists();
 
             return Page();
@@ -123,7 +124,7 @@ namespace DentistBooking.Pages.DentistPage.Appointments
             var dentistSlots = await _dentistSlotService.GetAllDentistSlots();
             var medicalRecords = await _medicalRecordService.GetAllMedicalRecords();
             var services = await _serviceService.GetAllServices();
-
+            Prescription = null;
             ViewData["CreateBy"] = new SelectList(users, "UserId", "Name");
             ViewData["CustomerId"] = new SelectList(users, "UserId", "Name");
             ViewData["DentistSlotId"] = new SelectList(dentistSlots, "DentistSlotId", "DentistSlotId");

@@ -2,8 +2,6 @@
 @model DentistBooking.Pages.DentistPage.Appointments.EditModel
 
 @{
-    ViewData["Title"] = "Edit Appointment";
-    Layout = "~/Pages/Shared/_DentistLayout.cshtml";
 }
 
 <h1>Edit Appointment</h1>
@@ -84,8 +82,7 @@
     <div>
         <h4>Prescription</h4>
         <hr />
-        @if (Model.Prescription != null)
-        {
+ 
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -98,22 +95,21 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>@Model.Prescription.Date.ToString("d")</td>
+                       @*  <td>@Model.Prescription.Date.ToString("d")</td>
                         <td>@Model.Prescription.Diagnosis</td>
                         <td>@Model.Prescription.Total</td>
                         <td>@(Model.Prescription.Status == true ? "Active" : "Inactive")</td>
                         <td>
                             <a asp-page="./Prescriptions/Edit" asp-route-id="@Model.Prescription.PrescriptionId" class="btn btn-primary btn-sm">Edit</a>
                             <a asp-page="./Prescriptions/Details" asp-route-id="@Model.Prescription.PrescriptionId" class="btn btn-info btn-sm">Details</a>
-                        </td>
+                        </td> *@
                     </tr>
                 </tbody>
             </table>
-        }
-        else
-        {
+        
+        
             <p>No prescription available</p>
-        }
+        
     </div>
 </div>
 

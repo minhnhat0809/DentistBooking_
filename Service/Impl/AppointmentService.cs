@@ -648,7 +648,7 @@ namespace Service.Impl
         public async Task<List<AppointmentDto>> GetAllAppointmentByDentistId(int dentistId)
         {
             
-            var models = await appointmentRepo.GetAllProcessingAppointment();
+            var models = await appointmentRepo.GetAllAppointmentsByDentist(dentistId);
             models = models.Where(x => x.DentistSlot.DentistId == dentistId).ToList();
             var viewModels = mapper.Map<List<AppointmentDto>>(models);  
             return viewModels;
