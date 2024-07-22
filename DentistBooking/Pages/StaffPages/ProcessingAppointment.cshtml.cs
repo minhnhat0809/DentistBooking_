@@ -24,6 +24,7 @@ namespace DentistBooking.Pages.StaffPages
         private readonly IConfiguration configuration;
         private readonly IHubContext<SignalRHub> hubContext;
 
+
         private readonly IRoomService roomService;
         public ProcessingAppointmentModel(IAppointmentService appointmentService, IDentistService dentistService
             , IService service, IUserService userService, IDentistSlotService dentistSlotService, IRoomService roomService
@@ -51,7 +52,7 @@ namespace DentistBooking.Pages.StaffPages
         public TimeOnly DentistSlotTimeEnd { get; set; } = default!;
 
         public IList<Room> Rooms { get; set; } = default!;
-        
+
         [BindProperty(SupportsGet = true)]
         public int RoomId { get; set; }
 
@@ -62,13 +63,13 @@ namespace DentistBooking.Pages.StaffPages
 
             Service = await service.GetServiceByID(Appointment.ServiceId.Value);
 
-            Rooms =  roomService.GetAllActiveRooms().Result.Rooms;
+            Rooms = roomService.GetAllActiveRooms().Result.Rooms;
 
             Dentists = await userService.GetAllDentistsByService((int)Appointment.ServiceId);
-            
-            
-            
-            HttpContext.Session.SetInt32("AppointmentId",Appointment.AppointmentId);
+
+
+
+            HttpContext.Session.SetInt32("AppointmentId", Appointment.AppointmentId);
             return Page();
         }
 
@@ -81,7 +82,7 @@ namespace DentistBooking.Pages.StaffPages
             }
             AppointmentResult result = await appointmentService.UpdateAppointmentForStaff((int)Appointment.ServiceId,
                 Appointment.AppointmentId, Appointment.TimeStart, Appointment.TimeEnd, (int)Appointment.DentistSlotId);
-            
+
             if (!result.Message.Equals("Success"))
             {
                 TempData["ErrorProcessingAppointment"] = result.Message;
@@ -107,9 +108,10 @@ namespace DentistBooking.Pages.StaffPages
 
         public IActionResult OnGetDentistSchedule(int dentistId, DateTime timeStart)
         {
-            HttpContext.Session.SetInt32("DentistId",dentistId);
+            HttpContext.Session.SetInt32("DentistId", dentistId);
             var dentistSlot = dentistSlotService.GetAllDentistSlotsByDentistAndDate(dentistId, DateOnly.FromDateTime(timeStart)).Result;
-            var schedule = dentistSlot.Select(d => new { 
+            var schedule = dentistSlot.Select(d => new
+            {
                 Id = d.DentistSlotId,
                 TimeStart = d.TimeStart,
                 TimeEnd = d.TimeEnd,
@@ -121,7 +123,7 @@ namespace DentistBooking.Pages.StaffPages
                 ReferenceHandler = ReferenceHandler.Preserve,
                 WriteIndented = true
             };
-            
+
             return new JsonResult(schedule, options);
         }
 
@@ -132,10 +134,10 @@ namespace DentistBooking.Pages.StaffPages
             var date = Appointment.TimeStart;
             DateTime slotTimeStart = new DateTime(date.Year, date.Month, date.Day,
                 DentistSlotTimeStart.Hour, DentistSlotTimeStart.Minute, DentistSlotTimeStart.Second);
-            
+
             DateTime slotTimeEnd = new DateTime(date.Year, date.Month, date.Day,
                 DentistSlotTimeEnd.Hour, DentistSlotTimeEnd.Minute, DentistSlotTimeEnd.Second);
-            
+
             DentistSlotResult result = await dentistSlotService.CreateDentistSlot((int)HttpContext.Session.GetInt32("DentistId")
                 , slotTimeStart, slotTimeEnd, RoomId);
             if (!result.Message.Equals("Success"))

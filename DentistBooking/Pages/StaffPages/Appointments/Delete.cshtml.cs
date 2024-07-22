@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.SignalR;
 using BusinessObject.DTO;
 using BusinessObject.Result;
 using Microsoft.IdentityModel.Tokens;
+using Service.Lib;
+using Service.Impl;
 
 namespace DentistBooking.Pages.StaffPages.Appointments
 {
@@ -19,11 +21,15 @@ namespace DentistBooking.Pages.StaffPages.Appointments
     {
         private readonly IAppointmentService _appointmentService;
         private readonly IHubContext<SignalRHub> _hubContext;
+        private readonly IConfiguration configuration;
+        private readonly IEmailSender emailSender;
 
-        public DeleteModel(IAppointmentService appointmentService, IHubContext<SignalRHub> hubContext)
+        public DeleteModel(IAppointmentService appointmentService, IHubContext<SignalRHub> hubContext, IConfiguration configuration, IEmailSender emailSender)
         {
             _appointmentService = appointmentService;   
             _hubContext = hubContext;
+            this.configuration = configuration;
+            this.emailSender = emailSender;
         }
 
         [BindProperty]
@@ -89,6 +95,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
                 return Page();
             }
 
+            AppointmentDto oldAppointment = await _appointmentService.GetAppointmentByID(appointmentId);
             AppointmentResult result = _appointmentService.DeleteAppointmentForStaff(appointmentId, CustomerName, Reason);
             if (!result.Message.Equals("Success"))
             {
@@ -97,6 +104,16 @@ namespace DentistBooking.Pages.StaffPages.Appointments
                 return Page();
             }
             TempData["SuccessDeleteAppointment"] = "Delete successfully!";
+            var receiver = oldAppointment.Customer.Email;
+            var subject = "Your appointment has been denied!";
+            string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Templates", "SorryForDenied.html");
+            string body = await System.IO.File.ReadAllTextAsync(templatePath);
+            body = body.Replace("[Service Details]", oldAppointment.Service.ServiceName)
+                       .Replace("[Date]", DateOnly.FromDateTime(oldAppointment.TimeStart).ToString())
+                       .Replace("[Time]", TimeOnly.FromDateTime(oldAppointment.TimeStart).ToString())
+                       .Replace("[Reason for Denial]", Reason);
+
+            await emailSender.SendEmailAsync(receiver, subject, body);
             await _hubContext.Clients.All.SendAsync("ReloadAppointments");
             return RedirectToPage("./Index");
         }
