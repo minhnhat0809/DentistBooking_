@@ -124,7 +124,7 @@ namespace DentistBooking.Pages.DentistPage.Appointments
             var dentistSlots = await _dentistSlotService.GetAllDentistSlots();
             var medicalRecords = await _medicalRecordService.GetAllMedicalRecords();
             var services = await _serviceService.GetAllServices();
-            Prescription = null;
+
             ViewData["CreateBy"] = new SelectList(users, "UserId", "Name");
             ViewData["CustomerId"] = new SelectList(users, "UserId", "Name");
             ViewData["DentistSlotId"] = new SelectList(dentistSlots, "DentistSlotId", "DentistSlotId");
