@@ -103,12 +103,11 @@ namespace Service.Impl
                 }
 
                 var appoinmentList = dentistSlot.Appointments.ToList();
+                appoinmentList = appoinmentList.Where(ap => !(ap.Status.Equals("Processing")  ||  ap.Status.Equals("Delete"))).ToList();
                 if (appoinmentList != null)
                 {
                     foreach (var ap in appoinmentList)
                     {
-                        if (!appointment.TimeStart.Equals(appointment.TimeStart))
-                        {
                             TimeSpan apStartTime = ap.TimeStart.TimeOfDay;
                             TimeSpan apEndTime = ap.TimeEnd.TimeOfDay;
 
@@ -120,7 +119,6 @@ namespace Service.Impl
                                 appointmentResult.Message = $"There is an appointment overlapping at {ap.TimeStart} - {ap.TimeEnd.TimeOfDay}'";
                                 return appointmentResult;
                             }
-                        }
                     }
                 }
 
@@ -399,21 +397,26 @@ namespace Service.Impl
             }
 
             var appointmentList = dentistSlot.Appointments.ToList();
+            appointmentList = appointmentList.Where(ap => !(ap.Status.Equals("Delete"))).ToList();
             if (appointmentList != null)
             {
                 foreach (var ap in appointmentList)
                 {
-                    TimeSpan apStartTime = ap.TimeStart.TimeOfDay;
-                    TimeSpan apEndTime = ap.TimeEnd.TimeOfDay;
-
-                    TimeSpan timeStart = TimeStart.TimeOfDay;
-                    TimeSpan timeEnd = TimeEnd.TimeOfDay;
-
-                    if ((timeStart >= apStartTime && timeStart < apEndTime) || (timeStart < apStartTime && timeEnd > apStartTime))
+                    if (ap.AppointmentId != appointment.AppointmentId)
                     {
-                        appointmentResult.Message = $"There is an appointment overlapping at {ap.TimeStart} - {ap.TimeEnd.TimeOfDay}";
-                        return appointmentResult;
+                        TimeSpan apStartTime = ap.TimeStart.TimeOfDay;
+                        TimeSpan apEndTime = ap.TimeEnd.TimeOfDay;
+
+                        TimeSpan timeStart = TimeStart.TimeOfDay;
+                        TimeSpan timeEnd = TimeEnd.TimeOfDay;
+
+                        if ((timeStart >= apStartTime && timeStart < apEndTime) || (timeStart < apStartTime && timeEnd > apStartTime))
+                        {
+                            appointmentResult.Message = $"There is an appointment overlapping at {ap.TimeStart} - {ap.TimeEnd.TimeOfDay}";
+                            return appointmentResult;
+                        }
                     }
+                    
                 }
             }
 
@@ -437,8 +440,7 @@ namespace Service.Impl
             return appointmentResult;
         }
         }
-
-
+       
         public async Task PutAppointment(AppointmentDto appointment)
         {
             if (appointment == null)
@@ -558,8 +560,6 @@ namespace Service.Impl
                 {
                     foreach (var ap in appointmentList)
                     {
-                        if (!appointMent.TimeStart.Equals(appointment.TimeStart))
-                        {
                             TimeSpan apStartTime = ap.TimeStart.TimeOfDay;
                             TimeSpan apEndTime = ap.TimeEnd.TimeOfDay;
 
@@ -571,7 +571,6 @@ namespace Service.Impl
                                 appointmentResult.Message = $"There is an appointment overlapping at {ap.TimeStart} - {ap.TimeEnd.TimeOfDay}";
                                 return appointmentResult;
                             }
-                        }
                     }
                 }
 

@@ -143,14 +143,7 @@ namespace Service.Impl
                     dentistSlotResult.Message = "Time must be in range [8:00-12:00] , [13:00-17:00], [17:00-19:30]!";
                     return dentistSlotResult;
                 }
-
-                List<DentistSlot> dentistSLots = await dentistSlotRepo.GetAllDentistSlotsByRoomAndDate(RoomId, timeStart);
-                if (dentistSLots != null)
-                {
-                    dentistSlotResult.Message = "There is a dentist using this room in this range time";
-                    return dentistSlotResult;
-                }
-
+                
                 List<DentistSlot> dentistSlots = await dentistSlotRepo.GetAllDentistSlotsByDentistAndDate(dentistId, DateOnly.FromDateTime(timeStart));
                 if (dentistSlots.Count > 0)
                 {
@@ -159,6 +152,13 @@ namespace Service.Impl
                         dentistSlotResult.Message = "There is a slot with this time range!";
                         return dentistSlotResult;
                     }
+                }
+
+                List<DentistSlot> dentistSLots = await dentistSlotRepo.GetAllDentistSlotsByRoomAndDate(RoomId, timeStart);
+                if (dentistSLots.Count > 0)
+                {
+                    dentistSlotResult.Message = "There is a dentist using this room in this range time";
+                    return dentistSlotResult;
                 }
 
                 DentistSlot dentistSlot = new DentistSlot();

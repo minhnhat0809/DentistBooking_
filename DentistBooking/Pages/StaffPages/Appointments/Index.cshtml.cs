@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Service;
 using X.PagedList;
 using BusinessObject.DTO;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DentistBooking.Pages.StaffPages.Appointments
 {
@@ -24,6 +25,18 @@ namespace DentistBooking.Pages.StaffPages.Appointments
         public int PageSize { get; set; } = 5;
         public async Task<IActionResult> OnGetAsync()
         {
+            string role = HttpContext.Session.GetString("Role");
+            if (!role.IsNullOrEmpty())
+            {
+                if (!role.Equals("Staff"))
+                {
+                    return RedirectToPage("/Index");
+                }
+            }
+            else
+            {
+                return RedirectToPage("/Index");
+            }
             var appointments = await _appointmentService.GetAllAppointments();
             Appointment = appointments.ToPagedList(PageNumber, PageSize);
             return Page();
