@@ -240,7 +240,10 @@ namespace Service.Impl
                 User? model = await _userRepo.GetById(user.UserId);
                 if (model != null)
                 {
+                    var role = model.RoleId;
                     model = _mapper.Map<User>(user);
+                    model.RoleId = role;
+                    model.ClinicId = 1;
                     await _userRepo.UpdateUser(model);
                 }
             }

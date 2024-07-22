@@ -93,6 +93,6 @@ button.accept-policy {
 /* Extra extra large devices (XXL desktops, 1400px and up) */
 @media (min-width: 1400px) {
     .cus-container {
-        max-width: 1480px;
+        max-width: 1300px;
     }
 }

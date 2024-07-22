@@ -71,7 +71,7 @@
 }
 <div>
     <a asp-page="./Edit" asp-route-id="@Model.Prescription.PrescriptionId">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="./../Edit" asp-route-id="@Model.Prescription.AppointmentId">Back to Edit Appointment</a>
 </div>
 
 <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>

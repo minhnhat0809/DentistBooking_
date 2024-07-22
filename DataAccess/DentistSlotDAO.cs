@@ -59,6 +59,7 @@ namespace DataAccess
         {
             var context = new BookingDentistDbContext();
             var dentistSlotList = await context.DentistSlots
+                .Include(dl => dl.Dentist)
                 .Where(ds => ds.RoomId == roomId && ds.TimeStart.Equals(selectedDate))
                 .OrderBy(ds => ds.TimeStart).ToListAsync();
             return dentistSlotList;
@@ -89,7 +90,7 @@ namespace DataAccess
 
         public List<DentistSlot> getAllDentistSlotsByServiceAndDate(int serviceId, DateTime timeStart)
         {
-            var context = new BookingDentistDbContext();
+             var context = new BookingDentistDbContext();
             return context.DentistSlots.Include(dl => dl.Dentist).ThenInclude(d => d.DentistServices)
                 .Where(dl => dl.Dentist.DentistServices.Any(ds => ds.ServiceId == serviceId && ds.Status == true && dl.DentistId.Equals(ds.DentistId)) && 
                              dl.TimeStart<= timeStart && dl.TimeEnd > timeStart &&

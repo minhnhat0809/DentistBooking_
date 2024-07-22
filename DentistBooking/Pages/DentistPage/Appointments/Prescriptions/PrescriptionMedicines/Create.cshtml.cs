@@ -32,8 +32,8 @@ namespace DentistBooking.Pages.DentistPage.Appointments.Prescriptions.Prescripti
         [BindProperty]
         public PrescriptionMedicineDto PrescriptionMedicine { get; set; } = new PrescriptionMedicineDto();
 
-        public SelectList PrescriptionIdSelectList { get; set; }
-        public SelectList MedicineIdSelectList { get; set; }
+        public SelectList PrescriptionIdSelectList { get; set; } = default!;
+        public IList<MedicineDto> MedicineList { get; set; }
 
         public async Task<IActionResult> OnGet(int id)
         {
@@ -42,8 +42,12 @@ namespace DentistBooking.Pages.DentistPage.Appointments.Prescriptions.Prescripti
 
             // Populate dropdowns
             PrescriptionIdSelectList = new SelectList(await _prescriptionService.GetPrescriptions(), "PrescriptionId", "PrescriptionId", id);
-            MedicineIdSelectList = new SelectList(await _medicineService.GetAllMedicines(), "MedicineId", "MedicineName");
-
+            MedicineList = (await _medicineService.GetAllMedicines()).Select(m => new MedicineDto
+            {
+                MedicineId = m.MedicineId,
+                MedicineName = m.MedicineName,
+                Price = m.Price
+            }).ToList();
             return Page();
         }
 
@@ -52,14 +56,32 @@ namespace DentistBooking.Pages.DentistPage.Appointments.Prescriptions.Prescripti
             if (!ModelState.IsValid)
             {
                 PrescriptionIdSelectList = new SelectList(await _prescriptionService.GetPrescriptions(), "PrescriptionId", "PrescriptionId", PrescriptionMedicine.PrescriptionId);
-                MedicineIdSelectList = new SelectList(await _medicineService.GetAllMedicines(), "MedicineId", "MedicineName");
+                MedicineList = (await _medicineService.GetAllMedicines()).Select(m => new MedicineDto
+                {
+                    MedicineId = m.MedicineId,
+                    MedicineName = m.MedicineName,
+                    Price = m.Price
+                }).ToList();
                 return Page();
             }
-            PrescriptionMedicine.Status = true;
-            await _prescriptionMedicinesService.AddPrescriptionMedicine(PrescriptionMedicine);
-            await _hubContext.Clients.All.SendAsync("ReloadPrescriptionMedicines");
 
-            return RedirectToPage("./Index", new { id = PrescriptionMedicine.PrescriptionId });
+            try
+            {
+                PrescriptionMedicine.Status = true;
+                await _prescriptionMedicinesService.AddPrescriptionMedicine(PrescriptionMedicine);
+                await _hubContext.Clients.All.SendAsync("ReloadPrescriptionMedicines");
+                await _prescriptionService.UpdatePrescriptionPrice(PrescriptionMedicine.PrescriptionId.Value);
+                await _hubContext.Clients.All.SendAsync("ReloadPrescriptionMedicines");
+                return RedirectToPage("./Index", new { id = PrescriptionMedicine.PrescriptionId });
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                PrescriptionIdSelectList = new SelectList(await _prescriptionService.GetPrescriptions(), "PrescriptionId", "PrescriptionId", PrescriptionMedicine.PrescriptionId);
+                MedicineList = (await _medicineService.GetAllMedicines()).Select(m => new MedicineDto { MedicineId = m.MedicineId, MedicineName = m.MedicineName, Price = m.Price }).ToList();
+                return Page();
+            }
         }
+
     }
 }

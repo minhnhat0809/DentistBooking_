@@ -131,6 +131,33 @@
             @Html.DisplayFor(model => model.Appointment.Service.ServiceName)
         </dd>
     </dl>
+    <h4>Prescription</h4>
+    <hr />
+    @if (Model.Prescription != null)
+    {
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Diagnosis</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@Model.Prescription.Date.ToString("d")</td>
+                    <td>@Model.Prescription.Diagnosis</td>
+                    <td>@Model.Prescription.Total</td>
+                    <td>@(Model.Prescription.Status == true ? "Active" : "Inactive")</td>
+                </tr>
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No prescription available</p>
+    }
 </div>
 <div>
     <a asp-page="./Edit" asp-route-id="@Model.Appointment.AppointmentId">Edit</a> |

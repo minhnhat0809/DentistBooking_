@@ -2,11 +2,12 @@
 @model DentistBooking.Pages.StaffPages.Users.ViewUsers
 
 @{
-    Layout = "~/Pages/Shared/_StaffLayout.cshtml";
+Layout = "~/Pages/Shared/_StaffLayout.cshtml";
 }
 
 <head>
     <style>
+        /* Existing styles */
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f8f9fa;
@@ -69,17 +70,56 @@
         .form-control {
             max-width: 300px;
         }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 
 <h2 class="my-4">User List</h2>
+
+<button id="createNewCustomerBtn" class="btn btn-primary mb-4">Create New Customer</button>
 
 <form method="get" class="form-inline mb-4">
     <label for="userTypeSelect" class="mr-2 font-weight-bold">View: </label>
     <select id="userTypeSelect" asp-for="SelectedUserType" class="form-control mr-2" onchange="this.form.submit()">
         @foreach (var item in Model.Types)
         {
-            <option value="@item">@item</option>
+        <option value="@item">@item</option>
         }
     </select>
     <noscript>
@@ -89,57 +129,126 @@
 
 @if (Model.Users != null && Model.Users.Count > 0)
 {
-    <div class="table-responsive">
-        <table class="table table-hover table-striped table-bordered">
-            <thead class="thead-dark">
-                <tr>
-                    <th>User ID</th>
-                    <th>User Name</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone Number</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var user in Model.Users)
-                {
-                    <tr>
-                        <td>@user.UserId</td>
-                        <td>@user.UserName</td>
-                        <td>@user.Name</td>
-                        <td>@user.Email</td>
-                        <td>@user.PhoneNumber</td>
-                        <td>
+<div class="table-responsive">
+    <table class="table table-hover table-striped table-bordered">
+        <thead class="thead-dark">
+        <tr>
+            <th>User ID</th>
+            <th>User Name</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var user in Model.Users)
+        {
+        <tr>
+            <td>@user.UserId</td>
+            <td>@user.UserName</td>
+            <td>@user.Name</td>
+            <td>@user.Email</td>
+            <td>@user.PhoneNumber</td>
+            <td>
                             <span class="badge @(user.Status == true ? "badge-success" : "badge-secondary")">
                                 @(user.Status == true ? "Active" : "Inactive")
                             </span>
-                        </td>
-                        <td>
-                            <a asp-page="./Details" asp-route-id="@user.UserId" class="btn btn-info btn-sm">View</a>
-                            <a asp-page="./Edit" asp-route-id="@user.UserId" class="btn btn-warning btn-sm">Edit</a>
-                            
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+            </td>
+            <td>
+                <a asp-page="./Details" asp-route-id="@user.UserId" class="btn btn-info btn-sm">View</a>
+                <a asp-page="./Edit" asp-route-id="@user.UserId" class="btn btn-warning btn-sm">Edit</a>
+            </td>
+        </tr>
+        }
+        </tbody>
+    </table>
+</div>
 }
 else
 {
-    <div class="alert alert-warning" role="alert">
-        No users found for the selected type.
+<div class="alert alert-warning" role="alert">
+    No users found for the selected type.
+</div>
+}
+
+<!-- Modal for Create New Customer -->
+<div id="createCustomerModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>Create New Customer</h3>
+        <!-- Add your form or content for creating a new customer here -->
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="hidden" asp-for="SelectedUserType" value="@Model.SelectedUserType"/>
+            <div class="form-group">
+                <label asp-for="User.UserName" class="control-label"></label>
+                <input asp-for="User.UserName" class="form-control" />
+                <span asp-validation-for="User.UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.Name" class="control-label"></label>
+                <input asp-for="User.Name" class="form-control" />
+                <span asp-validation-for="User.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.Password" class="control-label"></label>
+                <input asp-for="User.Password" class="form-control" />
+                <span asp-validation-for="User.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.Dob" class="control-label"></label>
+                <input asp-for="User.Dob" class="form-control" type="date" />
+                <span asp-validation-for="User.Dob" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="User.Gender" class="control-label"></label>
+                <select asp-for="User.Gender" class="form-control">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+                <span asp-validation-for="User.Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.PhoneNumber" class="control-label"></label>
+                <input asp-for="User.PhoneNumber" class="form-control" />
+                <span asp-validation-for="User.PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.Email" class="control-label"></label>
+                <input asp-for="User.Email" class="form-control" />
+                <span asp-validation-for="User.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.RoleId" class="control-label"></label>
+                <input  class="form-control" value="Customer"  disabled="disabled"/>
+            </div>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </form>
     </div>
-} 
+</div>
+
 <script>
-    document.getElementById('userTypeSelect').addEventListener('change', function () {
-        document.querySelector('form').submit();
-    });
+    var modal = document.getElementById("createCustomerModal");
+    var btn = document.getElementById("createNewCustomerBtn");
+    var span = document.getElementsByClassName("close")[0];
+
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
 </script>
 
-
 <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
-
 <script src="~/js/site.js"></script>

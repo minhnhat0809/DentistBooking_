@@ -49,9 +49,9 @@ namespace DataAccess
             var context = new BookingDentistDbContext();
             var appointments = await context.Appointments
                 .Include(x=>x.Customer)
-                .Include(x => x.DentistSlot)
+                .Include(x => x.DentistSlot).ThenInclude(dl => dl.Dentist)
                 .Include(x => x.MedicalRecord)
-                .Include(x => x.Service)
+                .Include(s => s.Service)
                 .OrderBy(ap => ap.TimeStart).ToListAsync();
             return appointments;
         }
@@ -94,9 +94,11 @@ namespace DataAccess
             var appointments = await  context.Appointments
                 .Include(ap => ap.DentistSlot)
                 .ThenInclude(dl => dl.Dentist)
-                .Include(ap => ap.Customer)
-                .Include(ap => ap.MedicalRecord)
-                .Include(ap => ap.Service)
+                .Include(c => c.Customer) 
+                .Include(c => c.CreateByNavigation)
+                .Include(x=>x.MedicalRecord)
+                .Include(m => m.ModifiedByNavigation)
+                .Include(s => s.Service)
                 .Where(ap => ap.Status.Equals("Processing")).ToListAsync();
             return appointments;
         }

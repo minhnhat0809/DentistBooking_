@@ -10,5 +10,7 @@ namespace Repository
         Task UpdatePrescription(Prescription prescription);
         Task DeletePrescription(int id);
         Task<Prescription> GetByIdWithMedicinesAsync(int id);
+        
+        
     }
 }

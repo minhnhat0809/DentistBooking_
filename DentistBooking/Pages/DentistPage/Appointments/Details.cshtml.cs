@@ -14,14 +14,15 @@ namespace DentistBooking.Pages.DentistPage.Appointments
     public class DetailsModel : PageModel
     {
         private readonly IAppointmentService _appointmentService;
-
-        public DetailsModel(IAppointmentService appointmentService)
+        private readonly IPrescriptionService _prescriptionService;
+        public DetailsModel(IAppointmentService appointmentService, IPrescriptionService prescriptionService)
         {
             _appointmentService = appointmentService;
+            _prescriptionService = prescriptionService;
         }
 
         public AppointmentDto Appointment { get; set; } = default!;
-
+        public PrescriptionDto Prescription { get; set; } = default!;
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -37,6 +38,7 @@ namespace DentistBooking.Pages.DentistPage.Appointments
             else
             {
                 Appointment = appointment;
+                Prescription = await _prescriptionService.GetByAppointmentId(appointment.AppointmentId);
             }
             return Page();
         }

@@ -59,6 +59,18 @@ namespace DentistBooking.Pages.StaffPages.Appointments
         
         public async Task<IActionResult> OnGet()
         {
+            string role = HttpContext.Session.GetString("Role");
+            if (!role.IsNullOrEmpty())
+            {
+                if (!role.Equals("Staff"))
+                {
+                    return RedirectToPage("/Index");
+                }
+            }
+            else
+            {
+                return RedirectToPage("/Index");
+            }
             List<UserDto> customers = (await _userService.GetAllActiveCustomers()).Users;
             ViewData["CustomerId"] = new SelectList( customers, "UserId", "Name");
             Status = await _appointmentService.GetAllStatusOfAppointment(0);
@@ -103,6 +115,18 @@ namespace DentistBooking.Pages.StaffPages.Appointments
         }
         public async Task<IActionResult> OnPostAsync()
         {
+            string role = HttpContext.Session.GetString("Role");
+            if (!role.IsNullOrEmpty())
+            {
+                if (!role.Equals("Staff"))
+                {
+                    return RedirectToPage("/Index");
+                }
+            }
+            else
+            {
+                return RedirectToPage("/Index");
+            }
             if (!ModelState.IsValid)
             {
                 return RedirectToPage();
@@ -122,7 +146,14 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             if (!appointmentResult.Message.Equals("Success"))
             {
                 TempData["ErrorCreateAppointment"] = appointmentResult.Message;
-                return RedirectToPage("./Create");
+                List<UserDto> customers = (await _userService.GetAllActiveCustomers()).Users;
+                ViewData["CustomerId"] = new SelectList( customers, "UserId", "Name");
+                Status = await _appointmentService.GetAllStatusOfAppointment(0);
+                Services = (await _service.GetAllActiveServices()).Services;
+                DateTime now = DateTime.Now;
+                DentistSlots =  _dentistSlotService.GetDentistSlotByServiceAndDate(Services.FirstOrDefault().ServiceId, now).DentistSlots;
+                MedicalRecords = await _medicalRecordService.GetMedicalRecordsByCustomerIdAsync(customers.FirstOrDefault().UserId);
+                return Page();
             }
             else
             {

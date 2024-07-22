@@ -84,7 +84,8 @@
                 <div class="form-group row m-2">
                         <label class="col-sm-3 col-form-label">Service</label>
                         <div class="col-sm-9">
-                        <input type="text" asp-for="@Model.Appointment.ServiceId" value="@Model.Service.ServiceName" readonly />
+                            <input type="text" value="@Model.Service.ServiceName" readonly />
+                            <input  type="hidden" asp-for="@Model.Appointment.ServiceId"/>
                         </div>
                     </div>
 

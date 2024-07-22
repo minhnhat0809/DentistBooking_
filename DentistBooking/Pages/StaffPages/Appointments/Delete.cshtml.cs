@@ -11,6 +11,7 @@ using Service;
 using Microsoft.AspNetCore.SignalR;
 using BusinessObject.DTO;
 using BusinessObject.Result;
+using Microsoft.IdentityModel.Tokens;
 using Service.Lib;
 using Service.Impl;
 
@@ -41,6 +42,19 @@ namespace DentistBooking.Pages.StaffPages.Appointments
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
+            string role = HttpContext.Session.GetString("Role");
+            if (!role.IsNullOrEmpty())
+            {
+                if (!role.Equals("Staff"))
+                {
+                    return RedirectToPage("/Index");
+                }
+            }
+            else
+            {
+                return RedirectToPage("/Index");
+            }
+            
             if (id == null)
             {
                 return NotFound();
@@ -61,6 +75,18 @@ namespace DentistBooking.Pages.StaffPages.Appointments
 
         public async Task<IActionResult> OnPostAsync(int appointmentId)
         {
+            string role = HttpContext.Session.GetString("Role");
+            if (!role.IsNullOrEmpty())
+            {
+                if (!role.Equals("Staff"))
+                {
+                    return RedirectToPage("/Index");
+                }
+            }
+            else
+            {
+                return RedirectToPage("/Index");
+            }
 
             if (string.IsNullOrWhiteSpace(Reason) || string.IsNullOrWhiteSpace(CustomerName))
             {
