@@ -55,6 +55,7 @@ namespace DentistBooking.Pages.DentistPage.Appointments
             }
 
             var appointment = await _appointmentService.GetAppointmentByID(id.Value);
+            
             if (appointment == null)
             {
                 return NotFound();

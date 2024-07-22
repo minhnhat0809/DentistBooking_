@@ -35,7 +35,8 @@ namespace DentistBooking.Pages.DentistPage.Appointments
             var dentists = await _userService.GetAllDentists();
             var dentist = dentists.FirstOrDefault(x => x.Email == email);
             List<AppointmentDto> viewModels = await _appointmentService.GetAllAppointmentByDentistId(dentist.UserId);
-            Appointment = viewModels.ToPagedList(PageNumber, PageSize); 
+            
+            Appointment = viewModels.ToPagedList(PageNumber, PageSize);
         }
     }
 }
