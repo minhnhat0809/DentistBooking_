@@ -556,10 +556,13 @@ namespace Service.Impl
                 }
 
                 var appointmentList = dentistSlot.Appointments.ToList();
+                appointmentList = appointmentList.Where(ap => !(ap.Status.Equals("Delete"))).ToList();
                 if (appointmentList != null)
                 {
                     foreach (var ap in appointmentList)
                     {
+                        if (ap.AppointmentId != appointment.AppointmentId)
+                        {
                             TimeSpan apStartTime = ap.TimeStart.TimeOfDay;
                             TimeSpan apEndTime = ap.TimeEnd.TimeOfDay;
 
@@ -571,6 +574,7 @@ namespace Service.Impl
                                 appointmentResult.Message = $"There is an appointment overlapping at {ap.TimeStart} - {ap.TimeEnd.TimeOfDay}";
                                 return appointmentResult;
                             }
+                        }
                     }
                 }
 
@@ -644,7 +648,7 @@ namespace Service.Impl
         public async Task<List<AppointmentDto>> GetAllAppointmentByDentistId(int dentistId)
         {
             
-            var models = await appointmentRepo.GetAllProcessingAppointment();
+            var models = await appointmentRepo.GetAllAppointmentsByDentist(dentistId);
             models = models.Where(x => x.DentistSlot.DentistId == dentistId).ToList();
             var viewModels = mapper.Map<List<AppointmentDto>>(models);  
             return viewModels;

@@ -109,7 +109,7 @@ namespace DentistBooking.Pages
             TempData["Book"] = "Appointment created successfully!";
             var receiver = Email;
             var subject = "Thank you for your booking!";
-            string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "ThanksGuestBooking.html");
+            string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Templates", "ThanksGuestBooking.html");
             string body = await System.IO.File.ReadAllTextAsync(templatePath);
             var selectedService = await service.GetServiceByID(SelectedServiceId);
             body = body.Replace("[Service Details]", selectedService.ServiceName)
