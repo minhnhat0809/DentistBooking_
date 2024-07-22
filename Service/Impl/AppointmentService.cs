@@ -556,10 +556,13 @@ namespace Service.Impl
                 }
 
                 var appointmentList = dentistSlot.Appointments.ToList();
+                appointmentList = appointmentList.Where(ap => !(ap.Status.Equals("Delete"))).ToList();
                 if (appointmentList != null)
                 {
                     foreach (var ap in appointmentList)
                     {
+                        if (ap.AppointmentId != appointment.AppointmentId)
+                        {
                             TimeSpan apStartTime = ap.TimeStart.TimeOfDay;
                             TimeSpan apEndTime = ap.TimeEnd.TimeOfDay;
 
@@ -571,6 +574,7 @@ namespace Service.Impl
                                 appointmentResult.Message = $"There is an appointment overlapping at {ap.TimeStart} - {ap.TimeEnd.TimeOfDay}";
                                 return appointmentResult;
                             }
+                        }
                     }
                 }
 
