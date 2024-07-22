@@ -48,55 +48,62 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Appointment) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.TimeStart)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TimeEnd)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Diagnosis)
-            </td>
-            @* <td>
-                @Html.DisplayFor(modelItem => item.Note)
-            </td> *@
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            @* <td>
-                @Html.DisplayFor(modelItem => item.CreateByNavigation.Name)
-            </td> *@
-            <td>
-                @Html.DisplayFor(modelItem => item.Customer.Name)
-            </td>
-            @if (item.DentistSlot != null && item.DentistSlot.Dentist != null)
+        @if (Model.Appointment.Count > 0)
+        {
+            @foreach (var item in Model.Appointment)
             {
-                <td>@item.DentistSlot.Dentist.Name (@item.DentistSlot.TimeStart.ToString("hh:mm tt") - @item.DentistSlot.TimeEnd.ToString("hh:mm tt"))</td>
-            }
-            else
-            {
-                <td>N/A</td>    
-            }
-            @* <td>
-                @Html.DisplayFor(modelItem => item.DentistSlot.DentistSlotId)
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TimeStart)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TimeEnd)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Diagnosis)
+                    </td>
+                    @* <td>
+            @Html.DisplayFor(modelItem => item.Note)
             </td> *@
-            @* <td>
-                @Html.DisplayFor(modelItem => item.MedicalRecord.MediaRecordId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ModifiedByNavigation.Name)
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    @* <td>
+            @Html.DisplayFor(modelItem => item.CreateByNavigation.Name)
             </td> *@
-            <td>
-                @Html.DisplayFor(modelItem => item.Service.ServiceName)
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Customer.Name)
+                    </td>
+                    @if (item.DentistSlot != null && item.DentistSlot.Dentist != null)
+                    {
+                        <td>@item.DentistSlot.Dentist.Name (@item.DentistSlot.TimeStart.ToString("hh:mm tt") - @item.DentistSlot.TimeEnd.ToString("hh:mm tt"))</td>
+                    }
+                    else
+                    {
+                        <td>N/A</td>
+                    }
+                    @* <td>
+            @Html.DisplayFor(modelItem => item.DentistSlot.DentistSlotId)
+            </td> *@
+                    @* <td>
+            @Html.DisplayFor(modelItem => item.MedicalRecord.MediaRecordId)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.AppointmentId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.AppointmentId">Details</a>
-            </td>
-        </tr>
-}
+            @Html.DisplayFor(modelItem => item.ModifiedByNavigation.Name)
+            </td> *@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Service.ServiceName)
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@item.AppointmentId">Edit</a> |
+                        <a asp-page="./Details" asp-route-id="@item.AppointmentId">Details</a>
+                    </td>
+                </tr>
+            }
+        }else{
+            <td class="col-span-7"> No appointments</td>
+        }
+       
     </tbody>
 </table>
 <div>
