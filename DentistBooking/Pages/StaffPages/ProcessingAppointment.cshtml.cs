@@ -122,7 +122,7 @@ namespace DentistBooking.Pages.StaffPages
             {
                 ReferenceHandler = ReferenceHandler.Preserve,
                 WriteIndented = true
-            };
+            }; 
 
             return new JsonResult(schedule, options);
         }

@@ -10,5 +10,7 @@ namespace Repository
     public interface IDentistServiceRepo
     {
         Task<List<BusinessObject.Service>> GetAllServiceByDentist(int dentistId);
+        
+        Task<List<BusinessObject.Service>> GetAllServiceByDentistActive(int dentistId);
     }
 }
