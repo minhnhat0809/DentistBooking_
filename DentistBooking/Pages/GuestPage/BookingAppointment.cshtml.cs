@@ -1,6 +1,7 @@
 using BusinessObject.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.SignalR;
 using Service;
 using Service.Impl;
 using Service.Lib;
@@ -15,12 +16,14 @@ namespace DentistBooking.Pages.GuestPage
         private readonly IUserService userService;
         private readonly IEmailSender emailSender;
 
-        public BookingAppointmentModel(IUserService userService, IAppointmentService appointmentService, IService service, IEmailSender emailSender)
+        private readonly IHubContext<SignalRHub> hubContext;
+        public BookingAppointmentModel(IUserService userService, IAppointmentService appointmentService, IService service, IEmailSender emailSender, IHubContext<SignalRHub> hubContext)
         {
             this.appointmentService = appointmentService;
             this.service = service;
             this.userService = userService;
             this.emailSender = emailSender;
+            this.hubContext = hubContext;
         }
 
         public List<ServiceDto> Services { get; set; } = new List<ServiceDto>();
@@ -87,6 +90,7 @@ namespace DentistBooking.Pages.GuestPage
                     Password = "cuZXynTq"
                 };
                 await userService.CreateUser(newCustomer);
+                await hubContext.Clients.All.SendAsync("ReloadUsers");
                 customer = await userService.GetCustomerByPhoneNumber(PhoneNumber);
             }
 
@@ -104,6 +108,7 @@ namespace DentistBooking.Pages.GuestPage
                 return Page();
             }
 
+            hubContext.Clients.All.SendAsync("ReloadAppointments");
             TempData["Book"] = "Appointment created successfully!";
             var receiver = Email;
             var subject = "Thank you for your booking!";
@@ -112,7 +117,9 @@ namespace DentistBooking.Pages.GuestPage
             var selectedService = await service.GetServiceByID(SelectedServiceId);
             body = body.Replace("[Service Details]", selectedService.ServiceName)
                        .Replace("[Date]", DateOnly.FromDateTime(AppointmentTime).ToString())
-                       .Replace("[Time]", TimeOnly.FromDateTime(AppointmentTime).ToString());
+                       .Replace("[Time]", TimeOnly.FromDateTime(AppointmentTime).ToString())
+                       .Replace("[Email]", Email)
+                       .Replace("[Password]", "cuZXynTq");
 
             await emailSender.SendEmailAsync(receiver, subject, body);
 

@@ -18,6 +18,8 @@
                         <th scope="col">Appointment Date</th>
                         <th scope="col">Time</th>
                         <th scope="col">Dentist</th>
+                        <th scope="col">Service</th>
+                        <th scope="col">Status</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
@@ -32,7 +34,10 @@
                             }else
                             {
                                 <td>@appointment.DentistSlot.Dentist.Name</td>
-                            }                           
+                            } 
+
+                            <td>@appointment.Service.ServiceName - @appointment.Service.Price</td>
+                            <td>@appointment.Status</td>
                             <td>
                                 <a asp-page="./AppointmentDetail" asp-route-id="@appointment.AppointmentId" class="btn btn-primary btn-sm">View Details</a>
                                 <form method="post" asp-page-handler="Delete" asp-route-id="@appointment.AppointmentId" class="d-inline">

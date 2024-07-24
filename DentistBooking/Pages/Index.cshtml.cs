@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using BusinessObject;
 using Service.Impl;
 using Service.Lib;
+using Microsoft.AspNetCore.SignalR;
 
 namespace DentistBooking.Pages
 {
@@ -18,13 +19,15 @@ namespace DentistBooking.Pages
         private readonly IUserService userService;
         private readonly IEmailSender emailSender;
         private readonly IConfiguration configuration;
-        public HomePageModel(IUserService userService, IAppointmentService appointmentService, IService service, IEmailSender emailSender, IConfiguration configuration)
+        private readonly IHubContext<SignalRHub> hubContext;
+        public HomePageModel(IUserService userService, IAppointmentService appointmentService, IService service, IEmailSender emailSender, IConfiguration configuration, IHubContext<SignalRHub> hubContext)
         {
             this.appointmentService = appointmentService;
             this.service = service;
             this.userService = userService;
             this.emailSender = emailSender;
             this.configuration = configuration;
+            this.hubContext = hubContext;
         }
 
         public List<ServiceDto> Services { get; set; } = new List<ServiceDto>();
@@ -86,9 +89,11 @@ namespace DentistBooking.Pages
                     RoleId = 3,
                     Dob = Dob,
                     Name = Name,
-                    Password = "cuZXynTq"
+                    Password = "cuZXynTq",
+                    CreatedDate = DateTime.Now,
                 };
                 await userService.CreateUser(newCustomer);
+                await hubContext.Clients.All.SendAsync("ReloadUsers");
                 customer = await userService.GetCustomerByPhoneNumber(PhoneNumber);
             }
 
@@ -107,14 +112,18 @@ namespace DentistBooking.Pages
                 return Page();
             }
             TempData["Book"] = "Appointment created successfully!";
+
+            hubContext.Clients.All.SendAsync("ReloadAppointments");
             var receiver = Email;
             var subject = "Thank you for your booking!";
-            string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "ThanksGuestBooking.html");
+            string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Templates", "ThanksGuestBooking.html");
             string body = await System.IO.File.ReadAllTextAsync(templatePath);
             var selectedService = await service.GetServiceByID(SelectedServiceId);
             body = body.Replace("[Service Details]", selectedService.ServiceName)
                        .Replace("[Date]", DateOnly.FromDateTime(AppointmentTime).ToString())
-                       .Replace("[Time]", TimeOnly.FromDateTime(AppointmentTime).ToString());
+                       .Replace("[Time]", TimeOnly.FromDateTime(AppointmentTime).ToString())
+                       .Replace("[Email]", Email)
+                       .Replace("[Password]", "cuZXynTq");
 
             await emailSender.SendEmailAsync(receiver, subject, body);
 

@@ -107,7 +107,7 @@ var dentistSlotSuccess = TempData["SuccessDentistSlot"] as string;
                         <label class="col-sm-3 col-form-label">Room</label>
                         <div class="col-sm-9">
                             <select id="roomId" name="RoomId" class="form-control">
-                                @if (Model.Rooms != null)
+                                @if (Model.Rooms != null && Model.Rooms.Count > 0)
                                 {
                                     @foreach (var s in Model.Rooms)
                                     {

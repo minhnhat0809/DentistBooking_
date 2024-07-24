@@ -19,8 +19,7 @@ namespace Service
         Task<List<RoleDto>> GetAllRoles();
         Task<List<UserDto>> GetAllUserByType(string type);
         Task<UserDto> GetCustomerByPhoneNumber(string phoneNumber);
-
-        
+        Task<UserDto> GetCustomerByEmail(string email);
         Task<ListUserResult> GetAllActiveCustomers();
 
     }

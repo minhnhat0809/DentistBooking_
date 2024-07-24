@@ -44,6 +44,7 @@ namespace DentistBooking.Pages.DentistPage.Appointments
 
         [BindProperty]
         public AppointmentDto Appointment { get; set; } = default!;
+
         public PrescriptionDto Prescription { get; set; } = default!;
         public SelectList StatusOptions { get; set; }
         public async Task<IActionResult> OnGetAsync(int? id)
@@ -54,18 +55,19 @@ namespace DentistBooking.Pages.DentistPage.Appointments
             }
 
             var appointment = await _appointmentService.GetAppointmentByID(id.Value);
+            
             if (appointment == null)
             {
                 return NotFound();
             }
             List<string> status = await _appointmentService.GetAllStatusOfAppointment(appointment.AppointmentId);
             if (status == null)
-            {
+            {   
                 return NotFound();
             }
             StatusOptions = new SelectList(new List<string> { "Happening", "Finished" , appointment.Status});
             Appointment = appointment;
-            Prescription = await _prescriptionService1.GetByAppointmentId(appointment.AppointmentId);
+            Prescription = _prescriptionService1.GetByAppointmentId(appointment.AppointmentId).Result;
             await LoadSelectLists();
 
             return Page();

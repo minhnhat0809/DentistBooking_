@@ -65,7 +65,7 @@
                 <div class="col-md-2">
                     <label asp-for="Appointment.MedicalRecordId" class="control-label">Medical Record</label>
                     <select name="Appointment.MedicalRecordId" id="MedicalRecordId" class="form-control">
-                        @if (Model.MedicalRecords != null)
+                        @if (Model.MedicalRecords[0] != null && Model.MedicalRecords.Count > 0)
                         {
                             @foreach (var s in Model.MedicalRecords)
                             {
