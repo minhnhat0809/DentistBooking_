@@ -52,33 +52,39 @@ namespace DentistBooking.Pages.StaffPages.Users
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
+            
             if (!ModelState.IsValid)
             {
-                ViewData["ClinicId"] = new SelectList(_clinicService.GetAllClinics().Result, "ClinicId", "ClinicName");
                 ViewData["RoleId"] = new SelectList(_userService.GetAllRoles().Result, "RoleId", "RoleName");
                 return Page();
             }
-
-
 
             try
             {
                 await _userService.UpdateUser(User);
                 await _hubContext.Clients.All.SendAsync("ReloadUsers");
+                return RedirectToPage("./Index");
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!UserExists(User.UserId))
                 {
-                    return NotFound();
+                    TempData["ErrorMessage"] = "User not found.";
+                    return RedirectToPage("/Error");
                 }
                 else
                 {
-                    throw;
+                    ModelState.AddModelError(string.Empty, "An error occurred while updating the appointment: " + ex.Message);
+                    ViewData["RoleId"] = new SelectList(_userService.GetAllRoles().Result, "RoleId", "RoleName");
+                    return Page();
                 }
             }
-
-            return RedirectToPage("./ViewUsers");
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "An unexpected error occurred: " + ex.Message);
+                ViewData["RoleId"] = new SelectList(_userService.GetAllRoles().Result, "RoleId", "RoleName");
+                return Page();
+            }
         }
 
         private bool UserExists(int id)

@@ -5,6 +5,7 @@ using AutoMapper;
 using BusinessObject;
 using BusinessObject.DTO;
 using Repository;
+using Repository.Impl;
 using Service.Exeption;
 
 namespace Service.Impl
@@ -67,6 +68,12 @@ namespace Service.Impl
 
             try
             {
+                var models = await _medicineRepo.GetAllMedicines();
+                models = models.Where(m => m.Status == true).ToList();
+                if (models.Any(u => u.MedicineName == medicine.MedicineName))
+                {
+                    throw new InvalidOperationException("Medicine Name is already taken.");
+                }
                 var model = await _medicineRepo.GetById(medicine.MedicineId);
                 if (model != null)
                 {
@@ -78,7 +85,7 @@ namespace Service.Impl
             catch (Exception ex)
             {
                 // Log exception
-                throw new ExceptionHandler.ServiceException("An error occurred while creating the medicine.", ex);
+                throw new ExceptionHandler.ServiceException(ex.Message);
             }
         }
 
@@ -91,6 +98,12 @@ namespace Service.Impl
 
             try
             {
+                var models = await _medicineRepo.GetAllMedicines();
+                models = models.Where(m => m.Status == true).ToList();
+                if (models.Any(u => u.MedicineName == medicine.MedicineName))
+                {
+                    throw new InvalidOperationException("Medicine Name is already taken.");
+                }
                 var model =await _medicineRepo.GetById(medicine.MedicineId);
                 if (model == null)
                 {
@@ -102,7 +115,7 @@ namespace Service.Impl
             catch (Exception ex)
             {
                 // Log exception
-                throw new ExceptionHandler.ServiceException("An error occurred while updating the medicine.", ex);
+                throw new ExceptionHandler.ServiceException(ex.Message);
             }
         }
 

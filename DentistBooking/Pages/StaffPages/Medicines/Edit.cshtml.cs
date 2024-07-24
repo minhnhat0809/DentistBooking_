@@ -11,6 +11,7 @@ using DataAccess;
 using Service;
 using Microsoft.AspNetCore.SignalR;
 using BusinessObject.DTO;
+using Service.Impl;
 
 namespace DentistBooking.Pages.StaffPages.Medicines
 {
@@ -53,31 +54,35 @@ namespace DentistBooking.Pages.StaffPages.Medicines
                 return Page();
             }
 
-
-
             try
             {
                 await _medicineService.UpdateMedicine(Medicine);
                 await _hubContext.Clients.All.SendAsync("ReloadMedicines");
+                return RedirectToPage("./Index");
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
-                if (!MedicineExists(Medicine.MedicineId))
+                if (!await MedicineExists(Medicine.MedicineId))
                 {
                     return NotFound();
                 }
                 else
                 {
-                    throw;
+                    ModelState.AddModelError(string.Empty, $"An error occurred: {ex.Message}");
+                    return Page();
                 }
             }
-
-            return RedirectToPage("./Index");
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"An error occurred: {ex.Message}");
+                return Page();
+            }
         }
-
-        private bool MedicineExists(int id)
+        private async Task<bool> MedicineExists(int id)
         {
-            return _medicineService.GetAllMedicines().Result.Any(e => e.MedicineId == id);
+            // Ensure that the service exists by querying the database
+            var services = await _medicineService.GetAllMedicines();
+            return services.Any(e => e.MedicineId == id);
         }
     }
 }

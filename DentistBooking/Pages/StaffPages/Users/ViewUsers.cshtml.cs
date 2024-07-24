@@ -2,8 +2,11 @@ using BusinessObject;
 using BusinessObject.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Service;
+using Service.Impl;
 using X.PagedList;
 
 namespace DentistBooking.Pages.StaffPages.Users;
@@ -31,27 +34,12 @@ public class ViewUsers : PageModel
 
     public List<string> Types = new List<string> { "All", "Dentist", "Customer" };
 
-    public void OnGet()
+    public async Task<IActionResult> OnGet()
     {
-        Users = userService.GetAllUserByType(SelectedUserType).Result;
-    }
-
-    public async Task<IActionResult> OnPost()
-    {
-        if (!ModelState.IsValid)
-        {
-            Users = userService.GetAllUserByType(SelectedUserType).Result;
-            return Page();
-        }
-
-        User.CreatedDate = DateTime.Now;
-            
-        User.Status = true;
-        User.RoleId = 3;
-        await userService.CreateUser(User);
-        await _hubContext.Clients.All.SendAsync("ReloadUsers");
-        
-        Users = userService.GetAllUserByType(SelectedUserType).Result;
+        Users = await userService.GetAllUserByType(SelectedUserType);
         return Page();
     }
+
+    
+    
 }
