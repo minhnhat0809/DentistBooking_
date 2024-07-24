@@ -106,7 +106,7 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
-app.UseStatusCodePages(async context =>
+/*app.UseStatusCodePages(async context =>
 {
     var response = context.HttpContext.Response;
     var request = context.HttpContext.Request;
@@ -115,7 +115,7 @@ app.UseStatusCodePages(async context =>
         response.Redirect("/Error");
     }
     await System.Threading.Tasks.Task.CompletedTask;
-});
+});*/
 
 app.MapHub<SignalRHub>("/SignalRHub");
 
