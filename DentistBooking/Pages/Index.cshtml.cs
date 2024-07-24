@@ -67,7 +67,7 @@ namespace DentistBooking.Pages
         { get; set; }
         public async Task OnGetAsync()
         {
-            Services = await service.GetAllServices();
+            Services = (await service.GetAllActiveServices()).Services;
             Dentists = await userService.GetAllDentistsByService(SelectedServiceId);
         }
         public async Task<IActionResult> OnGetDentistsByServiceAsync(int serviceId)
@@ -100,7 +100,8 @@ namespace DentistBooking.Pages
         {
             if (!ModelState.IsValid)
             {
-                Services = await service.GetAllServices();
+                Services = (await service.GetAllActiveServices()).Services;
+                Dentists = await userService.GetAllDentistsByService(SelectedServiceId);
                 return Page();
             }
 

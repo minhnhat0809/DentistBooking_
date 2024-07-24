@@ -9,6 +9,9 @@
     var appointmentSuccess = TempData["SuccessProcessingAppointmentError"] as string;
     var dentistSlotError = TempData["ErrorProcessingAppointment_DentistSlot"] as string;
     var dentistSlotSuccess = TempData["SuccessProcessingAppointment_DentistSlot"] as string;
+    
+    var error = TempData["ErrorDeleteAppointment"] as string;
+    
 }
 
     <div class="card shadow-sm">
@@ -120,6 +123,7 @@
                 <div class="form-group row text-center m-2">
                         <div class="col-sm-9 offset-sm-3">
                             <button type="submit" class="btn btn-primary btn-block" id="updateButton">Update</button>
+                            <button type="button" class="btn btn-danger btn-sm" onclick="openDeleteModal('@Model.Appointment.AppointmentId', '@Model.Appointment.Customer.Name')">Delete</button>
                         </div>
                     </div>
                 </form>
@@ -182,12 +186,44 @@
     </div>
 </div>
 
-
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirm Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="deleteForm" method="post" asp-page-handler="Delete">
+                    <input type="hidden" id="appointmentId" name="AppointmentId" />
+                    <div class="form-group">
+                        <label for="reason">Reason for deletion</label>
+                        <input type="text" asp-for="@Model.Reason" class="form-control" id="reason" name="Reason" />
+                    </div>
+                    <div class="form-group">
+                        <label for="customerName">Customer Name</label><span class="text-danger" style="font-size:12px"> (You must type customer name correctly!)</span>
+                        <input type="text" asp-for="@Model.CustomerName" class="form-control" id="customerName" name="CustomerName" placeholder="" />
+                    </div>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
+    function openDeleteModal(appointmentId, customerName) {
+        $('#appointmentId').val(appointmentId);
+        $('#customerName').attr('placeholder', customerName);
+        $('#deleteConfirmationModal').modal('show');
+    }
+    
     $(document).ready(function () {
         var appointmentError = '@appointmentError';
         if (appointmentError.trim() !== '') {
@@ -248,6 +284,23 @@
                 alertPlaceholder.children('.alert').alert('close');
             }, 5000);
         }
+
+        var error = '@error';
+        if (error.trim() !== '') {
+            var alertPlaceholder = $('#customAlertPlaceholder');
+            var alertHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'
+                + error
+                + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
+                + '<span aria-hidden="true">&times;</span>'
+                + '</button></div>';
+            alertPlaceholder.html(alertHtml);
+
+            setTimeout(function () {
+                alertPlaceholder.children('.alert').alert('close');
+            }, 3000);
+        }
+
+        
 
         $('#dentistId').change(function () {
             var dentistId = $(this).val();

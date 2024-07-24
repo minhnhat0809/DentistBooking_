@@ -111,7 +111,10 @@ namespace DataAccess
         public async Task<List<User>> GetAllDentistsByService(int serviceId)
         {
             var context = new BookingDentistDbContext();
-            var dentistService = context.DentistServices.Include(ds => ds.Dentist).Where(ds => ds.ServiceId == serviceId).ToList();
+            var dentistService = context.DentistServices
+                .Include(ds => ds.Dentist)
+                .Where(ds => ds.ServiceId == serviceId)
+                .ToList();
             dentistService.Where(ds => ds.Status == true).ToList();
 
             var dentistList = dentistService.Select(ds => ds.Dentist).ToList();

@@ -230,12 +230,12 @@
                                     <label for="SelectedDentistId" class="text-start w-100">Select A Dentist (Optional)</label>
                                     <select asp-for="SelectedDentistId" class="form-select bg-light border-0" style="height: 55px;">
                                         <option selected disabled>Select A Dentist (Optional)</option>
-                                        <option>Anyone</option>
+                                        <option value="0">Anyone</option>
                                         @if (Model.Dentists != null)
                                         {
                                             @foreach (var dentist in Model.Dentists)
                                             {
-                                                <option value="@dentist.UserId">@dentist.UserName</option>
+                                                <option value="@dentist.UserId">@dentist.Name</option>
                                             }
                                         }
                                         else
