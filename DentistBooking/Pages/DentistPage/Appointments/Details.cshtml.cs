@@ -25,22 +25,38 @@ namespace DentistBooking.Pages.DentistPage.Appointments
         public PrescriptionDto Prescription { get; set; } = default!;
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null)
+            // check null
+            if (id != null)
             {
-                return NotFound();
-            }
+                try
+                {
+                    // check exist
+                    var appointment = await _appointmentService.GetAppointmentByID(id.Value);
+                    if (appointment == null)
+                    {
+                        TempData["ErrorMessage"] = "Appointment not found.";
+                        return RedirectToPage("/Error");
+                    }
 
-            var appointment = await _appointmentService.GetAppointmentByID(id.Value);
-            if (appointment == null)
-            {
-                return NotFound();
+                    Appointment = appointment;
+
+                    // try get prescription
+                    Prescription = await _prescriptionService.GetByAppointmentId(appointment.AppointmentId);
+
+                    return Page();
+                }
+                catch (Exception ex)
+                {
+                    // Handle unexpected errors
+                    TempData["ErrorMessage"] = "An unexpected error occurred: " + ex.Message;
+                    return RedirectToPage("/Error");
+                }
             }
             else
             {
-                Appointment = appointment;
-                Prescription = await _prescriptionService.GetByAppointmentId(appointment.AppointmentId);
+                TempData["ErrorMessage"] = "Appointment ID is missing.";
+                return RedirectToPage("/Error");
             }
-            return Page();
         }
     }
 }

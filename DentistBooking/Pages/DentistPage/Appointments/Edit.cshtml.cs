@@ -46,39 +46,67 @@ namespace DentistBooking.Pages.DentistPage.Appointments
         public AppointmentDto Appointment { get; set; } = default!;
 
         public PrescriptionDto Prescription { get; set; } = default!;
+
         public SelectList StatusOptions { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null)
+            // check null
+            if (id != null)
             {
-                return NotFound();
-            }
+                // check role
+                var role = HttpContext.Session.GetString("Role");
+                if (role == "Dentist")
+                {
+                    try
+                    {
+                        var appointment = await _appointmentService.GetAppointmentByID(id.Value);
+                        // check exist
+                        if (appointment != null)
+                        {
+                            // try get status
+                            if(appointment.Status != null)
+                            {
+                                if(appointment.Status == "Happening" || appointment.Status == "Finished") StatusOptions = new SelectList(new List<string> { "Happening", "Finished"});
+                                else StatusOptions = new SelectList(new List<string> { "Happening", "Finished", appointment.Status });
+                            }
+                            
+                            Appointment = appointment;
 
-            var appointment = await _appointmentService.GetAppointmentByID(id.Value);
-            
-            if (appointment == null)
+                            // try get prescription 
+                           Prescription = await _prescriptionService1.GetByAppointmentId(appointment.AppointmentId);
+
+                            await LoadSelectLists();
+                            return Page();
+                        }
+                        else
+                        {
+                            TempData["ErrorMessage"] = "Appointment not found.";
+                            return RedirectToPage("/Error");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["ErrorMessage"] = "An unexpected error occurred: " + ex.Message;
+                        return RedirectToPage("/Error");
+                    }
+                }
+                else return RedirectToPage("/Denied");
+            }
+            else
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Appointment ID is missing.";
+                return RedirectToPage("/Error");
             }
-            List<string> status = await _appointmentService.GetAllStatusOfAppointment(appointment.AppointmentId);
-            if (status == null)
-            {   
-                return NotFound();
-            }
-            StatusOptions = new SelectList(new List<string> { "Happening", "Finished" , appointment.Status});
-            Appointment = appointment;
-            Prescription = _prescriptionService1.GetByAppointmentId(appointment.AppointmentId).Result;
-            await LoadSelectLists();
-
-            return Page();
         }
+
 
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
                 await LoadSelectLists();
-                StatusOptions = new SelectList(new List<string> { "Happening", "Finished" , Appointment.Status});
+                StatusOptions = new SelectList(new List<string> { "Happening", "Finished", Appointment.Status });
                 return Page();
             }
 
@@ -86,19 +114,20 @@ namespace DentistBooking.Pages.DentistPage.Appointments
             {
                 await _appointmentService.PutAppointment(Appointment);
                 await _hubContext.Clients.All.SendAsync("ReloadAppointments");
+                return RedirectToPage("./Index");
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                // Handle concurrency issues
                 if (!AppointmentExists(Appointment.AppointmentId))
                 {
-                    return NotFound();
+                    TempData["ErrorMessage"] = "Appointment not found.";
+                    return RedirectToPage("/Error");
                 }
                 else
                 {
                     ModelState.AddModelError(string.Empty, "An error occurred while updating the appointment: " + ex.Message);
                     await LoadSelectLists();
-                    StatusOptions = new SelectList(new List<string> { "Happening", "Finished", Appointment.Status});
+                    StatusOptions = new SelectList(new List<string> { "Happening", "Finished", Appointment.Status });
                     return Page();
                 }
             }
@@ -106,32 +135,45 @@ namespace DentistBooking.Pages.DentistPage.Appointments
             {
                 ModelState.AddModelError(string.Empty, "An unexpected error occurred: " + ex.Message);
                 await LoadSelectLists();
-                StatusOptions = new SelectList(new List<string> { "Happening", "Finished", Appointment.Status});
+                StatusOptions = new SelectList(new List<string> { "Happening", "Finished", Appointment.Status });
                 return Page();
             }
-
-            return RedirectToPage("./Index");
         }
-
 
         private bool AppointmentExists(int id)
         {
-            return _appointmentService.GetAllAppointments().Result.Any(e => e.AppointmentId == id);
+            try
+            {
+                return _appointmentService.GetAllAppointments().Result.Any(e => e.AppointmentId == id);
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "An error occurred while checking appointment existence: " + ex.Message;
+                return false;
+            }
         }
+
 
         private async Task LoadSelectLists()
         {
-            var users = await _userService.GetAllUsers();
-            var dentistSlots = await _dentistSlotService.GetAllDentistSlots();
-            var medicalRecords = await _medicalRecordService.GetAllMedicalRecords();
-            var services = await _serviceService.GetAllServices();
+            try
+            {
+                var users = await _userService.GetAllUsers();
+                var dentistSlots = await _dentistSlotService.GetAllDentistSlots();
+                var medicalRecords = await _medicalRecordService.GetAllMedicalRecords();
+                var services = await _serviceService.GetAllServices();
 
-            ViewData["CreateBy"] = new SelectList(users, "UserId", "Name");
-            ViewData["CustomerId"] = new SelectList(users, "UserId", "Name");
-            ViewData["DentistSlotId"] = new SelectList(dentistSlots, "DentistSlotId", "DentistSlotId");
-            ViewData["MedicalRecordId"] = new SelectList(medicalRecords, "MediaRecordId", "MediaRecordId");
-            ViewData["ModifiedBy"] = new SelectList(users, "UserId", "Name");
-            ViewData["ServiceId"] = new SelectList(services, "ServiceId", "ServiceName");
+                ViewData["CreateBy"] = new SelectList(users, "UserId", "Name");
+                ViewData["CustomerId"] = new SelectList(users, "UserId", "Name");
+                ViewData["DentistSlotId"] = new SelectList(dentistSlots, "DentistSlotId", "DentistSlotId");
+                ViewData["MedicalRecordId"] = new SelectList(medicalRecords, "MediaRecordId", "MediaRecordId");
+                ViewData["ModifiedBy"] = new SelectList(users, "UserId", "Name");
+                ViewData["ServiceId"] = new SelectList(services, "ServiceId", "ServiceName");
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "An error occurred while loading select lists: " + ex.Message;
+            }
         }
     }
 }
