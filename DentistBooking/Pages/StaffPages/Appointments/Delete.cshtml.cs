@@ -109,9 +109,12 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Templates", "SorryForDenied.html");
             string body = await System.IO.File.ReadAllTextAsync(templatePath);
             body = body.Replace("[Service Details]", oldAppointment.Service.ServiceName)
-                       .Replace("[Date]", DateOnly.FromDateTime(oldAppointment.TimeStart).ToString())
-                       .Replace("[Time]", TimeOnly.FromDateTime(oldAppointment.TimeStart).ToString())
-                       .Replace("[Reason for Denial]", Reason);
+                       .Replace("[Date]", oldAppointment.TimeStart.ToString("yyyy-MM-dd"))
+                       .Replace("[Time]", oldAppointment.TimeStart.ToString("HH:mm"))
+                       .Replace("[Reason for Denial]", Reason)
+                       .Replace("[Contact Information]", "support@gooddentist.com"); 
+
+            await emailSender.SendEmailAsync(receiver, subject, body);
 
             await emailSender.SendEmailAsync(receiver, subject, body);
             await _hubContext.Clients.All.SendAsync("ReloadAppointments");
