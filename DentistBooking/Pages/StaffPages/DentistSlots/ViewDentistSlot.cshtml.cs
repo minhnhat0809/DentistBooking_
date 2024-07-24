@@ -131,6 +131,18 @@ public class ViewDentistSlot : PageModel
     
     public async Task<IActionResult> OnPostReactivateAsync(int slotId)
     {
+        string role = HttpContext.Session.GetString("Role");
+        if (!role.IsNullOrEmpty())
+        {
+            if (!role.Equals("Staff"))
+            {
+                return RedirectToPage("/Index");
+            }
+        }
+        else
+        {
+            return RedirectToPage("/Index");
+        }
         DentistSlotResult dentistSlotResult = await dentistSlotService.UpdateStatusDentistSlot(true, slotId);
         Dentists =  userService.GetAllUserByType("Dentist").Result;
         Rooms =  _roomService.GetAllActiveRooms().Result.Rooms;
@@ -148,6 +160,18 @@ public class ViewDentistSlot : PageModel
 
     public async Task<IActionResult> OnPostDeleteAsync(int slotId)
     {
+        string role = HttpContext.Session.GetString("Role");
+        if (!role.IsNullOrEmpty())
+        {
+            if (!role.Equals("Staff"))
+            {
+                return RedirectToPage("/Index");
+            }
+        }
+        else
+        {
+            return RedirectToPage("/Index");
+        }
         DentistSlotResult dentistSlotResult = await dentistSlotService.UpdateStatusDentistSlot(false, slotId);
         Dentists =  userService.GetAllUserByType("Dentist").Result;
         Rooms =  _roomService.GetAllActiveRooms().Result.Rooms;
