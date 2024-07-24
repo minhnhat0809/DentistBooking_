@@ -20,10 +20,11 @@ namespace Service.Impl
         private readonly IServiceRepo serviceRepo;
         private readonly IUserRepo userRepo;
         private readonly IMedicalRecordRepo medicalRecordRepo;
+        private readonly IDentistServiceRepo _dentistServiceRepo;
         private readonly IMapper mapper;
 
         public AppointmentService(IAppointmentRepo appointmentRepo, IDentistSlotRepo dentistSlotRepo, 
-            IServiceRepo serviceRepo, IUserRepo userRepo, IMedicalRecordRepo medicalRecordRepo,
+            IServiceRepo serviceRepo, IUserRepo userRepo, IMedicalRecordRepo medicalRecordRepo, IDentistServiceRepo _dentistServiceRepo,
             IMapper mapper)
         {
             this.appointmentRepo = appointmentRepo;
@@ -32,6 +33,7 @@ namespace Service.Impl
             this.userRepo = userRepo;
             this.mapper = mapper;
             this.medicalRecordRepo = medicalRecordRepo;
+            this._dentistServiceRepo = _dentistServiceRepo;
         }
         public async Task<AppointmentResult> AddAppointment(AppointmentDto appointment, string email)
         {
@@ -195,6 +197,102 @@ namespace Service.Impl
                 appointment.CustomerId = customerId;
                 appointment.Status = "Processing";
                 appointment.ServiceId = serviceId;
+
+                await appointmentRepo.CreateAppointment(appointment);
+                AddError("Success", "Create Successfully!");
+                return errors;
+            }
+            catch (Exception e)
+            {
+                AddError("Error", "Error while creating appointment");
+                return errors;
+            }
+        }
+        
+        public async Task<Dictionary<string, string>> CreateAppointmentWithDentist(DateTime TimeStart, int customerId, DateOnly selectedDate, int serviceId, int dentistId)
+        {
+            Dictionary<string, string> errors = new Dictionary<string, string>();
+
+            void AddError(string field, string message)
+            {
+                if (!errors.ContainsKey(field))
+                {
+                    errors[field] = "";
+                }
+                errors[field] = message;
+            }
+
+            try
+            {
+                BusinessObject.Service serviceDto = await serviceRepo.GetServiceByID(serviceId);
+                if (serviceDto == null)
+                {
+                    AddError("Service", "Service is not existed!");
+                    return errors;
+                }
+
+                if (dentistId > 0)
+                {
+                    User? dentist = await userRepo.GetById(dentistId);
+                    if (dentist == null)
+                    {
+                        AddError("Dentist", "Dentist is not existed!");
+                        return errors;
+                    }
+
+                    List<BusinessObject.Service> services = await _dentistServiceRepo.GetAllServiceByDentistActive(dentistId);
+                    if (!services.Any(s => s.ServiceId == serviceId))
+                    {
+                        AddError("Service", "Dentist does not do this service!");
+                        return errors;
+                    }
+                }
+
+                
+
+                if (!CheckTimeStart(TimeStart))
+                {
+                    AddError("TimeStart", "Time must be in range [8:00-11:30] & [13:00-19:00]");
+                    return errors;
+                }
+
+                List<Appointment> appointments = await appointmentRepo.GetAllAppointmentsOfCustomer(customerId);
+
+                var appoinmentList = appointments.Where(a => DateOnly.FromDateTime(a.TimeStart) == selectedDate).ToList();
+                
+                if (appoinmentList != null)
+                {
+                    foreach (var ap in appoinmentList)
+                    {
+                        TimeSpan apStartTime = ap.TimeStart.TimeOfDay;
+                        TimeSpan apEndTime = ap.TimeEnd.TimeOfDay;
+
+                        TimeSpan timeStart = TimeStart.TimeOfDay;
+                        TimeSpan timeEnd = TimeStart.AddMinutes(30).TimeOfDay;
+
+                        if ((timeStart >= apStartTime && timeStart < apEndTime) || (timeStart < apStartTime && timeEnd > apStartTime))
+                        {
+                            AddError("",$"There is an appointment overlapping at {ap.TimeStart} - {ap.TimeEnd.TimeOfDay}'");
+                            return errors;
+                        }
+                    }
+                }
+
+                DateTime combinedDateTime = new DateTime(selectedDate.Year, selectedDate.Month,
+                    selectedDate.Day, TimeStart.Hour, TimeStart.Minute, TimeStart.Second);
+
+
+                Appointment appointment = new Appointment();
+                appointment.TimeStart = combinedDateTime;
+                appointment.TimeEnd = TimeStart.AddMinutes(30);
+                appointment.CustomerId = customerId;
+                appointment.Status = "Processing";
+                appointment.ServiceId = serviceId;
+
+                if (dentistId > 0)
+                {
+                    appointment.CreateBy = dentistId;
+                }
 
                 await appointmentRepo.CreateAppointment(appointment);
                 AddError("Success", "Create Successfully!");

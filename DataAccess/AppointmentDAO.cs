@@ -73,8 +73,12 @@ namespace DataAccess
         public async Task<List<Appointment>> getAllAppointmentsOfCustomer(int customerId)
         {
             var context = new BookingDentistDbContext();
-            var appointments = await context.Appointments.Include(ap => ap.DentistSlot)
-                .ThenInclude(ds => ds.Dentist).Where(ap => ap.CustomerId == customerId).OrderBy(ap => ap.TimeStart).ToListAsync();
+            var appointments = await context.Appointments
+                .Include(ap => ap.DentistSlot)
+                .ThenInclude(ds => ds.Dentist)
+                .Include(ap => ap.Service)
+                .Include(ap => ap.Customer)
+                .Where(ap => ap.CustomerId == customerId).OrderBy(ap => ap.TimeStart).ToListAsync();
             return appointments;
         }
 

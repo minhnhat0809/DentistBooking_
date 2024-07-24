@@ -12,6 +12,8 @@ namespace Repository.Impl
     public class DentistServiceRepo : IDentistServiceRepo
     {
         public async Task<List<Service>> GetAllServiceByDentist(int dentistId) => await DentistServiceDAO.Instance.getAllServiceByDentist(dentistId);
+        
+        public async Task<List<Service>> GetAllServiceByDentistActive(int dentistId) => await DentistServiceDAO.Instance.getAllServiceByDentistActive(dentistId);
 
     }
 }

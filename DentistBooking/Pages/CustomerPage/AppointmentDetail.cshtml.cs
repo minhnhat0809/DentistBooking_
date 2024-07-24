@@ -28,12 +28,12 @@ namespace DentistBooking.Pages.CustomerPage
             if (Appointment.DentistSlot != null)
             {
                 Services = await dentistService.GetAllServiceByDentist((int)Appointment.DentistSlot.DentistId, (int)Appointment.ServiceId);
-                return RedirectToPage(new {id = id});
+                return Page();
             }
             else
             {
                 Services = await service.GetAllServicesForCustomer((int)Appointment.ServiceId);
-                return RedirectToPage(new { id = id });
+                return Page();
             }
         }
 

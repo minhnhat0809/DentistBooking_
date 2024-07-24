@@ -37,5 +37,8 @@ namespace Service
 
 
         Task<List<AppointmentDto>> GetAllAppointmentByDentistId(int dentistId);
+
+        Task<Dictionary<string, string>> CreateAppointmentWithDentist(DateTime TimeStart, int customerId,
+            DateOnly selectedDate, int serviceId, int dentistId);
     }
 }
