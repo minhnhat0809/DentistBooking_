@@ -14,7 +14,7 @@ public class ViewPrescriptions : PageModel
 {
     private readonly IPrescriptionService prescriptionService;
     private readonly IUserService userService;
-
+    
     public ViewPrescriptions(IPrescriptionService prescriptionService, IUserService userService)
     {
         this.prescriptionService = prescriptionService;
@@ -32,28 +32,36 @@ public class ViewPrescriptions : PageModel
 
     public async Task<IActionResult> OnGet()
     {
-        string? email = HttpContext.Session.GetString("Email");
-        if (!string.IsNullOrEmpty(email))
+        try
         {
-            var users = await userService.GetAllDentists();
-            if (users != null)
-            {
-                var user = users.FirstOrDefault(x => x.Email == email);
-                if (user == null)
+            string? email = "jane.smith@gmail.com";//HttpContext.Session.GetString("Email");
+            /*if (!string.IsNullOrEmpty(email))
+            {*/
+                var users = await userService.GetAllCustomers();
+                if (users != null)
+                {
+                    var user = users.FirstOrDefault(x => x.Email == email);
+                    if (user == null)
+                    {
+                        TempData["ErrorMessage"] = "No dentist found with the provided email.";
+                        return RedirectToPage("/Error");
+                    }
+                    var prescriptions = await prescriptionService.GetAllPrescriptionByCustomer(user.UserId);
+                    Prescriptions = prescriptions.ToPagedList(PageNumber, PageSize);
+                    return Page();
+                }
+                else
                 {
                     TempData["ErrorMessage"] = "No dentist found with the provided email.";
                     return RedirectToPage("/Error");
                 }
-                var prescriptions = await prescriptionService.GetAllPrescriptionByCustomer(user.UserId);
-                Prescriptions = prescriptions.ToPagedList(PageNumber, PageSize);
-                return Page();
-            }
-            else
-            {
-                TempData["ErrorMessage"] = "No dentist found with the provided email.";
-                return RedirectToPage("/Error");
-            }
+            /*}
+            else return RedirectToPage("/Denied");*/
         }
-        else return RedirectToPage("/Denied");
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
+            return Page();
+        }
     }
 }
