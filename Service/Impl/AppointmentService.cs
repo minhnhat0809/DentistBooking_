@@ -840,12 +840,12 @@ namespace Service.Impl
             return viewModels;
         }
 
-        public AppointmentResult DeleteAppointmentForStaff(int appointmentId, string customerName, string reason)
+        public async Task<AppointmentResult> DeleteAppointmentForStaff(int appointmentId, string customerName, string reason)
         {
             AppointmentResult appointmentResult = new AppointmentResult();
             try
             {
-                Appointment? appointment = appointmentRepo.GetAppointmentById(appointmentId).Result;
+                Appointment? appointment = await appointmentRepo.GetAppointmentById(appointmentId);
                 if (!appointment.Customer.Name.Equals(customerName))
                 {
                     appointmentResult.Message = "Wrong customer name!";

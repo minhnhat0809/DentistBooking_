@@ -94,7 +94,7 @@ namespace DentistBooking.Pages.CustomerPage
                 return RedirectToPage(new {id = appointmentId});
             }
             
-            AppointmentResult result = appointmentService.DeleteAppointmentForStaff(appointmentId, CustomerName, "");
+            AppointmentResult result = await appointmentService.DeleteAppointmentForStaff(appointmentId, CustomerName, "");
             
             await hubContext.Clients.All.SendAsync("ReloadAppointments");
             
