@@ -1,4 +1,7 @@
 ﻿@page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.IdentityModel.Tokens
+@using X.PagedList.Mvc.Core
 @model DentistBooking.Pages.CustomerPage.InitialPageModel
 
 @{
@@ -9,54 +12,56 @@
 <h1>Services</h1>
 <table class="table table-bordered table-striped bg-light">
     <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Service[0].ServiceName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Service[0].Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Service[0].Status)
-            </th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Services[0].ServiceName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Services[0].Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Services[0].Status)
+        </th>
+        <th></th>
+    </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Service) {
+    @if (!Model.Services.IsNullOrEmpty())
+    {
+        @foreach (var item in Model.Services)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ServiceName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    <a asp-page="./Book" asp-route-id="@item.ServiceId">Book</a>
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ServiceName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                <a asp-page="./Book" asp-route-id="@item.ServiceId">Book</a>
-            </td>
+            <td>No service found</td>
         </tr>
-}
+    }
+    
     </tbody>
 </table>
-<div>
-    @if (Model.Service.HasPreviousPage)
-    {
-        <a asp-page="./Index" asp-route-pageNumber="@(Model.Service.PageNumber - 1)" asp-route-pageSize="@Model.PageSize">Previous</a>
-    }
-    else
-    {
-        <span>Previous</span>
-    }
 
-    @if (Model.Service.HasNextPage)
-    {
-        <a asp-page="./Index" asp-route-pageNumber="@(Model.Service.PageNumber + 1)" asp-route-pageSize="@Model.PageSize">Next</a>
-    }
-    else
-    {
-        <span>Next</span>
-    }
+<div class="pagination">
+    @Html.PagedListPager(Model.Services, pageNumber => Url.Page("./InitialPage", new { PageNumber = pageNumber, PageSize = Model.PageSize }), PagedListRenderOptions.ClassicPlusFirstAndLast)
 </div>
+
 <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
 
 <script src="~/js/site.js"></script>
+
+<script>
+
+
+</script>

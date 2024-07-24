@@ -30,6 +30,11 @@ namespace DentistBooking.Pages.StaffPages.Service
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Staff")
+            {
+                return RedirectToPage("/Denied");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -53,30 +58,39 @@ namespace DentistBooking.Pages.StaffPages.Service
                 return Page();
             }
 
-
             try
             {
+                Service.Status = true;
                 await _service.UpdateService(Service);
                 await _hubContext.Clients.All.SendAsync("ReloadServices");
+                return RedirectToPage("./Index");
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
-                if (!ServiceExists(Service.ServiceId))
+                if (!await ServiceExistsAsync(Service.ServiceId))
                 {
                     return NotFound();
                 }
                 else
                 {
-                    throw;
+                    ModelState.AddModelError(string.Empty, $"An error occurred: {ex.Message}");
+                    return Page();
                 }
             }
-
-            return RedirectToPage("./Index");
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"An error occurred: {ex.Message}");
+                return Page();
+            }
         }
 
-        private bool ServiceExists(int id)
+        // Async version of ServiceExists method
+        private async Task<bool> ServiceExistsAsync(int id)
         {
-            return _service.GetAllServices().Result.Any(e => e.ServiceId == id);
+            // Ensure that the service exists by querying the database
+            var services = await _service.GetAllServices();
+            return services.Any(e => e.ServiceId == id);
         }
+
     }
 }

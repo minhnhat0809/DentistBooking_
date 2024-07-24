@@ -113,7 +113,7 @@ namespace DataAccess
             var context = new BookingDentistDbContext();
             var dentistService = context.DentistServices
                 .Include(ds => ds.Dentist)
-                .Where(ds => ds.ServiceId == serviceId)
+                .Where(ds => ds.ServiceId == serviceId && ds.Dentist.Status == true)
                 .ToList();
             dentistService.Where(ds => ds.Status == true).ToList();
 

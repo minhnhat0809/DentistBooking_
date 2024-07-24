@@ -31,15 +31,16 @@ namespace DentistBooking.Pages.AdminPage.Users
         public UserDto User { get; set; } = default!;
         public async Task<IActionResult> OnGetAsync(int? id)
         {
+
             // check null
             if (id != null)
             {
                 // check role
-                /*var role = HttpContext.Session.GetString("Role");
+                var role = HttpContext.Session.GetString("Role");
                 if (role != "Dentist")
                 {
                     return RedirectToPage("/Denied");
-                }*/
+                }
                 try
                 {
                     var user = await _userService.GetById(id.Value);

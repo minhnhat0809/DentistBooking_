@@ -23,7 +23,7 @@ namespace DentistBooking.Pages.CustomerPage
             this.service = service;
         }
 
-        public IPagedList<ServiceDto> Service { get;set; } = default!;
+        public IPagedList<ServiceDto> Services { get;set; } = default!;
         [BindProperty(SupportsGet = true)]
         public int PageNumber { get; set; } = 1;
 
@@ -32,8 +32,8 @@ namespace DentistBooking.Pages.CustomerPage
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var services = await service.GetAllServices();
-            Service = services.ToPagedList(PageNumber, PageSize);
+            var services = (await service.GetAllActiveServices()).Services;
+            Services = services.ToPagedList(PageNumber, PageSize);
             return Page();
         }
     }

@@ -96,7 +96,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             }
 
             AppointmentDto oldAppointment = await _appointmentService.GetAppointmentByID(appointmentId);
-            AppointmentResult result = _appointmentService.DeleteAppointmentForStaff(appointmentId, CustomerName, Reason);
+            AppointmentResult result = await _appointmentService.DeleteAppointmentForStaff(appointmentId, CustomerName, Reason);
             if (!result.Message.Equals("Success"))
             {
                 TempData["ErrorDeleteAppointment"] = result.Message;
@@ -104,6 +104,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
                 return Page();
             }
             TempData["SuccessDeleteAppointment"] = "Delete successfully!";
+            await _hubContext.Clients.All.SendAsync("ReloadAppointments");
             var receiver = oldAppointment.Customer.Email;
             var subject = "Your appointment has been denied!";
             string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Templates", "SorryForDenied.html");

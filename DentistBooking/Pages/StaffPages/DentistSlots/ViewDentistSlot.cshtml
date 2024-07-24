@@ -13,7 +13,9 @@ var dentistSlotSuccess = TempData["SuccessDentistSlot"] as string;
     <title>Select Dentist and Date</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <style>
-        
+        .btn-action {
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body>
@@ -51,6 +53,7 @@ var dentistSlotSuccess = TempData["SuccessDentistSlot"] as string;
                 <th>Time Start</th>
                 <th>Time End</th>
                 <th>Room Number</th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -60,6 +63,31 @@ var dentistSlotSuccess = TempData["SuccessDentistSlot"] as string;
                 <td>@slot.TimeStart.ToString("HH:mm")</td>
                 <td>@slot.TimeEnd.ToString("HH:mm")</td>
                 <td>@slot.Room.RoomNumber</td>
+                <td>
+                    @if(slot.Status == false)
+                    {
+                        <form method="post" asp-page-handler="Reactivate" style="display:inline;">
+                            <input type="hidden" name="slotId" value="@slot.DentistSlotId"/>
+                            <button type="submit" class="btn btn-success btn-action">Reactivate</button>
+                        </form>
+                        <form method="post" asp-page-handler="Delete" style="display:inline;">
+                            <input type="hidden" name="slotId" value="@slot.DentistSlotId"/>
+                            <button type="submit" class="btn btn-danger btn-action" disabled="disabled">Delete</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form method="post" asp-page-handler="Reactivate" style="display:inline;">
+                            <input type="hidden" name="slotId" value="@slot.DentistSlotId"/>
+                            <button type="submit" class="btn btn-success btn-action" disabled="disabled">Reactivate</button>
+                        </form>
+                        <form method="post" asp-page-handler="Delete" style="display:inline;">
+                            <input type="hidden" name="slotId" value="@slot.DentistSlotId"/>
+                            <button type="submit" class="btn btn-danger btn-action">Delete</button>
+                        </form>
+                    }
+                   
+                </td>
             </tr>
             }
             </tbody>

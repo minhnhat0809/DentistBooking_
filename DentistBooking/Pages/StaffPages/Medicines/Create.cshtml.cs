@@ -26,6 +26,11 @@ namespace DentistBooking.Pages.StaffPages.Medicines
 
         public IActionResult OnGet()
         {
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Staff")
+            {
+                return RedirectToPage("/Denied");
+            }
             // check role
             return Page();
         }
@@ -40,12 +45,27 @@ namespace DentistBooking.Pages.StaffPages.Medicines
             {
                 return Page();
             }
-            // add medicine
-            Medicine.Status = true;
-            await _medicineService.CreateMedicine(Medicine);
-            // signalR real-time
-            await _hubContext.Clients.All.SendAsync("ReloadMedicines");
-            return RedirectToPage("./Index");
+
+            try
+            {
+                var existingMedicine = await _medicineService.GetById(Medicine.MedicineId);
+                if (existingMedicine != null)
+                {
+                    ModelState.AddModelError(string.Empty, $"A medicine with ID {Medicine.MedicineId} already exists.");
+                    return Page();
+                }
+                Medicine.Status = true;
+                await _medicineService.CreateMedicine(Medicine);
+                await _hubContext.Clients.All.SendAsync("ReloadMedicines");
+
+                return RedirectToPage("./Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"An error occurred while creating the medicine: {ex.Message}");
+                return Page();
+            }
         }
+
     }
 }

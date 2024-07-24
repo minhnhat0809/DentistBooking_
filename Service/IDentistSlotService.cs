@@ -26,5 +26,7 @@ namespace Service
         ListDentistSlotResult GetDentistSlotForAppointment(List<DentistSlot> dentistSlots, int dentistSlotId);
 
         DentistSlotResult GetDentistSlotByAppointmentTimeStart(DateTime TimeStart, int dentistId);
+
+        Task<DentistSlotResult> UpdateStatusDentistSlot(bool status, int dentistSlotId);
     }
 }

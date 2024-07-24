@@ -10,6 +10,7 @@ using DataAccess;
 using Service;
 using Microsoft.AspNetCore.SignalR;
 using BusinessObject.DTO;
+using Service.Impl;
 
 namespace DentistBooking.Pages.StaffPages.MedicalRecords
 {
@@ -28,6 +29,11 @@ namespace DentistBooking.Pages.StaffPages.MedicalRecords
 
         public IActionResult OnGet()
         {
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Staff")
+            {
+                return RedirectToPage("/Denied");
+            }
             ViewData["CustomerId"] = new SelectList(_userService.GetAllCustomers().Result, "UserId", "Name");
             return Page();
         }
@@ -39,15 +45,25 @@ namespace DentistBooking.Pages.StaffPages.MedicalRecords
         {
             if (!ModelState.IsValid)
             {
+                ViewData["CustomerId"] = new SelectList(_userService.GetAllCustomers().Result, "UserId", "Name");
                 return Page();
             }
-            MedicalRecord.TimeStart = DateTime.Now;
-            MedicalRecord.Duration = TimeOnly.FromDateTime(MedicalRecord.TimeStart);
-            MedicalRecord.Status = true;
-            await _medicalRecordService.CreateMedicalRecord(MedicalRecord);
-            await _hubContext.Clients.All.SendAsync("ReloadMedicalRecords");
+            try
+            {
+                
+                MedicalRecord.TimeStart = DateTime.Now;
+                MedicalRecord.Duration = TimeOnly.FromDateTime(MedicalRecord.TimeStart);
+                MedicalRecord.Status = true;
+                await _medicalRecordService.CreateMedicalRecord(MedicalRecord);
+                await _hubContext.Clients.All.SendAsync("ReloadMedicalRecords");
 
-            return RedirectToPage("./Index");
+                return RedirectToPage("./Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"An error occurred while creating the medicine: {ex.Message}");
+                return Page();
+            }
         }
     }
 }

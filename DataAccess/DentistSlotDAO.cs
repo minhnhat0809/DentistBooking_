@@ -52,7 +52,8 @@ namespace DataAccess
             var dentistSlotList = await context.DentistSlots
                 .Include(dl => dl.Room)
                 .Include(ds => ds.Appointments)
-                .Where(ds => ds.DentistId == id && DateOnly.FromDateTime(ds.TimeStart.Date).Equals(selectedDate))
+                .Include(ds => ds.Dentist)
+                .Where(ds => ds.DentistId == id && DateOnly.FromDateTime(ds.TimeStart.Date).Equals(selectedDate) && ds.Dentist.Status == true)
                 .OrderBy(ds => ds.TimeStart).ToListAsync();
             return dentistSlotList;
         }
@@ -62,7 +63,7 @@ namespace DataAccess
             var context = new BookingDentistDbContext();
             var dentistSlotList = await context.DentistSlots
                 .Include(dl => dl.Dentist)
-                .Where(ds => ds.RoomId == roomId && ds.TimeStart.Equals(selectedDate))
+                .Where(ds => ds.RoomId == roomId && ds.TimeStart.Equals(selectedDate) && ds.Dentist.Status == true)
                 .OrderBy(ds => ds.TimeStart).ToListAsync();
             return dentistSlotList;
         }
@@ -93,10 +94,13 @@ namespace DataAccess
         public List<DentistSlot> getAllDentistSlotsByServiceAndDate(int serviceId, DateTime timeStart)
         {
              var context = new BookingDentistDbContext();
-            return context.DentistSlots.Include(dl => dl.Dentist).ThenInclude(d => d.DentistServices)
+            return context.DentistSlots
+                .Include(dl => dl.Dentist)
+                    .ThenInclude(d => d.DentistServices)
                 .Where(dl => dl.Dentist.DentistServices.Any(ds => ds.ServiceId == serviceId && ds.Status == true && dl.DentistId.Equals(ds.DentistId)) && 
                              dl.TimeStart<= timeStart && dl.TimeEnd > timeStart &&
-                             dl.Status == true)
+                             dl.Status == true &&
+                             dl.Dentist.Status == true)
                 .ToList();
         }
 
@@ -106,7 +110,8 @@ namespace DataAccess
             return context.DentistSlots.Include(dl => dl.Dentist).ThenInclude(d => d.DentistServices)
                 .Where(dl => dl.Dentist.DentistServices.Any(ds => ds.ServiceId == serviceId && ds.Status == true) && 
                              dl.TimeStart.Date.Equals(timeStart.Date) &&
-                             dl.Status == true)
+                             dl.Status == true &&
+                             dl.Dentist.Status == true)
                 .ToList();
         }
 
@@ -120,7 +125,8 @@ namespace DataAccess
                                       dl.TimeStart.TimeOfDay <= TimeStart.TimeOfDay &&
                                       dl.TimeEnd.TimeOfDay > TimeStart.TimeOfDay &&
                                       dl.DentistId.Value  == dentistId &&
-                                      dl.Status == true);
+                                      dl.Status == true &&
+                                      dl.Dentist.Status == true);
         }
     }
 }

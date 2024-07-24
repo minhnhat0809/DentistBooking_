@@ -34,6 +34,11 @@ namespace DentistBooking.Pages.DentistPage.Customers
         public int PageSize { get; set; } = 5;
         public async Task<IActionResult> OnGetAsync(int? id)
         {
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Dentist")
+            {
+                return RedirectToPage("/Denied");
+            }
             if (id == null)
             {
                 return NotFound();

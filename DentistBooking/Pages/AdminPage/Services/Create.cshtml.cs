@@ -26,6 +26,11 @@ namespace DentistBooking.Pages.AdminPage.Services
 
         public IActionResult OnGet()
         {
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Admin")
+            {
+                return RedirectToPage("/Denied");
+            }
             return Page();
         }
 

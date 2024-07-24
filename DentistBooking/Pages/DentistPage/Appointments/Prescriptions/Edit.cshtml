@@ -27,7 +27,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="Prescription.Total" class="control-label"></label>
-                <input asp-for="Prescription.Total" class="form-control" readonly/>
+                <input value="@Model.Prescription.Total" class="form-control" readonly/>
+                <input type="hidden" asp-for="Prescription.Total" class="form-control" readonly/>
                 <span asp-validation-for="Prescription.Total" class="text-danger"></span>
             </div>
             <div class="form-group">

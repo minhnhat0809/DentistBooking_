@@ -17,6 +17,8 @@ namespace Repository
 
         Task<DentistSlot> GetDentistSlotByID(int dentistSlotId);
 
+        Task UpdateDentistSlot(DentistSlot dentistSlot);
+
         Task CreateDentistSlot(DentistSlot dentistSlot);
 
         List<DentistSlot> GetAllDentistSlotByServiceAndTimeStart(int serviceId, DateTime timeStart);

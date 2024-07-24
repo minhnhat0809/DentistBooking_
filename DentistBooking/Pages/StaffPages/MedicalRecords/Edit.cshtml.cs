@@ -32,6 +32,11 @@ namespace DentistBooking.Pages.StaffPages.MedicalRecords
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Staff")
+            {
+                return RedirectToPage("/Denied");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -53,36 +58,42 @@ namespace DentistBooking.Pages.StaffPages.MedicalRecords
         {
             if (!ModelState.IsValid)
             {
-                ViewData["CustomerId"] = new SelectList(_userService.GetAllUsers().Result, "UserId", "Name");
+                ViewData["CustomerId"] = new SelectList(await _userService.GetAllUsers(), "UserId", "Name");
                 return Page();
             }
 
-           
             try
             {
-                MedicalRecord.TimeStart = DateTime.Now; 
+                MedicalRecord.TimeStart = DateTime.Now;
                 MedicalRecord.Duration = TimeOnly.FromDateTime(MedicalRecord.TimeStart);
                 await _medicalRecordService.UpdateMedicalRecord(MedicalRecord);
                 await _hubContext.Clients.All.SendAsync("ReloadMedicalRecords");
+
+                return RedirectToPage("./Index");
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!MedicalRecordExists(MedicalRecord.MediaRecordId))
+                if (!await MedicalRecordExists(MedicalRecord.MediaRecordId))
                 {
                     return NotFound();
                 }
                 else
                 {
-                    throw;
+                    ModelState.AddModelError(string.Empty, "Concurrency error: The record was modified by another user.");
+                    return Page();
                 }
             }
-
-            return RedirectToPage("./Index");
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"An error occurred while updating the medical record: {ex.Message}");
+                return Page();
+            }
         }
 
-        private bool MedicalRecordExists(int id)
+        private async Task<bool> MedicalRecordExists(int id)
         {
-            return _medicalRecordService.GetAllMedicalRecords().Result.Any(e => e.MediaRecordId == id);
+            var records = await _medicalRecordService.GetAllMedicalRecords();
+            return records.Any(e => e.MediaRecordId == id);
         }
     }
 }

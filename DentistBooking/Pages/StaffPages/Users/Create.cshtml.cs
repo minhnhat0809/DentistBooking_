@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.SignalR;
 using BusinessObject.DTO;
 using Service.Impl;
 
-namespace DentistBooking.Pages.AdminPage.Users
+namespace DentistBooking.Pages.StaffPages.Users
 {
     public class CreateModel : PageModel
     {
@@ -29,7 +29,7 @@ namespace DentistBooking.Pages.AdminPage.Users
         public IActionResult OnGet()
         {
             var role = HttpContext.Session.GetString("Role");
-            if (role != "Admin")
+            if (role != "Staff")
             {
                 return RedirectToPage("/Denied");
             }
@@ -44,7 +44,6 @@ namespace DentistBooking.Pages.AdminPage.Users
 
         public async Task<IActionResult> OnPostAsync()
         {
-
             if (!ModelState.IsValid)
             {
                 // Populate dropdowns or other select lists
