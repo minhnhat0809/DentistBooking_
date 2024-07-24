@@ -16,6 +16,7 @@
                 <th>Date</th>
                 <th>Diagnosis</th>
                 <th>Total</th>
+                <th>Status</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -28,7 +29,7 @@
                     <td>@prescription.Total?.ToString("C")</td>
                     <td>@(prescription.Status == true ? "Active" : "Inactive")</td>
                     <td>
-                        <a asp-page="./PrescriptionDetail" asp-route-prescriptionId="@prescription.PrescriptionId" class="btn btn-info">Detail</a>
+                        <a asp-page="./PrescriptionDetail" asp-route-id="@prescription.PrescriptionId" class="btn btn-info">Detail</a>
                     </td>
                 </tr>
             }
