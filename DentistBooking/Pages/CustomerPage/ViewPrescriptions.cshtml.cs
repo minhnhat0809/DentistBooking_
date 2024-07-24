@@ -47,6 +47,7 @@ public class ViewPrescriptions : PageModel
                         return RedirectToPage("/Error");
                     }
                     var prescriptions = await prescriptionService.GetAllPrescriptionByCustomer(user.UserId);
+                    prescriptions = prescriptions.Where(x => x.Status == true).ToList();
                     Prescriptions = prescriptions.ToPagedList(PageNumber, PageSize);
                     return Page();
                 }
