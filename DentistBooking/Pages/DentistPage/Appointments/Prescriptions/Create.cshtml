@@ -1,12 +1,12 @@
-﻿@page
+﻿@page "{appointmentId?}"
 @model DentistBooking.Pages.DentistPage.Appointments.Prescriptions.CreateModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Prescription";
     Layout = "~/Pages/Shared/_DentistLayout.cshtml";
 }
 
-<h1>Create</h1>
+<h1>Create Prescription</h1>
 
 <h4>Prescription</h4>
 <hr />
@@ -21,7 +21,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Prescription.AppointmentId" class="control-label"></label>
-                <select asp-for="Prescription.AppointmentId" class ="form-control" asp-items="ViewBag.AppointmentId"></select>
+                <select asp-for="Prescription.AppointmentId" class="form-control" asp-items="ViewBag.AppointmentId"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -31,9 +31,11 @@
 </div>
 
 <div>
-    <a asp-page="Index">Back to List</a>
+    <a asp-page="/DentistPage/Appointments/Edit" asp-route-id="@Model.Prescription.AppointmentId">Back to Appointment</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

@@ -93,7 +93,11 @@
         </form>
     </div>
     <div>
+        
         <h4>Prescriptions</h4>
+        <p>
+            <a asp-page="./Prescriptions/Create" asp-route-appointmentId="@Model.Appointment.AppointmentId" >Add Prescription</a>
+        </p>
         <hr />
         @if (Model.Prescriptions != null && Model.Prescriptions.Any())
         {

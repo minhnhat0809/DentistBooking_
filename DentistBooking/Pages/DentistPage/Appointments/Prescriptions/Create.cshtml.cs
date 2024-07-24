@@ -26,21 +26,26 @@ namespace DentistBooking.Pages.DentistPage.Appointments.Prescriptions
             _appointmentService = appointmentService;
         }
 
-        public IActionResult OnGet()
+        [BindProperty]
+        public PrescriptionDto Prescription { get; set; } = new PrescriptionDto();
+
+        public async Task<IActionResult> OnGetAsync(int? appointmentId)
         {
-        ViewData["AppointmentId"] = new SelectList(_appointmentService.GetAllAppointments().Result, "AppointmentId", "AppointmentId");
+            if (appointmentId == null)
+            {
+                return NotFound();
+            }
+
+            Prescription.AppointmentId = appointmentId.Value;
+            ViewData["AppointmentId"] = new SelectList(await _appointmentService.GetAllAppointments(), "AppointmentId", "AppointmentId", Prescription.AppointmentId);
             return Page();
         }
 
-        [BindProperty]
-        public PrescriptionDto Prescription { get; set; } = default!;
-
-        // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
-                ViewData["AppointmentId"] = new SelectList(await _appointmentService.GetAllAppointments(), "AppointmentId", "AppointmentId");
+                ViewData["AppointmentId"] = new SelectList(await _appointmentService.GetAllAppointments(), "AppointmentId", "AppointmentId", Prescription.AppointmentId);
                 return Page();
             }
 
@@ -51,17 +56,15 @@ namespace DentistBooking.Pages.DentistPage.Appointments.Prescriptions
                 Prescription.Total = 0;
                 await _prescriptionService.CreatePrescription(Prescription);
                 await _hubContext.Clients.All.SendAsync("ReloadPrescriptions");
+                return RedirectToPage("/DentistPage/Appointments/Edit", new { id = Prescription.AppointmentId });
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
-                ViewData["AppointmentId"] = new SelectList(await _appointmentService.GetAllAppointments(), "AppointmentId", "AppointmentId");
-
+                ViewData["AppointmentId"] = new SelectList(await _appointmentService.GetAllAppointments(), "AppointmentId", "AppointmentId", Prescription.AppointmentId);
                 return Page();
             }
-
-            return RedirectToPage("./Index");
         }
-
     }
+
 }

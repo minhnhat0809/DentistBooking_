@@ -17,7 +17,7 @@ namespace BusinessObject.DTO
         [Required]
         public string? Diagnosis { get; set; }
 
-        [Range(0.01, (double)decimal.MaxValue, ErrorMessage = "Total must be a positive value.")]
+        [Range(0.00, (double)decimal.MaxValue, ErrorMessage = "Total must be a positive value.")]
         public decimal? Total { get; set; }
 
         public bool? Status { get; set; }
