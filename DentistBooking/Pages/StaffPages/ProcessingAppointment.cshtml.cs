@@ -146,7 +146,9 @@ namespace DentistBooking.Pages.StaffPages
                 TempData["ErrorProcessingAppointment"] = result.Message;
                 return RedirectToPage(new { id = Appointment.AppointmentId });
             }
-            hubContext.Clients.All.SendAsync("ReloadAppointments");
+            
+            await hubContext.Clients.All.SendAsync("ReloadAppointments");
+            
             var email = HttpContext.Session.GetString("Email");
             if (email != null)
             {
@@ -160,6 +162,7 @@ namespace DentistBooking.Pages.StaffPages
 
                 await emailSender.SendEmailAsync(receiver, subject, body);
             }
+            
             TempData["SuccessProcessingAppointmentError"] = "Appointment updated successfully!";
             return RedirectToPage(new { id = Appointment.AppointmentId });
         }
