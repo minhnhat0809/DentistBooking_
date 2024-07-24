@@ -298,5 +298,29 @@ namespace Service.Impl
 
             return dentistSlotResult;
         }
+
+        public async Task<DentistSlotResult> UpdateStatusDentistSlot(bool status, int dentistSlotId)
+        {
+            DentistSlotResult dentistSlotResult = new DentistSlotResult();
+            try
+            {
+                DentistSlot dentistSlot = await dentistSlotRepo.GetDentistSlotByID(dentistSlotId);
+                if (dentistSlot == null)
+                {
+                    dentistSlotResult.Message = "This dentist slot is not exist!";
+                    return dentistSlotResult;
+                }
+
+                dentistSlot.Status = status;
+
+                await dentistSlotRepo.UpdateDentistSlot(dentistSlot);
+                dentistSlotResult.Message = "Success";
+            }
+            catch (Exception e)
+            {
+                dentistSlotResult.Message = e.Message;
+            }
+            return dentistSlotResult;
+        }
     }
 }

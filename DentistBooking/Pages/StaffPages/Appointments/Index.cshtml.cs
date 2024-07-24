@@ -38,6 +38,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
                 return RedirectToPage("/Index");
             }
             var appointments = await _appointmentService.GetAllAppointments();
+            appointments.Where(ap => !ap.Status.Equals("Processing")).ToList();
             Appointment = appointments.ToPagedList(PageNumber, PageSize);
             return Page();
         }

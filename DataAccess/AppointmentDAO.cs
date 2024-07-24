@@ -52,7 +52,7 @@ namespace DataAccess
                 .Include(x => x.DentistSlot).ThenInclude(dl => dl.Dentist)
                 .Include(x => x.MedicalRecord)
                 .Include(s => s.Service)
-                .OrderBy(ap => ap.TimeStart).ToListAsync();
+                .OrderByDescending(ap => ap.TimeStart).ToListAsync();
             return appointments;
         }
 

@@ -124,4 +124,36 @@ public class ViewDentistSlot : PageModel
         Rooms =  _roomService.GetAllActiveRooms().Result.Rooms;
         return Page();
     }
+    
+    public async Task<IActionResult> OnPostReactivateAsync(int slotId)
+    {
+        DentistSlotResult dentistSlotResult = await dentistSlotService.UpdateStatusDentistSlot(true, slotId);
+        Dentists =  userService.GetAllUserByType("Dentist").Result;
+        Rooms =  _roomService.GetAllActiveRooms().Result.Rooms;
+        DentistSlots = dentistSlotService.GetAllDentistSlotsByDentistAndDate((userService.GetAllUserByType("Dentist").Result)[0].UserId, 
+            DateOnly.FromDateTime(DateTime.Now)).Result;
+        if (!dentistSlotResult.Message.Contains("Success"))
+        {
+            TempData["ErrorDentistSlot"] = dentistSlotResult.Message;
+            return Page();
+        }
+        TempData["SuccessDentistSlot"] = "Slot reactivated successfully.";
+        return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostDeleteAsync(int slotId)
+    {
+        DentistSlotResult dentistSlotResult = await dentistSlotService.UpdateStatusDentistSlot(false, slotId);
+        Dentists =  userService.GetAllUserByType("Dentist").Result;
+        Rooms =  _roomService.GetAllActiveRooms().Result.Rooms;
+        DentistSlots = dentistSlotService.GetAllDentistSlotsByDentistAndDate((userService.GetAllUserByType("Dentist").Result)[0].UserId, 
+            DateOnly.FromDateTime(DateTime.Now)).Result;
+        if (!dentistSlotResult.Message.Contains("Success"))
+        {
+            TempData["ErrorDentistSlot"] = dentistSlotResult.Message;
+            return Page();
+        }
+        TempData["SuccessDentistSlot"] = "Slot deleted successfully.";
+        return RedirectToPage();
+    }
 }
