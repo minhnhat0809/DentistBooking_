@@ -19,7 +19,7 @@ namespace Service
 
         Task<AppointmentDto> GetAppointmentByID(int id);
 
-        Task<Dictionary<string, string>> UpdateAppointment(int serviceId, int appointmentId, DateTime TimeStart, int customerId);
+        Task<Dictionary<string, string>> UpdateAppointment(int serviceId, int appointmentId, DateTime TimeStart, int customerId, int dentistId);
 
         Task<List<AppointmentDto>> GetAllProcessingAppointment();
 

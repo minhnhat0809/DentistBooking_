@@ -26,7 +26,8 @@ namespace DentistBooking.Pages.CustomerPage
 
         public IActionResult OnPostDelete(int appointmentId)
         {
-
+            var customerId = Int32.Parse(HttpContext.Session.GetString("ID"));
+            Appointments = appointmentService.GetALlAppointmentsOfCustomer(customerId).Result;
             return Page();
         }
     }

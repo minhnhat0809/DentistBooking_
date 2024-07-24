@@ -1,10 +1,24 @@
 ﻿@page
+@using BusinessObject
+@using Microsoft.IdentityModel.Tokens
 @model DentistBooking.Pages.CustomerPage.AppointmentDetailModel
 @{
     ViewData["Title"] = "Appointment Detail";
     Layout = "/Pages/Shared/_CustomerLayout.cshtml";
     var resultMessage = TempData["AppointmentDetail"] as string;
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    
+    var error = TempData["ErrorDeleteCustomerAppointment"] as string;
+    var success = TempData["SuccessDeleteCustomerAppointment"] as string;
 }
+
+<style>
+    .btn-custom-width {
+        width: 100px; /* Adjust the width as needed */
+    }
+</style>
 
 
 <div class="card">
@@ -17,7 +31,6 @@
             <form method="post" asp-page-handler="Update">
                 <input type="hidden" asp-for="@Model.Appointment.AppointmentId" />
                 <input type="hidden" asp-for="@Model.Appointment.CustomerId" />
-                <input type="hidden" asp-for="@Model.Appointment.DentistSlot.DentistId" />
 
                 <div class="form-group row">
                     <label class="col-sm-3 col-form-label">Time Start</label>
@@ -30,6 +43,13 @@
                     <label class="col-sm-3 col-form-label">Time End</label>
                     <div class="col-sm-9">
                         <input type="datetime-local" class="form-control" asp-for="@Model.Appointment.TimeEnd" readonly />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Customer</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" value="@Model.Appointment.Customer?.Name" readonly />
                     </div>
                 </div>
 
@@ -48,37 +68,69 @@
                 </div>
 
                 <div class="form-group row">
-                    <label class="col-sm-3 col-form-label">Dentist</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control-plaintext" value="@Model.Appointment.DentistSlot?.Dentist?.Name" readonly />
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-sm-3 col-form-label">Customer</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control-plaintext" value="@Model.Appointment.Customer?.Name" readonly />
-                    </div>
-                </div>
-
-                <div class="form-group row">
                     <label class="col-sm-3 col-form-label">Services</label>
                     <div class="col-sm-9">
-                        <select id="Appointment.ServiceId" name="Appointment.ServiceId" class="form-control">
-                            @if (Model.Services != null)
+                        <select name="Appointment.ServiceId" id="ServiceId" class="form-control">
+                            @if (!Model.Services.IsNullOrEmpty() && Model.Services.Count > 0)
                             {
                                 @foreach (var s in Model.Services)
                                 {
-                                    <option value="@s.ServiceId">@s.ServiceName - @s.Price</option>
+                                    <option value="@s.ServiceId" title="@s.ServiceName"> @s.ServiceName</option>
                                 }
+                            }
+                            else
+                            {
+                                <option value="0">No service found</option>
                             }
                         </select>
                     </div>
                 </div>
 
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Dentist</label>
+                    <div class="col-sm-9">
+                        <select id="DentistId" name="Appointment.CreateBy" class="form-control">
+                            @if (!Model.Dentists.IsNullOrEmpty())
+                            {
+                                @if(!Model.Appointment.CreateBy.HasValue)
+                                {
+                                    <option value="0">Anyone</option>
+                                    @foreach (var s in Model.Dentists)
+                                    {
+                                        <option value="@s.UserId">@s.Name</option>
+                                    }
+                                }
+                                else
+                                {
+                                    @foreach (var s in Model.Dentists)
+                                    {
+                                        <option value="@s.UserId">@s.Name</option>
+                                    }
+                                    <option value="0">Anyone</option>
+                                }
+                                
+                            }
+                            else
+                            {
+                                <option value="0">No dentists for this service found</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+
                 <div class="form-group row text-center">
-                    <div class="col-sm-9 offset-sm-3">
-                        <button type="submit" class="btn btn-primary">Update</button>
+                    <div class="col-sm-9 offset-sm-3 btn-group" role="group">
+                        @if (Model.Appointment.Status.Equals("Delete"))
+                        {
+                        <button type="submit" class="btn btn-primary btn-custom-width" disabled="disabled">Update</button>
+                        <button type="button" disabled="disabled" class="btn btn-danger btn-sm btn-custom-width" onclick="openDeleteModal('@Model.Appointment.AppointmentId', '@Model.Appointment.Customer.Name')">Delete</button>
+                        }
+                        else
+                        {
+                        <button type="submit" class="btn btn-primary btn-sm btn-custom-width">Update</button>
+                        <button type="button" class="btn btn-danger btn-sm btn-custom-width" onclick="openDeleteModal('@Model.Appointment.AppointmentId', '@Model.Appointment.Customer.Name')">Delete</button>
+                        }
                     </div>
                 </div>
             </form>
@@ -98,8 +150,41 @@
     <a href="./ViewAppointments" class="btn btn-primary btn-sm">Back</a>
 </div>
 
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirm Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="deleteForm" method="post" asp-page-handler="Delete">
+                    <input type="hidden" id="appointmentId" name="AppointmentId" />
+                    @*<div class="form-group">
+                        <label for="reason">Reason for deletion</label>
+                        <input type="text" asp-for="@Model.Reason" class="form-control" id="reason" name="Reason" />
+                    </div>*@
+                    <div class="form-group">
+                        <label for="customerName">Customer Name</label><span class="text-danger" style="font-size:12px"> (You must type customer name correctly!)</span>
+                        <input type="text" asp-for="@Model.CustomerName" class="form-control" id="customerName" name="CustomerName" placeholder="" />
+                    </div>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
+    function openDeleteModal(appointmentId, customerName) {
+        $('#appointmentId').val(appointmentId);
+        $('#customerName').attr('placeholder', customerName);
+        $('#deleteConfirmationModal').modal('show');
+    }
+    
     $(document).ready(function () {
         var resultMessage = '@resultMessage';
         if (resultMessage.trim() !== '') {
@@ -115,5 +200,71 @@
                 alertPlaceholder.children('.alert').alert('close');
             }, 3000);
         }
+
+        var success = '@success';
+        if (success.trim() !== '') {
+            var alertPlaceholder = $('#customAlertPlaceholder');
+            var alertHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'
+                + success
+                + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
+                + '<span aria-hidden="true">&times;</span>'
+                + '</button></div>';
+            alertPlaceholder.html(alertHtml);
+
+            setTimeout(function () {
+                alertPlaceholder.children('.alert').alert('close');
+            }, 3000);
+        }
+
+        var error = '@error';
+        if (error.trim() !== '') {
+            var alertPlaceholder = $('#customAlertPlaceholder');
+            var alertHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'
+                + error
+                + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
+                + '<span aria-hidden="true">&times;</span>'
+                + '</button></div>';
+            alertPlaceholder.html(alertHtml);
+
+            setTimeout(function () {
+                alertPlaceholder.children('.alert').alert('close');
+            }, 3000);
+        }
+
+        $('#ServiceId').change(function () {
+            var serviceId = $(this).val();
+            console.log(serviceId);
+
+            $.getJSON('@Url.Page("/CustomerPage/AppointmentDetail", "DentistByService")', {
+                serviceId: serviceId,
+            })
+                .done(function (response) {
+                    console.log(response);
+                    var dentistSelectList = $('#DentistId');
+                    dentistSelectList.empty();
+                    dentistSelectList.append($('<option>', {
+                        value: '0',
+                        text: 'Anyone'
+                    }));
+
+                    if (response.success === false) {
+                        dentistSelectList.append($('<option>', {
+                            value: '',
+                            text: response.message
+                        }));
+                    } else {
+                        $.each(response.dentistSelectList, function (index, item) {
+                            console.log(response.dentistSelectList)
+                            dentistSelectList.append($('<option>', {
+                                value: item.value,
+                                text: item.text
+                            }));
+                        });
+                    }
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    console.error('AJAX request failed:', textStatus, errorThrown);
+                });
+        });
     });
 </script>

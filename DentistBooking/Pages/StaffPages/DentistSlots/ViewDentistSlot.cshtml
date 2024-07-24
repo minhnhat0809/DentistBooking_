@@ -42,7 +42,7 @@ var dentistSlotSuccess = TempData["SuccessDentistSlot"] as string;
         <button type="submit" class="btn btn-primary btn-block">View Dentist Slot</button>
     </form>
 
-    @if (Model.DentistSlots != null && Model.DentistSlots.Count > 0)
+    @if (!Model.DentistSlots.IsNullOrEmpty() && Model.DentistSlots.Count > 0)
     {
     <div class="table-responsive mt-4">
         <table class="table table-hover table-striped table-bordered">
@@ -50,6 +50,7 @@ var dentistSlotSuccess = TempData["SuccessDentistSlot"] as string;
             <tr>
                 <th>Time Start</th>
                 <th>Time End</th>
+                <th>Room Number</th>
             </tr>
             </thead>
             <tbody>
@@ -58,13 +59,14 @@ var dentistSlotSuccess = TempData["SuccessDentistSlot"] as string;
             <tr>
                 <td>@slot.TimeStart.ToString("HH:mm")</td>
                 <td>@slot.TimeEnd.ToString("HH:mm")</td>
+                <td>@slot.Room.RoomNumber</td>
             </tr>
             }
             </tbody>
         </table>
     </div>
     }
-    else if(Model.DentistSlots == null)
+    else if(Model.DentistSlots.IsNullOrEmpty())
     {
     <div class="alert alert-warning" role="alert">
         No slots found for the selected dentist and date.

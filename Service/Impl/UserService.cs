@@ -92,7 +92,7 @@ namespace Service.Impl
             catch (Exception ex)
             {
 
-                throw new ArgumentException("Error while delete user", ex);
+                throw new ArgumentException("An error occurred while retrieving", ex);
             }
 
         }

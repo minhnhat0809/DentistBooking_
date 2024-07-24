@@ -203,16 +203,15 @@
                                     </select>
                                     <span asp-validation-for="Gender" class="text-danger"></span>
                                 </div>
-                                <div class="col-6 col-sm-6">
-                                    <label for="Dob" class="text-start w-100">Date of Birth</label>
-                                    <input type="date" asp-for="Dob" class="form-control bg-light border-0" style="height: 55px;" min="1900-01-01" max="@DateTime.Now.ToString("yyyy-MM-dd")">
-                                    <span asp-validation-for="Dob" class="text-danger"></span>
+                                <div class="col-12 col-sm-6">
+                                    <label for="AppointmentTime" class="text-start w-100">Appointment Time</label>
+                                    <input type="datetime-local" asp-for="AppointmentTime" class="form-control bg-light border-0" min="@DateTime.Now.ToString("yyyy-MM-dd HH:mm")" style="height: 55px;">
+                                    <span asp-validation-for="AppointmentTime" class="text-danger"></span>
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <label for="SelectedServiceId" class="text-start w-100">Select A Service</label>
                                     <select asp-for="SelectedServiceId" class="form-select bg-light border-0" style="height: 55px;">
                                         <option selected disabled>Select A Service</option>
-
                                         @if (Model.Services != null)
                                         {
                                             @foreach (var service in Model.Services)
@@ -228,9 +227,23 @@
                                     <span asp-validation-for="SelectedServiceId" class="text-danger"></span>
                                 </div>
                                 <div class="col-12 col-sm-6">
-                                    <label for="AppointmentTime" class="text-start w-100">Appointment Time</label>
-                                    <input type="datetime-local" asp-for="AppointmentTime" class="form-control bg-light border-0" min="@DateTime.Now.ToString("yyyy-MM-dd HH:mm")" style="height: 55px;">
-                                    <span asp-validation-for="AppointmentTime" class="text-danger"></span>
+                                    <label for="SelectedDentistId" class="text-start w-100">Select A Dentist (Optional)</label>
+                                    <select asp-for="SelectedDentistId" class="form-select bg-light border-0" style="height: 55px;">
+                                        <option selected disabled>Select A Dentist (Optional)</option>
+                                        <option value="0">Anyone</option>
+                                        @if (Model.Dentists != null)
+                                        {
+                                            @foreach (var dentist in Model.Dentists)
+                                            {
+                                                <option value="@dentist.UserId">@dentist.Name</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option disabled>No dentists for this service</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="SelectedDentistId" class="text-danger"></span>
                                 </div>
                                 <div class="col-12">
                                     <button class="btn btn-dark w-100 py-3" type="submit">Make Appointment</button>
@@ -429,11 +442,12 @@
         </div>
     </div>
     <!-- Newsletter End -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         window.addEventListener('load', function () {
             // Check if there are errors or messages in TempData
-
-            if (@Model.ModelState.ErrorCount> 0 || TempData["Book"] !== '') {
+            if (@Model.ModelState.ErrorCount > 0 || String(resultMessage).length > 0) {
                 document.getElementById('appointment-form').scrollIntoView();
             }
 
@@ -444,6 +458,39 @@
                 var formattedDate = now.toISOString().slice(0, 16); // Format: YYYY-MM-DDTHH:MM
                 dateInput.min = formattedDate;
             }
+        });
+
+        $('#SelectedServiceId').change(function () {
+            var serviceId = $(this).val();
+            console.log(serviceId);
+
+            $.getJSON('@Url.Page("/Index", "DentistsByService")', { serviceId: serviceId })
+                .done(function (response) {
+                    console.log("response" + response);
+                    var SelectedDentistId = $('#SelectedDentistId');
+                    SelectedDentistId.empty();
+                    SelectedDentistId.append($('<option>', {
+                        value: '0',
+                        text: 'Anyone'
+                    }));
+                    if (response.success === false) {
+                        SelectedDentistId.append($('<option>', {
+                            value: '',
+                            text: response.message
+                        }));
+                    } else {
+                        $.each(response.newDentists, function (index, item) {
+                            console.log(response.newDentists)
+                            SelectedDentistId.append($('<option>', {
+                                value: item.value,
+                                text: item.text
+                            }));
+                        });
+                    }
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    console.error('AJAX request failed:', textStatus, errorThrown);
+                });
         });
     </script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
