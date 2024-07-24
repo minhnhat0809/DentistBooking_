@@ -97,23 +97,28 @@
                         }
                         else if(Model.Appointment.DentistSlot == null && !Model.DentistSlot.IsNullOrEmpty())
                         {
-                        <select id="dentistSlotId" name="Appointment.DentistSlotId" class="form-control">
+                        
                             @if (!Model.DentistSlot.IsNullOrEmpty() && Model.DentistSlot[0] != null)
                             {
+                                <select id="dentistSlotId" name="Appointment.DentistSlotId" class="form-control">
                                 @foreach (var s in Model.DentistSlot)
                                 {
                                  <option value="@s.DentistSlotId">@s.TimeStart.TimeOfDay - @s.TimeEnd.TimeOfDay</option>
                                 }
+                                </select>
                             }else
                             {
-                                <option value="0">No slot found</option>
+                                <select id="dentistSlotId" name="Appointment.DentistSlotId" class="form-control">
+                                    <option value="0">No slot found</option>
+                                </select>
+                                <button type="button" class="btn btn-info btn-block" id="createSlotButton" data-toggle="modal" data-target="#createSlotModal" onclick="setDentistId()">Create slot for this date</button>
                             }
-                        </select>
+                        
                         }
                         else
                         {
                             <input type="text" value="No available slots" readonly />
-                            <button type="button" class="btn btn-info btn-block" id="createSlotButton" data-toggle="modal" data-target="#createSlotModal">Create slot for this date</button>
+                            <button type="button" class="btn btn-info btn-block" id="createSlotButton" data-toggle="modal" data-target="#createSlotModal" onclick="setDentistId()">Create slot for this date</button>
                             <input type="hidden" asp-for="Appointment.DentistSlotId" value="0" />
                         }
                     </div>
@@ -148,6 +153,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form method="post" asp-page-handler="CreateDentistSlot">
+                <input type="hidden" id="dentisTId" name="dentisTId" />
                 <div class="modal-header">
                     <h5 class="modal-title" id="createSlotModalLabel">Create Slot</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -158,9 +164,9 @@
                     <div class="form-group">
                         <div class="form-group">
                             <label>Time Range</label>
-                            <input type="text" class="form-control" value="@Model.TimeRange" readonly />
+                            <input type="text" class="form-control" value="@Model.TimeRange" readonly/>
                         </div>
-                        
+
                         <label for="roomSelect">Select Room</label>
                         <select class="form-control" id="roomSelect" asp-for="RoomId">
                             @if (!Model.Rooms.IsNullOrEmpty() && Model.Rooms.Count > 0)
@@ -223,6 +229,14 @@
         $('#customerName').attr('placeholder', customerName);
         $('#deleteConfirmationModal').modal('show');
     }
+
+    function setDentistId() {
+        var dentistId = $('#dentistId').val();
+        document.getElementById("dentisTId").value = dentistId;
+        console.log(dentistId);
+    }
+
+    
     
     $(document).ready(function () {
         var appointmentError = '@appointmentError';

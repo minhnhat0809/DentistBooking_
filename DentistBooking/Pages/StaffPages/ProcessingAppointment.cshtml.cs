@@ -57,6 +57,9 @@ namespace DentistBooking.Pages.StaffPages
         [BindProperty(SupportsGet = true)]
         public int RoomId { get; set; }
         
+        [BindProperty(SupportsGet = true)]
+        public int dentisTId { get; set; }
+        
         public string TimeRange { get; set; }
 
         public List<DentistSlotDto> DentistSlot { get; set; }
@@ -225,7 +228,7 @@ namespace DentistBooking.Pages.StaffPages
             DateTime slotTimeEnd = new DateTime(date.Year, date.Month, date.Day,
                 DentistSlotTimeEnd.Hour, DentistSlotTimeEnd.Minute, DentistSlotTimeEnd.Second);
 
-            DentistSlotResult result = await dentistSlotService.CreateDentistSlot((int)HttpContext.Session.GetInt32("DentistId")
+            DentistSlotResult result = await dentistSlotService.CreateDentistSlot(dentisTId
                 , slotTimeStart, slotTimeEnd, RoomId);
             if (!result.Message.Equals("Success"))
             {
@@ -236,8 +239,6 @@ namespace DentistBooking.Pages.StaffPages
             TempData["SuccessProcessingAppointment_DentistSlot"] = "Create dentist slot successfully!";
             return RedirectToPage(new { id = Appointment.AppointmentId });
         }
-        
-        
         public async Task<IActionResult> OnPostDelete(int appointmentId)
         {
             if (string.IsNullOrWhiteSpace(Reason) || string.IsNullOrWhiteSpace(CustomerName))
