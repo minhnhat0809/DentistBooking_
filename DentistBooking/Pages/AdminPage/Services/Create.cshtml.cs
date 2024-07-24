@@ -10,6 +10,7 @@ using DataAccess;
 using Service;
 using Microsoft.AspNetCore.SignalR;
 using BusinessObject.DTO;
+using Service.Impl;
 
 namespace DentistBooking.Pages.AdminPage.Services
 {
@@ -38,10 +39,19 @@ namespace DentistBooking.Pages.AdminPage.Services
             {
                 return Page();
             }
-            Service.Status = true; 
-            await _service.CreateService(Service);
-            await _hubContext.Clients.All.SendAsync("ReloadServices");
-            return RedirectToPage("./Index");
+
+            try
+            {
+                Service.Status = true;
+                await _service.CreateService(Service);
+                await _hubContext.Clients.All.SendAsync("ReloadServices");
+                return RedirectToPage("./Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return Page();
+            }
         }
     }
 }

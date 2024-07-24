@@ -19,6 +19,8 @@ namespace Service.Impl
             _mapper = mapper;
         }
 
+        
+
         public async Task<List<ClinicDto>> GetAllClinics()
         {
             try
@@ -70,7 +72,11 @@ namespace Service.Impl
                 {
                     throw new InvalidOperationException($"Clinic with ID {clinic.ClinicId} already exists.");
                 }
-                model = _mapper.Map<Clinic>(clinic); 
+
+                // Map the valid ClinicDto to Clinic entity
+                model = _mapper.Map<Clinic>(clinic);
+
+                // Create the clinic in the repository
                 await _clinicRepo.CreateClinic(model);
             }
             catch (Exception ex)
@@ -87,14 +93,21 @@ namespace Service.Impl
                 throw new ArgumentNullException(nameof(clinic), "Clinic cannot be null.");
             }
 
+            // Validate the ClinicDto object
+            ValidateClinicInfo(clinic);
+
             try
             {
-                var model = await _clinicRepo.GetById(clinic.ClinicId);
-                if (model == null)
+                var existingClinic = await _clinicRepo.GetById(clinic.ClinicId);
+                if (existingClinic == null)
                 {
                     throw new ExceptionHandler.NotFoundException($"Clinic with ID {clinic.ClinicId} not found.");
                 }
-                model = _mapper.Map<Clinic>(clinic);
+
+                // Map the valid ClinicDto to Clinic entity
+                var model = _mapper.Map<Clinic>(clinic);
+
+                // Update the clinic in the repository
                 await _clinicRepo.UpdateClinic(model);
             }
             catch (Exception ex)
@@ -103,6 +116,53 @@ namespace Service.Impl
                 throw new ExceptionHandler.ServiceException("An error occurred while updating the clinic.", ex);
             }
         }
+
+        private void ValidateClinicInfo(ClinicDto clinicDto)
+        {
+            // Validate ClinicName
+            if (string.IsNullOrWhiteSpace(clinicDto.ClinicName))
+            {
+                throw new ExceptionHandler.ServiceException("Clinic Name is required.");
+            }
+            else if (clinicDto.ClinicName.Length > 100)
+            {
+                throw new ExceptionHandler.ServiceException("Clinic Name can't be longer than 100 characters.");
+            }
+
+            // Validate Address
+            if (string.IsNullOrWhiteSpace(clinicDto.Address))
+            {
+                throw new ExceptionHandler.ServiceException("Address is required.");
+            }
+            else if (clinicDto.Address.Length > 200)
+            {
+                throw new ExceptionHandler.ServiceException("Address can't be longer than 200 characters.");
+            }
+
+            // Validate Phone
+            if (!string.IsNullOrWhiteSpace(clinicDto.Phone))
+            {
+                // A basic phone number validation (this can be customized)
+                if (!System.Text.RegularExpressions.Regex.IsMatch(clinicDto.Phone, @"^\+?[1-9]\d{1,14}$"))
+                {
+                    throw new ExceptionHandler.ServiceException("Invalid Phone number format.");
+                }
+            } else throw new ExceptionHandler.ServiceException("Phone is required.");
+
+            // Validate Email
+            if (!string.IsNullOrWhiteSpace(clinicDto.Email))
+            {
+                try
+                {
+                    var emailAddress = new System.Net.Mail.MailAddress(clinicDto.Email);
+                }
+                catch
+                {
+                    throw new ExceptionHandler.ServiceException("Invalid Email address format.");
+                }
+            } else throw new ExceptionHandler.ServiceException("Phone is required.");
+        }
+
 
         public async Task DeleteClinic(int id)
         {

@@ -10,6 +10,7 @@ using DataAccess;
 using BusinessObject.DTO;
 using Service;
 using X.PagedList;
+using Service.Impl;
 
 namespace DentistBooking.Pages.AdminPage.MedicalRecords
 {
@@ -31,19 +32,22 @@ namespace DentistBooking.Pages.AdminPage.MedicalRecords
         public int PageSize { get; set; } = 5;
         public async Task<IActionResult> OnGetAsync()
         {
-
-            var medicalRecords = await _medicalRecordService.GetAllMedicalRecords();
-            if (medicalRecords == null)
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Admin")
             {
-                // Handle null case if necessary
-                MedicalRecord = new List<MedicalRecordDto>().ToPagedList(PageNumber, PageSize);
+                return RedirectToPage("/Denied");
             }
-            else
+            try
             {
+                var medicalRecords = await _medicalRecordService.GetAllMedicalRecords();
                 MedicalRecord = medicalRecords.ToPagedList(PageNumber, PageSize);
+                return Page();
             }
-
-            return Page();
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "An unexpected error occurred: " + ex.Message;
+                return RedirectToPage("/Error");
+            }
 
         }
     }

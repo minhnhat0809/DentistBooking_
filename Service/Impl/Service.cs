@@ -23,6 +23,12 @@ namespace Service.Impl
         {
             try
             {
+                var models = await _servicerRepo.GetAllServicesAsync();
+                models = models.Where(m => m.Status == true).ToList();
+                if (models.Any(u => u.ServiceName == service.ServiceName))
+                {
+                    throw new InvalidOperationException("Username is already taken.");
+                }
                 var model = await _servicerRepo.GetServiceByID(service.ServiceId);
                 if (model != null)
                 {
@@ -34,7 +40,7 @@ namespace Service.Impl
             catch (Exception ex)
             {
 
-                throw new Exception("error at create service", ex);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -205,6 +211,12 @@ namespace Service.Impl
         {
             try
             {
+                var models = await _servicerRepo.GetAllServicesAsync();
+                models = models.Where(m => m.Status == true).ToList();
+                if (models.Any(u => u.ServiceName == service.ServiceName))
+                {
+                    throw new InvalidOperationException("Service Name is already taken.");
+                }
                 var model = await _servicerRepo.GetServiceByID(service.ServiceId);   
                 if (model == null)
                 {
@@ -216,7 +228,7 @@ namespace Service.Impl
             catch (Exception ex)
             {
 
-                throw new Exception("error at get service", ex);
+                throw new Exception(ex.Message);
             }
         }
     }

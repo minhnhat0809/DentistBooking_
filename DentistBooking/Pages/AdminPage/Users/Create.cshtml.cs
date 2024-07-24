@@ -10,6 +10,7 @@ using DataAccess;
 using Service;
 using Microsoft.AspNetCore.SignalR;
 using BusinessObject.DTO;
+using Service.Impl;
 
 namespace DentistBooking.Pages.AdminPage.Users
 {
@@ -35,20 +36,36 @@ namespace DentistBooking.Pages.AdminPage.Users
         public UserDto User { get; set; } = default!;
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
-                PopulateSelectLists();
+                // Populate dropdowns or other select lists
+                ViewData["RoleId"] = new SelectList(await _userService.GetAllRoles(), "RoleId", "RoleName");
                 return Page();
             }
-            User.CreatedDate = DateTime.Now;
-            
-            User.Status = true;
-            await _userService.CreateUser(User);
-            await _hubContext.Clients.All.SendAsync("ReloadUsers");
-            return RedirectToPage("./Index");
+
+            try
+            {
+                User.CreatedDate = DateTime.Now;
+                User.Status = true;
+
+                await _userService.CreateUser(User);
+
+                await _hubContext.Clients.All.SendAsync("ReloadUsers");
+
+                return RedirectToPage("./Index");
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions and provide feedback
+                ModelState.AddModelError(string.Empty, "An unexpected error occurred: " + ex.Message);
+                ViewData["RoleId"] = new SelectList(await _userService.GetAllRoles(), "RoleId", "RoleName");
+                return Page();
+            }
         }
+
         private void PopulateSelectLists()
         {
             ViewData["ClinicId"] = new SelectList(_clinicService.GetAllClinics().Result, "ClinicId", "ClinicName");

@@ -11,6 +11,7 @@ using DataAccess;
 using Service;
 using Microsoft.AspNetCore.SignalR;
 using BusinessObject.DTO;
+using Service.Impl;
 
 namespace DentistBooking.Pages.AdminPage.Users
 {
@@ -28,52 +29,81 @@ namespace DentistBooking.Pages.AdminPage.Users
 
         [BindProperty]
         public UserDto User { get; set; } = default!;
-
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null)
+            // check null
+            if (id != null)
             {
-                return NotFound();
+                // check role
+                /*var role = HttpContext.Session.GetString("Role");
+                if (role != "Dentist")
+                {
+                    return RedirectToPage("/Denied");
+                }*/
+                try
+                {
+                    var user = await _userService.GetById(id.Value);
+                    if (user != null)
+                    {
+                        User = user;
+                        ViewData["RoleId"] = new SelectList(_userService.GetAllRoles().Result, "RoleId", "RoleName");
+                        return Page();
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = "Appointment not found.";
+                        return RedirectToPage("/Error");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    TempData["ErrorMessage"] = "An unexpected error occurred: " + ex.Message;
+                    return RedirectToPage("/Error");
+                }
             }
-
-            var user = await _userService.GetById(id.Value);
-            if (user == null)
+            else
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Appointment ID is missing.";
+                return RedirectToPage("/Error");
             }
-            User = user;
-            ViewData["RoleId"] = new SelectList(_userService.GetAllRoles().Result, "RoleId", "RoleName");
-            return Page();
         }
+        
         
         public async Task<IActionResult> OnPostAsync()
         {
+            
             if (!ModelState.IsValid)
             {
                 ViewData["RoleId"] = new SelectList(_userService.GetAllRoles().Result, "RoleId", "RoleName");
                 return Page();
             }
 
-            
-
             try
             {
                 await _userService.UpdateUser(User);
                 await _hubContext.Clients.All.SendAsync("ReloadUsers");
+                return RedirectToPage("./Index");
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!UserExists(User.UserId))
                 {
-                    return NotFound();
+                    TempData["ErrorMessage"] = "User not found.";
+                    return RedirectToPage("/Error");
                 }
                 else
                 {
-                    throw;
+                    ModelState.AddModelError(string.Empty, "An error occurred while updating the appointment: " + ex.Message);
+                    ViewData["RoleId"] = new SelectList(_userService.GetAllRoles().Result, "RoleId", "RoleName");
+                    return Page();
                 }
             }
-
-            return RedirectToPage("./Index");
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "An unexpected error occurred: " + ex.Message);
+                ViewData["RoleId"] = new SelectList(_userService.GetAllRoles().Result, "RoleId", "RoleName");
+                return Page();
+            }
         }
 
         private bool UserExists(int id)

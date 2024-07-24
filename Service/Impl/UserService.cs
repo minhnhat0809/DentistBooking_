@@ -29,13 +29,29 @@ namespace Service.Impl
             try
             {
                 if (user == null) { throw new ArgumentNullException(nameof(user)); }
-                User? model = _mapper.Map<User>(user);
+
+                // Check if username or email is already taken
+                List<User> users = await _userRepo.GetAllUsers();
+
+                if (users.Any(u => u.UserName == user.UserName))
+                {
+                    throw new InvalidOperationException("Username is already taken.");
+                }
+
+                if (users.Any(u => u.Email == user.Email))
+                {
+                    throw new InvalidOperationException("Email is already in use.");
+                }
+
+                // Map the DTO to the User model
+                User model = _mapper.Map<User>(user);
+
+                // Create the new user
                 await _userRepo.CreateUser(model);
             }
             catch (Exception ex)
             {
-                // Log exception
-                throw new ExceptionHandler.ServiceException("An error occurred while retrieving", ex);
+                throw new ExceptionHandler.ServiceException(ex.Message);
             }
         }
 
@@ -237,6 +253,21 @@ namespace Service.Impl
             try
             {
                 if (user == null) { throw new ArgumentNullException(nameof(user)); }
+                List<User> users = await _userRepo.GetAllUsers();
+
+                // Check if username or email is already taken
+
+                if (users.Any(u => u.UserName == user.UserName))
+                {
+                    throw new InvalidOperationException("Username is already taken.");
+                }
+
+                if (users.Any(u => u.Email == user.Email))
+                {
+                    throw new InvalidOperationException("Email is already in use.");
+                }
+
+                if (user == null) { throw new ArgumentNullException(nameof(user)); }
                 User? model = await _userRepo.GetById(user.UserId);
                 if (model != null)
                 {
@@ -249,8 +280,7 @@ namespace Service.Impl
             }
             catch (Exception ex)
             {
-                // Log exception
-                throw new ExceptionHandler.ServiceException("An error occurred while retrieving", ex);
+                throw new ExceptionHandler.ServiceException(ex.Message);
             }
         }
 
@@ -283,7 +313,6 @@ namespace Service.Impl
                 throw new ExceptionHandler.ServiceException("An error occurred while retrieving", ex);
             }
         }
-
 
         public async Task<UserDto> GetCustomerByPhoneNumber(string phoneNumber)
         {
