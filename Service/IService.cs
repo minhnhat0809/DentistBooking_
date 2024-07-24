@@ -15,6 +15,7 @@ namespace Service
         Task<List<ServiceDto>> GetAllServicesForCustomer(int serviceId);
         Task<List<ServiceDto>> GetAllServicesByDentistId(int dentistId);
         Task<IEnumerable<ServiceDto>> GetServicesByDentistSlotAsync(int dentistSlotId);
+        Task<List<ServiceDto>> ServicesForAppointmentCustomer(int appointmentId);
 
         Task<ListServiceResult> GetAllActiveServices();
     }

@@ -1,9 +1,14 @@
 ﻿@page
+@using BusinessObject
+@using Microsoft.IdentityModel.Tokens
 @model DentistBooking.Pages.CustomerPage.AppointmentDetailModel
 @{
     ViewData["Title"] = "Appointment Detail";
     Layout = "/Pages/Shared/_CustomerLayout.cshtml";
     var resultMessage = TempData["AppointmentDetail"] as string;
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 }
 
 
@@ -17,7 +22,6 @@
             <form method="post" asp-page-handler="Update">
                 <input type="hidden" asp-for="@Model.Appointment.AppointmentId" />
                 <input type="hidden" asp-for="@Model.Appointment.CustomerId" />
-                <input type="hidden" asp-for="@Model.Appointment.DentistSlot.DentistId" />
 
                 <div class="form-group row">
                     <label class="col-sm-3 col-form-label">Time Start</label>
@@ -30,6 +34,13 @@
                     <label class="col-sm-3 col-form-label">Time End</label>
                     <div class="col-sm-9">
                         <input type="datetime-local" class="form-control" asp-for="@Model.Appointment.TimeEnd" readonly />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Customer</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" value="@Model.Appointment.Customer?.Name" readonly />
                     </div>
                 </div>
 
@@ -48,33 +59,56 @@
                 </div>
 
                 <div class="form-group row">
-                    <label class="col-sm-3 col-form-label">Dentist</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control-plaintext" value="@Model.Appointment.DentistSlot?.Dentist?.Name" readonly />
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <label class="col-sm-3 col-form-label">Customer</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control-plaintext" value="@Model.Appointment.Customer?.Name" readonly />
-                    </div>
-                </div>
-
-                <div class="form-group row">
                     <label class="col-sm-3 col-form-label">Services</label>
                     <div class="col-sm-9">
-                        <select id="Appointment.ServiceId" name="Appointment.ServiceId" class="form-control">
-                            @if (Model.Services != null)
+                        <select name="Appointment.ServiceId" id="ServiceId" class="form-control">
+                            @if (!Model.Services.IsNullOrEmpty() && Model.Services.Count > 0)
                             {
                                 @foreach (var s in Model.Services)
                                 {
-                                    <option value="@s.ServiceId">@s.ServiceName - @s.Price</option>
+                                    <option value="@s.ServiceId" title="@s.ServiceName"> @s.ServiceName</option>
                                 }
+                            }
+                            else
+                            {
+                                <option value="0">No service found</option>
                             }
                         </select>
                     </div>
                 </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Dentist</label>
+                    <div class="col-sm-9">
+                        <select id="DentistId" name="Appointment.CreateBy" class="form-control">
+                            @if (!Model.Dentists.IsNullOrEmpty())
+                            {
+                                @if(!Model.Appointment.CreateBy.HasValue)
+                                {
+                                    <option value="0">Anyone</option>
+                                    @foreach (var s in Model.Dentists)
+                                    {
+                                        <option value="@s.UserId">@s.Name</option>
+                                    }
+                                }
+                                else
+                                {
+                                    @foreach (var s in Model.Dentists)
+                                    {
+                                        <option value="@s.UserId">@s.Name</option>
+                                    }
+                                    <option value="0">Anyone</option>
+                                }
+                                
+                            }
+                            else
+                            {
+                                <option value="0">No dentists for this service found</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                
 
                 <div class="form-group row text-center">
                     <div class="col-sm-9 offset-sm-3">
@@ -115,5 +149,41 @@
                 alertPlaceholder.children('.alert').alert('close');
             }, 3000);
         }
+
+        $('#ServiceId').change(function () {
+            var serviceId = $(this).val();
+            console.log(serviceId);
+
+            $.getJSON('@Url.Page("/CustomerPage/AppointmentDetail", "DentistByService")', {
+                serviceId: serviceId,
+            })
+                .done(function (response) {
+                    console.log(response);
+                    var dentistSelectList = $('#DentistId');
+                    dentistSelectList.empty();
+                    dentistSelectList.append($('<option>', {
+                        value: '0',
+                        text: 'Anyone'
+                    }));
+
+                    if (response.success === false) {
+                        dentistSelectList.append($('<option>', {
+                            value: '',
+                            text: response.message
+                        }));
+                    } else {
+                        $.each(response.dentistSelectList, function (index, item) {
+                            console.log(response.dentistSelectList)
+                            dentistSelectList.append($('<option>', {
+                                value: item.value,
+                                text: item.text
+                            }));
+                        });
+                    }
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    console.error('AJAX request failed:', textStatus, errorThrown);
+                });
+        });
     });
 </script>

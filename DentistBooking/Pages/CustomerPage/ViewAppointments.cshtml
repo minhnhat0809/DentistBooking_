@@ -29,11 +29,13 @@
                         <tr>
                             <td>@appointment.TimeStart.ToString("MM/dd/yyyy")</td>
                             <td>@appointment.TimeStart.ToString("hh\\:mm tt")</td>
-                            @if(appointment.DentistSlot == null){
-                                <td></td>
-                            }else
+                            @if(appointment.CreateByNavigation != null)
                             {
-                                <td>@appointment.DentistSlot.Dentist.Name</td>
+                                <td>@appointment.CreateByNavigation?.Name</td>
+                            }
+                            else
+                            {
+                                <td></td>
                             } 
 
                             <td>@appointment.Service.ServiceName - @appointment.Service.Price</td>

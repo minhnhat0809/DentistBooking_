@@ -10,5 +10,7 @@ namespace Service
     public interface IDentistService
     {
         Task<List<ServiceDto>> GetAllServiceByDentist(int dentistId, int serviceId);
+
+        Task<List<UserDto>> GetDentistsForAppointmentCustomer(int appointmentId);
     }
 }

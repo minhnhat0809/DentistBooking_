@@ -1,4 +1,5 @@
 ﻿@page
+@using Microsoft.IdentityModel.Tokens
 @model DentistBooking.Pages.StaffPages.Appointments.EditModel
 
 @{
@@ -117,12 +118,16 @@
                     {
                         <label asp-for="Appointment.ServiceId" class="control-label">Service</label>
                         <select name="Appointment.ServiceId" id="ServiceId" class="form-control" disabled="disabled">
-                            @if (Model.Services != null)
+                            @if (!Model.Services.IsNullOrEmpty() && Model.Services.Count > 0)
                             {
                                 @foreach (var s in Model.Services)
                                 {
                                     <option value="@s.ServiceId" title="@s.ServiceName"> @s.ServiceName</option>
                                 }
+                            }
+                            else
+                            {
+                                <option value="0">No service found</option>
                             }
                         </select>
                         <span asp-validation-for="Appointment.ServiceId" class="text-danger"></span>
