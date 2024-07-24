@@ -34,11 +34,6 @@ namespace DentistBooking.Pages.DentistPage.Appointments
         {
             try
             {
-                /*var role = HttpContext.Session.GetString("Role");
-                if (role != "Dentist")
-                {
-                    return RedirectToPage("/Denied");
-                }*/
                 var role = HttpContext.Session.GetString("Role");
                 string? email = HttpContext.Session.GetString("Email");
                 if (!string.IsNullOrEmpty(email))

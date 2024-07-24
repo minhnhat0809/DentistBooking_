@@ -11,6 +11,8 @@ using DataAccess;
 using Service;
 using BusinessObject.DTO;
 using Microsoft.AspNetCore.SignalR;
+using System.Drawing.Printing;
+using X.PagedList;
 
 namespace DentistBooking.Pages.AdminPage.Clinics
 {
@@ -30,6 +32,11 @@ namespace DentistBooking.Pages.AdminPage.Clinics
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Admin")
+            {
+                return RedirectToPage("/Denied");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -53,8 +60,6 @@ namespace DentistBooking.Pages.AdminPage.Clinics
                 return Page();
             }
 
-
-
             try
             {
                 await _clinicService.UpdateClinic(Clinic);
@@ -64,12 +69,20 @@ namespace DentistBooking.Pages.AdminPage.Clinics
             {
                 if (!ClinicExists(Clinic.ClinicId))
                 {
+                    // If the clinic no longer exists, return NotFound
                     return NotFound();
                 }
                 else
                 {
+                    // Otherwise, rethrow the exception
                     throw;
                 }
+            }
+            catch (Exception ex)
+            {
+                // Handle any other exceptions
+                ModelState.AddModelError(string.Empty, $"An unexpected error occurred: {ex.Message}");
+                return Page();
             }
 
             return RedirectToPage("./Index");
