@@ -31,11 +31,19 @@ namespace DentistBooking.Pages.DentistPage.Appointments.Prescriptions
 
         public async Task<IActionResult> OnGetAsync()
         {
-            
-            var prescriptions = await _prescriptionService.GetPrescriptions();
-            Prescription = prescriptions.ToPagedList(PageNumber, PageSize);
+            try
+            {
+                var prescriptions = await _prescriptionService.GetPrescriptions();
+                Prescription = prescriptions.ToPagedList(PageNumber, PageSize);
 
-            return Page();
+                return Page();
+            }
+            catch (Exception ex)
+            {
+                // Handle unexpected errors
+                TempData["ErrorMessage"] = "An unexpected error occurred: " + ex.Message;
+                return RedirectToPage("/Error");
+            }
         }
     }
 }

@@ -13,6 +13,7 @@ namespace DentistBooking.Pages
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
         private readonly ILogger<ErrorModel> _logger;
+        public string? ErrorMessage { get; set; }
 
         public ErrorModel(ILogger<ErrorModel> logger)
         {
@@ -22,6 +23,7 @@ namespace DentistBooking.Pages
         public void OnGet()
         {
             RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+            ErrorMessage = TempData["ErrorMessage"] as string;
         }
     }
 

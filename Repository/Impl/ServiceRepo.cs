@@ -16,7 +16,7 @@ namespace Repository.Impl
         public async Task<List<Service>> GetAllServices()
         => await ServiceDAO.Instance.getAllServices();
 
-        public async Task<IEnumerable<Service>> GetAllServicesAsync()
+        public async Task<List<Service>> GetAllServicesAsync()
         => await ServiceDAO.Instance.getAllServices();
 
         public async Task<Service> GetServiceByID(int? id)

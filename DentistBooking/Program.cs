@@ -33,6 +33,7 @@ builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
     options.Conventions.AddPageRoute("/DentistPage/Appointments/Index", "/appointments");
     options.Conventions.AddPageRoute("/DentistPage/Appointments/Prescriptions/Index", "/appointments/prescriptions");
     options.Conventions.AddPageRoute("/DentistPage/Appointments/Prescriptions/PrescriptionMedicines/Index", "/appointments/prescriptions/medicines");
+    
 
     options.Conventions.AddPageRoute("/CustomerPage/ViewServices", "/services/view");
     options.Conventions.AddPageRoute("/CustomerPage/ViewPrescriptions", "/prescriptions/view");

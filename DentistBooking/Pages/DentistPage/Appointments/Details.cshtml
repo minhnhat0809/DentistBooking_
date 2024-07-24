@@ -131,33 +131,39 @@
             @Html.DisplayFor(model => model.Appointment.Service.ServiceName)
         </dd>
     </dl>
-    <h4>Prescription</h4>
-    <hr />
-    @if (Model.Prescription != null)
-    {
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Diagnosis</th>
-                    <th>Total</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>@Model.Prescription.Date.ToString("d")</td>
-                    <td>@Model.Prescription.Diagnosis</td>
-                    <td>@Model.Prescription.Total</td>
-                    <td>@(Model.Prescription.Status == true ? "Active" : "Inactive")</td>
-                </tr>
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <p>No prescription available</p>
-    }
+    <div>
+        <h4>Prescriptions</h4>
+        <hr />
+        @if (Model.Prescriptions != null && Model.Prescriptions.Any())
+        {
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Diagnosis</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var prescription in Model.Prescriptions)
+                    {
+                        <tr>
+                            <td>@prescription.Date.ToString("d")</td>
+                            <td>@prescription.Diagnosis</td>
+                            <td>@prescription.Total</td>
+                            <td>@(prescription.Status == true ? "Active" : "Inactive")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No prescriptions available</p>
+        }
+
+    </div>
 </div>
 <div>
     <a asp-page="./Edit" asp-route-id="@Model.Appointment.AppointmentId">Edit</a> |
