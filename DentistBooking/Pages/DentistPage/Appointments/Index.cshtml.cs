@@ -9,6 +9,7 @@ using BusinessObject;
 using Service;
 using BusinessObject.DTO;
 using X.PagedList;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DentistBooking.Pages.DentistPage.Appointments
 {
@@ -33,32 +34,35 @@ namespace DentistBooking.Pages.DentistPage.Appointments
         {
             try
             {
-                var role = HttpContext.Session.GetString("Role");
-                if (role == "Dentist")
+                /*var role = HttpContext.Session.GetString("Role");
+                if (role != "Dentist")
                 {
-                    string? email = HttpContext.Session.GetString("Email");
-                    if (!string.IsNullOrEmpty(email))
+                    return RedirectToPage("/Denied");
+                }*/
+                var role = HttpContext.Session.GetString("Role");
+                string? email = HttpContext.Session.GetString("Email");
+                if (!string.IsNullOrEmpty(email))
+                {
+                    var dentists = await _userService.GetAllDentists();
+                    if (dentists != null)
                     {
-                        var dentists = await _userService.GetAllDentists();
-                        if (dentists != null)
-                        {
-                            var dentist = dentists.FirstOrDefault(x => x.Email == email);
-                            if (dentist == null)
-                            {
-                                TempData["ErrorMessage"] = "No dentist found with the provided email.";
-                                return RedirectToPage("/Error");
-                            }
-                            List<AppointmentDto> viewModels = await _appointmentService.GetAllAppointmentByDentistId(dentist.UserId);
-                            Appointment = viewModels.ToPagedList(PageNumber, PageSize);
-                            return Page();
-                        }
-                        else 
+                        var dentist = dentists.FirstOrDefault(x => x.Email == email);
+                        if (dentist == null)
                         {
                             TempData["ErrorMessage"] = "No dentist found with the provided email.";
                             return RedirectToPage("/Error");
                         }
-                    } else return RedirectToPage("/Login");
-                } else return RedirectToPage("/Denied");
+                        List<AppointmentDto> viewModels = await _appointmentService.GetAllAppointmentByDentistId(dentist.UserId);
+                        Appointment = viewModels.ToPagedList(PageNumber, PageSize);
+                        return Page();
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = "No dentist found with the provided email.";
+                        return RedirectToPage("/Error");
+                    }
+                }
+                else return RedirectToPage("/Denied");
             }
             catch (Exception ex)
             {

@@ -48,14 +48,14 @@
         </form>
     </div>
 </div>
-@if (Model.Prescription.PrescriptionMedicines != null && Model.Prescription.PrescriptionMedicines.Any())
-{
+
      <div>
         <h4>Medicines</h4>
         <div class="form-group">
             <a asp-page="./PrescriptionMedicines/Index" asp-route-id="@Model.Prescription.PrescriptionId" class="btn btn-primary">Edit Medicines</a>
         </div>
-        <hr />
+    @if (Model.Prescription.PrescriptionMedicines != null && Model.Prescription.PrescriptionMedicines.Any())
+    {
         <table class="table">
             <thead>
                 <tr>
@@ -75,13 +75,13 @@
                 }
             </tbody>
         </table>
+    }
+    else
+    {
+        <p>No Medicines available</p>
+    }
     </div>
-}else
-{
-    <h4>Medicines</h4>
-    <hr />
-    <p>No Medicines available</p>
-}
+
 
 <div>
     <a asp-page="./../Edit" asp-route-id="@Model.Prescription.AppointmentId">Back to Edit Appointment</a>

@@ -10,18 +10,22 @@ using DataAccess;
 using Service.Impl;
 using Microsoft.AspNetCore.SignalR;
 using BusinessObject.DTO;
+using Service;
 
 namespace DentistBooking.Pages.DentistPage.Appointments.Prescriptions.PrescriptionMedicines
 {
     public class DeleteModel : PageModel
     {
         private readonly IPrescriptionMedicinesService _prescriptionMedicinesService;
+        private readonly IPrescriptionService _prescriptionService;
         private readonly IHubContext<SignalRHub> _hubContext;
         public DeleteModel(IPrescriptionMedicinesService prescriptionMedicinesService,
-            IHubContext<SignalRHub> hubContext)
+            IHubContext<SignalRHub> hubContext,
+            IPrescriptionService prescriptionService)
         {
             _hubContext = hubContext;   
             _prescriptionMedicinesService = prescriptionMedicinesService;
+            _prescriptionService = prescriptionService;
         }
 
         [BindProperty]
@@ -59,6 +63,8 @@ namespace DentistBooking.Pages.DentistPage.Appointments.Prescriptions.Prescripti
             {
                 PrescriptionMedicine = prescriptionmedicine;
                 await _prescriptionMedicinesService.DeletePrescriptionMedicine(prescriptionmedicine);
+                await _hubContext.Clients.All.SendAsync("ReloadPrescriptionMedicines");
+                await _prescriptionService.UpdatePrescriptionPrice(PrescriptionMedicine.PrescriptionId.Value);
                 await _hubContext.Clients.All.SendAsync("ReloadPrescriptionMedicines");
             }
 

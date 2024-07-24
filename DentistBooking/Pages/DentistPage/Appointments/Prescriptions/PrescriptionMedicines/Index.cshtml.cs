@@ -31,14 +31,22 @@ namespace DentistBooking.Pages.DentistPage.Appointments.Prescriptions.Prescripti
         public int PageSize { get; set; } = 5;
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            PrescriptionId = id;    
-            var prescriptionMedicines = await _prescriptionMedicinesService.GetAllPrescriptionMedicinesByPrescriptionId(id);
-            if (prescriptionMedicines == null || !prescriptionMedicines.Any())
+            // Set the PrescriptionId for use in the page
+            PrescriptionId = id;
+
+            try
             {
-                return NotFound();
+                var prescriptionMedicines = await _prescriptionMedicinesService.GetAllPrescriptionMedicinesByPrescriptionId(id);
+                PrescriptionMedicine = prescriptionMedicines.ToPagedList(PageNumber, PageSize);
+
+                return Page();
             }
-            PrescriptionMedicine = prescriptionMedicines.ToPagedList(PageNumber, PageSize);
-            return Page();
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "An error occurred while retrieving prescription medicines: " + ex.Message;
+                return RedirectToPage("/Error");
+            }
         }
+
     }
 }

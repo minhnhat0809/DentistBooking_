@@ -62,6 +62,7 @@ namespace DentistBooking.Pages.DentistPage.Appointments.Prescriptions
             {
                 await _prescriptionService.UpdatePrescription(Prescription);
                 await _hubContext.Clients.All.SendAsync("ReloadPrescriptions");
+                return RedirectToPage("/DentistPage/Appointments/Edit", new { id = Prescription.AppointmentId });
             }
             catch (DbUpdateConcurrencyException ex)
             {
@@ -82,8 +83,6 @@ namespace DentistBooking.Pages.DentistPage.Appointments.Prescriptions
                 ViewData["AppointmentId"] = new SelectList(await _appointmentService.GetAllAppointments(), "AppointmentId", "AppointmentId");
                 return Page();
             }
-
-            return RedirectToPage("./Index");
         }
         private bool PrescriptionExists(int id)
         {

@@ -55,43 +55,43 @@ namespace DentistBooking.Pages.DentistPage.Appointments
             if (id != null)
             {
                 // check role
-                var role = HttpContext.Session.GetString("Role");
-                if (role == "Dentist")
+                /*var role = HttpContext.Session.GetString("Role");
+                if (role != "Dentist")
                 {
-                    try
+                    return RedirectToPage("/Denied");
+                }*/
+                try
+                {
+                    var appointment = await _appointmentService.GetAppointmentByID(id.Value);
+                    // check exist
+                    if (appointment != null)
                     {
-                        var appointment = await _appointmentService.GetAppointmentByID(id.Value);
-                        // check exist
-                        if (appointment != null)
+                        // try get status
+                        if (appointment.Status != null)
                         {
-                            // try get status
-                            if(appointment.Status != null)
-                            {
-                                if(appointment.Status == "Happening" || appointment.Status == "Finished") StatusOptions = new SelectList(new List<string> { "Happening", "Finished"});
-                                else StatusOptions = new SelectList(new List<string> { "Happening", "Finished", appointment.Status });
-                            }
-                            
-                            Appointment = appointment;
-
-                            // try get prescription 
-                           Prescriptions = await _prescriptionService1.GetByAppointmentId(appointment.AppointmentId);
-
-                            await LoadSelectLists();
-                            return Page();
+                            if (appointment.Status == "Happening" || appointment.Status == "Finished") StatusOptions = new SelectList(new List<string> { "Happening", "Finished" });
+                            else StatusOptions = new SelectList(new List<string> { "Happening", "Finished", appointment.Status });
                         }
-                        else
-                        {
-                            TempData["ErrorMessage"] = "Appointment not found.";
-                            return RedirectToPage("/Error");
-                        }
+
+                        Appointment = appointment;
+
+                        // try get prescription 
+                        Prescriptions = await _prescriptionService1.GetByAppointmentId(appointment.AppointmentId);
+
+                        await LoadSelectLists();
+                        return Page();
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        TempData["ErrorMessage"] = "An unexpected error occurred: " + ex.Message;
+                        TempData["ErrorMessage"] = "Appointment not found.";
                         return RedirectToPage("/Error");
                     }
                 }
-                else return RedirectToPage("/Denied");
+                catch (Exception ex)
+                {
+                    TempData["ErrorMessage"] = "An unexpected error occurred: " + ex.Message;
+                    return RedirectToPage("/Error");
+                }
             }
             else
             {
