@@ -62,7 +62,7 @@ namespace DentistBooking.Pages.DentistPage.Appointments.Prescriptions
                 await _hubContext.Clients.All.SendAsync("ReloadPrescriptions");
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("/DentistPage/Appointments/Edit", new { id = Prescription.AppointmentId });
         }
     }
 }

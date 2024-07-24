@@ -10,7 +10,7 @@ namespace Repository
         Task CreateService(Service service);
         Task UpdateService(Service service);
 
-        Task<IEnumerable<Service>> GetAllServicesAsync();
+        Task<List<Service>> GetAllServicesAsync();
         Task<IEnumerable<Service>> GetServicesByDentistSlotAsync(int dentistSlotId);
 
     }

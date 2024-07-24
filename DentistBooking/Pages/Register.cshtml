@@ -23,15 +23,23 @@
             <div class="register-form" id="register-form">
                 <form method="post" asp-page-handler="register" class="needs-validation" novalidate>
                     <h2>Register</h2>
+
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            @TempData["ErrorMessage"]
+                        </div>
+                    }
+
                     <div class="input-field">
-                        <input type="text" name="name" required>
+                        <input type="text" name="Name" value="@Model.Name" required>
                         <label>Enter your name</label>
                         <div style="position: absolute; font-size: 10px">
-                            <span asp-validation-for="Name" class="text-danger text-start"></span>
+                            <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="input-field">
-                        <input type="email" name="RegisterEmail" required>
+                        <input type="email" name="RegisterEmail" value="@Model.RegisterEmail" required>
                         <label>Enter your email</label>
                         <div style="position: absolute; font-size: 10px">
                             <span asp-validation-for="RegisterEmail" class="text-danger"></span>
@@ -40,22 +48,28 @@
 
                     <div class="d-flex flex-row gap-5">
                         <div class="input-field">
-                            <input type="date" name="dob">
+                            <input type="date" name="Dob" value="@Model.Dob.ToString("yyyy-MM-dd")" min="1900-01-01" max="@DateTime.Now.ToString("yyyy-MM-dd")">
                             <label>Date of birth</label>
                             <div style="position: absolute; font-size: 10px">
                                 <span asp-validation-for="Dob" class="text-danger"></span>
                             </div>
                         </div>
 
-                        <div style="display: flex;flex-direction: column; align-items: flex-start; row-gap: 5px; position: relative; flex:1">
+                        <div style="display: flex; flex-direction: column; align-items: flex-start; row-gap: 5px; position: relative; flex: 1">
                             <label class="radio-label">Gender</label>
-                            <div class="radio-group" style="display: flex; flex-direction: row; column-gap: 10px; justify-content:space-between">
+                            <div class="radio-group" style="display: flex; flex-direction: row; column-gap: 10px; justify-content: space-between">
                                 <label>
-                                    <input type="radio" name="gender" value="male" required>
+                                    <input type="radio" name="Gender" value="male" @if (Model.Gender == "male")
+                                    {
+                                        <text>checked</text>
+                                    } required>
                                     Male
                                 </label>
                                 <label>
-                                    <input type="radio" name="gender" value="female" required>
+                                    <input type="radio" name="Gender" value="female" @if (Model.Gender == "female")
+                                    {
+                                        <text>checked</text>
+                                    } required>
                                     Female
                                 </label>
                             </div>
@@ -64,8 +78,9 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="input-field">
-                        <input type="text" name="phoneNumber" required>
+                        <input type="text" name="PhoneNumber" value="@Model.PhoneNumber" required>
                         <label>Enter your phone number</label>
                         <div style="position: absolute; font-size: 10px">
                             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
@@ -83,7 +98,11 @@
                     <div class="input-field">
                         <input type="password" name="RegisterConfirm" required>
                         <label>Confirm your password</label>
+                        <div style="position: absolute; font-size: 10px">
+                            <span asp-validation-for="RegisterConfirm" class="text-danger"></span>
+                        </div>
                     </div>
+
                     <div class="forget">
                         <label for="remember">
                             <input type="checkbox" id="remember">

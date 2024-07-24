@@ -21,5 +21,7 @@ namespace Repository
         Task DeleteAppointment(int appointmentId);
 
         Task<List<Appointment>> GetAllProcessingAppointment();
+
+        Task<List<Appointment>> GetAllAppointmentsByDentist(int dentistId);
     }
 }

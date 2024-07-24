@@ -32,9 +32,14 @@ namespace DentistBooking.Pages.DentistPage.Customers
         public async Task<IActionResult> OnGetAsync()
         {
             var users = await _userService.GetAllCustomers();
+            if (users == null)
+            {
+                users = new List<UserDto>();
+            }
             users = users.Where(x => x.Status == true).ToList();
             User = users.ToPagedList(PageNumber, PageSize);
             return Page();
         }
+
     }
 }

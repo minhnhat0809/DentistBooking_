@@ -107,5 +107,18 @@ namespace DataAccess
                              dl.Status == true)
                 .ToList();
         }
+
+        public DentistSlot getDentistSlotByDentistAndTimeStart(int dentistId, DateTime TimeStart)
+        {
+            var context = new BookingDentistDbContext();
+            return context.DentistSlots
+                .Include(dl => dl.Dentist)
+                .Include(dl => dl.Room)
+                .FirstOrDefault(dl => dl.TimeStart.Date.Equals(TimeStart.Date) &&
+                                      dl.TimeStart.TimeOfDay <= TimeStart.TimeOfDay &&
+                                      dl.TimeEnd.TimeOfDay > TimeStart.TimeOfDay &&
+                                      dl.DentistId.Value  == dentistId &&
+                                      dl.Status == true);
+        }
     }
 }

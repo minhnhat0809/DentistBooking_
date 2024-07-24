@@ -67,7 +67,22 @@ namespace DataAccess
         public async Task< List<BusinessObject.Service>> getAllServiceByDentist(int dentistId)
         {
             var context = new BookingDentistDbContext();
-            List<BusinessObject.Service> services = await context.DentistServices.Where(ds => ds.DentistId == dentistId).Select(ds => ds.Service).ToListAsync();
+            List<BusinessObject.Service> services = await context.DentistServices
+                .Include(ds =>ds.Service)
+                .Where(ds => ds.DentistId == dentistId && ds.Service.Status == true)
+                .Select(ds => ds.Service)
+                .ToListAsync();
+            return services;
+        }
+        
+        public async Task< List<BusinessObject.Service>> getAllServiceByDentistActive(int dentistId)
+        {
+            var context = new BookingDentistDbContext();
+            List<BusinessObject.Service> services = await context.DentistServices
+                .Include(ds =>ds.Service)
+                .Where(ds => ds.DentistId == dentistId && ds.Service.Status == true && ds.Status == true)
+                .Select(ds => ds.Service)
+                .ToListAsync();
             return services;
         }
         

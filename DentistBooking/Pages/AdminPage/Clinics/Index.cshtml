@@ -8,9 +8,7 @@
 
 <h1>Clinics</h1>
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
+
 <table class="table table-striped table-bordered  bg-light">
     <thead>
         <tr>
@@ -62,8 +60,7 @@
                 </td> *@
                 <td>
                     <a asp-page="./Edit" asp-route-id="@item.ClinicId">Edit</a> |
-                    <a asp-page="./Details" asp-route-id="@item.ClinicId">Details</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.ClinicId">Delete</a>
+                    <a asp-page="./Details" asp-route-id="@item.ClinicId">Details</a>
                 </td>
             </tr>
         }

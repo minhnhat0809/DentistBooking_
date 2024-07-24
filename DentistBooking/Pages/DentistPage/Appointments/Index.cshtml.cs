@@ -9,6 +9,7 @@ using BusinessObject;
 using Service;
 using BusinessObject.DTO;
 using X.PagedList;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DentistBooking.Pages.DentistPage.Appointments
 {
@@ -29,13 +30,45 @@ namespace DentistBooking.Pages.DentistPage.Appointments
 
         [BindProperty(SupportsGet = true)]
         public int PageSize { get; set; } = 5;
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-            string? email = HttpContext.Session.GetString("Email");
-            var dentists = await _userService.GetAllDentists();
-            var dentist = dentists.FirstOrDefault(x => x.Email == email);
-            List<AppointmentDto> viewModels = await _appointmentService.GetAllAppointmentByDentistId(dentist.UserId);
-            Appointment = viewModels.ToPagedList(PageNumber, PageSize); 
+            try
+            {
+                /*var role = HttpContext.Session.GetString("Role");
+                if (role != "Dentist")
+                {
+                    return RedirectToPage("/Denied");
+                }*/
+                var role = HttpContext.Session.GetString("Role");
+                string? email = HttpContext.Session.GetString("Email");
+                if (!string.IsNullOrEmpty(email))
+                {
+                    var dentists = await _userService.GetAllDentists();
+                    if (dentists != null)
+                    {
+                        var dentist = dentists.FirstOrDefault(x => x.Email == email);
+                        if (dentist == null)
+                        {
+                            TempData["ErrorMessage"] = "No dentist found with the provided email.";
+                            return RedirectToPage("/Error");
+                        }
+                        List<AppointmentDto> viewModels = await _appointmentService.GetAllAppointmentByDentistId(dentist.UserId);
+                        Appointment = viewModels.ToPagedList(PageNumber, PageSize);
+                        return Page();
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = "No dentist found with the provided email.";
+                        return RedirectToPage("/Error");
+                    }
+                }
+                else return RedirectToPage("/Denied");
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "An unexpected error occurred: " + ex.Message;
+                return RedirectToPage("/Error");
+            }
         }
     }
 }

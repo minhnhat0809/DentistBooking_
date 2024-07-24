@@ -75,7 +75,7 @@ namespace Service.Impl
             }
         }
 
-        public async Task<IEnumerable<ServiceDto>> GetAllServicesAsync()
+        public async Task<List<ServiceDto>> GetAllServicesByDentistId(int dentistId)
         {
             try
             {
@@ -84,7 +84,11 @@ namespace Service.Impl
                 {
                     throw new InvalidOperationException("Services not found!");
                 }
-                var viewModels = _mapper.Map<ServiceDto[]>(models);
+                if(dentistId != null)
+                {
+                    models = models.Where(x=>x.DentistServices.Any(x=>x.DentistId == dentistId)).ToList();
+                }
+                var viewModels = _mapper.Map<List<ServiceDto>>(models);
                 return viewModels;
             }
             catch (Exception ex)

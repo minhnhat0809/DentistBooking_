@@ -22,16 +22,18 @@ namespace DentistBooking.Pages.CustomerPage
         public AppointmentDto Appointment { get; set; } = default!;
 
         public IList<ServiceDto> Services { get; set; } = default!;
-        public async void OnGet(int id)
+        public async Task<IActionResult>  OnGet(int id)
         {
             Appointment = await appointmentService.GetAppointmentByID(id);
             if (Appointment.DentistSlot != null)
             {
                 Services = await dentistService.GetAllServiceByDentist((int)Appointment.DentistSlot.DentistId, (int)Appointment.ServiceId);
+                return Page();
             }
             else
             {
                 Services = await service.GetAllServicesForCustomer((int)Appointment.ServiceId);
+                return Page();
             }
         }
 

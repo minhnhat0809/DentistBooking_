@@ -22,5 +22,7 @@ namespace Repository
         List<DentistSlot> GetAllDentistSlotByServiceAndTimeStart(int serviceId, DateTime timeStart);
 
         List<DentistSlot> GetAllDentistSlotByServiceAndDate(int serviceId, DateTime timeStart);
+
+        DentistSlot GetDentistSlotByDentistAndTimeStart(int dentistId, DateTime TimeStart);
     }
 }

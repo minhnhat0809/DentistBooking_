@@ -13,7 +13,7 @@ namespace Service
         Task CreateService(ServiceDto service);
         Task UpdateService(ServiceDto service);
         Task<List<ServiceDto>> GetAllServicesForCustomer(int serviceId);
-        Task<IEnumerable<ServiceDto>> GetAllServicesAsync();
+        Task<List<ServiceDto>> GetAllServicesByDentistId(int dentistId);
         Task<IEnumerable<ServiceDto>> GetServicesByDentistSlotAsync(int dentistSlotId);
 
         Task<ListServiceResult> GetAllActiveServices();
