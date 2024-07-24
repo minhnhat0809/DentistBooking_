@@ -39,7 +39,7 @@
                             {
                                 <td></td>
                             }
-                            else
+                            else if(appointment.CreateByNavigation != null)
                             {
                                 <td>@appointment.CreateByNavigation.Name</td>
                             }
@@ -107,4 +107,8 @@ else
     });
 
 </script>
+
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+
+<script src="~/js/site.js"></script>
 
