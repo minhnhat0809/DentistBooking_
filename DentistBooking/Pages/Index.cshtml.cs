@@ -8,6 +8,7 @@ using BusinessObject;
 using Service.Impl;
 using Service.Lib;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace DentistBooking.Pages
 {
@@ -20,7 +21,8 @@ namespace DentistBooking.Pages
         private readonly IEmailSender emailSender;
         private readonly IConfiguration configuration;
         private readonly IHubContext<SignalRHub> hubContext;
-        public HomePageModel(IUserService userService, IAppointmentService appointmentService, IService service, IEmailSender emailSender, IConfiguration configuration, IHubContext<SignalRHub> hubContext)
+        public HomePageModel(IUserService userService, IAppointmentService appointmentService, IService service, 
+            IEmailSender emailSender, IConfiguration configuration, IHubContext<SignalRHub> hubContext)
         {
             this.appointmentService = appointmentService;
             this.service = service;
@@ -31,6 +33,7 @@ namespace DentistBooking.Pages
         }
 
         public List<ServiceDto> Services { get; set; } = new List<ServiceDto>();
+        public List<UserDto> Dentists { get; set; } = new List<UserDto>();
 
         [BindProperty]
         [Required]
@@ -60,13 +63,38 @@ namespace DentistBooking.Pages
         public string Gender { get; set; }
 
         [BindProperty]
-        [Required]
-        [DataType(DataType.Date)]
-        public DateOnly Dob { get; set; }
+        public int SelectedDentistId
+        { get; set; }
         public async Task OnGetAsync()
         {
             Services = await service.GetAllServices();
+            Dentists = await userService.GetAllDentistsByService(SelectedServiceId);
         }
+        public async Task<IActionResult> OnGetDentistsByServiceAsync(int serviceId)
+        {
+            try
+            {
+                var dentists = await userService.GetAllDentistsByService(serviceId);
+                if (dentists == null || !dentists.Any())
+                {
+                    return new JsonResult(new { success = false, message = "No dentists available for this service" });
+                }
+
+                var newDentists = dentists.Select(dentist => new SelectListItem
+                {
+                    Value = dentist.UserId.ToString(),
+                    Text = dentist.Name
+                }).ToList();
+
+                return new JsonResult(new { success = true, newDentists });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return new JsonResult(new { success = false, message = "An error occurred while retrieving dentists." });
+            }
+        }
+
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -87,7 +115,6 @@ namespace DentistBooking.Pages
                     UserName = new Guid().ToString(),
                     Gender = Gender,
                     RoleId = 3,
-                    Dob = Dob,
                     Name = Name,
                     Password = "cuZXynTq",
                     CreatedDate = DateTime.Now,
@@ -99,8 +126,7 @@ namespace DentistBooking.Pages
 
 
             var appointmentDate = DateOnly.FromDateTime(AppointmentTime.Date);
-
-            Dictionary<string, string> result = await appointmentService.CreateAppointment(AppointmentTime, customer.UserId, appointmentDate, SelectedServiceId);
+            Dictionary<string, string> result = await appointmentService.CreateAppointmentWithDentist(AppointmentTime, customer.UserId, appointmentDate, SelectedServiceId, SelectedDentistId);
             if (!result.ContainsKey("Success"))
             {
                 foreach (var item in result)

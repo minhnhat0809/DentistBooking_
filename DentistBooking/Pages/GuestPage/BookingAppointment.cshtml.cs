@@ -1,6 +1,7 @@
 using BusinessObject.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
 using Service;
 using Service.Impl;
@@ -27,6 +28,7 @@ namespace DentistBooking.Pages.GuestPage
         }
 
         public List<ServiceDto> Services { get; set; } = new List<ServiceDto>();
+        public List<UserDto> Dentists { get; set; } = new List<UserDto>();
 
         [BindProperty]
         [Required]
@@ -48,6 +50,9 @@ namespace DentistBooking.Pages.GuestPage
 
         [BindProperty]
         [Required]
+        public int SelectedDentistId { get; set; }
+        [BindProperty]
+        [Required]
         [DataType(DataType.DateTime)]
         public DateTime AppointmentTime { get; set; }
 
@@ -55,16 +60,35 @@ namespace DentistBooking.Pages.GuestPage
         [Required]
         public string Gender { get; set; }
 
-        [BindProperty]
-        [Required]
-        [DataType(DataType.Date)]
-        public DateOnly Dob { get; set; }
-
         public async Task OnGetAsync()
         {
             Services = await service.GetAllServices();
+            Dentists = await userService.GetAllDentistsByService(SelectedServiceId);
         }
+        public async Task<IActionResult> OnGetDentistsByServiceAsync(int serviceId)
+        {
+            try
+            {
+                var dentists = await userService.GetAllDentistsByService(serviceId);
+                if (dentists == null || !dentists.Any())
+                {
+                    return new JsonResult(new { success = false, message = "No dentists available for this service" });
+                }
 
+                var newDentists = dentists.Select(dentist => new SelectListItem
+                {
+                    Value = dentist.UserId.ToString(),
+                    Text = dentist.Name
+                }).ToList();
+
+                return new JsonResult(new { success = true, newDentists });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return new JsonResult(new { success = false, message = "An error occurred while retrieving dentists." });
+            }
+        }
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -85,7 +109,6 @@ namespace DentistBooking.Pages.GuestPage
                     UserName = Guid.NewGuid().ToString(),
                     Gender = Gender,
                     RoleId = 3,
-                    Dob = Dob,
                     Name = Name,
                     Password = "cuZXynTq"
                 };
@@ -96,7 +119,7 @@ namespace DentistBooking.Pages.GuestPage
 
             var appointmentDate = DateOnly.FromDateTime(AppointmentTime.Date);
 
-            Dictionary<string, string> result = await appointmentService.CreateAppointment(AppointmentTime, customer.UserId, appointmentDate, SelectedServiceId);
+            Dictionary<string, string> result = await appointmentService.CreateAppointmentWithDentist(AppointmentTime, customer.UserId, appointmentDate, SelectedServiceId, SelectedDentistId);
             if (!result.ContainsKey("Success"))
             {
                 foreach (var item in result)
@@ -112,7 +135,7 @@ namespace DentistBooking.Pages.GuestPage
             TempData["Book"] = "Appointment created successfully!";
             var receiver = Email;
             var subject = "Thank you for your booking!";
-            string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "ThanksGuestBooking.html");
+            string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Templates", "ThanksGuestBooking.html");
             string body = await System.IO.File.ReadAllTextAsync(templatePath);
             var selectedService = await service.GetServiceByID(SelectedServiceId);
             body = body.Replace("[Service Details]", selectedService.ServiceName)
