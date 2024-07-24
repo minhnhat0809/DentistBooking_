@@ -96,7 +96,7 @@ namespace DentistBooking.Pages.CustomerPage
             TempData["Book"] = "Appointment created successfully!";
             Services = services;
             Dentists = await _userService.GetAllDentistsByService(SelectedServiceId);
-            hubContext.Clients.All.SendAsync("ReloadAppointments");
+            await hubContext.Clients.All.SendAsync("ReloadAppointments");
             var email = HttpContext.Session.GetString("Email");
             if (email != null)
             {

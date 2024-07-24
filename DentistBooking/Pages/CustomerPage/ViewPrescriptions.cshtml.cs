@@ -1,23 +1,68 @@
 using BusinessObject;
 using BusinessObject.DTO;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Service;
+using Service.Impl;
+using System.Drawing.Printing;
+using X.PagedList;
 
 namespace DentistBooking.Pages.CustomerPage;
 
 public class ViewPrescriptions : PageModel
 {
     private readonly IPrescriptionService prescriptionService;
-
-    public ViewPrescriptions(IPrescriptionService prescriptionService)
+    private readonly IUserService userService;
+    
+    public ViewPrescriptions(IPrescriptionService prescriptionService, IUserService userService)
     {
         this.prescriptionService = prescriptionService;
+        this.userService = userService;
     }
-    public IList<PrescriptionDto> Prescriptions { get; set; }
-    public async void OnGet()
+    public IPagedList<PrescriptionDto> Prescriptions { get; set; }
+
+    [BindProperty(SupportsGet = true)]
+
+    public int PageNumber { get; set; } = 1;
+
+    [BindProperty(SupportsGet = true)]
+
+    public int PageSize { get; set; } = 5;
+
+    public async Task<IActionResult> OnGet()
     {
-        Prescriptions = await prescriptionService.GetAllPrescriptionByCustomer
-            (Int32.Parse(HttpContext.Session.GetString("ID")));
+        try
+        {
+            string? email = HttpContext.Session.GetString("Email");
+            if (!string.IsNullOrEmpty(email))
+            {
+                var users = await userService.GetAllCustomers();
+                if (users != null)
+                {
+                    var user = users.FirstOrDefault(x => x.Email == email);
+                    if (user == null)
+                    {
+                        TempData["ErrorMessage"] = "No dentist found with the provided email.";
+                        return RedirectToPage("/Error");
+                    }
+                    var prescriptions = await prescriptionService.GetAllPrescriptionByCustomer(user.UserId);
+                    prescriptions = prescriptions.Where(x => x.Status == true).ToList();
+                    Prescriptions = prescriptions.ToPagedList(PageNumber, PageSize);
+                    return Page();
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "No dentist found with the provided email.";
+                    return RedirectToPage("/Error");
+                }
+            }
+            else return RedirectToPage("/Denied");
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
+            return Page();
+        }
     }
 }

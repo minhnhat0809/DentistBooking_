@@ -11,7 +11,10 @@ menuicn.addEventListener("click", () => {
 "use strict";
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/SignalRHub").build();
-
+connection.on("ReloadDentistSlots", function () {
+    console.log("Reloading Dentist Slots")
+    location.reload();
+})
 connection.on("ReloadAppointments", function () {
     console.log("Reloading Appointments")
     location.reload();

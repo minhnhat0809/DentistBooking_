@@ -39,9 +39,13 @@
                             {
                                 <td></td>
                             }
-                            else
+                            else if(appointment.CreateByNavigation != null)
                             {
                                 <td>@appointment.CreateByNavigation.Name</td>
+                            }
+                            else
+                            {
+                                <td></td>
                             }
 
                             @if (@appointment.Customer == null)
@@ -76,7 +80,7 @@
 else
 {
     <div class="alert alert-info" role="alert">
-        No appointments found.
+        No unprocessing appointments found.
     </div>
 }
 
@@ -107,4 +111,8 @@ else
     });
 
 </script>
+
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+
+<script src="~/js/site.js"></script>
 

@@ -817,7 +817,7 @@ namespace Service.Impl
 
         public async Task<List<string>> GetAllStatusOfAppointment(int appointmentId)
         {
-            List<string> statusList = new List<string> { "Not yet arrived", "Arrived", "Happening", "Finished", "Processing"};
+            List<string> statusList = new List<string> { "Not yet arrived", "Arrived", "Happening", "Finished"};
             if (appointmentId == 0)
             {
                 return statusList;

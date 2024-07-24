@@ -203,11 +203,15 @@
                     _ => ""
                 };
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => item.TimeStart)</td>
+                    <td id="timeStart-@item.AppointmentId">@Html.DisplayFor(modelItem => item.TimeStart)</td>
                     <td>@Html.DisplayFor(modelItem => item.TimeEnd)</td>
                     <td>@Html.DisplayFor(modelItem => item.Diagnosis)</td>
-                    <td>
+                    <td class="d-flex flex-column">
                         <span class="badge @statusClass">@Html.DisplayFor(modelItem => item.Status)</span>
+                        @if (item.Status.Equals("Not yet arrived"))
+                        {
+                            <span id="delay-@item.AppointmentId" class="delay-time">00:00:00</span>
+                        }
                     </td>
                     <td>@Html.DisplayFor(modelItem => item.Customer.Name)</td>
                     <td>@Html.DisplayFor(modelItem => item.DentistSlot.Dentist.Name)</td>
@@ -259,6 +263,48 @@
         <span>Next</span>
     }
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        function updateDelays() {
+            const delayElements = document.querySelectorAll('.delay-time');
 
+            delayElements.forEach(function (element) {
+                const appointmentId = element.id.split('-')[1];
+                const timeStartElement = document.querySelector(`#timeStart-${appointmentId}`);
+                if (!timeStartElement) return;
+
+                const timeStart = new Date(timeStartElement.innerText);
+                const now = new Date();
+                const appointmentTime = new Date(timeStart);
+
+                if (appointmentTime > now) { //Time left
+                    const delay = appointmentTime - now; // delay in milliseconds
+
+                    const hours = Math.floor(delay / (1000 * 60 * 60));
+                    const minutes = Math.floor((delay % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((delay % (1000 * 60)) / 1000);
+
+                    const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                    element.innerText = "Time left: " + formattedTime;
+                } else if (appointmentTime < now) {//Overdue
+                    const delay = now - appointmentTime; // delay in milliseconds
+
+                    const hours = Math.floor(delay / (1000 * 60 * 60));
+                    const minutes = Math.floor((delay % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((delay % (1000 * 60)) / 1000);
+
+                    const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                    element.innerText = "Overdue: " + formattedTime; element.style.color = 'red';
+                }
+            });
+        }
+
+        // Initial update
+        updateDelays();
+
+        // Update every second
+        setInterval(updateDelays, 1000);
+    });
+</script>
 <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/site.js"></script>

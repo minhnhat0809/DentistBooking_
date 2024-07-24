@@ -123,26 +123,33 @@ namespace Service.Impl
 
         public async Task<List<PrescriptionDto>> GetAllPrescriptionByCustomer(int customerId)
         {
-            if(customerId == 0)
+            if (customerId == 0)
             {
-                throw new Exception("user not found");
+                throw new Exception("Customer ID cannot be zero.");
             }
+
             try
             {
                 var models = await _preScription.GetPrescriptions();
-                if (models == null)
+
+                if (models == null || !models.Any())
                 {
-                    throw new Exception("Prescriptions not found");
+                    throw new Exception("No prescriptions found.");
                 }
-                var viewModel = _mapper.Map<List<PrescriptionDto>>(models);
-                return viewModel.Where(s => s.Appointment.CustomerId == customerId).ToList(); 
+
+                var viewModel = models
+                    .Where(p => p.Appointment.CustomerId == customerId)
+                    .Select(p => _mapper.Map<PrescriptionDto>(p))
+                    .ToList();
+
+                return viewModel;
             }
             catch (Exception ex)
             {
-                // Log exception
-                throw new ExceptionHandler.ServiceException("An error occurred while retrieving Prescription.", ex);
+                throw new Exception("An error occurred while retrieving prescriptions.", ex);
             }
         }
+
 
         public async Task<List<PrescriptionDto>> GetPrescriptions()
 
