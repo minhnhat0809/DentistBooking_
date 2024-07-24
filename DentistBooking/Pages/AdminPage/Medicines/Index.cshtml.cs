@@ -31,9 +31,22 @@ namespace DentistBooking.Pages.AdminPage.Medicines
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var medicines = await _medicineService.GetAllMedicines();
-            Medicine = medicines.ToPagedList(PageNumber, PageSize);
-            return Page();
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Admin")
+            {
+                return RedirectToPage("/Denied");
+            }
+            try
+            {
+                var medicines = await _medicineService.GetAllMedicines();
+                Medicine = medicines.ToPagedList(PageNumber, PageSize);
+                return Page();
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "An unexpected error occurred: " + ex.Message;
+                return RedirectToPage("/Error");
+            }
         }
     }
 }

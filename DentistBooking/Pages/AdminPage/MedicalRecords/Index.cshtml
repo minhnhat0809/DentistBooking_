@@ -6,79 +6,70 @@
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-
 <h1>Medical Record</h1>
 
-<table class="table table-striped table-bordered  bg-light">
-    <thead>
-        <tr>
-            @* <th>
-                @Html.DisplayNameFor(model => model.MedicalRecord[0].TimeStart)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MedicalRecord[0].Duration)
-            </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.MedicalRecord[0].Diagnosis)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MedicalRecord[0].Status)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MedicalRecord[0].Customer)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.MedicalRecord)
-        {
+@if (Model.MedicalRecord == null || Model.MedicalRecord.Any())
+{
+    <table class="table table-striped table-bordered bg-light">
+        <thead>
             <tr>
-                @* <td>
-                    @Html.DisplayFor(modelItem => item.TimeStart)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Duration)
-                </td> *@
-                <td>
-                    @Html.DisplayFor(modelItem => item.Diagnosis)
-                </td>
-                @if(item.Status == true)
-                {
-                    <td>Active</td>
-                }else {<td>Inactive</td>}
-                @* <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td> *@
-                <td>
-                    @Html.DisplayFor(modelItem => item.Customer.Name)
-                </td>
-                <td>
-                    <a asp-page="./Details" asp-route-id="@item.MediaRecordId">Details</a>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.MedicalRecord[0].Diagnosis)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MedicalRecord[0].Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MedicalRecord[0].Customer)
+                </th>
+                <th></th>
             </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.MedicalRecord)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Diagnosis)
+                    </td>
+                    <td>
+                        @(item.Status == true ? "Active" : "Inactive")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Customer.Name)
+                    </td>
+                    <td>
+                        <a asp-page="./Details" asp-route-id="@item.MediaRecordId">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div>
+        @if (Model.MedicalRecord.HasPreviousPage)
+        {
+            <a asp-page="./Index" asp-route-pageNumber="@(Model.MedicalRecord.PageNumber - 1)" asp-route-pageSize="@Model.PageSize">Previous</a>
         }
-    </tbody>
-</table>
-<div>
-    @if (Model.MedicalRecord.HasPreviousPage)
-    {
-        <a asp-page="./Index" asp-route-pageNumber="@(Model.MedicalRecord.PageNumber - 1)" asp-route-pageSize="@Model.PageSize">Previous</a>
-    }
-    else
-    {
-        <span>Previous</span>
-    }
+        else
+        {
+            <span>Previous</span>
+        }
 
-    @if (Model.MedicalRecord.HasNextPage)
-    {
-        <a asp-page="./Index" asp-route-pageNumber="@(Model.MedicalRecord.PageNumber + 1)" asp-route-pageSize="@Model.PageSize">Next</a>
-    }
-    else
-    {
-        <span>Next</span>
-    }
-</div>
+        @if (Model.MedicalRecord.HasNextPage)
+        {
+            <a asp-page="./Index" asp-route-pageNumber="@(Model.MedicalRecord.PageNumber + 1)" asp-route-pageSize="@Model.PageSize">Next</a>
+        }
+        else
+        {
+            <span>Next</span>
+        }
+    </div>
+}
+else
+{
+    <p>No medical records found.</p>
+}
+
 <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
-
 <script src="~/js/site.js"></script>

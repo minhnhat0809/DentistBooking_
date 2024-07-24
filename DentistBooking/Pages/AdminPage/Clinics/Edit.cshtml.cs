@@ -65,22 +65,20 @@ namespace DentistBooking.Pages.AdminPage.Clinics
                 await _clinicService.UpdateClinic(Clinic);
                 await _hubContext.Clients.All.SendAsync("ReloadClinics");
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!ClinicExists(Clinic.ClinicId))
                 {
-                    // If the clinic no longer exists, return NotFound
                     return NotFound();
                 }
                 else
                 {
-                    // Otherwise, rethrow the exception
-                    throw;
+                    ModelState.AddModelError(string.Empty, "An error occurred while updating the appointment: " + ex.Message);
+                    return Page();
                 }
             }
             catch (Exception ex)
             {
-                // Handle any other exceptions
                 ModelState.AddModelError(string.Empty, $"An unexpected error occurred: {ex.Message}");
                 return Page();
             }
