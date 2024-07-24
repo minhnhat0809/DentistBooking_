@@ -55,11 +55,11 @@ namespace DentistBooking.Pages.DentistPage.Appointments
             if (id != null)
             {
                 // check role
-                /*var role = HttpContext.Session.GetString("Role");
+                var role = HttpContext.Session.GetString("Role");
                 if (role != "Dentist")
                 {
                     return RedirectToPage("/Denied");
-                }*/
+                }
                 try
                 {
                     var appointment = await _appointmentService.GetAppointmentByID(id.Value);
