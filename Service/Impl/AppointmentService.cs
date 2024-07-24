@@ -101,7 +101,7 @@ namespace Service.Impl
                 User? user = userRepo.GetUserByUserName(email).Result;
                 if (user != null)
                 {
-                    appointment.CreateBy = user.UserId;
+                    appointment.ModifiedBy = user.UserId;
                 }
 
                 var appoinmentList = dentistSlot.Appointments.ToList();
@@ -125,7 +125,8 @@ namespace Service.Impl
                 }
 
                 
-                var viewModel = mapper.Map<Appointment>(appointment);  
+                var viewModel = mapper.Map<Appointment>(appointment);
+                viewModel.CreateBy = dentistSlot.DentistId;
                 
                  await appointmentRepo.CreateAppointment(viewModel);
                 appointmentResult.Message = "Success";

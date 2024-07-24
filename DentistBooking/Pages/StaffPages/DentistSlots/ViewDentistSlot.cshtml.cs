@@ -57,6 +57,9 @@ public class ViewDentistSlot : PageModel
         }
         Dentists =  userService.GetAllUserByType("Dentist").Result;
         Rooms =  _roomService.GetAllActiveRooms().Result.Rooms;
+        DentistSlots = dentistSlotService.GetAllDentistSlotsByDentistAndDate((userService.GetAllUserByType("Dentist").Result)[0].UserId, 
+            DateOnly.FromDateTime(DateTime.Now)).Result;
+        
         return Page();
     }
 
