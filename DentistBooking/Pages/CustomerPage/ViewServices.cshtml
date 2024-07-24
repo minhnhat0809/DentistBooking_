@@ -10,58 +10,67 @@
 }
 
 <h1>Services</h1>
-<table class="table table-bordered table-striped bg-light">
-    <thead>
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Services[0].ServiceName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Services[0].Price)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Services[0].Status)
-        </th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    @if (!Model.Services.IsNullOrEmpty())
-    {
-        @foreach (var item in Model.Services)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ServiceName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    <a asp-page="./Book" asp-route-id="@item.ServiceId">Book</a>
-                </td>
-            </tr>
-        }
-    }
-    else
-    {
-        <tr>
-            <td>No service found</td>
-        </tr>
-    }
-    
-    </tbody>
-</table>
 
-<div class="pagination">
-    @Html.PagedListPager(Model.Services, pageNumber => Url.Page("./InitialPage", new { PageNumber = pageNumber, PageSize = Model.PageSize }), PagedListRenderOptions.ClassicPlusFirstAndLast)
-</div>
+@if (Model.Services == null || !Model.Services.Any())
+{
+    <p>No services available.</p>
+}
+else
+{
+    <table class="table table-bordered table-striped bg-light">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Services[0].ServiceName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Services[0].Price)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Services[0].Status)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Services)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ServiceName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>@(item.Status == true ? "Active" : "Inactive")</td>
+                    <td>
+                        <a asp-page="./Book" asp-route-id="@item.ServiceId">Book</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div>
+        @if (Model.Services.HasPreviousPage)
+        {
+            <a asp-page="./Index" asp-route-pageNumber="@(Model.Services.PageNumber - 1)" asp-route-pageSize="@Model.PageSize">Previous</a>
+        }
+        else
+        {
+            <span>Previous</span>
+        }
+
+        @if (Model.Services.HasNextPage)
+        {
+            <a asp-page="./Index" asp-route-pageNumber="@(Model.Services.PageNumber + 1)" asp-route-pageSize="@Model.PageSize">Next</a>
+        }
+        else
+        {
+            <span>Next</span>
+        }
+    </div>
+}
 
 <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
-
 <script src="~/js/site.js"></script>
-
-<script>
-
-
-</script>
