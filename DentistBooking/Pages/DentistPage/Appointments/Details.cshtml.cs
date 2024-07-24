@@ -22,7 +22,7 @@ namespace DentistBooking.Pages.DentistPage.Appointments
         }
 
         public AppointmentDto Appointment { get; set; } = default!;
-        public PrescriptionDto Prescription { get; set; } = default!;
+        public List<PrescriptionDto> Prescriptions { get; set; } = default!;
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             // check null
@@ -41,7 +41,7 @@ namespace DentistBooking.Pages.DentistPage.Appointments
                     Appointment = appointment;
 
                     // try get prescription
-                    Prescription = await _prescriptionService.GetByAppointmentId(appointment.AppointmentId);
+                    Prescriptions = await _prescriptionService.GetByAppointmentId(appointment.AppointmentId);
 
                     return Page();
                 }

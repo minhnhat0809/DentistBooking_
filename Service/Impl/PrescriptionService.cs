@@ -187,7 +187,7 @@ namespace Service.Impl
             }
         }
 
-        public async Task<PrescriptionDto> GetByAppointmentId(int appointmentId)
+        public async Task<List<PrescriptionDto>> GetByAppointmentId(int appointmentId)
         {
             if (appointmentId <= 0)
             {
@@ -202,9 +202,9 @@ namespace Service.Impl
                     throw new ExceptionHandler.NotFoundException($"Appointment with ID {appointment} not found.");
                 }
                 var models = await _preScription.GetPrescriptions();
-                var prescription = models.FirstOrDefault(x=>x.AppointmentId == appointment.AppointmentId);
-                var viewModel = _mapper.Map<PrescriptionDto>(prescription);
-                return viewModel;
+                var prescriptions = models.Where(x=>x.AppointmentId == appointment.AppointmentId).ToList();
+                var viewModels = _mapper.Map<List<PrescriptionDto>>(prescriptions);
+                return viewModels;
             }
             catch (Exception ex)
             {

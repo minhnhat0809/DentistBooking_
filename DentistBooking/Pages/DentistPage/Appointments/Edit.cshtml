@@ -93,9 +93,9 @@
         </form>
     </div>
     <div>
-        <h4>Prescription</h4>
+        <h4>Prescriptions</h4>
         <hr />
-        @if (Model.Prescription != null)
+        @if (Model.Prescriptions != null && Model.Prescriptions.Any())
         {
             <table class="table table-bordered">
                 <thead>
@@ -108,23 +108,27 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>@Model.Prescription.Date.ToString("d")</td>
-                        <td>@Model.Prescription.Diagnosis</td>
-                        <td>@Model.Prescription.Total</td>
-                        <td>@(Model.Prescription.Status == true ? "Active" : "Inactive")</td>
-                        <td>
-                            <a asp-page="./Prescriptions/Edit" asp-route-id="@Model.Prescription.PrescriptionId" class="btn btn-primary btn-sm">Edit</a>
-                            <a asp-page="./Prescriptions/Details" asp-route-id="@Model.Prescription.PrescriptionId" class="btn btn-info btn-sm">Details</a>
-                        </td>
-                    </tr>
+                    @foreach (var prescription in Model.Prescriptions)
+                    {
+                        <tr>
+                            <td>@prescription.Date.ToString("d")</td>
+                            <td>@prescription.Diagnosis</td>
+                            <td>@prescription.Total</td>
+                            <td>@(prescription.Status == true ? "Active" : "Inactive")</td>
+                            <td>
+                                <a asp-page="./Prescriptions/Edit" asp-route-id="@prescription.PrescriptionId" class="btn btn-primary btn-sm">Edit</a>
+                                <a asp-page="./Prescriptions/Details" asp-route-id="@prescription.PrescriptionId" class="btn btn-info btn-sm">Details</a>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         }
         else
         {
-            <p>No prescription available</p>
+            <p>No prescriptions available</p>
         }
+
     </div>
 </div>
 

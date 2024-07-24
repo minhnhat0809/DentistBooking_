@@ -45,7 +45,7 @@ namespace DentistBooking.Pages.DentistPage.Appointments
         [BindProperty]
         public AppointmentDto Appointment { get; set; } = default!;
 
-        public PrescriptionDto Prescription { get; set; } = default!;
+        public List<PrescriptionDto> Prescriptions { get; set; } = default!;
 
         public SelectList StatusOptions { get; set; }
 
@@ -74,7 +74,7 @@ namespace DentistBooking.Pages.DentistPage.Appointments
                             Appointment = appointment;
 
                             // try get prescription 
-                           Prescription = await _prescriptionService1.GetByAppointmentId(appointment.AppointmentId);
+                           Prescriptions = await _prescriptionService1.GetByAppointmentId(appointment.AppointmentId);
 
                             await LoadSelectLists();
                             return Page();

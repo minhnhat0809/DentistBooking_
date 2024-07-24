@@ -48,6 +48,7 @@ namespace DentistBooking.Pages.DentistPage.Appointments.Prescriptions
             {
                 Prescription.Date = DateOnly.FromDateTime(DateTime.Now);
                 Prescription.Status = true;
+                Prescription.Total = 0;
                 await _prescriptionService.CreatePrescription(Prescription);
                 await _hubContext.Clients.All.SendAsync("ReloadPrescriptions");
             }

@@ -1,5 +1,4 @@
-﻿using BusinessObject;
-using BusinessObject.DTO;
+﻿using BusinessObject.DTO;
 
 namespace Service
 {
@@ -13,7 +12,7 @@ namespace Service
         Task<PrescriptionDto> GetByIdWithMedicinesAsync(int id);
 
         Task<List<PrescriptionDto>> GetAllPrescriptionByCustomer(int customerId);
-        Task<PrescriptionDto> GetByAppointmentId(int appointmentId);
+        Task<List<PrescriptionDto>> GetByAppointmentId(int appointmentId);
         Task UpdatePrescriptionPrice(int prescriptionId);
     }
 }
