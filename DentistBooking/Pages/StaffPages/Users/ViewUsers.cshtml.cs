@@ -36,6 +36,11 @@ public class ViewUsers : PageModel
 
     public async Task<IActionResult> OnGet()
     {
+        var role = HttpContext.Session.GetString("Role");
+        if (role != "Staff")
+        {
+            return RedirectToPage("/Denied");
+        }
         Users = await userService.GetAllUserByType(SelectedUserType);
         return Page();
     }

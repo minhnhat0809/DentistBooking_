@@ -106,6 +106,17 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
+app.UseStatusCodePages(async context =>
+{
+    var response = context.HttpContext.Response;
+    var request = context.HttpContext.Request;
+    if (response.StatusCode == 404)
+    {
+        response.Redirect("/Error");
+    }
+    await System.Threading.Tasks.Task.CompletedTask;
+});
+
 app.MapHub<SignalRHub>("/SignalRHub");
 
 app.UseSession();

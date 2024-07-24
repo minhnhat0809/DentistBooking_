@@ -31,6 +31,11 @@ namespace DentistBooking.Pages.StaffPages.Medicines
 
         public async Task<IActionResult> OnGetAsync()
         {
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Staff")
+            {
+                return RedirectToPage("/Denied");
+            }
             var medicines = await _medicineService.GetAllMedicines();
             Medicine = medicines.ToPagedList(PageNumber, PageSize);
             return Page();
