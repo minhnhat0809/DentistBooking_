@@ -31,6 +31,11 @@ namespace DentistBooking.Pages.DentistPage.Appointments.Prescriptions.Prescripti
         public int PageSize { get; set; } = 5;
         public async Task<IActionResult> OnGetAsync(int id)
         {
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Dentist")
+            {
+                return RedirectToPage("/Denied");
+            }
             // Set the PrescriptionId for use in the page
             PrescriptionId = id;
 

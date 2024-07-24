@@ -28,6 +28,11 @@ namespace DentistBooking.Pages.AdminPage.Users
 
         public IActionResult OnGet()
         {
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Admin")
+            {
+                return RedirectToPage("/Denied");
+            }
             PopulateSelectLists();
             return Page();
         }
@@ -39,6 +44,7 @@ namespace DentistBooking.Pages.AdminPage.Users
 
         public async Task<IActionResult> OnPostAsync()
         {
+
             if (!ModelState.IsValid)
             {
                 // Populate dropdowns or other select lists

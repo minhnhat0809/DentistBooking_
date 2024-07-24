@@ -29,6 +29,11 @@ namespace DentistBooking.Pages.StaffPages.MedicalRecords
 
         public IActionResult OnGet()
         {
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Staff")
+            {
+                return RedirectToPage("/Denied");
+            }
             ViewData["CustomerId"] = new SelectList(_userService.GetAllCustomers().Result, "UserId", "Name");
             return Page();
         }

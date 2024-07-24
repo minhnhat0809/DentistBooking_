@@ -30,6 +30,11 @@ namespace DentistBooking.Pages.DentistPage.Customers.MedicalRecords
         public int PageSize { get; set; } = 5;
         public async Task<IActionResult> OnGetAsync()
         {
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Dentist")
+            {
+                return RedirectToPage("/Denied");
+            }
 
             var medicalRecords = await _medicalRecordService.GetAllMedicalRecords();
             if (medicalRecords == null)

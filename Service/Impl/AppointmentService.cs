@@ -71,6 +71,11 @@ namespace Service.Impl
                     appointmentResult.Message = "Dentist slot is not exist!";
                     return appointmentResult;
                 }
+                else if(dentistSlot.Status == false)
+                {
+                    appointmentResult.Message = "Dentist slot is disabled!";
+                    return appointmentResult;
+                }
 
                 if (dentistSlot.Dentist.Status == false)
                 {
@@ -247,7 +252,9 @@ namespace Service.Impl
                     {
                         AddError("Dentist", "Dentist is not existed!");
                         return errors;
-                    }else if (dentist.Status == false)
+                    } 
+                    
+                    if (dentist.Status == false)
                     {
                         AddError("Dentist", "Dentist is disabled!");
                         return errors;
@@ -541,6 +548,10 @@ namespace Service.Impl
             {
                 appointmentResult.Message = "This dentist slot does not exist!";
                 return appointmentResult;
+            }else if(dentistSlot.Status == false)
+            {
+                appointmentResult.Message = "Dentist slot is disabled!";
+                return appointmentResult;
             }
 
             if (TimeStart < dentistSlot.TimeStart || TimeEnd > dentistSlot.TimeEnd)
@@ -693,6 +704,10 @@ namespace Service.Impl
                 {
                     appointmentResult.Message = "This dentist slot does not exist!";
                     return appointmentResult;
+                }else if(dentistSlot.Status == false)
+                {
+                    appointmentResult.Message = "Dentist slot is disabled!";
+                    return appointmentResult;
                 }
 
                 if (dentistSlot.Dentist.Status == false)
@@ -825,12 +840,12 @@ namespace Service.Impl
             return viewModels;
         }
 
-        public AppointmentResult DeleteAppointmentForStaff(int appointmentId, string customerName, string reason)
+        public async Task<AppointmentResult> DeleteAppointmentForStaff(int appointmentId, string customerName, string reason)
         {
             AppointmentResult appointmentResult = new AppointmentResult();
             try
             {
-                Appointment? appointment = appointmentRepo.GetAppointmentById(appointmentId).Result;
+                Appointment? appointment = await appointmentRepo.GetAppointmentById(appointmentId);
                 if (!appointment.Customer.Name.Equals(customerName))
                 {
                     appointmentResult.Message = "Wrong customer name!";
