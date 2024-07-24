@@ -69,7 +69,7 @@
                         {
                             @foreach (var s in Model.MedicalRecords)
                             {
-                                <option value="@s.MediaRecordId" title="@s.Customer.Name - @s.Diagnosis"> @s.Customer.Name - @s.Diagnosis</option>
+                                <option value="@s.MediaRecordId" title="@s.Customer.Name - @s.Diagnosis">@s.Diagnosis</option>
                             }
                         }
                     </select>

@@ -45,6 +45,7 @@ namespace DataAccess
             var userList = await context.Users
                 .Include(x => x.Role)
                 .Include(x => x.Clinic)
+                .Where(c => c.RoleId != 1)
                 .ToListAsync();
             return userList;
         }

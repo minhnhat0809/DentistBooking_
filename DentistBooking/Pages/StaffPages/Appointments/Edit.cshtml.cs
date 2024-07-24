@@ -81,7 +81,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             
             Status = await _appointmentService.GetAllStatusOfAppointment(appointment.AppointmentId);
 
-            var dentistSlots = _dentistSlotService.GetDentistSlotByServiceAndDate(appointment.ServiceId.Value, appointment.TimeStart).DentistSlots;
+            var dentistSlots = _dentistSlotService.GetDentistSlotByServiceAndDateTime(appointment.ServiceId.Value, appointment.TimeStart).DentistSlots;
 
             DentistSlots = _dentistSlotService.GetDentistSlotForAppointment(dentistSlots, appointment.AppointmentId).DentistSlots;
             

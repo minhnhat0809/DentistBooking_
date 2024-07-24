@@ -1,4 +1,5 @@
 ﻿@page
+@using Microsoft.IdentityModel.Tokens
 @model DentistBooking.Pages.StaffPages.Appointments.CreateModel
 
 @{
@@ -126,19 +127,35 @@ var success = TempData["SuccessCreateAppointment"] as string;
 
                     <div class="col-md-2">
                         <label asp-for="Appointment.CustomerId" class="control-label">Customer</label>
-                        <select asp-for="Appointment.CustomerId" class="form-control" asp-items="ViewBag.CustomerId" id="CustomerId"></select>
+                        <select name="Appointment.CustomerId" id="CustomerId" class="form-control">
+                            @if (!Model.Customers.IsNullOrEmpty() && Model.Customers.Count > 0)
+                            {
+                                @foreach (var s in Model.Customers)
+                                {
+                                    <option value="@s.UserId" title="@s.Name">@s.Name</option>
+                                }
+                            }
+                            else
+                                {
+                                    <option value="0">No customer found</option>
+                                }
+                        </select>
                         <span asp-validation-for="Appointment.CustomerId" class="text-danger"></span>
                     </div>
 
                     <div class="col-md-2">
                         <label asp-for="Appointment.MedicalRecordId" class="control-label">Medical Record</label>
                         <select name="Appointment.MedicalRecordId" id="MedicalRecordId" class="form-control">
-                            @if (Model.MedicalRecords != null)
+                            @if (!Model.MedicalRecords.IsNullOrEmpty() && Model.MedicalRecords.Count > 0)
                             {
-                            @foreach (var s in Model.MedicalRecords)
-                            {
-                            <option value="@s.MediaRecordId" title="@s.Customer.Name - @s.Diagnosis"> @s.Customer.Name - @s.Diagnosis</option>
+                                @foreach (var s in Model.MedicalRecords)
+                                {
+                                    <option value="@s.MediaRecordId" title="@s.Customer.Name - @s.Diagnosis">@s.Diagnosis</option>
+                                }
                             }
+                            else
+                            {
+                                <option value="0">No medical records found</option>
                             }
                         </select>
                         <span asp-validation-for="Appointment.MedicalRecordId" class="text-danger"></span>
@@ -155,12 +172,12 @@ var success = TempData["SuccessCreateAppointment"] as string;
                     <div class="col-md-2">
                         <label asp-for="Appointment.Status" class="control-label">Status</label>
                         <select name="Appointment.Status" class="form-control">
-                            @if (Model.Status != null)
+                            @if (!Model.Status.IsNullOrEmpty() && Model.Status.Count > 0)
                             {
-                            @foreach (var s in Model.Status)
-                            {
-                            <option value="@s">@s</option>
-                            }
+                                @foreach (var s in Model.Status)
+                                {
+                                <option value="@s">@s</option>
+                                }
                             }
                         </select>
                         <span asp-validation-for="Appointment.Status" class="text-danger"></span>
@@ -171,10 +188,14 @@ var success = TempData["SuccessCreateAppointment"] as string;
                         <select name="Appointment.ServiceId" id="ServiceId" class="form-control">
                             @if (Model.Services != null)
                             {
-                            @foreach (var s in Model.Services)
-                            {
-                            <option value="@s.ServiceId" title="@s.ServiceName"> @s.ServiceName</option>
+                                @foreach (var s in Model.Services)
+                                {
+                                    <option value="@s.ServiceId" title="@s.ServiceName"> @s.ServiceName</option>
+                                }
                             }
+                            else
+                            {
+                                <option value="0" >No service found</option>
                             }
                         </select>
                         <span asp-validation-for="Appointment.ServiceId" class="text-danger"></span>
@@ -185,16 +206,16 @@ var success = TempData["SuccessCreateAppointment"] as string;
                         <select id="DentistSlotId" asp-for="Appointment.DentistSlotId" class="form-control">
                             @if (Model.DentistSlots.Count > 0)
                             {
-                            @foreach (var s in Model.DentistSlots)
-                            {
-                            <option value="@s.DentistSlotId" title="@s.Dentist.Name [@s.TimeStart.TimeOfDay - @s.TimeEnd.TimeOfDay]">
-                                @s.Dentist.Name [@s.TimeStart.TimeOfDay - @s.TimeEnd.TimeOfDay]
-                            </option>
-                            }
+                                @foreach (var s in Model.DentistSlots)
+                                {
+                                    <option value="@s.DentistSlotId" title="@s.Dentist.Name [@s.TimeStart.TimeOfDay - @s.TimeEnd.TimeOfDay]">
+                                        @s.Dentist.Name [@s.TimeStart.TimeOfDay - @s.TimeEnd.TimeOfDay]
+                                    </option>
+                                 }
                             }
                             else
                             {
-                            <option value="0">No dentist slots available for selected service and the selected time.</option>
+                                    <option value="0">No dentist slots available for selected service and the selected time.</option>
                             }
                         </select>
                         <span asp-validation-for="Appointment.DentistSlotId" class="text-danger"></span>
@@ -278,6 +299,73 @@ await Html.RenderPartialAsync("_ValidationScriptsPartial");
                     } else {
                         $.each(response.dentistSlotSelectList, function (index, item) {
                             dentistSlotSelectList.append($('<option>', {
+                                value: item.value,
+                                text: item.text
+                            }));
+                        });
+                    }
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    console.error('AJAX request failed:', textStatus, errorThrown);
+                });
+        });
+
+        $('#slotTimeStart').change(function () {
+            var serviceId = $('#ServiceId').val();
+            var selectedDate = $('#datepicker').val();
+            var timeStart = $(this).val();
+            console.log(serviceId);
+            console.log(selectedDate);
+            console.log(timeStart);
+
+            $.getJSON('@Url.Page("/StaffPages/Appointments/Edit", "DentistSlotByService")', {
+                serviceId: serviceId,
+                selectedDate: selectedDate,
+                timeStart: timeStart
+            })
+                .done(function (response) {
+                    console.log(response);
+                    var dentistSlotSelectList = $('#DentistSlotId');
+                    dentistSlotSelectList.empty();
+
+                    if (response.success === false) {
+                        dentistSlotSelectList.append($('<option>', {
+                            value: '0',
+                            text: response.message
+                        }));
+                    } else {
+                        $.each(response.dentistSlotSelectList, function (index, item) {
+                            dentistSlotSelectList.append($('<option>', {
+                                value: item.value,
+                                text: item.text
+                            }));
+                        });
+                    }
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    console.error('AJAX request failed:', textStatus, errorThrown);
+                });
+        });
+
+        $('#CustomerId').change(function () {
+            var customerId = $(this).val();
+
+            $.getJSON('@Url.Page("/StaffPages/Appointments/Create", "MedicalRecordByCustomerId")', {
+                customerId: customerId
+            })
+                .done(function (response) {
+                    var medicalRecords = $('#MedicalRecordId');
+                    medicalRecords.empty();
+                    
+                    console.log(response);
+                    if (response.success === false) {
+                        medicalRecords.append($('<option>', {
+                            value: '0',
+                            text: response.message
+                        }));
+                    } else {
+                        $.each(response.medicalRecordList, function (index, item) {
+                            medicalRecords.append($('<option>', {
                                 value: item.value,
                                 text: item.text
                             }));

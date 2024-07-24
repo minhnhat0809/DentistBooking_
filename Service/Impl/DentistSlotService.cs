@@ -166,6 +166,7 @@ namespace Service.Impl
                 dentistSlot.TimeStart = timeStart;
                 dentistSlot.TimeEnd = timeEnd;
                 dentistSlot.Status = true;
+                dentistSlot.RoomId = RoomId;
             
                 await dentistSlotRepo.CreateDentistSlot(dentistSlot);
                 dentistSlotResult.Message = "Success";
@@ -214,7 +215,7 @@ namespace Service.Impl
             }
         }
 
-        public ListDentistSlotResult GetDentistSlotByServiceAndDate(int serviceId, DateTime timeStart)
+        /*public ListDentistSlotResult GetDentistSlotByServiceAndDate(int serviceId, DateTime timeStart)
         {
             ListDentistSlotResult listDentistSlotResult = new ListDentistSlotResult();
             try
@@ -237,7 +238,7 @@ namespace Service.Impl
                 {
                     listDentistSlotResult.Message = "Selected date is smaller than today!";
                     return listDentistSlotResult;
-                }*/
+                }#1#
                 
                 List<DentistSlot> dentistSlots =  dentistSlotRepo.GetAllDentistSlotByServiceAndDate(serviceId, timeStart);
                 listDentistSlotResult.DentistSlots = dentistSlots;
@@ -249,7 +250,7 @@ namespace Service.Impl
                 listDentistSlotResult.Message = e.Message;
                 return listDentistSlotResult;
             }
-        }
+        }*/
 
         public ListDentistSlotResult GetDentistSlotForAppointment(List<DentistSlot> dentistSlots, int dentistSlotId)
         {
