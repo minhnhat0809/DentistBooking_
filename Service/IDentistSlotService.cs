@@ -21,7 +21,7 @@ namespace Service
 
         ListDentistSlotResult GetDentistSlotByServiceAndDateTime(int serviceId, DateTime timeStart);
         
-        ListDentistSlotResult GetDentistSlotByServiceAndDate(int serviceId, DateTime timeStart);
+        /*ListDentistSlotResult GetDentistSlotByServiceAndDate(int serviceId, DateTime timeStart);*/
 
         ListDentistSlotResult GetDentistSlotForAppointment(List<DentistSlot> dentistSlots, int dentistSlotId);
 

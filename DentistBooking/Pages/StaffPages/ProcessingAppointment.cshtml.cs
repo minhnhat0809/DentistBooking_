@@ -44,6 +44,11 @@ namespace DentistBooking.Pages.StaffPages
 
         [BindProperty(SupportsGet = true)]
         public AppointmentDto Appointment { get; set; } = default!;
+        
+        [BindProperty(SupportsGet = true)]
+        public string Reason { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public string CustomerName { get; set; }
 
         [BindProperty]
         public IList<UserDto> Dentists { get; set; } = default!;
@@ -230,6 +235,37 @@ namespace DentistBooking.Pages.StaffPages
 
             TempData["SuccessProcessingAppointment_DentistSlot"] = "Create dentist slot successfully!";
             return RedirectToPage(new { id = Appointment.AppointmentId });
+        }
+        
+        
+        public async Task<IActionResult> OnPostDelete(int appointmentId)
+        {
+            if (string.IsNullOrWhiteSpace(Reason) || string.IsNullOrWhiteSpace(CustomerName))
+            {
+                TempData["ErrorDeleteAppointment"] = "Reason and Customer Name are required.";
+                return RedirectToPage(new {id = appointmentId});
+            }
+            AppointmentDto oldAppointment = await appointmentService.GetAppointmentByID(appointmentId);
+            AppointmentResult result = appointmentService.DeleteAppointmentForStaff(appointmentId, CustomerName, Reason);
+            await hubContext.Clients.All.SendAsync("ReloadAppointments");
+            if (!result.Message.Equals("Success"))
+            {
+                TempData["ErrorDeleteAppointment"] = result.Message;
+                return RedirectToPage(new {id = appointmentId});
+            }
+            var receiver = oldAppointment.Customer.Email;
+            var subject = "Your appointment has been denied!";
+            string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Templates", "SorryForDenied.html");
+            string body = await System.IO.File.ReadAllTextAsync(templatePath);
+            body = body.Replace("[Service Details]", oldAppointment.Service.ServiceName)
+                .Replace("[Date]", DateOnly.FromDateTime(oldAppointment.TimeStart).ToString())
+                .Replace("[Time]", TimeOnly.FromDateTime(oldAppointment.TimeStart).ToString())
+                .Replace("[Reason for Denial]", Reason);
+
+            await emailSender.SendEmailAsync(receiver, subject, body);
+
+            TempData["SuccessDeleteAppointment"] = "Delete successfully!";
+            return RedirectToPage("/StaffPages/ProcessingAppointmentList");
         }
         
 

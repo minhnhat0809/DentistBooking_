@@ -11,11 +11,13 @@ namespace Service.Impl
     public class Service : IService
     {
         private readonly IServiceRepo _servicerRepo;
+        private readonly IAppointmentService _appointmentService;
         private readonly IMapper _mapper;
-        public Service(IServiceRepo repo, IMapper mapper)
+        public Service(IServiceRepo repo, IAppointmentService appointmentService, IMapper mapper)
         {
             _servicerRepo = repo;
             _mapper = mapper;
+            _appointmentService = appointmentService;
         }
         public async Task CreateService(ServiceDto service)
         {
@@ -152,6 +154,27 @@ namespace Service.Impl
 
                 throw new Exception("error at get service", ex);
             }
+        }
+
+        public async Task<List<ServiceDto>> ServicesForAppointmentCustomer(int appointmentId)
+        {
+            AppointmentDto appointment = await _appointmentService.GetAppointmentByID(appointmentId);
+
+            List<BusinessObject.Service> services = await _servicerRepo.GetAllServices();
+            services = services.Where(s => s.Status == true).ToList();
+
+            foreach (var s in services)
+            {
+                if (s.ServiceId == appointment.ServiceId.Value)
+                {
+                    var service = services.FirstOrDefault(se => se.ServiceId == s.ServiceId);
+                    services.Remove(service);
+                    services.Insert(0,service);
+                    break;
+                }
+            }
+
+            return _mapper.Map<List<ServiceDto>>(services);
         }
 
         public async Task<ListServiceResult> GetAllActiveServices()

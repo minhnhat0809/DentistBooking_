@@ -49,7 +49,9 @@ namespace DataAccess
         public async Task<List<DentistSlot>> getAllDentistSlotsByDentist(int id, DateOnly selectedDate)
         {
             var context = new BookingDentistDbContext();
-            var dentistSlotList = await context.DentistSlots.Include(ds => ds.Appointments)
+            var dentistSlotList = await context.DentistSlots
+                .Include(dl => dl.Room)
+                .Include(ds => ds.Appointments)
                 .Where(ds => ds.DentistId == id && DateOnly.FromDateTime(ds.TimeStart.Date).Equals(selectedDate))
                 .OrderBy(ds => ds.TimeStart).ToListAsync();
             return dentistSlotList;

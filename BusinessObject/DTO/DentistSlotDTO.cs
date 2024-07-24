@@ -17,8 +17,12 @@ namespace BusinessObject.DTO
         public bool? Status { get; set; }
 
         public int? DentistId { get; set; }
+        
+        public int? RoomId { get; set; }
 
         public virtual ICollection<AppointmentDto> Appointments { get; set; } = new List<AppointmentDto>();
+        
+        public virtual Room? Room { get; set; }
 
         public virtual UserDto? Dentist { get; set; }
     }

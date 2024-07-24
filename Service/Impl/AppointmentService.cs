@@ -101,7 +101,7 @@ namespace Service.Impl
                 User? user = userRepo.GetUserByUserName(email).Result;
                 if (user != null)
                 {
-                    appointment.CreateBy = user.UserId;
+                    appointment.ModifiedBy = user.UserId;
                 }
 
                 var appoinmentList = dentistSlot.Appointments.ToList();
@@ -125,7 +125,8 @@ namespace Service.Impl
                 }
 
                 
-                var viewModel = mapper.Map<Appointment>(appointment);  
+                var viewModel = mapper.Map<Appointment>(appointment);
+                viewModel.CreateBy = dentistSlot.DentistId;
                 
                  await appointmentRepo.CreateAppointment(viewModel);
                 appointmentResult.Message = "Success";
@@ -330,7 +331,7 @@ namespace Service.Impl
             var viewModel = mapper.Map<AppointmentDto>(appointment);
             return viewModel;
         }
-        public async Task<Dictionary<string, string>> UpdateAppointment(int serviceId, int appointmentId, DateTime TimeStart, int customerId)
+        public async Task<Dictionary<string, string>> UpdateAppointment(int serviceId, int appointmentId, DateTime TimeStart, int customerId, int dentistId)
         {
             Dictionary<string, string> errors = new Dictionary<string, string>();
             void AddError(string field, string message)
@@ -351,10 +352,27 @@ namespace Service.Impl
                     AddError("Service", "Service is not existed!");
                     return errors;
                 }
+                
+                if (dentistId > 0)
+                {
+                    User? dentist = await userRepo.GetById(dentistId);
+                    if (dentist == null)
+                    {
+                        AddError("Dentist", "Dentist is not existed!");
+                        return errors;
+                    }
+
+                    List<BusinessObject.Service> services = await _dentistServiceRepo.GetAllServiceByDentistActive(dentistId);
+                    if (!services.Any(s => s.ServiceId == serviceId))
+                    {
+                        AddError("Service", "Dentist does not do this service!");
+                        return errors;
+                    }
+                }
 
                 if (customerId <= 0)
                 {
-                    AddError("Customer", "Cusotmer Id is empty!");
+                    AddError("Customer", "Customer Id is empty!");
                     return errors;
                 }
 
@@ -394,10 +412,24 @@ namespace Service.Impl
                         return errors;
                 }
 
+                if (!appointment.TimeStart.Equals(TimeStart))
+                {
+                    appointment.DentistSlotId = null;
+                    appointment.TimeStart = TimeStart;
+                    appointment.TimeEnd = TimeStart.AddMinutes(30);
+                }
+
                 appointment.ServiceId = serviceId;
-                appointment.TimeStart = TimeStart;
-                appointment.TimeEnd = TimeStart.AddMinutes(30);
+                if (dentistId > 0)
+                {
+                    appointment.CreateBy = dentistId;
+                }
+                else
+                {
+                    appointment.CreateBy = null;
+                }
                 appointment.Status = "Processing";
+                
 
                 appointmentRepo.UpdateAppointment(appointment);
                 AddError("Success", "Update successfully!");

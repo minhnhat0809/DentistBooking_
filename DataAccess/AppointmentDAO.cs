@@ -78,6 +78,7 @@ namespace DataAccess
                 .ThenInclude(ds => ds.Dentist)
                 .Include(ap => ap.Service)
                 .Include(ap => ap.Customer)
+                .Include(c => c.CreateByNavigation)
                 .Where(ap => ap.CustomerId == customerId).OrderBy(ap => ap.TimeStart).ToListAsync();
             return appointments;
         }

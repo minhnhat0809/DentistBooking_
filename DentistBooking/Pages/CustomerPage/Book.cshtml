@@ -1,4 +1,5 @@
 ﻿@page
+@using Microsoft.IdentityModel.Tokens
 @model DentistBooking.Pages.CustomerPage.BookModel
 @{
     ViewData["Title"] = "Book Appointment";
@@ -66,7 +67,6 @@
 
     <form method="post" asp-page-handler="Book" class="mb-5">
         <div class="form-row">
-            <input type="hidden" asp-for="@Model.serviceId" />
             <div class="form-group col-md-6">
                 <label asp-for="selectedDate" for="datepicker">Select Date:</label>
                 <input asp-for="selectedDate" type="date" id="datepicker" name="selectedDate" class="form-control" autocomplete="off">
@@ -76,16 +76,40 @@
                 <input asp-for="startTime" type="time" id="startTime" name="startTime" class="form-control" required>
             </div>
             <div class="form-group">
-                <label asp-for="serviceId">Service:</label>
-                <select name="serviceId" class="form-control">
-                    @if (Model.Services != null)
+                <label asp-for="SelectedServiceId">Service:</label>
+                <select id="SelectedServiceId" name="SelectedServiceId" class="form-control">
+                    @if (!Model.Services.IsNullOrEmpty() && Model.Services.Count > 0)
                     {
                         @foreach (var s in Model.Services)
                         {
-                            <option value="@s.ServiceId">@s.ServiceName</option>
+                            <option value="@s.ServiceId">@s.ServiceName - @s.Price</option>
                         }
                     }
+                    else
+                    {
+                        <option value="">No service found</option>
+                    }
                 </select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="SelectedDentistId" class="text-start w-100">Select A Dentist (Optional)</label>
+                <select asp-for="SelectedDentistId" class="form-select bg-light border-0" style="height: 55px;">
+                    <option selected disabled>Select A Dentist (Optional)</option>
+                    <option value="0">Anyone</option>
+                    @if (!Model.Dentists.IsNullOrEmpty() && Model.Dentists.Count > 0)
+                    {
+                        @foreach (var dentist in Model.Dentists)
+                        {
+                            <option value="@dentist.UserId">@dentist.Name</option>
+                        }
+                    }
+                    else
+                    {
+                        <option disabled>No dentists for this service</option>
+                    }
+                </select>
+                <span asp-validation-for="SelectedDentistId" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-success btn-block m-3">Book</button>
         </div>
@@ -120,6 +144,39 @@
                     alertPlaceholder.children('.alert').alert('close');
                 }, 3000);
             }
+
+            $('#SelectedServiceId').change(function () {
+                var serviceId = $(this).val();
+                console.log(serviceId);
+
+                $.getJSON('@Url.Page("/CustomerPage/Book", "DentistsByService")', { serviceId: serviceId })
+                    .done(function (response) {
+                        console.log("response" + response);
+                        var SelectedDentistId = $('#SelectedDentistId');
+                        SelectedDentistId.empty();
+                        SelectedDentistId.append($('<option>', {
+                            value: '0',
+                            text: 'Anyone'
+                        }));
+                        if (response.success === false) {
+                            SelectedDentistId.append($('<option>', {
+                                value: '',
+                                text: response.message
+                            }));
+                        } else {
+                            $.each(response.newDentists, function (index, item) {
+                                console.log(response.newDentists)
+                                SelectedDentistId.append($('<option>', {
+                                    value: item.value,
+                                    text: item.text
+                                }));
+                            });
+                        }
+                    })
+                    .fail(function (jqXHR, textStatus, errorThrown) {
+                        console.error('AJAX request failed:', textStatus, errorThrown);
+                    });
+            });
         });
     </script>
 </div>

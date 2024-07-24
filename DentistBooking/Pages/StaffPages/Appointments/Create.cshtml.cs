@@ -32,12 +32,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             _medicalRecordService = medicalRecordService;
             _hubContext = hubContext;
         }
-        /*
-         flow: pick dentist slot (GetAllDentistSlot) 
-	        -> Pick Service (GetAllServiceByDentist)
-	        -> choose Customer (GetAllCustomer) 
-	        -> medical record auto pick by customerID (GetMedicalRecordByCustomerId)
-        */
+       
         public IList<string> Status { get; set; } = default!;
 
         public IList<MedicalRecordDto> MedicalRecords { get; set; } = default!;
@@ -51,6 +46,8 @@ namespace DentistBooking.Pages.StaffPages.Appointments
         
         [BindProperty(SupportsGet = true)]
         public DateOnly SelectedDate { get; set; } = default!;
+
+        public IList<UserDto> Customers { get; set; } = default!;
 
         public IList<DentistSlot> DentistSlots { get; set; } = default!;
         
@@ -72,11 +69,13 @@ namespace DentistBooking.Pages.StaffPages.Appointments
                 return RedirectToPage("/Index");
             }
             List<UserDto> customers = (await _userService.GetAllActiveCustomers()).Users;
-            ViewData["CustomerId"] = new SelectList( customers, "UserId", "Name");
+            Customers = customers;
             Status = await _appointmentService.GetAllStatusOfAppointment(0);
             Services = (await _service.GetAllActiveServices()).Services;
             DateTime now = DateTime.Now;
-            DentistSlots =  _dentistSlotService.GetDentistSlotByServiceAndDate(Services.FirstOrDefault().ServiceId, now).DentistSlots;
+
+            DateTime noWw = new DateTime(now.Year, now.Month, now.Day, 8, 0, 0);
+            DentistSlots =  _dentistSlotService.GetDentistSlotByServiceAndDateTime(Services.FirstOrDefault().ServiceId, noWw).DentistSlots;
             MedicalRecords = await _medicalRecordService.GetMedicalRecordsByCustomerIdAsync(customers.FirstOrDefault().UserId);
             return Page();
         }
@@ -103,7 +102,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             var medicalRecords = await _medicalRecordService.GetMedicalRecordsByCustomerIdAsync(customerId);
             if (medicalRecords.IsNullOrEmpty())
             {
-                return new JsonResult("");
+                return new JsonResult(new { success = false, message = "No medical records found" });
             }
             var medicalRecordList = medicalRecords.Select(mr => new SelectListItem
             {
@@ -111,7 +110,7 @@ namespace DentistBooking.Pages.StaffPages.Appointments
                 Text = mr.Diagnosis
             }).ToList();
 
-            return new JsonResult(medicalRecordList);
+            return new JsonResult(new { success = true, medicalRecordList});
         }
         public async Task<IActionResult> OnPostAsync()
         {
@@ -147,11 +146,13 @@ namespace DentistBooking.Pages.StaffPages.Appointments
             {
                 TempData["ErrorCreateAppointment"] = appointmentResult.Message;
                 List<UserDto> customers = (await _userService.GetAllActiveCustomers()).Users;
-                ViewData["CustomerId"] = new SelectList( customers, "UserId", "Name");
+                Customers = customers;
                 Status = await _appointmentService.GetAllStatusOfAppointment(0);
                 Services = (await _service.GetAllActiveServices()).Services;
                 DateTime now = DateTime.Now;
-                DentistSlots =  _dentistSlotService.GetDentistSlotByServiceAndDate(Services.FirstOrDefault().ServiceId, now).DentistSlots;
+
+                DateTime noWw = new DateTime(now.Year, now.Month, now.Day, 8, 0, 0);
+                DentistSlots =  _dentistSlotService.GetDentistSlotByServiceAndDateTime(Services.FirstOrDefault().ServiceId, noWw).DentistSlots;
                 MedicalRecords = await _medicalRecordService.GetMedicalRecordsByCustomerIdAsync(customers.FirstOrDefault().UserId);
                 return Page();
             }
