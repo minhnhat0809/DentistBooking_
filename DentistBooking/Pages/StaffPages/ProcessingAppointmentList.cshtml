@@ -36,13 +36,13 @@
                         <td>@appointment.TimeStart.ToString("hh\\:mm tt")</td>
                         @if (appointment != null)
                         {
-                            @if (@appointment.DentistSlot == null)
+                            @if (appointment.DentistSlot == null && appointment.CreateByNavigation == null)
                             {
                                 <td></td>
                             }
                             else
                             {
-                                <td>@appointment.DentistSlot.Dentist.Name</td>
+                                <td>@appointment.CreateByNavigation.Name</td>
                             }
 
                             @if (@appointment.Customer == null)
