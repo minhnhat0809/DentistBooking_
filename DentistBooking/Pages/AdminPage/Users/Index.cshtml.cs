@@ -32,6 +32,11 @@ namespace DentistBooking.Pages.AdminPage.Users
         public int PageSize { get; set; } = 5;
         public async Task<IActionResult> OnGetAsync()
         {
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Admin")
+            {
+                return RedirectToPage("/Denied");
+            }
             var users = await  _userService.GetAllUsers();
             User = users.ToPagedList(PageNumber, PageSize);
             return Page();

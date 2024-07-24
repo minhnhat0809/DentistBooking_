@@ -2,8 +2,8 @@
 @model DentistBooking.Pages.StaffPages.MedicalRecords.IndexModel
 
 @{
-ViewData["Title"] = "Index";
-Layout = "~/Pages/Shared/_StaffLayout.cshtml";
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_StaffLayout.cshtml";
 }
 
 <head>
@@ -36,38 +36,38 @@ Layout = "~/Pages/Shared/_StaffLayout.cshtml";
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .table th, .table td {
-            border: 1px solid #dee2e6;
-            padding: 12px 15px;
-            text-align: left;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+            .table th, .table td {
+                border: 1px solid #dee2e6;
+                padding: 12px 15px;
+                text-align: left;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
 
-        .table thead th {
-            background-color: #343a40;
-            color: #ffffff;
-            font-size: 0.875rem;
-            text-transform: uppercase;
-        }
+            .table thead th {
+                background-color: #343a40;
+                color: #ffffff;
+                font-size: 0.875rem;
+                text-transform: uppercase;
+            }
 
-        .table tbody tr {
-            transition: background-color 0.3s ease-in-out;
-        }
+            .table tbody tr {
+                transition: background-color 0.3s ease-in-out;
+            }
 
-        .table tbody tr:hover {
-            background-color: #f1f1f1;
-        }
+                .table tbody tr:hover {
+                    background-color: #f1f1f1;
+                }
 
-        .table a {
-            color: #007bff;
-            text-decoration: none;
-        }
+            .table a {
+                color: #007bff;
+                text-decoration: none;
+            }
 
-        .table a:hover {
-            text-decoration: underline;
-        }
+                .table a:hover {
+                    text-decoration: underline;
+                }
 
         /* Badge styling */
         .badge {
@@ -109,7 +109,6 @@ Layout = "~/Pages/Shared/_StaffLayout.cshtml";
         .btn-details {
             background-color: #ffc107; /* Yellow background */
         }
-        
 
         /* Pagination styling */
         .pagination {
@@ -117,91 +116,99 @@ Layout = "~/Pages/Shared/_StaffLayout.cshtml";
             text-align: center;
         }
 
-        .pagination a, .pagination span {
-            padding: 10px 15px;
-            margin: 0 5px;
-            font-size: 0.875rem;
-            border-radius: 4px;
-            color: #007bff;
-            text-decoration: none;
-            border: 1px solid #dee2e6;
-        }
+            .pagination a, .pagination span {
+                padding: 10px 15px;
+                margin: 0 5px;
+                font-size: 0.875rem;
+                border-radius: 4px;
+                color: #007bff;
+                text-decoration: none;
+                border: 1px solid #dee2e6;
+            }
 
-        .pagination span {
-            color: #6c757d;
-        }
+            .pagination span {
+                color: #6c757d;
+            }
 
-        .pagination a:hover {
-            background-color: #e9ecef;
-        }
-
+            .pagination a:hover {
+                background-color: #e9ecef;
+            }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>Medical Records</h1>
+    <div class="container">
+        <h1>Medical Records</h1>
 
-    <p>
-        <a asp-page="Create" class="btn btn-primary">Create New</a>
-    </p>
+        @if (Model.MedicalRecord == null || !Model.MedicalRecord.Any())
+        {
+            <p class="text-center">No medical records available.</p>
+        }
+        else
+        {
+            <p>
+                <a asp-page="Create" class="btn btn-primary">Create New</a>
+            </p>
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.MedicalRecord[0].Diagnosis)</th>
-            <th>Status</th>
-            <th>@Html.DisplayNameFor(model => model.MedicalRecord[0].CustomerId)</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var item in Model.MedicalRecord) {
-        <tr>
-            <td>@Html.DisplayFor(modelItem => item.Diagnosis)</td>
-            <td>
-                @if (item.Status.Value)
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.MedicalRecord[0].Diagnosis)</th>
+                        <th>Status</th>
+                        <th>@Html.DisplayNameFor(model => model.MedicalRecord[0].CustomerId)</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.MedicalRecord)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.Diagnosis)</td>
+                            <td>
+                                @if (item.Status.HasValue && item.Status.Value)
+                                {
+                                    <span class="badge badge-active">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-inactive">Inactive</span>
+                                }
+                            </td>
+                            <td>@Html.DisplayFor(modelItem => item.Customer.Name)</td>
+                            <td>
+                                <a asp-page="./Edit" asp-route-id="@item.MediaRecordId" class="btn btn-primary">Edit</a> |
+                                <a asp-page="./Details" asp-route-id="@item.MediaRecordId" class="btn btn-details">Details</a> |
+                                <a asp-page="./Delete" asp-route-id="@item.MediaRecordId" class="btn btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="pagination">
+                @if (Model.MedicalRecord.HasPreviousPage)
                 {
-                <span class="badge badge-active">Active</span>
+                    <a asp-page="./Index" asp-route-pageNumber="@(Model.MedicalRecord.PageNumber - 1)" asp-route-pageSize="@Model.PageSize">Previous</a>
                 }
                 else
                 {
-                <span class="badge badge-inactive">Inactive</span>
+                    <span>Previous</span>
                 }
-            </td>
-            <td>@Html.DisplayFor(modelItem => item.Customer.Name)</td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.MediaRecordId" class="btn btn-primary">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.MediaRecordId" class="btn btn-details">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.MediaRecordId" class="btn btn-danger">Delete</a>
-            </td>
-        </tr>
-        }
-        </tbody>
-    </table>
 
-    <div class="pagination">
-        @if (Model.MedicalRecord.HasPreviousPage)
-        {
-        <a asp-page="./Index" asp-route-pageNumber="@(Model.MedicalRecord.PageNumber - 1)" asp-route-pageSize="@Model.PageSize">Previous</a>
-        }
-        else
-        {
-        <span>Previous</span>
-        }
-
-        @if (Model.MedicalRecord.HasNextPage)
-        {
-        <a asp-page="./Index" asp-route-pageNumber="@(Model.MedicalRecord.PageNumber + 1)" asp-route-pageSize="@Model.PageSize">Next</a>
-        }
-        else
-        {
-        <span>Next</span>
+                @if (Model.MedicalRecord.HasNextPage)
+                {
+                    <a asp-page="./Index" asp-route-pageNumber="@(Model.MedicalRecord.PageNumber + 1)" asp-route-pageSize="@Model.PageSize">Next</a>
+                }
+                else
+                {
+                    <span>Next</span>
+                }
+            </div>
         }
     </div>
-</div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
-<script src="~/js/site.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/site.js"></script>
 </body>
+
