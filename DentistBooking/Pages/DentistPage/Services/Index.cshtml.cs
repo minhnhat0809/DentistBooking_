@@ -33,7 +33,6 @@ namespace DentistBooking.Pages.DentistPage.Services
 
         public async Task<IActionResult> OnGetAsync()
         {
-            
             string? email = HttpContext.Session.GetString("Email");
             if (!string.IsNullOrEmpty(email))
             {
