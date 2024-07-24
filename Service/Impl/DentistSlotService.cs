@@ -278,5 +278,24 @@ namespace Service.Impl
 
             return listDentistSlotResult;
         }
+
+        public DentistSlotResult GetDentistSlotByAppointmentTimeStart(DateTime TimeStart, int dentistId)
+        {
+            DentistSlotResult dentistSlotResult = new DentistSlotResult();
+            try
+            {
+                DentistSlot dentistSlot =
+                     dentistSlotRepo.GetDentistSlotByDentistAndTimeStart(dentistId, TimeStart);
+                
+                dentistSlotResult.Message = "Success";
+                dentistSlotResult.DentistSlot = mapper.Map<DentistSlotDto>(dentistSlot);
+            }
+            catch (Exception e)
+            {
+                dentistSlotResult.Message = e.Message;
+            }
+
+            return dentistSlotResult;
+        }
     }
 }

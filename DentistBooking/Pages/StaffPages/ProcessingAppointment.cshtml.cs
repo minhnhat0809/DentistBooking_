@@ -8,6 +8,7 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using BusinessObject.DTO;
 using BusinessObject.Result;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
 using Service.Lib;
 
@@ -46,15 +47,14 @@ namespace DentistBooking.Pages.StaffPages
 
         [BindProperty]
         public IList<UserDto> Dentists { get; set; } = default!;
-        [BindProperty(SupportsGet = true)]
-        public TimeOnly DentistSlotTimeStart { get; set; } = default!;
-        [BindProperty(SupportsGet = true)]
-        public TimeOnly DentistSlotTimeEnd { get; set; } = default!;
-
         public IList<Room> Rooms { get; set; } = default!;
 
         [BindProperty(SupportsGet = true)]
         public int RoomId { get; set; }
+        
+        public string TimeRange { get; set; }
+
+        public List<DentistSlotDto> DentistSlot { get; set; }
 
         public ServiceDto Service { get; set; } = default!;
         public async Task<IActionResult> OnGet(int id)
@@ -65,9 +65,59 @@ namespace DentistBooking.Pages.StaffPages
 
             Rooms = roomService.GetAllActiveRooms().Result.Rooms;
 
-            Dentists = await userService.GetAllDentistsByService((int)Appointment.ServiceId);
+            List<UserDto> dentist = new List<UserDto>();
 
+            List<DentistSlotDto> dentistSlotDtos = new List<DentistSlotDto>();
 
+            if (Appointment.CreateBy.HasValue)
+            {
+                dentist.Add(Appointment.CreateByNavigation);
+                Dentists = dentist;
+                dentistSlotDtos.Add(dentistSlotService.GetDentistSlotByAppointmentTimeStart(Appointment.TimeStart, Appointment.CreateBy.Value).DentistSlot);
+                DentistSlot = dentistSlotDtos;
+            }
+            else
+            {
+                Dentists = await userService.GetAllDentistsByService((int)Appointment.ServiceId);
+                dentistSlotDtos.Add(dentistSlotService
+                    .GetDentistSlotByAppointmentTimeStart(Appointment.TimeStart, Dentists[0].UserId)
+                    .DentistSlot);
+                DentistSlot = dentistSlotDtos;
+            }
+            
+            
+            var date = Appointment.TimeStart;
+            
+            var morningStart = new TimeSpan(8, 0, 0);  
+            var morningEnd = new TimeSpan(12, 0, 0);   
+            
+            var afternoonStart = new TimeSpan(13, 0, 0);  
+            var afternoonEnd = new TimeSpan(17, 0, 0);   
+            
+            var eveningStart = new TimeSpan(17, 0, 0);  
+            var eveningEnd = new TimeSpan(19, 30, 0);
+
+            TimeOnly DentistSlotTimeStart = new TimeOnly();
+            TimeOnly DentistSlotTimeEnd = new TimeOnly();
+        
+            if (date.TimeOfDay >= morningStart && date.TimeOfDay < morningEnd)
+            {
+                DentistSlotTimeStart = TimeOnly.FromTimeSpan(morningStart);
+                DentistSlotTimeEnd = TimeOnly.FromTimeSpan(morningEnd);
+            }
+            else if (date.TimeOfDay >= afternoonStart && date.TimeOfDay < afternoonEnd)
+            {
+                DentistSlotTimeStart = TimeOnly.FromTimeSpan(afternoonStart);
+                DentistSlotTimeEnd = TimeOnly.FromTimeSpan(afternoonEnd);
+            }
+            else if (date.TimeOfDay >= eveningStart && date.TimeOfDay < eveningEnd)
+            {
+                DentistSlotTimeStart = TimeOnly.FromTimeSpan(eveningStart);
+                DentistSlotTimeEnd = TimeOnly.FromTimeSpan(eveningEnd);
+            }
+
+            // Format the time range
+            TimeRange = $"{DentistSlotTimeStart:hh\\:mm} - {DentistSlotTimeEnd:hh\\:mm}";
 
             HttpContext.Session.SetInt32("AppointmentId", Appointment.AppointmentId);
             return Page();
@@ -106,25 +156,29 @@ namespace DentistBooking.Pages.StaffPages
             return RedirectToPage(new { id = Appointment.AppointmentId });
         }
 
-        public IActionResult OnGetDentistSchedule(int dentistId, DateTime timeStart)
+        public IActionResult OnGetGetDentistSchedule(int dentistId, DateTime timeStart)
         {
             HttpContext.Session.SetInt32("DentistId", dentistId);
-            var dentistSlot = dentistSlotService.GetAllDentistSlotsByDentistAndDate(dentistId, DateOnly.FromDateTime(timeStart)).Result;
-            var schedule = dentistSlot.Select(d => new
+            var dentistSlotResult = dentistSlotService.GetDentistSlotByAppointmentTimeStart(timeStart, dentistId);
+    
+            if (dentistSlotResult == null || dentistSlotResult.DentistSlot == null)
             {
-                Id = d.DentistSlotId,
-                TimeStart = d.TimeStart,
-                TimeEnd = d.TimeEnd,
-                Appointments = d.Appointments.Where(ap => !(ap.Status.Equals("Delete"))).ToList()
-                }
-            ).ToList();
-            var options = new JsonSerializerOptions
-            {
-                ReferenceHandler = ReferenceHandler.Preserve,
-                WriteIndented = true
-            }; 
+                return new JsonResult(new { success = false, message = "No slot found" });
+            }
 
-            return new JsonResult(schedule, options);
+            List<DentistSlotDto> dentistSlotDtos = new List<DentistSlotDto>();
+            
+            dentistSlotDtos.Add(dentistSlotResult.DentistSlot);
+
+            var schedule = dentistSlotDtos.Select(d => new SelectListItem
+            {
+                Value = d.DentistSlotId.ToString(),
+                Text =
+                    $"{d.TimeStart.ToString("HH:mm")} - {d.TimeEnd.ToString("HH:mm")}"
+            }).ToList();
+            
+
+            return new JsonResult(new { success = true, schedule });
         }
 
         public async Task<IActionResult> OnPostCreateDentistSlot()
@@ -132,6 +186,34 @@ namespace DentistBooking.Pages.StaffPages
             var apppointmentId = (int)HttpContext.Session.GetInt32("AppointmentId");
             Appointment = await appointmentService.GetAppointmentByID(apppointmentId);
             var date = Appointment.TimeStart;
+            
+            var morningStart = new TimeSpan(8, 0, 0);  
+            var morningEnd = new TimeSpan(12, 0, 0);   
+            
+            var afternoonStart = new TimeSpan(13, 0, 0);  
+            var afternoonEnd = new TimeSpan(17, 0, 0);   
+            
+            var eveningStart = new TimeSpan(17, 0, 0);  
+            var eveningEnd = new TimeSpan(19, 30, 0);
+
+            TimeOnly DentistSlotTimeStart = new TimeOnly();
+
+            TimeOnly DentistSlotTimeEnd = new TimeOnly();
+            
+            if (date.TimeOfDay >= morningStart && date.TimeOfDay < morningEnd)
+            {
+                DentistSlotTimeStart = TimeOnly.FromTimeSpan(morningStart);
+                DentistSlotTimeEnd = TimeOnly.FromTimeSpan(morningEnd);
+            }else if (date.TimeOfDay >= afternoonStart && date.TimeOfDay < afternoonEnd)
+            {
+                DentistSlotTimeStart = TimeOnly.FromTimeSpan(afternoonStart);
+                DentistSlotTimeEnd = TimeOnly.FromTimeSpan(afternoonEnd);
+            }else if (date.TimeOfDay >= eveningStart && date.TimeOfDay < eveningEnd)
+            {
+                DentistSlotTimeStart = TimeOnly.FromTimeSpan(eveningStart);
+                DentistSlotTimeEnd = TimeOnly.FromTimeSpan(eveningEnd);
+            }
+            
             DateTime slotTimeStart = new DateTime(date.Year, date.Month, date.Day,
                 DentistSlotTimeStart.Hour, DentistSlotTimeStart.Minute, DentistSlotTimeStart.Second);
 
@@ -149,6 +231,7 @@ namespace DentistBooking.Pages.StaffPages
             TempData["SuccessProcessingAppointment_DentistSlot"] = "Create dentist slot successfully!";
             return RedirectToPage(new { id = Appointment.AppointmentId });
         }
+        
 
 
     }

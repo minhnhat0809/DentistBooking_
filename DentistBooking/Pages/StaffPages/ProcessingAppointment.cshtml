@@ -1,5 +1,6 @@
 ﻿@page
 @using BusinessObject
+@using Microsoft.IdentityModel.Tokens
 @model DentistBooking.Pages.StaffPages.ProcessingAppointmentModel
 @{
     ViewData["Title"] = "Appointment Detail";
@@ -21,28 +22,43 @@
                     <input type="hidden" asp-for="@Model.Appointment.AppointmentId" />
                     <input type="hidden" asp-for="@Model.Appointment.CustomerId" />
 
-                <div class="form-group row m-2">
+                    <div class="form-group row m-2">
                         <label class="col-sm-3 col-form-label">Time Start</label>
                         <div class="col-sm-9">
                             <input type="datetime-local" id="timeStart" class="form-control" asp-for="@Model.Appointment.TimeStart" />
                         </div>
                     </div>
 
-                <div class="form-group row m-2">
+                    <div class="form-group row m-2">
                         <label class="col-sm-3 col-form-label">Time End</label>
                         <div class="col-sm-9">
                             <input type="datetime-local" class="form-control" asp-for="@Model.Appointment.TimeEnd" />
                         </div>
                     </div>
 
-                <div class="form-group row m-2">
+                    <div class="form-group row m-2">
+                        <label class="col-sm-3 col-form-label">Customer</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control-plaintext" value="@Model.Appointment.Customer?.Name" readonly />
+                        </div>
+                    </div>
+
+                    <div class="form-group row m-2">
                         <label class="col-sm-3 col-form-label">Diagnosis</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" asp-for="@Model.Appointment.Diagnosis" />
                         </div>
                     </div>
 
-                <div class="form-group row m-2">
+                    <div class="form-group row m-2">
+                        <label class="col-sm-3 col-form-label">Service</label>
+                        <div class="col-sm-9">
+                            <input type="text" value="@Model.Service.ServiceName" readonly />
+                            <input  type="hidden" asp-for="@Model.Appointment.ServiceId"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group row m-2">
                         <label class="col-sm-3 col-form-label">Status</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" asp-for="@Model.Appointment.Status" readonly />
@@ -53,45 +69,57 @@
                         <label class="col-sm-3 col-form-label">Dentist</label>
                         <div class="col-sm-6">
                             <select id="dentistId" name="Appointment.DentistSlot.DentistId" class="form-control">
-                                @if (Model.Dentists != null)
+                                @if (!Model.Dentists.IsNullOrEmpty() && Model.Dentists.Count >= 2)
                                 {
                                     @foreach (var s in Model.Dentists)
                                     {
                                         <option value="@s.UserId">@s.Name</option>
                                     }
+                                }else if (!Model.Dentists.IsNullOrEmpty() && Model.Dentists.Count is > 0 and < 2)
+                                {
+                                    <option value="@Model.Dentists[0].UserId">@Model.Dentists[0].Name</option>
                                 }
                             </select>
                         </div>
-                        <div class="col-sm-3">
-                        <button type="button" class="btn btn-info btn-block" id="viewScheduleButton" data-toggle="modal" data-target="#exampleModal">View Schedule</button>
-                        </div>
+
                 </div>
 
                 <div class="form-group row m-2">
                     <label class="col-sm-3 col-form-label">Dentist slot</label>
                     <div class="col-sm-9">
-                        <input type="text" id="selectedSlotId" name="Appointment.DentistSlotId" readonly />
+                        @if (Model.Appointment.DentistSlot != null)
+                        {
+                            <input type="text" value="@Model.Appointment.DentistSlot.TimeStart.ToString("yyyy-MM-dd") [@Model.Appointment.DentistSlot.TimeStart.ToString("HH:mm") - @Model.Appointment.DentistSlot.TimeEnd.ToString("HH:mm")]" readonly />
+                            <input type="hidden" asp-for="Appointment.DentistSlotId" />
+                        }
+                        else if(Model.Appointment.DentistSlot == null && !Model.DentistSlot.IsNullOrEmpty())
+                        {
+                        <select id="dentistSlotId" name="Appointment.DentistSlotId" class="form-control">
+                            @if (!Model.DentistSlot.IsNullOrEmpty() && Model.DentistSlot[0] != null)
+                            {
+                                @foreach (var s in Model.DentistSlot)
+                                {
+                                 <option value="@s.DentistSlotId">@s.TimeStart.TimeOfDay - @s.TimeEnd.TimeOfDay</option>
+                                }
+                            }else
+                            {
+                                <option value="0">No slot found</option>
+                            }
+                        </select>
+                        }
+                        else
+                        {
+                            <input type="text" value="No available slots" readonly />
+                            <button type="button" class="btn btn-info btn-block" id="createSlotButton" data-toggle="modal" data-target="#createSlotModal">Create slot for this date</button>
+                            <input type="hidden" asp-for="Appointment.DentistSlotId" value="0" />
+                        }
                     </div>
                 </div>
-
-                    <div class="form-group row m-2">
-                        <label class="col-sm-3 col-form-label">Customer</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control-plaintext" value="@Model.Appointment.Customer?.Name" readonly />
-                        </div>
-                    </div>
-
-                <div class="form-group row m-2">
-                        <label class="col-sm-3 col-form-label">Service</label>
-                        <div class="col-sm-9">
-                            <input type="text" value="@Model.Service.ServiceName" readonly />
-                            <input  type="hidden" asp-for="@Model.Appointment.ServiceId"/>
-                        </div>
-                    </div>
-
-                    <div class="form-group row text-center m-2">
+                    
+                
+                <div class="form-group row text-center m-2">
                         <div class="col-sm-9 offset-sm-3">
-                            <button type="submit" class="btn btn-primary btn-block">Update</button>
+                            <button type="submit" class="btn btn-primary btn-block" id="updateButton">Update</button>
                         </div>
                     </div>
                 </form>
@@ -111,68 +139,51 @@
     <a href="./ProcessingAppointmentList" class="btn btn-primary btn-sm mt-3">Back</a>
 </div>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+<!-- Modal -->
+<div class="modal fade" id="createSlotModal" tabindex="-1" role="dialog" aria-labelledby="createSlotModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="scheduleModalLabel">Dentist Schedule</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Time</th>
-                            <th>Appointments</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="scheduleBody">
+            <form method="post" asp-page-handler="CreateDentistSlot">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createSlotModalLabel">Create Slot</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label>Time Range</label>
+                            <input type="text" class="form-control" value="@Model.TimeRange" readonly />
+                        </div>
                         
-                    </tbody>
-                </table>
-                <form id="createSlotForm" asp-page-handler="CreateDentistSlot">
-                    <input type="hidden" value="@Model.Appointment.TimeStart"/>
-                    <input type="hidden" value="@Model.Appointment.AppointmentId"/>
-                    <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Slot Time Start</label>
-                        <div class="col-sm-9">
-                            <input type="time" id="slotTimeStart" name="DentistSlotTimeStart" asp-for="DentistSlotTimeStart" class="form-control" required/>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-3 col-form-label">Slot Time End</label>
-                        <div class="col-sm-9">
-                            <input type="time" id="slotTimeEnd" name="DentistSlotTimeEnd" asp-for="DentistSlotTimeEnd" class="form-control" required/>
-                        </div>
-                    </div>
-                    <label class="col-sm-3 col-form-label">Room</label>
-                    <div class="col-sm-6">
-                        <select id="roomId" asp-for="RoomId" class="form-control">
-                            @if (Model.Rooms != null)
+                        <label for="roomSelect">Select Room</label>
+                        <select class="form-control" id="roomSelect" asp-for="RoomId">
+                            @if (!Model.Rooms.IsNullOrEmpty() && Model.Rooms.Count > 0)
                             {
-                            @foreach (var s in Model.Rooms)
-                            {
-                            <option value="@s.RoomId">@s.RoomNumber</option>
+                                @foreach (var r in Model.Rooms)
+                                {
+                                    <option value="@r.RoomId">@r.RoomNumber</option>
+                                }
                             }
+                            else
+                            {
+                                <option value="0">No available rooms</option>
                             }
                         </select>
                     </div>
-                    <div class="form-group row text-center">
-                        <div class="col-sm-9 offset-sm-3">
-                            <button type="submit" class="btn btn-success btn-block">Create Dentist Slot</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+
+
+
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
@@ -238,112 +249,42 @@
             }, 5000);
         }
 
-        $('#viewScheduleButton').click(function () {
-            var dentistId = $('#dentistId').val();
-            var timeStart = $('#timeStart').val();
-            $.ajax({
-                url: '@Url.Page("/StaffPages/ProcessingAppointment", "DentistSchedule")',
-                data: { dentistId: dentistId, timeStart: timeStart },
-                type: 'GET',
-                success: function (data) {
-                    var scheduleBody = $('#scheduleBody');
-                    scheduleBody.empty();
-                    var slots = data.$values;
-                    console.log(slots);
-                    if (!slots || slots.length === 0) {
-                        var row = '<tr>' +
-                            '<td colspan="3">This dentist does not have slots for this date.</td>' +
-                            '</tr>';
-                        scheduleBody.append(row);
-                        return;
+        $('#dentistId').change(function () {
+            var dentistId = $(this).val();
+            var timeStart = '@Model.Appointment.TimeStart.ToString("yyyy-MM-ddTHH:mm:ss")';
+            console.log(dentistId);
+            console.log(timeStart);
+            $.getJSON('@Url.Page("/StaffPages/ProcessingAppointment", "GetDentistSchedule")', {
+                dentistId: dentistId,
+                timeStart: timeStart
+            })
+                .done(function (response) {
+                    var dentistSlot = $('#dentistSlotId');
+                console.log(response);
+                    if (response.success) {
+                        // Clear previous options
+                        dentistSlot.empty();
+                        // Add new options from response
+                        $.each(response.schedule,  function (index, item){
+                        console.log(item.TimeStart)
+
+                            dentistSlot.append($('<option>', {
+                                value: item.value,
+                                text: item.text
+                            }));
+                        });
+                    } else {
+                        // Handle error or no slots found
+                        dentistSlot.empty();
+                        dentistSlot.append($('<option>', {
+                            value: '0',
+                            text: response.message
+                        }));
                     }
-
-                    $.each(slots, function (index, slot) {
-                        var appointmentsHtml = '';
-                        
-                        if (slot.Appointments && slot.Appointments.$values.length > 0) {
-                            $.each(slot.Appointments.$values, function (idx, appointment) {
-                                var formattedStart = formatDate(new Date(appointment.TimeStart));
-                                var formattedEnd = formatDate(new Date(appointment.TimeEnd));
-
-                                appointmentsHtml += '<div>' +
-                                    '<strong>' + formattedStart + ' - ' + formattedEnd + '</strong><br>' +
-                                    '</div>';
-                            });
-                        } 
-                        else {
-                            appointmentsHtml = '<div>No appointments</div>';
-                        }
-
-                        var formattedSlotStart = formatDate(new Date(slot.TimeStart));
-                        var formattedSlotEnd = formatDate(new Date(slot.TimeEnd));
-                        
-                        var row = '<tr>' +
-                            '<td>' + formattedSlotStart + ' - ' + formattedSlotEnd + '</td>' +
-                            '<td>' + appointmentsHtml + '</td>' +
-                            '<td><button type="button" class="btn btn-success btn-sm book-slot-button" data-slot-id="' + slot.Id + '">Book</button></td>' +
-                            '</tr>'
-                        scheduleBody.append(row);
-                    });
-                },
-                error: function () {
-                    alert('Error retrieving schedule.');
-                }
-            });
-        });
-        
-        $('#createSlotButton').click(function () {
-                    var slotTimeStart = $('#slotTimeStart').val();
-                    var slotTimeEnd = $('#slotTimeEnd').val();
-                    var date = $('#timeStart').val();
-        
-                    $.ajax({
-                        url: '@Url.Page("/StaffPages/ProcessingAppointment", "CreateDentistSlot")',
-                        data: {
-                            timeStart: slotTimeStart,
-                            timeEnd: slotTimeEnd,
-                            date: date
-                        },
-                        type: 'POST',
-                        
-                        success: function (data) {
-                            alert('Dentist slot created successfully.');
-                            //$('#scheduleModal').modal('hide');
-                        },
-                        error: function () {
-                            console.log(this.data);
-                            alert('Error creating dentist slot.');
-                        }
-                    });
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    console.error('AJAX request failed:', textStatus, errorThrown);
                 });
-        
-        $(document).on('click', '.book-slot-button', function () {
-            var slotId = $(this).attr('data-slot-id');
-            console.log(slotId);  
-            $('#selectedSlotId').val(slotId);
-            var alertPlaceholder = $('#customAlertPlaceholder');
-            var s = "Book successfully!";
-            var alertHtml = '<div class="alert alert-success alert-dismissible fade show" role="alert">'
-                + s
-                + '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'
-                + '<span aria-hidden="true">&times;</span>'
-                + '</button></div>';
-            alertPlaceholder.html(alertHtml);
-
-            setTimeout(function () {
-                alertPlaceholder.children('.alert').alert('close');
-            }, 5000);
         });
-
-        function formatDate(date) {
-            var day = date.getDate().toString().padStart(2, '0');
-            var month = (date.getMonth() + 1).toString().padStart(2, '0');
-            var year = date.getFullYear();
-            var hours = date.getHours().toString().padStart(2, '0');
-            var minutes = date.getMinutes().toString().padStart(2, '0');
-            var seconds = date.getSeconds().toString().padStart(2, '0');
-
-            return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-        }
     });
 </script>
