@@ -209,7 +209,7 @@ namespace Service.Impl
                 }
                 else
                 {
-                    if (user.Password.Equals(password))
+                    if (user.Password.Equals(password) && user.Status == true)
                     {
                         responseDTO.IsSuccess = true;
                         responseDTO.Message = user.UserId.ToString();

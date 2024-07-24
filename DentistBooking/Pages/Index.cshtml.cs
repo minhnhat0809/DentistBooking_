@@ -119,6 +119,7 @@ namespace DentistBooking.Pages
                     Name = Name,
                     Password = "cuZXynTq",
                     CreatedDate = DateTime.Now,
+                    Status = true
                 };
                 await userService.CreateUser(newCustomer);
                 await hubContext.Clients.All.SendAsync("ReloadUsers");

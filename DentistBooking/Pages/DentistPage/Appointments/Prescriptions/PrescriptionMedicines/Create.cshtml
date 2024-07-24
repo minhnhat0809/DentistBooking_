@@ -36,7 +36,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="PrescriptionMedicine.Price" class="control-label"></label>
-                <input asp-for="PrescriptionMedicine.Price" class="form-control" readonly id="medicinePrice" />
+                <input class="form-control" readonly id="medicinePrice" />
+                <input type="hidden" asp-for="PrescriptionMedicine.Price" class="form-control" id="medicinePrice1" />
                 <span asp-validation-for="PrescriptionMedicine.Price" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -58,11 +59,13 @@
         document.addEventListener('DOMContentLoaded', function () {
             var medicineSelect = document.getElementById('medicineSelect');
             var medicinePriceInput = document.getElementById('medicinePrice');
+            var medicinePriceInput1 = document.getElementById('medicinePrice1');
 
             medicineSelect.addEventListener('change', function () {
                 var selectedOption = medicineSelect.options[medicineSelect.selectedIndex];
                 var price = selectedOption.getAttribute('data-price');
                 medicinePriceInput.value = price || '';
+                medicinePriceInput1.value = price || '';
             });
         });
     </script>
