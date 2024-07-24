@@ -37,6 +37,7 @@ namespace DataAccess
         {
             var context = new BookingDentistDbContext();
             var prescriptionList = await context.Prescriptions
+                .Include(x=>x.PrescriptionMedicines)
                 .Include (x=>x.Appointment)
                 .ThenInclude(x=>x.Customer)
                 .ToListAsync();

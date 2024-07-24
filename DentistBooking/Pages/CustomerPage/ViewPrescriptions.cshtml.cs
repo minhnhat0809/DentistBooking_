@@ -34,9 +34,9 @@ public class ViewPrescriptions : PageModel
     {
         try
         {
-            string? email = "jane.smith@gmail.com";//HttpContext.Session.GetString("Email");
-            /*if (!string.IsNullOrEmpty(email))
-            {*/
+            string? email = HttpContext.Session.GetString("Email");
+            if (!string.IsNullOrEmpty(email))
+            {
                 var users = await userService.GetAllCustomers();
                 if (users != null)
                 {
@@ -55,8 +55,8 @@ public class ViewPrescriptions : PageModel
                     TempData["ErrorMessage"] = "No dentist found with the provided email.";
                     return RedirectToPage("/Error");
                 }
-            /*}
-            else return RedirectToPage("/Denied");*/
+            }
+            else return RedirectToPage("/Denied");
         }
         catch (Exception ex)
         {
